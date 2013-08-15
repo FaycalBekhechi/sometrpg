@@ -7,6 +7,7 @@ package com.ziodyne.sometrpg.models;
 public class UnitStat {
   private final int value;
   private final Stat stat;
+  
   public UnitStat(int value, Stat stat) {
     super();
     this.value = value;

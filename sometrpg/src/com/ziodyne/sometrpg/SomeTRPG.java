@@ -3,7 +3,7 @@ package com.ziodyne.sometrpg;
 import com.artemis.World;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.ziodyne.sometrpg.screens.SplashScreen;
+import com.ziodyne.sometrpg.screens.Splash;
 
 public class SomeTRPG extends Game {
   private OrthographicCamera cam;
@@ -12,6 +12,6 @@ public class SomeTRPG extends Game {
 	public void create() {
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, 840, 400);
-		setScreen(new SplashScreen(this));
+		setScreen(new Splash(this));
 	}
 }

@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.logic;
+package com.ziodyne.sometrpg.logic.util;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,8 +8,8 @@ import com.ziodyne.sometrpg.models.Unit;
 import com.ziodyne.sometrpg.models.UnitGrowth;
 import com.ziodyne.sometrpg.models.UnitStat;
 
-public class Leveler {
-  private Leveler() { }
+public class UnitUtils {
+  private UnitUtils() { }
   
   public static void levelUp(Unit unit) {
     UnitGrowth growths = unit.getGrowths();

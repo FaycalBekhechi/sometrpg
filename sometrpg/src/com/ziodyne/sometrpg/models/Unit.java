@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Unit {
-  private static final AtomicLong lastIdentifier = new AtomicLong(1L);
+  private static final AtomicLong lastIdentifier = new AtomicLong(0L);
   
   private final long id;
   private String name;

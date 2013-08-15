@@ -5,8 +5,8 @@
 *.ear
 
 # Android crap #
-bin/
-gen/
+sometrpg-android\bin\
+sometrpg-android\gen\
 
 # Eclipse crap #
 .project

@@ -7,5 +7,6 @@ public enum Stat {
   RESISTANCE,
   SPEED,
   SKILL,
-  LUCK
+  LUCK,
+  LEVEL;
 }

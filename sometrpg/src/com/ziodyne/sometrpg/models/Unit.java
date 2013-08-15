@@ -9,11 +9,13 @@ public class Unit {
   private final long id;
   private String name;
   private Set<UnitStat> statSheet;
+  private final UnitGrowth growths;
   
-  public Unit(String name, Set<UnitStat> statSheet) {
+  public Unit(String name, Set<UnitStat> statSheet, UnitGrowth growths) {
     super();
     this.name = name;
     this.statSheet = statSheet;
+    this.growths = growths;
     this.id = lastIdentifier.incrementAndGet();
   }
 
@@ -31,6 +33,10 @@ public class Unit {
 
   public void setStatSheet(Set<UnitStat> statSheet) {
     this.statSheet = statSheet;
+  }
+  
+  public UnitGrowth getGrowths() {
+    return growths;
   }
 
   public long getId() {

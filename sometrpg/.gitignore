@@ -1,0 +1,13 @@
+*.class
+
+# Package Files #
+*.war
+*.ear
+
+# Android crap #
+bin/
+gen/
+
+# Eclipse crap #
+.project
+.classpath

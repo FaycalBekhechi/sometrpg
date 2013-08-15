@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 
 public class SplashScreen implements Screen {
+  private static final float SPLASH_DURATION = 1.75f;
+  private static final float SPLASH_FADE_DURATION = 0.75f;
   private final Game game;
   private final Stage stage;
   
@@ -52,9 +54,9 @@ public class SplashScreen implements Screen {
     splashLogoImage.getColor().a = 0f;
     
     splashLogoImage.addAction(Actions.sequence(
-        Actions.fadeIn(0.75f),
-        Actions.delay(1.75f),
-        Actions.fadeOut(0.75f)
+        Actions.fadeIn(SPLASH_FADE_DURATION),
+        Actions.delay(SPLASH_DURATION),
+        Actions.fadeOut(SPLASH_FADE_DURATION)
     ));
     
     stage.addActor(splashLogoImage);

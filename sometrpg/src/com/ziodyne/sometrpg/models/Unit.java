@@ -9,7 +9,7 @@ public class Unit {
   private final long id;
   private String name;
   private Set<UnitStat> statSheet;
-  private final UnitGrowth growths;
+  private final UnitGrowth growths; 
   
   public Unit(String name, Set<UnitStat> statSheet, UnitGrowth growths) {
     super();

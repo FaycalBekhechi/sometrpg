@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg;
 
-import com.artemis.World;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ziodyne.sometrpg.screens.Splash;

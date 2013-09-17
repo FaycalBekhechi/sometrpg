@@ -13,8 +13,7 @@ import com.ziodyne.sometrpg.components.Player;
 public class CameraControlSystem extends EntitySystem implements InputProcessor {
     private final OrthographicCamera camera;
 
-    private Vector3 currentMousePos;
-
+    @SuppressWarnings("unchecked")
     public CameraControlSystem(OrthographicCamera camera) {
         super(Aspect.getAspectForAll(Player.class));
         this.camera = camera;
@@ -27,8 +26,7 @@ public class CameraControlSystem extends EntitySystem implements InputProcessor 
 
     @Override
     protected void processEntities(ImmutableBag<Entity> entities) {
-        currentMousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(currentMousePos);
+
     }
 
     @Override

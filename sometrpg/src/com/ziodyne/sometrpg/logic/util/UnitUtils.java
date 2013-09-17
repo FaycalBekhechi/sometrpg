@@ -3,10 +3,10 @@ package com.ziodyne.sometrpg.logic.util;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.ziodyne.sometrpg.models.Stat;
-import com.ziodyne.sometrpg.models.Unit;
-import com.ziodyne.sometrpg.models.UnitGrowth;
-import com.ziodyne.sometrpg.models.UnitStat;
+import com.ziodyne.sometrpg.logic.models.Stat;
+import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.UnitGrowth;
+import com.ziodyne.sometrpg.logic.models.UnitStat;
 
 public class UnitUtils {
   private UnitUtils() { }

@@ -33,42 +33,44 @@ public class CameraControlSystem extends EntitySystem implements InputProcessor 
 
     @Override
     protected boolean checkProcessing() {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return true;
     }
 
     @Override
     public boolean keyDown(int i) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
     public boolean keyUp(int i) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
     public boolean keyTyped(char c) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
     public boolean touchDown(int i, int i2, int i3, int i4) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
     public boolean touchUp(int i, int i2, int i3, int i4) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
     public boolean touchDragged(int i, int i2, int i3) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        camera.translate(new Vector3(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0));
+
+        return false;
     }
 
     @Override
     public boolean mouseMoved(int i, int i2) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override

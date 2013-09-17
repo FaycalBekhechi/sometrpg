@@ -7,8 +7,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.ziodyne.sometrpg.components.Player;
 import com.ziodyne.sometrpg.components.Position;
 import com.ziodyne.sometrpg.components.Sprite;
+import com.ziodyne.sometrpg.systems.CameraControlSystem;
 import com.ziodyne.sometrpg.systems.SpriteRenderSystem;
 
 public class TestBattle implements Screen {
@@ -16,6 +18,7 @@ public class TestBattle implements Screen {
     private final OrthographicCamera camera;
     private World world;
     private SpriteRenderSystem spriteRenderSystem;
+    private CameraControlSystem cameraControlSystem;
 
     public TestBattle(Game game) {
         this.game = game;
@@ -23,9 +26,11 @@ public class TestBattle implements Screen {
         camera.setToOrtho(false, 800, 400);
 
         spriteRenderSystem = new SpriteRenderSystem(camera);
+        cameraControlSystem = new CameraControlSystem(camera);
 
         world = new World();
         world.setSystem(spriteRenderSystem, true);
+        world.setSystem(cameraControlSystem, true);
 
         world.initialize();
 
@@ -33,6 +38,7 @@ public class TestBattle implements Screen {
 
         testEntity.addComponent(new Position());
         testEntity.addComponent(new Sprite("data/libgdx.png"));
+        testEntity.addComponent(new Player());
         testEntity.addToWorld();
     }
 
@@ -47,6 +53,7 @@ public class TestBattle implements Screen {
         world.process();
 
         spriteRenderSystem.process();
+        cameraControlSystem.process();
     }
 
     @Override

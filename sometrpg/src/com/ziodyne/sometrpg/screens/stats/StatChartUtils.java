@@ -3,9 +3,17 @@ package com.ziodyne.sometrpg.screens.stats;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import com.ziodyne.sometrpg.logic.models.*;
+import com.ziodyne.sometrpg.logic.models.Constants;
+import com.ziodyne.sometrpg.logic.models.Stat;
+import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.UnitGrowth;
+import com.ziodyne.sometrpg.logic.models.UnitStat;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StatChartUtils {
@@ -47,7 +55,7 @@ public class StatChartUtils {
 
     List<Float> unitStatRatios = new ArrayList<Float>(CHARTED_STATS.size());
     for (Stat stat : CHARTED_STATS) {
-      unitStatRatios.add((float)statSheet.get(stat)/Constants.STAT_MAX);
+      unitStatRatios.add((float)statSheet.get(stat)/ Constants.STAT_MAX);
     }
 
     List<Vector2> scaledVertices = getScaledChartVertices(unitStatRatios);

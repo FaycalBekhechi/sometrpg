@@ -57,6 +57,12 @@ public class StatChartUtils {
     return new Polygon(toVertexArray(scaledVertices));
   }
 
+  /**
+   * Get the stat cap radar chart for a {@link Unit}
+   *
+   * @param unit The {@link Unit} for which to generate the chart.
+   * @return A {@link Polygon} representing a radar chart of the stats of a unit.
+   */
   public static Polygon getMaxStatRadarChart(Unit unit) {
     Map<Stat, Integer> maxStatSheet = indexStatSheetByValue(unit.getMaxStatSheet());
 

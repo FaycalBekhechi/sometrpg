@@ -4,7 +4,10 @@
 *.war
 *.ear
 
+# IntelliJ #
 .idea/
 .idea\workspace.xml
+*.iws
+*.iml
 
 out/

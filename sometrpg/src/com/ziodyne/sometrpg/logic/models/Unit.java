@@ -9,17 +9,18 @@ public class Unit {
   private final long id;
   private String name;
   private Set<UnitStat> statSheet;
-  private final UnitGrowth growths; 
-  
-  public Unit(String name, Set<UnitStat> statSheet, UnitGrowth growths) {
-    super();
-    this.name = name;
-    this.statSheet = statSheet;
-    this.growths = growths;
+  private final Set<UnitStat> maxStatSheet;
+  private final UnitGrowth growths;
+
+  public Unit(long id, Set<UnitStat> maxStatSheet, UnitGrowth growths, Set<UnitStat> statSheet, String name) {
     this.id = lastIdentifier.incrementAndGet();
+    this.maxStatSheet = maxStatSheet;
+    this.growths = growths;
+    this.statSheet = statSheet;
+    this.name = name;
   }
 
-  public String getName() {
+    public String getName() {
     return name;
   }
 

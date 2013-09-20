@@ -3,17 +3,16 @@ package com.ziodyne.sometrpg.screens.stats;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import com.ziodyne.sometrpg.logic.models.Stat;
-import com.ziodyne.sometrpg.logic.models.Unit;
-import com.ziodyne.sometrpg.logic.models.UnitGrowth;
+import com.ziodyne.sometrpg.logic.models.*;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.Map;
 
 public class StatChartUtils {
     private static final int GROWTH_CHART_RADIUS = 20;
+
+    // The charts show every stat except level and HP
+    private static final EnumSet<Stat> CHARTED_STATS = EnumSet.complementOf(EnumSet.of(Stat.LEVEL, Stat.HP));
 
     private StatChartUtils() { }
 
@@ -26,30 +25,77 @@ public class StatChartUtils {
     public static Polygon getGrowthRadarChart(Unit unit) {
         UnitGrowth growths = unit.getGrowths();
 
-        // The chart shows every stat except level
-        Set<Stat> relevantStats = EnumSet.complementOf(EnumSet.of(Stat.LEVEL));
-
         // Convert growths stored as percentages to values in the interval [0,1]
         List<Float> unitGrowthRatios = new ArrayList<Float>();
-        for (Stat stat : relevantStats) {
+        for (Stat stat : CHARTED_STATS) {
             unitGrowthRatios.add(growths.getGrowthChance(stat)/100f);
         }
 
-        // Generate normalized vectors representing each 'point' of the radar chart
-        List<Vector2> unitCircleVectors = uniformSampleUnitCircle(relevantStats.size());
-        List<Vector2> scaledVertices = new ArrayList<Vector2>();
-
-        for (int i = 0; i < relevantStats.size(); i++) {
-            Vector2 directionVector = unitCircleVectors.get(i);
-            Float scaleFactor = unitGrowthRatios.get(i);
-
-            // Scale the normalized vectors along the interval [0, GROWTH_CHART_RADIUS] using the
-            // growth ratio as a scaling factor
-            scaledVertices.add(directionVector.mul(GROWTH_CHART_RADIUS*scaleFactor));
-        }
+        List<Vector2> unitCircleVectors = uniformSampleUnitCircle(CHARTED_STATS.size());
+        List<Vector2> scaledVertices = getScaledChartVertices(unitGrowthRatios);
 
         // Convert to LibGDX's weird polygon format
         return new Polygon(toVertexArray(scaledVertices));
+    }
+
+    /**
+     * Get the stat value radar chart for a {@link Unit}
+     *
+     * @param unit The {@link Unit} for which to generate the chart.
+     * @return A {@link Polygon} representing a radar chart of the stats of a unit.
+     */
+    public static Polygon getStatRadarChart(Unit unit) {
+        Map<Stat, Integer> statSheet = indexStatSheetByValue(unit.getStatSheet());
+
+        List<Float> unitStatRatios = new ArrayList<Float>();
+        for (Stat stat : CHARTED_STATS) {
+            unitStatRatios.add((float)statSheet.get(stat)/Constants.STAT_MAX);
+        }
+
+        List<Vector2> scaledVertices = getScaledChartVertices(unitStatRatios);
+
+        return new Polygon(toVertexArray(scaledVertices));
+    }
+
+    /**
+     * Generate vectors representing the points of the radar chart.
+     *
+     * @param scalingFactors A {@link List} of floating point scaling factors to use against the radar chart's radius for
+     *                       vector length.
+     *
+     * @return A {@link List} of properly scaled {@link Vector2}s.
+     */
+    private static List<Vector2> getScaledChartVertices(List<Float> scalingFactors) {
+
+        // Generate normalized vectors representing each 'point' of the radar chart
+        List<Vector2> unitCircleVectors = uniformSampleUnitCircle(scalingFactors.size());
+        List<Vector2> scaledVertices = new ArrayList<Vector2>();
+
+        for (int i = 0; i < CHARTED_STATS.size(); i++) {
+            Vector2 directionVector = unitCircleVectors.get(i);
+            Float scaleFactor = scalingFactors.get(i);
+
+            // Generate a properly-scaled vector to the real point in the radar chart
+            scaledVertices.add(directionVector.mul(GROWTH_CHART_RADIUS*scaleFactor));
+        }
+
+        return scaledVertices;
+    }
+
+    /**
+     * Get an index of a {@link Unit}'s stat values by stat type.
+     *
+     * @param stats A {@link Collection} of {@link UnitStat} to index
+     * @return A {@link Map} of {@link Stat} to {@link Integer} representing the unit's value in the given stat.
+     */
+    private static Map<Stat, Integer> indexStatSheetByValue(Collection<UnitStat> stats) {
+        Map<Stat, Integer> index = new HashMap<Stat, Integer>();
+
+        for (UnitStat stat : stats) {
+            index.put(stat.getStat(), stat.getValue());
+        }
+
+        return index;
     }
 
     /**

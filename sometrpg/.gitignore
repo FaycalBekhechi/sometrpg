@@ -11,3 +11,5 @@ sometrpg-android\gen\
 # Eclipse crap #
 .project
 .classpath
+
+.idea/

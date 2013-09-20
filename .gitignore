@@ -4,4 +4,5 @@
 *.war
 *.ear
 
-.idea\
+.idea/
+.idea\workspace.xml

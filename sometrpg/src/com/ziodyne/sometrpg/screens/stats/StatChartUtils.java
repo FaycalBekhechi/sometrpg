@@ -86,6 +86,8 @@ public class StatChartUtils {
 
         float sampleFrequencyDegrees = 360f/numSamples;
 
+        // Generate samples along the unit circle by rotating the normalized 'up' vector
+        // around the circle at evenly-distributed intervals.
         Vector2 startPoint = new Vector2(0, 1);
         for (int i = 0; i < numSamples-1; i++) {
             Matrix3 rotation = new Matrix3();

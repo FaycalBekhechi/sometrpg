@@ -26,7 +26,7 @@ public class StatChartUtils {
     UnitGrowth growths = unit.getGrowths();
 
     // Convert growths stored as percentages to values in the interval [0,1]
-    List<Float> unitGrowthRatios = new ArrayList<Float>();
+    List<Float> unitGrowthRatios = new ArrayList<Float>(CHARTED_STATS.size());
     for (Stat stat : CHARTED_STATS) {
       unitGrowthRatios.add(growths.getGrowthChance(stat)/100f);
     }
@@ -47,12 +47,25 @@ public class StatChartUtils {
   public static Polygon getStatRadarChart(Unit unit) {
     Map<Stat, Integer> statSheet = indexStatSheetByValue(unit.getStatSheet());
 
-    List<Float> unitStatRatios = new ArrayList<Float>();
+    List<Float> unitStatRatios = new ArrayList<Float>(CHARTED_STATS.size());
     for (Stat stat : CHARTED_STATS) {
       unitStatRatios.add((float)statSheet.get(stat)/Constants.STAT_MAX);
     }
 
     List<Vector2> scaledVertices = getScaledChartVertices(unitStatRatios);
+
+    return new Polygon(toVertexArray(scaledVertices));
+  }
+
+  public static Polygon getMaxStatRadarChart(Unit unit) {
+    Map<Stat, Integer> maxStatSheet = indexStatSheetByValue(unit.getMaxStatSheet());
+
+    List<Float> unitMaxStatRatios = new ArrayList<Float>(CHARTED_STATS.size());
+    for (Stat stat : CHARTED_STATS) {
+      unitMaxStatRatios.add((float)maxStatSheet.get(stat)/Constants.STAT_MAX);
+    }
+
+    List<Vector2> scaledVertices = getScaledChartVertices(unitMaxStatRatios);
 
     return new Polygon(toVertexArray(scaledVertices));
   }

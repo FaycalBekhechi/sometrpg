@@ -28,6 +28,10 @@ public class Unit {
     this.name = name;
   }
 
+  public Set<UnitStat> getMaxStatSheet() {
+    return maxStatSheet;
+  }
+
   public Set<UnitStat> getStatSheet() {
     return statSheet;
   }

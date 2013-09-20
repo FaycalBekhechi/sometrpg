@@ -31,10 +31,8 @@ public class StatChartUtils {
       unitGrowthRatios.add(growths.getGrowthChance(stat)/100f);
     }
 
-    List<Vector2> unitCircleVectors = uniformSampleUnitCircle(CHARTED_STATS.size());
     List<Vector2> scaledVertices = getScaledChartVertices(unitGrowthRatios);
 
-    // Convert to LibGDX's weird polygon format
     return new Polygon(toVertexArray(scaledVertices));
   }
 

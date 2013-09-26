@@ -1,17 +1,25 @@
 package com.ziodyne.sometrpg.input;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
+import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.ziodyne.sometrpg.tween.CameraAccessor;
 
 public class CameraMoveController implements InputProcessor {
     private final OrthographicCamera camera;
+    private final World world;
+    private final TweenManager tweenManager;
     private boolean ignoreNextTouchUp = false;
 
-    public CameraMoveController(OrthographicCamera camera) {
-        this.camera = camera;
+    public CameraMoveController(OrthographicCamera camera, World world, TweenManager tweenManager) {
+      this.camera = camera;
+      this.world = world;
+      this.tweenManager = tweenManager;
     }
 
     @Override
@@ -39,13 +47,13 @@ public class CameraMoveController implements InputProcessor {
       if (button == Input.Buttons.LEFT && !ignoreNextTouchUp) {
 
         // Get the touch position in world space.
-        Vector3 touchCoords3d = new Vector3(screenX, screenY, 1);
+        Vector3 touchCoords3d = new Vector3(screenX, screenY, 0);
         camera.unproject(touchCoords3d);
 
-        // Compute the offset from the current camera position
-        touchCoords3d = touchCoords3d.sub(camera.position);
-
-        camera.translate(touchCoords3d.x, touchCoords3d.y);
+        // Slide the camera to the new position.
+        Tween.to(camera, CameraAccessor.POSITION, 0.5f)
+                .target(touchCoords3d.x, touchCoords3d.y, 0)
+                .start(tweenManager);
       }
       ignoreNextTouchUp = false;
       return false;

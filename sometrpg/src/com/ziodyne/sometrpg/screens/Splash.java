@@ -63,7 +63,7 @@ public class Splash implements Screen {
           public boolean act(float dt) {
             // This dependency should be inverted somehow, but that seems
             // challenging
-            game.setScreen(new MainMenu());
+            game.setScreen(new MainMenu(game));
             return true;
           }
         }

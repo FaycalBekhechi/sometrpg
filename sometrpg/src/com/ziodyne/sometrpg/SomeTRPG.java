@@ -11,6 +11,6 @@ public class SomeTRPG extends Game {
 	@Override
 	public void create() {
 		//setScreen(new TestBattle(this));
-    setScreen(new MainMenu());
+    setScreen(new MainMenu(this));
 	}
 }

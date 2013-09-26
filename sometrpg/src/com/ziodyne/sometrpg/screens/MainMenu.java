@@ -6,6 +6,7 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -16,11 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.ziodyne.sometrpg.tween.ActorAccessor;
 
 public class MainMenu implements Screen {
   private final Stage stage;
   private final Skin skin;
+  private final Game game;
   private final TweenManager tweenManager;
   private final Label title;
   private final Button startGameButton;
@@ -28,10 +31,13 @@ public class MainMenu implements Screen {
   private boolean menuInitialized = false;
   private boolean initializing = false;
 
-  public MainMenu() {
+  public MainMenu(Game theGame) {
+    this.game = theGame;
     this.stage = new Stage();
     this.skin = new Skin(Gdx.files.internal("uiskin.json"));
     this.tweenManager = new TweenManager();
+
+    Gdx.input.setInputProcessor(stage);
 
     title = new Label("Welcome to Some Tactical RPG", skin);
     title.setX((480 - title.getWidth()) / 2);
@@ -47,12 +53,26 @@ public class MainMenu implements Screen {
     startGameButton.setWidth(buttonWidth);
     startGameButton.getColor().a = 0;
 
+    startGameButton.addListener(new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent event, Actor actor) {
+        game.setScreen(new TestBattle(game));
+      }
+    });
+
     quitButton = new TextButton("Quit", skin);
     quitButton.setX((480 - buttonWidth)/2);
     quitButton.setY(startGameButton.getY() - startGameButton.getHeight() - 20);
     quitButton.setHeight(buttonHeight);
     quitButton.setWidth(buttonWidth);
     quitButton.getColor().a = 0;
+
+    quitButton.addListener(new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent event, Actor actor) {
+        Gdx.app.exit();
+      }
+    });
 
     stage.addActor(title);
     stage.addActor(startGameButton);

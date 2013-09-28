@@ -1,7 +1,5 @@
 package com.ziodyne.sometrpg.screens.stats;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import org.junit.Assert;
@@ -16,7 +14,7 @@ public class StatChartUtilsTest {
 
   static void assertEpsilonEquals(Vector2 expected, Vector2 actual, float epsilon) {
     if (!expected.epsilonEquals(actual, epsilon)) {
-      fail();
+      Assert.fail();
     }
   }
   
@@ -25,11 +23,11 @@ public class StatChartUtilsTest {
     int radius = 5;
     List<Float> scalingFactors = Lists.newArrayList(0.5f, 0.5f);
     List<Vector2> vectors = StatChartUtils.getScaledChartVertices(scalingFactors, radius);
-    assertEquals(scalingFactors.size(), vectors.size());
+    Assert.assertEquals(scalingFactors.size(), vectors.size());
 
     
-    Vector2 expectedFirst = new Vector2(0, 1).mul(radius*0.5f);
-    Vector2 expectedSecond = new Vector2(0, -1).mul(radius*0.5f);
+    Vector2 expectedFirst = new Vector2(0, 1).scl(radius*0.5f);
+    Vector2 expectedSecond = new Vector2(0, -1).scl(radius*0.5f);
     
     Vector2 actualFirst = vectors.get(0);
     Vector2 actualSecond = vectors.get(1);
@@ -43,7 +41,7 @@ public class StatChartUtilsTest {
     int nSamples = 2;
     List<Vector2> samples = StatChartUtils.uniformSampleUnitCircle(nSamples);
     
-    assertEquals(2, samples.size());
+    Assert.assertEquals(2, samples.size());
     
     Vector2 first = samples.get(0);
     Vector2 second = samples.get(1);
@@ -60,6 +58,6 @@ public class StatChartUtilsTest {
     float[] vertices = new float[]{0f, 1f, 2f, 3f};
     List<Vector2> vectors = Lists.newArrayList(new Vector2(vertices[0], vertices[1]), new Vector2(vertices[2], vertices[3]));
     
-    assertArrayEquals(vertices, StatChartUtils.toVertexArray(vectors), epsilon);
+    Assert.assertArrayEquals(vertices, StatChartUtils.toVertexArray(vectors), epsilon);
   }
 }

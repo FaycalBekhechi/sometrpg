@@ -162,8 +162,9 @@ public class StatChartUtils {
     // Generate samples along the unit circle by rotating the normalized 'up' vector
     // around the circle at evenly-distributed intervals.
     Vector3 startPoint = new Vector3(0f, 1f, 0f);
+    Matrix4 rotation = new Matrix4();
+    
     for (int i = 0; i <= numSamples-1; i++) {
-      Matrix4 rotation = new Matrix4();
       Vector3 rotated = startPoint.cpy();
 
       rotation.setToRotation(0f, 0f, 1f, sampleFrequencyDegrees*i);

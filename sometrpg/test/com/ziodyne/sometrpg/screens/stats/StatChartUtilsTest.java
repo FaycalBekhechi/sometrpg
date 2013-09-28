@@ -53,7 +53,6 @@ public class StatChartUtilsTest {
     
     assertEpsilonEquals(correctFirst, first, epsilon);
     assertEpsilonEquals(correctSecond, second, epsilon);
-    
   }
 
 }

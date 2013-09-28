@@ -10,6 +10,10 @@ public class UnitStat {
   
   public UnitStat(int value, Stat stat) {
     super();
+    if (value > Constants.STAT_MAX) {
+      throw new IllegalArgumentException("Stat too high! " + value + " provided, max is: " + Constants.STAT_MAX);
+    }
+    
     this.value = value;
     this.stat = stat;
   }

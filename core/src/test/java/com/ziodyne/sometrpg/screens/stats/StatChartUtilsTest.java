@@ -5,8 +5,12 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.ziodyne.sometrpg.logic.models.ModelTestUtils;
+import com.ziodyne.sometrpg.logic.models.Unit;
 
 public class StatChartUtilsTest {
   
@@ -19,7 +23,17 @@ public class StatChartUtilsTest {
   }
   
   @Test
-  public void test() {
+  public void testGrowthPolygonGeneration() {
+    Unit testUnit = ModelTestUtils.createUnit();
+    
+    int radius = 5;
+    Polygon radarChart = StatChartUtils.getGrowthRadarChart(testUnit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
+    
+    
+  }
+  
+  @Test
+  public void testVertexScaling() {
     int radius = 5;
     List<Float> scalingFactors = Lists.newArrayList(0.5f, 0.5f);
     List<Vector2> vectors = StatChartUtils.getScaledChartVertices(scalingFactors, radius);

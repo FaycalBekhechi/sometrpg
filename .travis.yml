@@ -1,4 +1,4 @@
 language: java
 
 before_install:
-- rm -f .gradlew
+- rm -f gradlew

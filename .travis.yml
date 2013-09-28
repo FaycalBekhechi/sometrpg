@@ -1,3 +1,5 @@
 language: java
 
-before_script: chmod a+x gradlew
+before_script:
+- echo "Running 'before_script'" 
+- chmod a+x ./gradlew

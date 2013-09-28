@@ -51,7 +51,7 @@ public class ModelTestUtils {
   }
   
   public static Unit createMaxedUnit() {
-    return new Unit(homogeneousStats(50), createGrowth(), homogeneousStats(50), "Test");
+    return new Unit(homogeneousStats(Constants.STAT_MAX), createGrowth(), homogeneousStats(Constants.STAT_MAX), "Test");
   }
   
   public static Unit createCrappyUnit() {

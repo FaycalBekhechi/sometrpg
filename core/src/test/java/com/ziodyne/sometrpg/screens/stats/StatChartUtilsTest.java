@@ -27,7 +27,7 @@ public class StatChartUtilsTest {
   public void testGrowthPolygonGeneration() {
     Unit testUnit = ModelTestUtils.createMaxedUnit();
     
-    int radius = 50;
+    int radius = 5;
     Polygon radarChart = StatChartUtils.getStatRadarChart(testUnit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
     
     // We expect 2 vertices per stat because the 2d vertices are stored in a flattened array
@@ -41,12 +41,11 @@ public class StatChartUtilsTest {
     
     System.out.println(Arrays.toString(roundedVertices));
     
-    // [0, 20 | -17, 10 | -17, -10 | 0, -20 | 17, -10 | 17, 10] for the case of r = 50;
     // Compare the distance between two opposing points on the chart.
-    Vector2 firstPoint = new Vector2(roundedVertices[0], roundedVertices[1]);
-    Vector2 opposingPoint = new Vector2(roundedVertices[6], roundedVertices[7]);
+    Vector2 firstPoint = new Vector2(tVerts[0], tVerts[1]);
+    Vector2 opposingPoint = new Vector2(tVerts[6], tVerts[7]);
     
-    Assert.assertEquals(radius, firstPoint.dst(opposingPoint), epsilon);
+    Assert.assertEquals(radius*2, firstPoint.dst(opposingPoint), epsilon);
     
     Unit crappyUnit = ModelTestUtils.createCrappyUnit();
     

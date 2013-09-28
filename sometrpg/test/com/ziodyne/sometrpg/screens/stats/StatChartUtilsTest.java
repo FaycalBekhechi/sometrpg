@@ -14,14 +14,28 @@ public class StatChartUtilsTest {
   
   private static float epsilon = 0.00001f;
 
+  static void assertEpsilonEquals(Vector2 expected, Vector2 actual, float epsilon) {
+    if (!expected.epsilonEquals(actual, epsilon)) {
+      fail();
+    }
+  }
+  
   @Test
   public void test() {
     int radius = 5;
     List<Float> scalingFactors = Lists.newArrayList(0.5f, 0.5f);
     List<Vector2> vectors = StatChartUtils.getScaledChartVertices(scalingFactors, radius);
-    
-    System.out.println(vectors);
     assertEquals(scalingFactors.size(), vectors.size());
+
+    
+    Vector2 expectedFirst = new Vector2(0, 1).mul(radius*0.5f);
+    Vector2 expectedSecond = new Vector2(0, -1).mul(radius*0.5f);
+    
+    Vector2 actualFirst = vectors.get(0);
+    Vector2 actualSecond = vectors.get(1);
+    
+    assertEpsilonEquals(expectedFirst, actualFirst, epsilon);
+    assertEpsilonEquals(expectedSecond, actualSecond, epsilon);
   }
   
   @Test
@@ -37,13 +51,9 @@ public class StatChartUtilsTest {
     Vector2 correctFirst = new Vector2(0, 1);
     Vector2 correctSecond = new Vector2(0, -1);
     
-    if (!first.epsilonEquals(correctFirst, epsilon)) {
-      fail();
-    }
+    assertEpsilonEquals(correctFirst, first, epsilon);
+    assertEpsilonEquals(correctSecond, second, epsilon);
     
-    if (!second.epsilonEquals(correctSecond, epsilon)) {
-      fail();
-    }
   }
 
 }

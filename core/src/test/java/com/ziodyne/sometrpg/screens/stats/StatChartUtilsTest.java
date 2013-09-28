@@ -29,7 +29,8 @@ public class StatChartUtilsTest {
     int radius = 5;
     Polygon radarChart = StatChartUtils.getGrowthRadarChart(testUnit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
     
-    
+    // We expect 2 vertices per stat because the 2d vertices are stored in a flattened array
+    Assert.assertEquals(radarChart.getVertices().length, StatChartUtils.DEFAULT_CHARTED_STATS.size()*2);
   }
   
   @Test

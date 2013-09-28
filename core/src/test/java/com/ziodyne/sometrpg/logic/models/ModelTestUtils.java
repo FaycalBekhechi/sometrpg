@@ -2,8 +2,6 @@ package com.ziodyne.sometrpg.logic.models;
 
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import com.google.common.collect.Maps;

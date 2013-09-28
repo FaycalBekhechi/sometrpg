@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.screens.stats;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -9,7 +8,6 @@ import org.junit.Test;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.ziodyne.sometrpg.logic.models.ModelTestUtils;
 import com.ziodyne.sometrpg.logic.models.Unit;
 

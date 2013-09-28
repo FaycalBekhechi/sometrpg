@@ -1,17 +1,20 @@
 *.class
 
 # Package Files #
+*.jar
 *.war
 *.ear
-
-# IntelliJ #
-.idea/
-.idea\workspace.xml
-*.iws
 *.iml
-
-# Eclipse #
+*.ipr
+*.iws
+*.so
 .classpath
+.project
+.settings/
+.gradle/
+.idea/
+build/
 bin/
-
 out/
+gen/
+local.properties

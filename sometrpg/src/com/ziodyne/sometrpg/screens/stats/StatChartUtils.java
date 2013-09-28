@@ -131,14 +131,14 @@ public class StatChartUtils {
    * @param vectors Vectors to convert
    * @return An array of floats where every pair of entries corresponds to the x and y coordinates of a point.
    */
-  private static float[] toVertexArray(List<Vector2> vectors) {
+  static float[] toVertexArray(List<Vector2> vectors) {
     float[] vertices = new float[vectors.size()*2];
 
-    for (int i = 0; i < vectors.size(); i+=2) {
+    for (int i = 0, j = 0; i < vectors.size(); i+=1, j+=2) {
       Vector2 vector = vectors.get(i);
 
-      vertices[i] = vector.x;
-      vertices[i+1] = vector.y;
+      vertices[j] = vector.x;
+      vertices[j+1] = vector.y;
     }
 
     return vertices;

@@ -55,4 +55,11 @@ public class StatChartUtilsTest {
     assertEpsilonEquals(correctSecond, second, epsilon);
   }
 
+  @Test
+  public void testVertexArrayConversion() {
+    float[] vertices = new float[]{0f, 1f, 2f, 3f};
+    List<Vector2> vectors = Lists.newArrayList(new Vector2(vertices[0], vertices[1]), new Vector2(vertices[2], vertices[3]));
+    
+    assertArrayEquals(vertices, StatChartUtils.toVertexArray(vectors), epsilon);
+  }
 }

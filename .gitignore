@@ -10,4 +10,8 @@
 *.iws
 *.iml
 
+# Eclipse #
+.classpath
+bin/
+
 out/

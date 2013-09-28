@@ -33,13 +33,7 @@ public class StatChartUtilsTest {
     // We expect 2 vertices per stat because the 2d vertices are stored in a flattened array
     Assert.assertEquals(radarChart.getTransformedVertices().length, StatChartUtils.DEFAULT_CHARTED_STATS.size()*2);
     
-    float[] tVerts = radarChart.getTransformedVertices();
-    int[] roundedVertices = new int[tVerts.length];
-    for (int i = 0; i < tVerts.length; i++) {
-      roundedVertices[i] = Math.round(tVerts[i]);
-    }
-    
-    System.out.println(Arrays.toString(roundedVertices));
+    float[] tVerts = radarChart.getTransformedVertices();   
     
     // Compare the distance between two opposing points on the chart.
     Vector2 firstPoint = new Vector2(tVerts[0], tVerts[1]);

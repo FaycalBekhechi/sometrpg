@@ -1,6 +1,4 @@
 language: java
 
-install: true
-
-before_script: 
-- chmod a+x ./gradlew
+before_install:
+- rm -f .gradlew

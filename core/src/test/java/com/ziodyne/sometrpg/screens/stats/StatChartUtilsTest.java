@@ -42,7 +42,6 @@ public class StatChartUtilsTest {
     Assert.assertEquals(radius*2, firstPoint.dst(opposingPoint), epsilon);
     
     Unit crappyUnit = ModelTestUtils.createCrappyUnit();
-    
     Polygon crappyRadarChart = StatChartUtils.getGrowthRadarChart(crappyUnit, StatChartUtils.DEFAULT_CHARTED_STATS, 0);
     
     float[] vertices = crappyRadarChart.getTransformedVertices();

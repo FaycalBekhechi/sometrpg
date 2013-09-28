@@ -12,7 +12,7 @@ import com.google.common.collect.Sets;
 public class ModelTestUtils {
   private ModelTestUtils() { }
   
-  private static Set<UnitStat> homogeneousStats(int value) {
+  public static Set<UnitStat> homogeneousStats(int value) {
     EnumSet<Stat> stats = EnumSet.allOf(Stat.class);
     
     Set<UnitStat> results = Sets.newHashSet();

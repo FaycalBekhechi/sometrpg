@@ -1,5 +1,5 @@
 language: java
 
-before_script:
+before_install:
 - echo "Running 'before_script'" 
 - chmod a+x ./gradlew

@@ -9,6 +9,7 @@ import com.ziodyne.sometrpg.logic.models.Stat;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.UnitGrowth;
 import com.ziodyne.sometrpg.logic.models.UnitStat;
+import com.ziodyne.sometrpg.logic.util.UnitUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +52,7 @@ public class StatChartUtils {
    * @return A {@link Polygon} representing a radar chart of the stats of a unit.
    */
   public static Polygon getStatRadarChart(Unit unit, EnumSet<Stat> chartedStats, int radius) {
-    Map<Stat, Integer> statSheet = indexStatSheetByValue(unit.getStatSheet());
+    Map<Stat, Integer> statSheet = UnitUtils.indexStatSheetByValue(unit.getStatSheet());
 
     List<Float> unitStatRatios = new ArrayList<Float>(chartedStats.size());
     for (Stat stat : chartedStats) {
@@ -70,7 +71,7 @@ public class StatChartUtils {
    * @return A {@link Polygon} representing a radar chart of the stats of a unit.
    */
   public static Polygon getMaxStatRadarChart(Unit unit, EnumSet<Stat> chartedStats, int radius) {
-    Map<Stat, Integer> maxStatSheet = indexStatSheetByValue(unit.getMaxStatSheet());
+    Map<Stat, Integer> maxStatSheet = UnitUtils.indexStatSheetByValue(unit.getMaxStatSheet());
 
     List<Float> unitMaxStatRatios = new ArrayList<Float>(chartedStats.size());
     for (Stat stat : chartedStats) {
@@ -106,22 +107,6 @@ public class StatChartUtils {
     }
 
     return scaledVertices;
-  }
-
-  /**
-   * Get an index of a {@link Unit}'s stat values by stat type.
-   *
-   * @param stats A {@link Collection} of {@link UnitStat} to index
-   * @return A {@link Map} of {@link Stat} to {@link Integer} representing the unit's value in the given stat.
-   */
-  private static Map<Stat, Integer> indexStatSheetByValue(Collection<UnitStat> stats) {
-    Map<Stat, Integer> index = new HashMap<Stat, Integer>();
-
-    for (UnitStat stat : stats) {
-      index.put(stat.getStat(), stat.getValue());
-    }
-
-    return index;
   }
 
   /**

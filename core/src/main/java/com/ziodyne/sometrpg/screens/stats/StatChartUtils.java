@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.screens.stats;
 
-import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
@@ -103,7 +102,7 @@ public class StatChartUtils {
       Float scaleFactor = scalingFactors.get(i);
 
       // Generate a properly-scaled vector to the real point in the radar chart
-      scaledVertices.add(directionVector.mul(radius*scaleFactor));
+      scaledVertices.add(directionVector.scl(radius*scaleFactor));
     }
 
     return scaledVertices;

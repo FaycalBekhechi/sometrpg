@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.screens.stats;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -24,19 +25,34 @@ public class StatChartUtilsTest {
   
   @Test
   public void testGrowthPolygonGeneration() {
-    Unit testUnit = ModelTestUtils.createUnit();
+    Unit testUnit = ModelTestUtils.createMaxedUnit();
     
-    int radius = 5;
-    Polygon radarChart = StatChartUtils.getGrowthRadarChart(testUnit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
+    int radius = 50;
+    Polygon radarChart = StatChartUtils.getStatRadarChart(testUnit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
     
     // We expect 2 vertices per stat because the 2d vertices are stored in a flattened array
-    Assert.assertEquals(radarChart.getVertices().length, StatChartUtils.DEFAULT_CHARTED_STATS.size()*2);
+    Assert.assertEquals(radarChart.getTransformedVertices().length, StatChartUtils.DEFAULT_CHARTED_STATS.size()*2);
+    
+    float[] tVerts = radarChart.getTransformedVertices();
+    int[] roundedVertices = new int[tVerts.length];
+    for (int i = 0; i < tVerts.length; i++) {
+      roundedVertices[i] = Math.round(tVerts[i]);
+    }
+    
+    System.out.println(Arrays.toString(roundedVertices));
+    
+    // [0, 20 | -17, 10 | -17, -10 | 0, -20 | 17, -10 | 17, 10] for the case of r = 50;
+    // Compare the distance between two opposing points on the chart.
+    Vector2 firstPoint = new Vector2(roundedVertices[0], roundedVertices[1]);
+    Vector2 opposingPoint = new Vector2(roundedVertices[6], roundedVertices[7]);
+    
+    Assert.assertEquals(radius, firstPoint.dst(opposingPoint), epsilon);
     
     Unit crappyUnit = ModelTestUtils.createCrappyUnit();
     
     Polygon crappyRadarChart = StatChartUtils.getGrowthRadarChart(crappyUnit, StatChartUtils.DEFAULT_CHARTED_STATS, 0);
     
-    float[] vertices = crappyRadarChart.getVertices();
+    float[] vertices = crappyRadarChart.getTransformedVertices();
     for (int i = 0; i < vertices.length; i++) {
       if (Math.abs(0 - vertices[i]) > epsilon) {
         Assert.fail("Zero radius radar chart has non-zero (fuzzy match) vertex...");

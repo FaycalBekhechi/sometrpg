@@ -40,9 +40,13 @@ public class StatChartUtils {
       unitGrowthRatios.add(growths.getGrowthChance(stat)/100f);
     }
 
-    List<Vector2> scaledVertices = getScaledChartVertices(unitGrowthRatios, radius);
+    List<Vector2> scaledVertices = getScaledChartVertices(unitGrowthRatios, 1);
 
-    return new Polygon(toVertexArray(scaledVertices));
+    Polygon result = new Polygon(toVertexArray(scaledVertices));
+    
+    result.setScale(radius, radius);
+    
+    return result;
   }
 
   /**

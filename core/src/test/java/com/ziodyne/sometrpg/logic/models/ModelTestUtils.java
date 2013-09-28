@@ -50,6 +50,10 @@ public class ModelTestUtils {
     return new Unit(createMaxStats(), createGrowth(), createStats(), "Test");
   }
   
+  public static Unit createMaxedUnit() {
+    return new Unit(homogeneousStats(50), createGrowth(), homogeneousStats(50), "Test");
+  }
+  
   public static Unit createCrappyUnit() {
     return new Unit(createMaxStats(), createGrowth(), createMinStats(), "Test");
   }

@@ -12,28 +12,28 @@ import com.google.common.collect.Sets;
 public class ModelTestUtils {
   private ModelTestUtils() { }
   
-  public static Set<UnitStat> createStats() {
+  private static Set<UnitStat> homogeneousStats(int value) {
     EnumSet<Stat> stats = EnumSet.allOf(Stat.class);
     
     Set<UnitStat> results = Sets.newHashSet();
     
     for (Stat stat : stats) {
-      results.add(new UnitStat(10, stat));
+      results.add(new UnitStat(value, stat));
     }
     
-    return results; 
+    return results;  
+  }
+  
+  public static Set<UnitStat> createStats() {
+    return homogeneousStats(10);
+  }
+  
+  public static Set<UnitStat> createMinStats() {
+    return homogeneousStats(0);
   }
   
   public static Set<UnitStat> createMaxStats() {
-    EnumSet<Stat> stats = EnumSet.allOf(Stat.class);
-    
-    Set<UnitStat> results = Sets.newHashSet();
-    
-    for (Stat stat : stats) {
-      results.add(new UnitStat(20, stat));
-    }
-    
-    return results;
+    return homogeneousStats(40);
   }
   
   public static UnitGrowth createGrowth() {
@@ -48,5 +48,9 @@ public class ModelTestUtils {
   
   public static Unit createUnit() {
     return new Unit(createMaxStats(), createGrowth(), createStats(), "Test");
+  }
+  
+  public static Unit createCrappyUnit() {
+    return new Unit(createMaxStats(), createGrowth(), createMinStats(), "Test");
   }
 }

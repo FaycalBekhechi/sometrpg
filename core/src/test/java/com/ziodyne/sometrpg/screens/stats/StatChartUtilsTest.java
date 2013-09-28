@@ -31,6 +31,17 @@ public class StatChartUtilsTest {
     
     // We expect 2 vertices per stat because the 2d vertices are stored in a flattened array
     Assert.assertEquals(radarChart.getVertices().length, StatChartUtils.DEFAULT_CHARTED_STATS.size()*2);
+    
+    Unit crappyUnit = ModelTestUtils.createCrappyUnit();
+    
+    Polygon crappyRadarChart = StatChartUtils.getGrowthRadarChart(crappyUnit, StatChartUtils.DEFAULT_CHARTED_STATS, 0);
+    
+    float[] vertices = crappyRadarChart.getVertices();
+    for (int i = 0; i < vertices.length; i++) {
+      if (Math.abs(0 - vertices[i]) > epsilon) {
+        Assert.fail("Zero radius radar chart has non-zero (fuzzy match) vertex...");
+      }
+    }
   }
   
   @Test

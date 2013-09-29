@@ -14,7 +14,7 @@ public class StatChart extends RadarChart {
   }
 
   @Override
-  protected Polygon generateChart(Unit unit) {
+  protected Polygon generateChart(Unit unit, float radius) {
     return StatChartUtils.getStatRadarChart(unit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
   }
 }

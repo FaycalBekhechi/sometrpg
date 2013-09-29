@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.screens.stats;
 
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
@@ -24,6 +25,10 @@ public class StatChartUtils {
   public static final EnumSet<Stat> DEFAULT_CHARTED_STATS = EnumSet.complementOf(EnumSet.of(Stat.LEVEL, Stat.HP));
 
   private StatChartUtils() { }
+
+  public static Mesh generateFanMesh(Polygon polygon) {
+    return null;
+  }
 
   /**
    * Get the growth radar chart for a {@link Unit}

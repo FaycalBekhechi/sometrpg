@@ -31,7 +31,7 @@ public class StatChartUtils {
    * @param unit  The {@link Unit} for which to generate the chart.
    * @return A {@link Polygon} representing a radar chart of the growths of a unit.
    */
-  public static Polygon getGrowthRadarChart(Unit unit, EnumSet<Stat> chartedStats, int radius) {
+  public static Polygon getGrowthRadarChart(Unit unit, EnumSet<Stat> chartedStats, float radius) {
     UnitGrowth growths = unit.getGrowths();
 
     // Convert growths stored as percentages to values in the interval [0,1]
@@ -55,7 +55,7 @@ public class StatChartUtils {
    * @param unit The {@link Unit} for which to generate the chart.
    * @return A {@link Polygon} representing a radar chart of the stats of a unit.
    */
-  public static Polygon getStatRadarChart(Unit unit, EnumSet<Stat> chartedStats, int radius) {
+  public static Polygon getStatRadarChart(Unit unit, EnumSet<Stat> chartedStats, float radius) {
     Map<Stat, Integer> statSheet = UnitUtils.indexStatSheetByValue(unit.getStatSheet());
 
     List<Float> unitStatRatios = new ArrayList<Float>(chartedStats.size());
@@ -74,7 +74,7 @@ public class StatChartUtils {
    * @param unit The {@link Unit} for which to generate the chart.
    * @return A {@link Polygon} representing a radar chart of the stats of a unit.
    */
-  public static Polygon getMaxStatRadarChart(Unit unit, EnumSet<Stat> chartedStats, int radius) {
+  public static Polygon getMaxStatRadarChart(Unit unit, EnumSet<Stat> chartedStats, float radius) {
     Map<Stat, Integer> maxStatSheet = UnitUtils.indexStatSheetByValue(unit.getMaxStatSheet());
 
     List<Float> unitMaxStatRatios = new ArrayList<Float>(chartedStats.size());
@@ -96,7 +96,7 @@ public class StatChartUtils {
    *
    * @return A {@link List} of properly scaled {@link Vector2}s.
    */
-   static List<Vector2> getScaledChartVertices(List<Float> scalingFactors, int radius) {
+   static List<Vector2> getScaledChartVertices(List<Float> scalingFactors, float radius) {
 
     // Generate normalized vectors representing each 'point' of the radar chart
     List<Vector2> unitCircleVectors = uniformSampleUnitCircle(scalingFactors.size());

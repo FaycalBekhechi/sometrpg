@@ -9,6 +9,10 @@ public class StatChart extends RadarChart {
     super(unit);
   }
 
+  public StatChart(Unit unit, float radius) {
+    super(unit, radius);
+  }
+
   @Override
   protected Polygon generateChart(Unit unit) {
     return StatChartUtils.getStatRadarChart(unit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);

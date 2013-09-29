@@ -9,6 +9,10 @@ public class MaxStatChart extends RadarChart {
     super(unit);
   }
 
+  public MaxStatChart(Unit unit, float radius) {
+    super(unit, radius);
+  }
+
   @Override
   protected Polygon generateChart(Unit unit) {
     return StatChartUtils.getMaxStatRadarChart(unit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);

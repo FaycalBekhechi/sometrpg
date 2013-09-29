@@ -10,6 +10,10 @@ public class GrowthChart extends RadarChart {
     super(unit);
   }
 
+  public GrowthChart(Unit unit, float radius) {
+    super(unit, radius);
+  }
+
   @Override
   protected Polygon generateChart(Unit unit) {
     return StatChartUtils.getGrowthRadarChart(unit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);

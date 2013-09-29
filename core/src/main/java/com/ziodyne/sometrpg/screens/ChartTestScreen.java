@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.screens.debug.ModelTestUtils;
+import com.ziodyne.sometrpg.screens.stats.charts.GrowthChart;
 import com.ziodyne.sometrpg.screens.stats.charts.RadarChart;
 import com.ziodyne.sometrpg.screens.stats.charts.StatChart;
 
@@ -25,7 +26,7 @@ public class ChartTestScreen implements Screen {
     camera.translate(0, 0);
 
     Unit testUnit = ModelTestUtils.createMaxedUnit();
-    chart = new StatChart(testUnit);
+    chart = new GrowthChart(testUnit);
   }
   
   @Override
@@ -33,7 +34,7 @@ public class ChartTestScreen implements Screen {
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     camera.update();
-    camera.zoom = 0.01f;
+    camera.zoom = 0.02f;
     camera.apply(Gdx.gl10);
     chart.render(camera);
   }

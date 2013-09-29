@@ -9,6 +9,10 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.google.common.collect.ContiguousSet;
+import com.google.common.collect.DiscreteDomain;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Range;
 import com.ziodyne.sometrpg.logic.models.Constants;
 import com.ziodyne.sometrpg.logic.models.Stat;
 import com.ziodyne.sometrpg.logic.models.Unit;
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,19 +41,25 @@ public class StatChartUtils {
                                        new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, "a_color")));
 
     builder.vertex(new float[]{ 0, 0, 0, Color.toFloatBits(0, 0, 255, 255) });
-    builder.vertex(new float[]{ 0, 2, 0, Color.toFloatBits(255, 0, 0, 255) });
-    builder.vertex(new float[]{ -2, 1, 0, Color.toFloatBits(0, 255, 0, 255)});
-    builder.vertex(new float[]{ -2, -1, 0, Color.toFloatBits(0, 0, 255, 255) });
-    builder.vertex(new float[]{ 0, -2, 0, Color.toFloatBits(0, 255, 0, 255) });
-    builder.vertex(new float[]{ 2, -1, 0, Color.toFloatBits(255, 0, 0, 255) });
-    builder.vertex(new float[]{ 2, 1, 0, Color.toFloatBits(0, 255, 0, 255) });
 
-    builder.index((short)0, (short)1, (short)2);
-    builder.index((short)0, (short)2, (short)3);
-    builder.index((short)0, (short)3, (short)4);
-    builder.index((short)0, (short)4, (short)5);
-    builder.index((short)0, (short)5, (short)6);
-    builder.index((short)0, (short)6, (short)1);
+    float[] transformedVertices = polygon.getTransformedVertices();
+    for (int first = 0, second = 1; first < transformedVertices.length; first+=2, second+=2) {
+      float x = transformedVertices[first];
+      float y = transformedVertices[second];
+      float z = 0;
+
+      builder.vertex(new float[]{ x, y, z, Color.toFloatBits(255, 0, 0, 255) });
+    }
+
+
+    int numVertices = transformedVertices.length/2;
+    for (int i = 1; i <= numVertices; i++) {
+      if (i == numVertices) {
+        builder.index((short)0, (short)i, (short)1);
+      } else {
+        builder.index((short)0, (short)i, (short)(i+1));
+      }
+    }
 
     return builder.end();
   }

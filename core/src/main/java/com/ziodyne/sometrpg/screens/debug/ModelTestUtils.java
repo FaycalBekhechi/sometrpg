@@ -26,6 +26,18 @@ public class ModelTestUtils {
     
     return results;  
   }
+
+  public static Set<UnitStat> randomStats() {
+    EnumSet<Stat> stats = EnumSet.allOf(Stat.class);
+
+    Set<UnitStat> results = Sets.newHashSet();
+
+    for (Stat stat : stats) {
+      results.add(new UnitStat(Math.round((long) (Math.random() * Constants.STAT_MAX)), stat));
+    }
+
+    return results;
+  }
   
   public static Set<UnitStat> createStats() {
     return homogeneousStats(10);
@@ -51,6 +63,10 @@ public class ModelTestUtils {
   
   public static Unit createUnit() {
     return new Unit(createMaxStats(), createGrowth(), createStats(), "Test");
+  }
+
+  public static Unit createRandomUnit() {
+    return new Unit(homogeneousStats(Constants.STAT_MAX), createGrowth(), randomStats(), "Test Random");
   }
   
   public static Unit createMaxedUnit() {

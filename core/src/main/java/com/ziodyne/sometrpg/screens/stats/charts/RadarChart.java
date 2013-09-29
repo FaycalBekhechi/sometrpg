@@ -31,4 +31,12 @@ public abstract class RadarChart {
 
     mesh.render(GL10.GL_TRIANGLE_FAN);
   }
+
+  public float getRadius() {
+    return radius;
+  }
+
+  public void setRadius(float radius) {
+    this.radius = radius;
+  }
 }

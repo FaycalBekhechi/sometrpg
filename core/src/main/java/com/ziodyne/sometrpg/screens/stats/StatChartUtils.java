@@ -40,8 +40,10 @@ public class StatChartUtils {
     builder.begin(new VertexAttributes(new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"),
                                        new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, "a_color")));
 
+    // Start the first vertex as the origin. This is intended to be rendered as a triangle fan.
     builder.vertex(new float[]{ 0, 0, 0, Color.toFloatBits(0, 0, 255, 255) });
 
+    // Generate vertices for the remaining points.
     float[] transformedVertices = polygon.getTransformedVertices();
     for (int first = 0, second = 1; first < transformedVertices.length; first+=2, second+=2) {
       float x = transformedVertices[first];
@@ -51,7 +53,7 @@ public class StatChartUtils {
       builder.vertex(new float[]{ x, y, z, Color.toFloatBits(255, 0, 0, 255) });
     }
 
-
+    // Use indices to organize the vertices properly in a fan.
     int numVertices = transformedVertices.length/2;
     for (int i = 1; i <= numVertices; i++) {
       if (i == numVertices) {

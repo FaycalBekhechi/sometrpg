@@ -1,5 +1,8 @@
 package com.ziodyne.sometrpg.screens;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
@@ -16,22 +19,30 @@ import com.ziodyne.sometrpg.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.screens.stats.charts.GrowthChart;
 import com.ziodyne.sometrpg.screens.stats.charts.RadarChart;
 import com.ziodyne.sometrpg.screens.stats.charts.StatChart;
+import com.ziodyne.sometrpg.tween.RadarChartAccessor;
 
 public class ChartTestScreen implements Screen {
   private RadarChart chart;
   private OrthographicCamera camera;
-  
+  private TweenManager tweenManager;
+
   public ChartTestScreen() {
     camera = new OrthographicCamera(800, 400);
     camera.translate(0, 0);
 
     Unit testUnit = ModelTestUtils.createMaxedUnit();
-    chart = new GrowthChart(testUnit);
+    chart = new GrowthChart(testUnit, 0);
+
+    tweenManager = new TweenManager();
+
+    Tween.registerAccessor(RadarChart.class, new RadarChartAccessor());
   }
   
   @Override
   public void render(float delta) {
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+    tweenManager.update(delta);
 
     camera.update();
     camera.zoom = 0.02f;
@@ -47,8 +58,10 @@ public class ChartTestScreen implements Screen {
 
   @Override
   public void show() {
-    // TODO Auto-generated method stub
-    
+    Tween.to(chart, RadarChartAccessor.RADIUS, 0.5f)
+         .ease(TweenEquations.easeOutQuint)
+         .target(5)
+         .start(tweenManager);
   }
 
   @Override

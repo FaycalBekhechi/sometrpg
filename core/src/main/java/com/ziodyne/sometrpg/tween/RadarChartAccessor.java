@@ -4,7 +4,7 @@ import aurelienribon.tweenengine.TweenAccessor;
 import com.ziodyne.sometrpg.screens.stats.charts.RadarChart;
 
 public class RadarChartAccessor implements TweenAccessor<RadarChart> {
-  private static final int RADIUS = 0;
+  public static final int RADIUS = 0;
 
   @Override
   public int getValues(RadarChart radarChart, int type, float[] values) {

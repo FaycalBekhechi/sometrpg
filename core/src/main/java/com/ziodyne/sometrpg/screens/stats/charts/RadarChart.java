@@ -27,7 +27,7 @@ public abstract class RadarChart {
   public void render(Camera camera) {
     Mesh mesh = StatChartUtils.generateFanMesh(polygon);
 
-    mesh.transform(camera.combined);
+    mesh.transform(camera.view);
 
     mesh.render(GL10.GL_TRIANGLE_FAN);
   }

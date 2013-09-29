@@ -33,7 +33,7 @@ public class StatChartUtils {
   public static Mesh generateFanMesh(Polygon polygon) {
     MeshBuilder builder = new MeshBuilder();
     builder.begin(new VertexAttributes(new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"),
-            new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, "a_color")));
+                                       new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, "a_color")));
 
     builder.vertex(new float[]{ 0, 0, 0, Color.toFloatBits(0, 0, 255, 255) });
     builder.vertex(new float[]{ 0, 2, 0, Color.toFloatBits(255, 0, 0, 255) });

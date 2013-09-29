@@ -30,8 +30,8 @@ public class ChartTestScreen implements Screen {
     camera = new OrthographicCamera(800, 400);
     camera.translate(0, 0);
 
-    Unit testUnit = ModelTestUtils.createMaxedUnit();
-    chart = new GrowthChart(testUnit, 0);
+    Unit testUnit = ModelTestUtils.createRandomUnit();
+    chart = new StatChart(testUnit, 1);
 
     tweenManager = new TweenManager();
 

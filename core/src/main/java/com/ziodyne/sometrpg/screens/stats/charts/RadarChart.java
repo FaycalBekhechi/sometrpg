@@ -37,6 +37,7 @@ public abstract class RadarChart {
   }
 
   public void setRadius(float radius) {
+    polygon.setScale(radius, radius);
     this.radius = radius;
   }
 }

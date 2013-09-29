@@ -1,6 +1,10 @@
 package com.ziodyne.sometrpg.screens.stats;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
@@ -27,7 +31,26 @@ public class StatChartUtils {
   private StatChartUtils() { }
 
   public static Mesh generateFanMesh(Polygon polygon) {
-    return null;
+    MeshBuilder builder = new MeshBuilder();
+    builder.begin(new VertexAttributes(new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"),
+            new VertexAttribute(VertexAttributes.Usage.ColorPacked, 4, "a_color")));
+
+    builder.vertex(new float[]{ 0, 0, 0, Color.toFloatBits(0, 0, 255, 255) });
+    builder.vertex(new float[]{ 0, 2, 0, Color.toFloatBits(255, 0, 0, 255) });
+    builder.vertex(new float[]{ -2, 1, 0, Color.toFloatBits(0, 255, 0, 255)});
+    builder.vertex(new float[]{ -2, -1, 0, Color.toFloatBits(0, 0, 255, 255) });
+    builder.vertex(new float[]{ 0, -2, 0, Color.toFloatBits(0, 255, 0, 255) });
+    builder.vertex(new float[]{ 2, -1, 0, Color.toFloatBits(255, 0, 0, 255) });
+    builder.vertex(new float[]{ 2, 1, 0, Color.toFloatBits(0, 255, 0, 255) });
+
+    builder.index((short)0, (short)1, (short)2);
+    builder.index((short)0, (short)2, (short)3);
+    builder.index((short)0, (short)3, (short)4);
+    builder.index((short)0, (short)4, (short)5);
+    builder.index((short)0, (short)5, (short)6);
+    builder.index((short)0, (short)6, (short)1);
+
+    return builder.end();
   }
 
   /**

@@ -13,52 +13,52 @@ import com.ziodyne.sometrpg.components.Sprite;
 
 public class SpriteRenderSystem extends EntitySystem {
 
-    private OrthographicCamera camera;
-    private SpriteBatch batch;
+  private final OrthographicCamera camera;
+  private final SpriteBatch batch;
 
-    @Mapper
-    ComponentMapper<Position> positionMapper;
+  @Mapper
+  ComponentMapper<Position> positionMapper;
 
-    @Mapper
-    ComponentMapper<Sprite> spriteMapper;
+  @Mapper
+  ComponentMapper<Sprite> spriteMapper;
 
-    @SuppressWarnings("unchecked")
-    public SpriteRenderSystem(OrthographicCamera camera) {
-        super(Aspect.getAspectForAll(Position.class, Sprite.class));
-        this.camera = camera;
+  @SuppressWarnings("unchecked")
+  public SpriteRenderSystem(OrthographicCamera camera, SpriteBatch spriteBatch) {
+    super(Aspect.getAspectForAll(Position.class, Sprite.class));
+    this.camera = camera;
+    this.batch = spriteBatch;
+  }
+
+  @Override
+  protected void initialize() {
+  }
+
+  @Override
+  protected void begin() {
+    batch.setProjectionMatrix(camera.combined);
+    batch.begin();
+  }
+
+  @Override
+  protected void end() {
+    batch.end();
+  }
+
+  @Override
+  protected void processEntities(ImmutableBag<Entity> entites) {
+    for (int i = 0; i < entites.size(); i++) {
+      Entity entity = entites.get(i);
+
+      Position pos = positionMapper.get(entity);
+      Sprite sprite = spriteMapper.get(entity);
+
+      batch.setColor(sprite.color);
+      batch.draw(sprite.texture, pos.getX(), pos.getY());
     }
+  }
 
-    @Override
-    protected void initialize() {
-        batch = new SpriteBatch();
-    }
-
-    @Override
-    protected void begin() {
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-    }
-
-    @Override
-    protected void end() {
-        batch.end();
-    }
-
-    @Override
-    protected void processEntities(ImmutableBag<Entity> entites) {
-        for (int i = 0; i < entites.size(); i++) {
-            Entity entity = entites.get(i);
-
-            Position pos = positionMapper.get(entity);
-            Sprite sprite = spriteMapper.get(entity);
-
-            batch.setColor(sprite.color);
-            batch.draw(sprite.texture, pos.getX(), pos.getY());
-        }
-    }
-
-    @Override
-    protected boolean checkProcessing() {
-        return true;
-    }
+  @Override
+  protected boolean checkProcessing() {
+    return true;
+  }
 }

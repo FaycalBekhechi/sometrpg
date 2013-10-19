@@ -11,6 +11,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ziodyne.sometrpg.components.Player;
 import com.ziodyne.sometrpg.components.Position;
 import com.ziodyne.sometrpg.components.Sprite;
@@ -25,16 +26,18 @@ public class TestBattle implements Screen {
   private final TweenManager tweenManager;
   private World world;
   private SpriteRenderSystem spriteRenderSystem;
+  private final SpriteBatch spriteBatch;
 
   public TestBattle(Game game) {
     this.game = game;
     this.tweenManager = new TweenManager();
+    this.spriteBatch = new SpriteBatch();
     this.camera = new OrthographicCamera();
     camera.setToOrtho(false, 800, 400);
 
     Tween.registerAccessor(Camera.class, new CameraAccessor());
 
-    spriteRenderSystem = new SpriteRenderSystem(camera);
+    spriteRenderSystem = new SpriteRenderSystem(camera, spriteBatch);
 
     world = new World();
     world.setSystem(spriteRenderSystem, true);

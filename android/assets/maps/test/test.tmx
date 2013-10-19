@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="grass-tiles-2-small" tilewidth="32" tileheight="32">
+  <image source="tileset/grass-tiles-2-small.png" width="384" height="192"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJytlD0KwzAMhb2UpplKSwPN3h7A3qX736o2KPD4kDN1eFhS9GMrT/JSigeqwGEfp0EeZwuYyAdqcmr+GnEmuQ32JvcwqeWIbcit97Kktie1XGKrxFfxY1+ynng57yF7R/u94/snfDoeHVvginNgCQzbLTD0teMZuAYOu/pv4bOFPr6/xLaKzyL5l/Ab+qXjLdghz/R94pPxTmXlTPY/ZzxXHpjkddh1DsjRhlrKadbK5skAjXPxIf8zfmdcZS310zdl/eFcktucN9bRXum7s53B+/GdZzuGO0Xf5knN7L8xNru7oyZ3ie4r7rwGmbas/zOesO8Z5/hfODPa40P/AShKTag=
+  </data>
+ </layer>
+</map>

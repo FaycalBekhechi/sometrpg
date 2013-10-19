@@ -14,12 +14,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.ziodyne.sometrpg.components.Player;
-import com.ziodyne.sometrpg.components.Position;
-import com.ziodyne.sometrpg.components.Sprite;
 import com.ziodyne.sometrpg.components.TiledMapComponent;
 import com.ziodyne.sometrpg.input.CameraMoveController;
-import com.ziodyne.sometrpg.input.UnitController;
 import com.ziodyne.sometrpg.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.tween.CameraAccessor;
@@ -53,12 +49,11 @@ public class TestBattle implements Screen {
 
     InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(new CameraMoveController(camera, world, tweenManager));
-    multiplexer.addProcessor(new UnitController());
 
     Gdx.input.setInputProcessor(multiplexer);
 
     TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
-    TiledMapComponent tiledMapComponent = new TiledMapComponent(tiledMap, 1/32f, spriteBatch);
+    TiledMapComponent tiledMapComponent = new TiledMapComponent(tiledMap, 1 / 32f, spriteBatch);
 
     Entity map = world.createEntity();
     map.addComponent(tiledMapComponent);
@@ -67,7 +62,7 @@ public class TestBattle implements Screen {
 
   @Override
   public void render(float delta) {
-    Gdx.gl.glClearColor(0,0,0.2f,1);
+    Gdx.gl.glClearColor(0, 0, 0.2f, 1);
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     tweenManager.update(delta);

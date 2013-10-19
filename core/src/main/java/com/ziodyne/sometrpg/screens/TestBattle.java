@@ -18,6 +18,7 @@ import com.ziodyne.sometrpg.components.Sprite;
 import com.ziodyne.sometrpg.input.CameraMoveController;
 import com.ziodyne.sometrpg.input.UnitController;
 import com.ziodyne.sometrpg.systems.SpriteRenderSystem;
+import com.ziodyne.sometrpg.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.tween.CameraAccessor;
 
 public class TestBattle implements Screen {
@@ -26,6 +27,7 @@ public class TestBattle implements Screen {
   private final TweenManager tweenManager;
   private World world;
   private SpriteRenderSystem spriteRenderSystem;
+  private TiledMapRenderSystem mapRenderSystem;
   private final SpriteBatch spriteBatch;
 
   public TestBattle(Game game) {
@@ -38,6 +40,7 @@ public class TestBattle implements Screen {
     Tween.registerAccessor(Camera.class, new CameraAccessor());
 
     spriteRenderSystem = new SpriteRenderSystem(camera, spriteBatch);
+    mapRenderSystem = new TiledMapRenderSystem(camera);
 
     world = new World();
     world.setSystem(spriteRenderSystem, true);
@@ -68,6 +71,7 @@ public class TestBattle implements Screen {
     world.process();
 
     camera.update();
+    mapRenderSystem.process();
     spriteRenderSystem.process();
   }
 

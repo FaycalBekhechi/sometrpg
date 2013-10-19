@@ -5,11 +5,12 @@ import aurelienribon.tweenengine.TweenManager;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.tween.CameraAccessor;
 
-public class CameraMoveController extends DefaultInputProcessor {
+public class CameraMoveController extends InputAdapter {
   private final OrthographicCamera camera;
   private final World world;
   private final TweenManager tweenManager;

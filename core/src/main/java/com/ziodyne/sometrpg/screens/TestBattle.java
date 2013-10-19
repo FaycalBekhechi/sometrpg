@@ -12,9 +12,12 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.ziodyne.sometrpg.components.Player;
 import com.ziodyne.sometrpg.components.Position;
 import com.ziodyne.sometrpg.components.Sprite;
+import com.ziodyne.sometrpg.components.TiledMapComponent;
 import com.ziodyne.sometrpg.input.CameraMoveController;
 import com.ziodyne.sometrpg.input.UnitController;
 import com.ziodyne.sometrpg.systems.SpriteRenderSystem;
@@ -35,7 +38,7 @@ public class TestBattle implements Screen {
     this.tweenManager = new TweenManager();
     this.spriteBatch = new SpriteBatch();
     this.camera = new OrthographicCamera();
-    camera.setToOrtho(false, 800, 400);
+    camera.setToOrtho(false, 20, 20);
 
     Tween.registerAccessor(Camera.class, new CameraAccessor());
 
@@ -44,6 +47,7 @@ public class TestBattle implements Screen {
 
     world = new World();
     world.setSystem(spriteRenderSystem, true);
+    world.setSystem(mapRenderSystem, true);
 
     world.initialize();
 
@@ -53,12 +57,12 @@ public class TestBattle implements Screen {
 
     Gdx.input.setInputProcessor(multiplexer);
 
-    Entity testEntity = world.createEntity();
+    TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
+    TiledMapComponent tiledMapComponent = new TiledMapComponent(tiledMap, 1/32f, spriteBatch);
 
-    testEntity.addComponent(new Position());
-    testEntity.addComponent(new Sprite("data/libgdx.png"));
-    testEntity.addComponent(new Player());
-    testEntity.addToWorld();
+    Entity map = world.createEntity();
+    map.addComponent(tiledMapComponent);
+    world.addEntity(map);
   }
 
   @Override

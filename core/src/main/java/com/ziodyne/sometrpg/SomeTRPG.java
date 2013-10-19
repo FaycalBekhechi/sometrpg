@@ -9,8 +9,8 @@ public class SomeTRPG extends Game {
 
 	@Override
 	public void create() {
-		//setScreen(new TestBattle(this));
+		setScreen(new TestBattle(this));
     //setScreen(new MainMenu(this));
-	  setScreen(new ChartTestScreen());
+	  //setScreen(new ChartTestScreen());
 	}
 }

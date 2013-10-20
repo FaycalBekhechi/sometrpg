@@ -28,6 +28,10 @@ public class Map {
     this.tiles = tiles;
   }
 
+  public boolean tileExists(int x, int y) {
+    return getTile(x, y) != null;
+  }
+
   /** Gets the tile at (x, y). Returns null if it does not exist. */
   public Tile getTile(int x, int y) {
     if (x > width || y > height) {

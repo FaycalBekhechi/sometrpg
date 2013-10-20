@@ -7,6 +7,7 @@ import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ziodyne.sometrpg.components.Position;
 import com.ziodyne.sometrpg.components.Sprite;
@@ -52,8 +53,7 @@ public class SpriteRenderSystem extends EntitySystem {
       Position pos = positionMapper.get(entity);
       Sprite sprite = spriteMapper.get(entity);
 
-      batch.setColor(sprite.color);
-      batch.draw(sprite.texture, pos.getX(), pos.getY());
+      batch.draw(sprite.getTexture(), pos.getX(), pos.getY(), sprite.getWidth(), sprite.getHeight());
     }
   }
 

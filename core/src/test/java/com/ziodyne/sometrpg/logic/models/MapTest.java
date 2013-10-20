@@ -65,4 +65,12 @@ public class MapTest {
 
     Assert.assertFalse(map.hasUnit(testUnit));
   }
+
+  @Test(expected = GameLogicException.class)
+  public void testRemoveNonexistantUnit() {
+    Map map = ModelTestUtils.createMap(5);
+    Unit testUnit = newTestUnit();
+
+    map.removeUnit(testUnit);
+  }
 }

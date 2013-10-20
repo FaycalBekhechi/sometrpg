@@ -8,7 +8,7 @@ public class Map {
   private final Tile[][] tiles;
   private final int width;
   private final int height;
-  private final java.util.Map<Long, Tile> occupiedUnits = new HashMap<Long, Tile>();
+  private final java.util.Map<Long, Tile> occupyingUnits = new HashMap<Long, Tile>();
 
   public Map(int size, Tile[][] tiles) {
     super();
@@ -62,29 +62,29 @@ public class Map {
 
     validateDestinationTile(destination);
     Long unitId = unit.getId();
-    Tile existingOccupancy = occupiedUnits.get(unitId);
+    Tile existingOccupancy = occupyingUnits.get(unitId);
     if (existingOccupancy != null) {
       throw new GameLogicException("Unit with id: " + unitId + " is already present on this map.");
     }
 
-    occupiedUnits.put(unitId, destination);
+    occupyingUnits.put(unitId, destination);
     destination.setOccupyingUnit(unit);
   }
 
   /** Remove a unit from the map. Blows up if it does not exist. */
   public void removeUnit(Unit unit) {
     Long unitId = unit.getId();
-    Tile occupancy = occupiedUnits.get(unitId);
+    Tile occupancy = occupyingUnits.get(unitId);
     if (occupancy == null) {
       throw  new GameLogicException("Unit with id: " + unitId + " does not exist on this map.");
     }
 
-    occupiedUnits.remove(unitId);
+    occupyingUnits.remove(unitId);
     occupancy.setOccupyingUnit(null);
   }
 
   public boolean hasUnit(Unit unit) {
-    return occupiedUnits.get(unit.getId()) != null;
+    return occupyingUnits.get(unit.getId()) != null;
   }
 
   private void moveUnit(Tile src, Tile dest) {
@@ -96,8 +96,8 @@ public class Map {
     dest.setOccupyingUnit(movingUnit);
 
     Long unitId = movingUnit.getId();
-    occupiedUnits.remove(unitId);
-    occupiedUnits.put(unitId, dest);
+    occupyingUnits.remove(unitId);
+    occupyingUnits.put(unitId, dest);
   }
 
   /** Checks tile movement preconditions and throws exceptions when any are violated. */

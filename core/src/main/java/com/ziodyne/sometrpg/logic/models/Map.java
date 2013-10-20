@@ -42,22 +42,6 @@ public class Map {
     moveUnit(src, dest);
   }
 
-  /** Checks tile movement preconditions and throws exceptions when any are violated. */
-  private static void validateMove(Tile src, Tile dest) throws GameLogicException {
-    Unit unitToMove = src.getOccupyingUnit();
-    if (unitToMove == null) {
-      throw new GameLogicException("Invalid move: source tile is unoccupied.");
-    }
-
-    if (dest.isOccupied()) {
-      throw new GameLogicException("Invalid move: cannot move to occupied tile.");
-    }
-
-    if (!dest.isPassable()) {
-      throw new GameLogicException("Invalid move: cannot move to impassable tile.");
-    }
-  }
-
   private void moveUnit(Tile src, Tile dest) {
     validateMove(src, dest);
 
@@ -65,6 +49,36 @@ public class Map {
 
     src.setOccupyingUnit(null);
     dest.setOccupyingUnit(movingUnit);
+  }
+
+  public void addUnit(Unit unit, int x, int y) {
+    Tile destination = getTile(x, y);
+    if (destination == null) {
+      throw new TileNotFoundException(x, y);
+    }
+
+    validateDestinationTile(destination);
+    destination.setOccupyingUnit(unit);
+  }
+
+  /** Checks tile movement preconditions and throws exceptions when any are violated. */
+  private static void validateMove(Tile src, Tile dest) throws GameLogicException {
+    Unit unitToMove = src.getOccupyingUnit();
+    if (unitToMove == null) {
+      throw new GameLogicException("Invalid move: source tile is unoccupied.");
+    }
+
+    validateDestinationTile(dest);
+  }
+
+  private static void validateDestinationTile(Tile dest) throws GameLogicException {
+    if (dest.isOccupied()) {
+      throw new GameLogicException("Invalid move: cannot move to occupied tile.");
+    }
+
+    if (!dest.isPassable()) {
+      throw new GameLogicException("Invalid move: cannot move to impassable tile.");
+    }
   }
 
   static class TileNotFoundException extends GameLogicException {

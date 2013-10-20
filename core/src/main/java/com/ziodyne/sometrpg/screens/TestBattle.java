@@ -86,8 +86,10 @@ public class TestBattle extends ScreenAdapter {
     Vector3 unprojectedCoords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     camera.unproject(unprojectedCoords);
 
-    mapSelectorPos.setX(unprojectedCoords.x);
-    mapSelectorPos.setY(unprojectedCoords.y);
+    double unprojectedX = unprojectedCoords.x;
+    double unprojectedY = unprojectedCoords.y;
+    mapSelectorPos.setX((float)Math.floor(unprojectedX));
+    mapSelectorPos.setY((float)Math.floor(unprojectedY));
 
     tweenManager.update(delta);
     world.setDelta(delta);

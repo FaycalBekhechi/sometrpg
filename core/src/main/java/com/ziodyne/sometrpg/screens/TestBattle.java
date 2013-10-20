@@ -4,6 +4,7 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import com.artemis.Entity;
 import com.artemis.World;
+import com.artemis.managers.TagManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -22,6 +23,7 @@ import com.ziodyne.sometrpg.components.Position;
 import com.ziodyne.sometrpg.components.Sprite;
 import com.ziodyne.sometrpg.components.TiledMapComponent;
 import com.ziodyne.sometrpg.input.CameraMoveController;
+import com.ziodyne.sometrpg.systems.MapSelectorUpdateSystem;
 import com.ziodyne.sometrpg.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.tween.CameraAccessor;
@@ -35,6 +37,7 @@ public class TestBattle extends ScreenAdapter {
   private Entity tileSelectorOverlay;
   private SpriteRenderSystem spriteRenderSystem;
   private TiledMapRenderSystem mapRenderSystem;
+  private MapSelectorUpdateSystem mapSelectorUpdateSystem;
   private final SpriteBatch spriteBatch;
   private Rectangle mapBoundingRect;
 
@@ -47,18 +50,23 @@ public class TestBattle extends ScreenAdapter {
 
     Tween.registerAccessor(Camera.class, new CameraAccessor());
 
-    spriteRenderSystem = new SpriteRenderSystem(camera, spriteBatch);
-    mapRenderSystem = new TiledMapRenderSystem(camera);
-
-    world = new World();
-    world.setSystem(spriteRenderSystem, true);
-    world.setSystem(mapRenderSystem, true);
-
-    world.initialize();
-
     TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
+
+    world = new World();
+
+    spriteRenderSystem = new SpriteRenderSystem(camera, spriteBatch);
+    mapRenderSystem = new TiledMapRenderSystem(camera);
+    mapSelectorUpdateSystem = new MapSelectorUpdateSystem(world, camera, mapBoundingRect);
+
+    world.setSystem(spriteRenderSystem, true);
+    world.setSystem(mapRenderSystem, true);
+    world.setSystem(mapRenderSystem, true);
+
+    world.setManager(new TagManager());
+
+    world.initialize();
 
     InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(new CameraMoveController(camera, world, tweenManager));
@@ -76,6 +84,7 @@ public class TestBattle extends ScreenAdapter {
 
     tileSelectorOverlay.addComponent(sprite);
     world.addEntity(tileSelectorOverlay);
+    world.getManager(TagManager.class).register("map_selector", tileSelectorOverlay);
 
     Entity map = world.createEntity();
     map.addComponent(tiledMapComponent);
@@ -89,25 +98,11 @@ public class TestBattle extends ScreenAdapter {
 
     camera.update();
 
-    Vector3 unprojectedCoords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-    camera.unproject(unprojectedCoords);
-
-    double unprojectedX = unprojectedCoords.x;
-    double unprojectedY = unprojectedCoords.y;
-    mapSelectorPos.setX((float)Math.floor(unprojectedX));
-    mapSelectorPos.setY((float)Math.floor(unprojectedY));
-
-    // If the cursor extends beyond the map rect, disable.
-    if (!mapBoundingRect.contains(mapSelectorPos.getX(), mapSelectorPos.getY())) {
-      tileSelectorOverlay.disable();
-    } else {
-      tileSelectorOverlay.enable();
-    }
-
     tweenManager.update(delta);
     world.setDelta(delta);
     world.process();
 
+    mapSelectorUpdateSystem.process();
     mapRenderSystem.process();
     spriteRenderSystem.process();
   }

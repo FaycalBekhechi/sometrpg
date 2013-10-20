@@ -2,7 +2,7 @@ package com.ziodyne.sometrpg.logic.models;
 
 import java.util.Set;
 
-import com.ziodyne.sometrpg.screens.debug.ModelTestUtils;
+import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;

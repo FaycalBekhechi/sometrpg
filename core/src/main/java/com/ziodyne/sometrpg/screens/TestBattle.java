@@ -5,10 +5,7 @@ import aurelienribon.tweenengine.TweenManager;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.artemis.managers.TagManager;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,7 +22,7 @@ import com.ziodyne.sometrpg.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.tween.CameraAccessor;
 
-public class TestBattle implements Screen {
+public class TestBattle extends ScreenAdapter {
   private final Game game;
   private final OrthographicCamera camera;
   private final TweenManager tweenManager;
@@ -97,29 +94,5 @@ public class TestBattle implements Screen {
 
     mapRenderSystem.process();
     spriteRenderSystem.process();
-  }
-
-  @Override
-  public void show() {
-  }
-
-  @Override
-  public void resize(int width, int height) {
-  }
-
-  @Override
-  public void hide() {
-  }
-
-  @Override
-  public void pause() {
-  }
-
-  @Override
-  public void resume() {
-  }
-
-  @Override
-  public void dispose() {
   }
 }

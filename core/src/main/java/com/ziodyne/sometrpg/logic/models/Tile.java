@@ -27,7 +27,7 @@ public class Tile {
   }
 
   public void setOccupyingUnit(Unit occupyingUnit) {
-    if (isOccupied()){
+    if (occupyingUnit != null && isOccupied()){
       throw new IllegalArgumentException("Can't send a unit to an occupied square.");
     }
     

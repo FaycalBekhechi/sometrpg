@@ -2,17 +2,30 @@ package com.ziodyne.sometrpg.logic.models;
 
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 
+import java.util.HashMap;
+
 public class Map {
   private final Tile[][] tiles;
   private final int width;
   private final int height;
-  
-  public Map(int width, int height) {
+  private final java.util.Map<Long, Tile> occupiedUnits = new HashMap<Long, Tile>();
+
+  public Map(int size, Tile[][] tiles) {
     super();
-    this.width = width;
-    this.height = height;
-    
-    tiles = new Tile[width][height];
+    this.width = size;
+    this.height = size;
+
+    if (tiles.length != size) {
+      throw new GameLogicException("Non-square grid: Row of invalid size.");
+    }
+
+    for (Tile[] row : tiles) {
+      if (row.length != size) {
+        throw new GameLogicException("Non-square grid: Column of invalid size.");
+      }
+    }
+
+    this.tiles = tiles;
   }
 
   /**
@@ -49,6 +62,10 @@ public class Map {
 
     src.setOccupyingUnit(null);
     dest.setOccupyingUnit(movingUnit);
+
+    Long unitId = movingUnit.getId();
+    occupiedUnits.remove(unitId);
+    occupiedUnits.put(unitId, dest);
   }
 
   public void addUnit(Unit unit, int x, int y) {
@@ -58,7 +75,29 @@ public class Map {
     }
 
     validateDestinationTile(destination);
+    Long unitId = unit.getId();
+    Tile existingOccupancy = occupiedUnits.get(unitId);
+    if (existingOccupancy != null) {
+      throw new GameLogicException("Unit with id: " + unitId + " is already present on this map.");
+    }
+
+    occupiedUnits.put(unitId, destination);
     destination.setOccupyingUnit(unit);
+  }
+
+  public void removeUnit(Unit unit) {
+    Long unitId = unit.getId();
+    Tile occupancy = occupiedUnits.get(unitId);
+    if (occupancy == null) {
+      throw  new GameLogicException("Unit with id: " + unitId + " does not exist on this map.");
+    }
+
+    occupiedUnits.remove(unitId);
+    occupancy.setOccupyingUnit(null);
+  }
+
+  public boolean hasUnit(Unit unit) {
+    return occupiedUnits.get(unit.getId()) != null;
   }
 
   /** Checks tile movement preconditions and throws exceptions when any are violated. */

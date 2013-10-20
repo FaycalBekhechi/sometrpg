@@ -9,6 +9,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,6 +20,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.ziodyne.sometrpg.logic.models.Map;
+import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.view.assets.BattleLoader;
+import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
@@ -38,6 +44,7 @@ public class TestBattle extends ScreenAdapter {
   private TiledMapRenderSystem mapRenderSystem;
   private MapSelectorUpdateSystem mapSelectorUpdateSystem;
   private final SpriteBatch spriteBatch;
+  private AssetManager assetManager;
   private Rectangle mapBoundingRect;
 
   public TestBattle(Game game) {
@@ -88,12 +95,23 @@ public class TestBattle extends ScreenAdapter {
     Entity map = world.createEntity();
     map.addComponent(tiledMapComponent);
     world.addEntity(map);
+
+    assetManager = new AssetManager();
+    assetManager.setLoader(TiledMap.class, new TmxMapLoader());
+    assetManager.setLoader(Map.class, new MapLoader(new InternalFileHandleResolver()));
+    assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
+
+    assetManager.load("battles/test.json", Battle.class);
   }
 
   @Override
   public void render(float delta) {
     Gdx.gl.glClearColor(0, 0, 0.2f, 1);
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+    if (!assetManager.update()) {
+      System.out.println("loading done");
+    }
 
     camera.update();
 

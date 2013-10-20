@@ -4,8 +4,10 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import com.artemis.Entity;
 import com.artemis.World;
-import com.artemis.managers.TagManager;
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -45,7 +47,6 @@ public class TestBattle extends ScreenAdapter {
     mapRenderSystem = new TiledMapRenderSystem(camera);
 
     world = new World();
-    world.setManager(new TagManager());
     world.setSystem(spriteRenderSystem, true);
     world.setSystem(mapRenderSystem, true);
 

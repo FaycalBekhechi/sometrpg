@@ -14,7 +14,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.components.Position;
 import com.ziodyne.sometrpg.components.Sprite;
@@ -30,9 +32,11 @@ public class TestBattle extends ScreenAdapter {
   private final TweenManager tweenManager;
   private final Position mapSelectorPos = new Position();
   private World world;
+  private Entity tileSelectorOverlay;
   private SpriteRenderSystem spriteRenderSystem;
   private TiledMapRenderSystem mapRenderSystem;
   private final SpriteBatch spriteBatch;
+  private Rectangle mapBoundingRect;
 
   public TestBattle(Game game) {
     this.game = game;
@@ -53,6 +57,8 @@ public class TestBattle extends ScreenAdapter {
     world.initialize();
 
     TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
+    TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
+    mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
 
     InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(new CameraMoveController(camera, world, tweenManager));
@@ -61,15 +67,15 @@ public class TestBattle extends ScreenAdapter {
 
     TiledMapComponent tiledMapComponent = new TiledMapComponent(tiledMap, 1 / 32f, spriteBatch);
 
-    Entity tileSelector = world.createEntity();
-    tileSelector.addComponent(mapSelectorPos);
+    tileSelectorOverlay = world.createEntity();
+    tileSelectorOverlay.addComponent(mapSelectorPos);
 
     Sprite sprite = new Sprite("grid_overlay.png", 1, 1);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
-    tileSelector.addComponent(sprite);
-    world.addEntity(tileSelector);
+    tileSelectorOverlay.addComponent(sprite);
+    world.addEntity(tileSelectorOverlay);
 
     Entity map = world.createEntity();
     map.addComponent(tiledMapComponent);
@@ -90,6 +96,13 @@ public class TestBattle extends ScreenAdapter {
     double unprojectedY = unprojectedCoords.y;
     mapSelectorPos.setX((float)Math.floor(unprojectedX));
     mapSelectorPos.setY((float)Math.floor(unprojectedY));
+
+    // If the cursor extends beyond the map rect, disable.
+    if (!mapBoundingRect.contains(mapSelectorPos.getX(), mapSelectorPos.getY())) {
+      tileSelectorOverlay.disable();
+    } else {
+      tileSelectorOverlay.enable();
+    }
 
     tweenManager.update(delta);
     world.setDelta(delta);

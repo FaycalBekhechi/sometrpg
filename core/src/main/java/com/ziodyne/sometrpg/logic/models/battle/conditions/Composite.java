@@ -2,9 +2,9 @@ package com.ziodyne.sometrpg.logic.models.battle.conditions;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.sun.istack.internal.Nullable;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 public abstract class Composite implements WinCondition {

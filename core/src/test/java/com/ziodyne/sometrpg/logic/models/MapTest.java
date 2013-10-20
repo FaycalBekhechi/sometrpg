@@ -30,7 +30,6 @@ public class MapTest {
     map.moveUnit(2, 2, 3, 3);
   }
 
-
   @Test(expected = GameLogicException.class)
   public void testMoveFromNonexistantTile() {
     Map emptyMap = ModelTestUtils.createEmptyMap();

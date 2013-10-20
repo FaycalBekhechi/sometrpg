@@ -28,9 +28,7 @@ public class Map {
     this.tiles = tiles;
   }
 
-  /**
-   * Gets the tile at (x, y). Returns null if it does not exist.
-   */
+  /** Gets the tile at (x, y). Returns null if it does not exist. */
   public Tile getTile(int x, int y) {
     if (x > width || y > height) {
       return null;
@@ -55,19 +53,7 @@ public class Map {
     moveUnit(src, dest);
   }
 
-  private void moveUnit(Tile src, Tile dest) {
-    validateMove(src, dest);
-
-    Unit movingUnit = src.getOccupyingUnit();
-
-    src.setOccupyingUnit(null);
-    dest.setOccupyingUnit(movingUnit);
-
-    Long unitId = movingUnit.getId();
-    occupiedUnits.remove(unitId);
-    occupiedUnits.put(unitId, dest);
-  }
-
+  /** Add a unit to the map. Blows up if it already exists. */
   public void addUnit(Unit unit, int x, int y) {
     Tile destination = getTile(x, y);
     if (destination == null) {
@@ -85,6 +71,7 @@ public class Map {
     destination.setOccupyingUnit(unit);
   }
 
+  /** Remove a unit from the map. Blows up if it does not exist. */
   public void removeUnit(Unit unit) {
     Long unitId = unit.getId();
     Tile occupancy = occupiedUnits.get(unitId);
@@ -98,6 +85,19 @@ public class Map {
 
   public boolean hasUnit(Unit unit) {
     return occupiedUnits.get(unit.getId()) != null;
+  }
+
+  private void moveUnit(Tile src, Tile dest) {
+    validateMove(src, dest);
+
+    Unit movingUnit = src.getOccupyingUnit();
+
+    src.setOccupyingUnit(null);
+    dest.setOccupyingUnit(movingUnit);
+
+    Long unitId = movingUnit.getId();
+    occupiedUnits.remove(unitId);
+    occupiedUnits.put(unitId, dest);
   }
 
   /** Checks tile movement preconditions and throws exceptions when any are violated. */

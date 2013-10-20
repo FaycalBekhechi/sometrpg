@@ -8,7 +8,9 @@ import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.ziodyne.sometrpg.view.components.Position;
+import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.Sprite;
 
 public class SpriteRenderSystem extends EntitySystem {
@@ -17,16 +19,22 @@ public class SpriteRenderSystem extends EntitySystem {
   private final SpriteBatch batch;
 
   @Mapper
-  ComponentMapper<Position> positionMapper;
+  private ComponentMapper<Position> positionMapper;
 
   @Mapper
-  ComponentMapper<Sprite> spriteMapper;
+  private ComponentMapper<Sprite> spriteMapper;
+
+  @Mapper
+  private ComponentMapper<Shader> shaderMapper;
+
+  private ShaderProgram defaultShader;
 
   @SuppressWarnings("unchecked")
   public SpriteRenderSystem(OrthographicCamera camera, SpriteBatch spriteBatch) {
     super(Aspect.getAspectForAll(Position.class, Sprite.class));
     this.camera = camera;
     this.batch = spriteBatch;
+    this.defaultShader = SpriteBatch.createDefaultShader();
   }
 
   @Override
@@ -51,6 +59,15 @@ public class SpriteRenderSystem extends EntitySystem {
 
       Position pos = positionMapper.get(entity);
       Sprite sprite = spriteMapper.get(entity);
+
+      Shader shaderComponent = shaderMapper.getSafe(entity);
+      ShaderProgram program = defaultShader;
+      if (shaderComponent != null) {
+        shaderComponent.update(world.getDelta());
+        program = shaderComponent.getShader();
+      }
+
+      batch.setShader(program);
 
       batch.draw(sprite.getTexture(), pos.getX(), pos.getY(), sprite.getWidth(), sprite.getHeight());
     }

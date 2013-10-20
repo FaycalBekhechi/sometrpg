@@ -9,7 +9,7 @@ public class Main {
  public static void main(String[] args) {
    LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
    cfg.title = "sometrpg";
-   cfg.useGL20 = false;
+   cfg.useGL20 = true;
    cfg.width = 1600;
    cfg.height = 900;
    cfg.samples = 8;

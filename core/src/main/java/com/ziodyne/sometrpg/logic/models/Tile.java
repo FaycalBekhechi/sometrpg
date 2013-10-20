@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.logic.models;
 
 public class Tile {
   private Unit occupyingUnit;
+  private boolean passable = true;
   private final TerrainType terrainType;
   
   public Tile(TerrainType terrainType) {
@@ -15,6 +16,14 @@ public class Tile {
   
   public boolean isOccupied() {
     return occupyingUnit != null;
+  }
+
+  public boolean isPassable() {
+    return passable;
+  }
+
+  public void setPassable(boolean passable) {
+    this.passable = passable;
   }
 
   public void setOccupyingUnit(Unit occupyingUnit) {

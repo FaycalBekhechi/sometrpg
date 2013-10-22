@@ -7,4 +7,9 @@ public class Rout implements WinCondition {
   public boolean isFulfilled(Battle battle) {
     return battle.getEnemyUnits().isEmpty();
   }
+
+  @Override
+  public boolean isFailed(Battle battle) {
+    return false;
+  }
 }

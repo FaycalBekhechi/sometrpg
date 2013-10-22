@@ -31,6 +31,18 @@ public abstract class Composite implements WinCondition {
 
       return Iterables.any(conditions, fulfilled);
     }
+
+    @Override
+    public boolean isFailed(final Battle battle) {
+      Predicate<WinCondition> failed = new Predicate<WinCondition>() {
+        @Override
+        public boolean apply(@Nullable WinCondition condition) {
+          return condition != null && condition.isFailed(battle);
+        }
+      };
+
+      return Iterables.any(conditions, failed);
+    }
   }
 
   /** All of the given conditions must be met in order to win. */
@@ -49,6 +61,18 @@ public abstract class Composite implements WinCondition {
       };
 
       return Iterables.all(conditions, fulfilled);
+    }
+
+    @Override
+    public boolean isFailed(final Battle battle) {
+      Predicate<WinCondition> failed = new Predicate<WinCondition>() {
+        @Override
+        public boolean apply(@Nullable WinCondition condition) {
+          return condition != null && condition.isFailed(battle);
+        }
+      };
+
+      return Iterables.all(conditions, failed);
     }
   }
 }

@@ -34,4 +34,18 @@ public class ProtectUnits implements WinCondition {
 
     return Iterables.all(unitsToProtect, isAlive);
   }
+
+  @Override
+  public boolean isFailed(Battle battle) {
+    final Map map = battle.getMap();
+
+    Predicate<Unit> isNotAlive = new Predicate<Unit>() {
+      @Override
+      public boolean apply(@Nullable Unit unit) {
+        return !map.hasUnit(unit);
+      }
+    };
+
+    return Iterables.any(unitsToProtect, isNotAlive);
+  }
 }

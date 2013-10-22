@@ -27,4 +27,9 @@ public class Sieze implements WinCondition {
 
     return occupyingUnit != null && battle.getPlayerUnits().contains(occupyingUnit);
   }
+
+  @Override
+  public boolean isFailed(Battle battle) {
+    return false;
+  }
 }

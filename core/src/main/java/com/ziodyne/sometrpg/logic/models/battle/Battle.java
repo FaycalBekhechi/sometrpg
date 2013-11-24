@@ -19,6 +19,10 @@ public class Battle {
     return condition.isFulfilled(this);
   }
 
+  public Army getCurrentTurnArmy() {
+    return armies.get(turnNumber % armies.size());
+  }
+
   public Map getMap() {
     return map;
   }

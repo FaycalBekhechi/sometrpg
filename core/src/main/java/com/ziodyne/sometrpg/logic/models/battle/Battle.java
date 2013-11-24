@@ -43,6 +43,7 @@ public class Battle {
     return getUnitsSafe(getArmyByType(ArmyType.NEUTRAL));
   }
 
+
   private Set<Unit> getUnitsSafe(Army army) {
     return army == null ? new HashSet<Unit>() : army.getUnits();
   }

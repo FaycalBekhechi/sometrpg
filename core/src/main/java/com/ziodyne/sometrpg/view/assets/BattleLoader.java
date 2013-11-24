@@ -7,7 +7,7 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import com.ziodyne.sometrpg.logic.models.Map;
+import com.ziodyne.sometrpg.logic.models.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import org.apache.commons.io.FilenameUtils;
 
@@ -22,14 +22,14 @@ public class BattleLoader extends SynchronousAssetLoader<Battle, BattleLoader.Ba
 
   @Override
   public Battle load(AssetManager assetManager, String fileName, FileHandle file, BattleParameter parameter) {
-    Map map = assetManager.get(getTmxFilepath(fileName), Map.class);
+    BattleMap map = assetManager.get(getTmxFilepath(fileName), BattleMap.class);
     return battleLoader.load(map, file.file());
   }
 
   @Override
   public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, BattleParameter parameter) {
     Array<AssetDescriptor> deps = new Array<AssetDescriptor>();
-    deps.add(new AssetDescriptor<Map>(getTmxFilepath(fileName), Map.class));
+    deps.add(new AssetDescriptor<BattleMap>(getTmxFilepath(fileName), BattleMap.class));
 
     return deps;
   }

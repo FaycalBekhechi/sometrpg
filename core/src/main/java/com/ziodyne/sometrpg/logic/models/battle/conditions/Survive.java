@@ -2,7 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle.conditions;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.ziodyne.sometrpg.logic.models.Map;
+import com.ziodyne.sometrpg.logic.models.BattleMap;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 
@@ -23,7 +23,7 @@ public class Survive implements WinCondition {
 
   @Override
   public boolean isFailed(Battle battle) {
-    final Map map = battle.getMap();
+    final BattleMap map = battle.getMap();
     Set<Unit> players = battle.getPlayerUnits();
     Predicate<Unit> isAlive = new Predicate<Unit>() {
       @Override

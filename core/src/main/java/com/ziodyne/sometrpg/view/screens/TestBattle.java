@@ -20,7 +20,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
-import com.ziodyne.sometrpg.logic.models.Map;
+import com.ziodyne.sometrpg.logic.models.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
@@ -98,7 +98,7 @@ public class TestBattle extends ScreenAdapter {
 
     assetManager = new AssetManager();
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
-    assetManager.setLoader(Map.class, new MapLoader(new InternalFileHandleResolver()));
+    assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
     assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     assetManager.load("battles/test.json", Battle.class);

@@ -1,17 +1,16 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.ImmutableList;
-import com.ziodyne.sometrpg.logic.models.Map;
+import com.ziodyne.sometrpg.logic.models.BattleMap;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Battle {
-  private Map map;
+  private BattleMap map;
   private ImmutableList<Army> armies;
   private WinCondition condition;
   private int turnNumber;
@@ -24,7 +23,7 @@ public class Battle {
     return armies.get(turnNumber % armies.size());
   }
 
-  public Map getMap() {
+  public BattleMap getMap() {
     return map;
   }
 

@@ -8,15 +8,15 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
-import com.ziodyne.sometrpg.logic.models.Map;
+import com.ziodyne.sometrpg.logic.models.BattleMap;
 
-public class MapLoader extends SynchronousAssetLoader<Map, MapLoader.MapParameter> {
+public class MapLoader extends SynchronousAssetLoader<BattleMap, MapLoader.MapParameter> {
   public MapLoader(FileHandleResolver resolver) {
     super(resolver);
   }
 
   @Override
-  public Map load(AssetManager assetManager, String fileName, FileHandle file, MapParameter parameter) {
+  public BattleMap load(AssetManager assetManager, String fileName, FileHandle file, MapParameter parameter) {
     TiledMap tiledMap = assetManager.get(fileName, TiledMap.class);
     return Conversion.convert(tiledMap);
   }
@@ -29,5 +29,5 @@ public class MapLoader extends SynchronousAssetLoader<Map, MapLoader.MapParamete
     return deps;
   }
 
-  public static class MapParameter extends AssetLoaderParameters<Map> { }
+  public static class MapParameter extends AssetLoaderParameters<BattleMap> { }
 }

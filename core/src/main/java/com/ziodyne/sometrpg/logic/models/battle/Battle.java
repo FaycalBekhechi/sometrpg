@@ -4,12 +4,14 @@ import com.ziodyne.sometrpg.logic.models.Map;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Battle {
   private Map map;
-  private Set<Unit> playerUnits;
-  private Set<Unit> enemyUnits;
+  private List<Army> armies;
   private WinCondition condition;
   private int turnNumber;
 
@@ -26,10 +28,25 @@ public class Battle {
   }
 
   public Set<Unit> getPlayerUnits() {
-    return playerUnits;
+    return getUnitsSafe(getArmyByType(ArmyType.PLAYER));
   }
 
   public Set<Unit> getEnemyUnits() {
-    return enemyUnits;
+    return getUnitsSafe(getArmyByType(ArmyType.ENEMY));
+  }
+
+  private Set<Unit> getUnitsSafe(Army army) {
+    return army == null ? new HashSet<Unit>() : army.getUnits();
+  }
+
+  @Nullable
+  private Army getArmyByType(ArmyType type) {
+    for (Army army : armies) {
+      if (army.getType() == type) {
+        return army;
+      }
+    }
+
+    return null;
   }
 }

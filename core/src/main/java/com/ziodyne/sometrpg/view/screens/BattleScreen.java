@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.screens;
 
+import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -9,8 +10,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class BattleScreen extends ScreenAdapter {
   protected final World world = new World();
@@ -20,12 +25,34 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected final OrthographicCamera camera;
   protected TiledMap map;
   protected Battle battle;
+  protected Map<Unit, Entity> entityIndex = new HashMap<Unit, Entity>();
 
   public BattleScreen(OrthographicCamera camera, String tiledMapPath) {
     this.camera = camera;
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
 
     assetManager.load(tiledMapPath, TiledMap.class);
+  }
+
+  public Battle getBattle() {
+    return battle;
+  }
+
+  public OrthographicCamera getCamera() {
+    return camera;
+  }
+
+  public TiledMap getMap() {
+    return map;
+  }
+
+  public Entity getUnitEntity(Unit unit) {
+    return entityIndex.get(unit);
+  }
+
+  protected void registerUnitEntity(Unit unit, Entity entity) {
+    entityIndex.put(unit, entity);
+    world.addEntity(entity);
   }
 
   @Override

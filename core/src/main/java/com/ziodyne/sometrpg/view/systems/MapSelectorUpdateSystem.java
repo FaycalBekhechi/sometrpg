@@ -24,7 +24,7 @@ public class MapSelectorUpdateSystem extends VoidEntitySystem {
   @Override
   protected void processSystem() {
     TagManager tagManager = world.getManager(TagManager.class);
-    Entity mapSelector = tagManager.getEntity("map_selector");
+    Entity mapSelector = tagManager.getEntity("map_hover_selector");
 
     if (mapSelector != null) {
       Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);

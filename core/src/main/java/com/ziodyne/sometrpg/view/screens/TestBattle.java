@@ -3,19 +3,12 @@ package com.ziodyne.sometrpg.view.screens;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import com.artemis.Entity;
-import com.artemis.World;
 import com.artemis.managers.TagManager;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -32,11 +25,8 @@ import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
-import com.ziodyne.sometrpg.view.components.Position;
-import com.ziodyne.sometrpg.view.components.Sprite;
-import com.ziodyne.sometrpg.view.components.TiledMapComponent;
-import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.input.CameraMoveController;
+import com.ziodyne.sometrpg.view.input.UnitSelectionController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.MapSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
@@ -71,6 +61,12 @@ public class TestBattle extends BattleScreen {
     mapRenderSystem = new TiledMapRenderSystem(camera);
     mapSelectorUpdateSystem = new MapSelectorUpdateSystem(world, camera, mapBoundingRect);
 
+    battle = initBattle(tileLayer);
+    initUnitEntities();
+
+    multiplexer.addProcessor(new UnitSelectionController(world, battle, camera));
+
+
     world.setSystem(spriteRenderSystem, true);
     world.setSystem(mapRenderSystem, true);
     world.setSystem(mapRenderSystem, true);
@@ -82,7 +78,12 @@ public class TestBattle extends BattleScreen {
 
     Entity tileSelectorOverlay = entityFactory.createMapSelector();
     world.addEntity(tileSelectorOverlay);
-    world.getManager(TagManager.class).register("map_selector", tileSelectorOverlay);
+    world.getManager(TagManager.class).register("map_hover_selector", tileSelectorOverlay);
+
+    Entity unitSelectorOverlay = entityFactory.createMapSelector();
+    world.addEntity(unitSelectorOverlay);
+    world.getManager(TagManager.class).register("map_selector", unitSelectorOverlay);
+
 
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
 
@@ -90,9 +91,6 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     //assetManager.load("battles/test.json", Battle.class);
-
-    battle = initBattle(tileLayer);
-    initUnitEntities();
   }
 
 
@@ -105,7 +103,7 @@ public class TestBattle extends BattleScreen {
         Unit unit = tile.getOccupyingUnit();
         if (unit != null) {
           Entity unitEntity = entityFactory.createUnit(unit, "grid_overlay.png", i, j);
-          world.addEntity(unitEntity);
+          registerUnitEntity(unit, unitEntity);
         }
       }
     }

@@ -35,6 +35,7 @@ import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
+import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.input.CameraMoveController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.MapSelectorUpdateSystem;
@@ -56,6 +57,7 @@ public class TestBattle extends ScreenAdapter {
   private AssetManager assetManager;
   private Rectangle mapBoundingRect;
   private final Battle battle;
+  private final EntityFactory entityFactory;
 
   public TestBattle(Game game) {
     this.game = game;
@@ -71,6 +73,7 @@ public class TestBattle extends ScreenAdapter {
     mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
 
     world = new World();
+    entityFactory = new EntityFactory(world);
 
     spriteRenderSystem = new SpriteRenderSystem(camera, spriteBatch);
     mapRenderSystem = new TiledMapRenderSystem(camera);
@@ -124,16 +127,7 @@ public class TestBattle extends ScreenAdapter {
         Tile tile = map.getTile(i, j);
         Unit unit = tile.getOccupyingUnit();
         if (unit != null) {
-          Entity unitEntity = world.createEntity();
-
-          Sprite sprite = new Sprite("grid_overlay.png", 1, 1);
-          sprite.setMagFiler(Texture.TextureFilter.Linear);
-          sprite.setMinFilter(Texture.TextureFilter.Linear);
-          unitEntity.addComponent(sprite);
-
-          Position position = new Position(i, j);
-          unitEntity.addComponent(position);
-
+          Entity unitEntity = entityFactory.createUnit(unit, "grid_overlay.png", i, j);
           world.addEntity(unitEntity);
         }
       }

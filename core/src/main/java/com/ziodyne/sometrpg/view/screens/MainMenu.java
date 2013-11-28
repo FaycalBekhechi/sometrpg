@@ -18,12 +18,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.tween.ActorAccessor;
 
 public class MainMenu extends ScreenAdapter {
   private final Stage stage;
   private final Skin skin;
-  private final Game game;
+  private final Director director;
   private final TweenManager tweenManager;
   private final Label title;
   private final Button startGameButton;
@@ -31,8 +32,8 @@ public class MainMenu extends ScreenAdapter {
   private boolean menuInitialized = false;
   private boolean initializing = false;
 
-  public MainMenu(Game theGame) {
-    this.game = theGame;
+  public MainMenu(Director dir) {
+    this.director = dir;
     this.stage = new Stage();
     this.skin = new Skin(Gdx.files.internal("uiskin.json"));
     this.tweenManager = new TweenManager();
@@ -56,7 +57,7 @@ public class MainMenu extends ScreenAdapter {
     startGameButton.addListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
-        game.setScreen(new TestBattle());
+        director.replaceScreen(new TestBattle());
       }
     });
 

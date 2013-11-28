@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.view.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,15 +13,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.ziodyne.sometrpg.view.Director;
 
 public class Splash implements Screen {
   private static final float SPLASH_DURATION = 1.75f;
   private static final float SPLASH_FADE_DURATION = 0.75f;
-  private final Game game;
+  private final Director director;
   private final Stage stage;
   
-  public Splash(Game game) {
-    this.game = game;
+  public Splash(Director director) {
+    this.director = director;
     this.stage = new Stage(800, 480, true);
   }
   
@@ -63,7 +63,7 @@ public class Splash implements Screen {
           public boolean act(float dt) {
             // This dependency should be inverted somehow, but that seems
             // challenging
-            game.setScreen(new MainMenu(game));
+            director.replaceScreen(new MainMenu(director));
             return true;
           }
         }

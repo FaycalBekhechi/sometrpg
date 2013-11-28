@@ -72,4 +72,14 @@ public class BattleMapTest {
 
     map.removeUnit(testUnit);
   }
+
+  @Test
+  public void testGetNonexistantTile() {
+    BattleMap map = ModelTestUtils.createMap(10);
+    Tile nonExistantTile = map.getTile(10, 10);
+    Tile existantTileLower = map.getTile(0, 0);
+
+    Assert.assertNull(nonExistantTile);
+    Assert.assertNotNull(existantTileLower);
+  }
 }

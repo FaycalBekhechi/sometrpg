@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.logic.models;
 
+import com.google.common.collect.Range;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 
 import java.util.HashMap;
@@ -8,12 +9,15 @@ public class BattleMap {
   private final Tile[][] tiles;
   private final int width;
   private final int height;
+  private final Range<Integer> mapIndices;
   private final java.util.Map<Long, Tile> occupyingUnits = new HashMap<Long, Tile>();
 
   public BattleMap(int size, Tile[][] tiles) {
     super();
     this.width = size;
     this.height = size;
+
+    mapIndices = Range.closedOpen(0, size);
 
     if (tiles.length != size) {
       throw new GameLogicException("Non-square grid: Row of invalid size.");
@@ -42,7 +46,8 @@ public class BattleMap {
 
   /** Gets the tile at (x, y). Returns null if it does not exist. */
   public Tile getTile(int x, int y) {
-    if (x > width || y > height) {
+    if (!mapIndices.contains(x) ||
+        !mapIndices.contains(y)) {
       return null;
     }
 

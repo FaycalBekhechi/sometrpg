@@ -38,7 +38,6 @@ public class MainMenu extends ScreenAdapter {
     this.skin = new Skin(Gdx.files.internal("uiskin.json"));
     this.tweenManager = new TweenManager();
 
-    Gdx.input.setInputProcessor(stage);
 
     title = new Label("Welcome to Some Tactical RPG", skin);
     title.setX((480 - title.getWidth()) / 2);
@@ -57,7 +56,7 @@ public class MainMenu extends ScreenAdapter {
     startGameButton.addListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
-        director.replaceScreen(new TestBattle());
+        director.addScreen(new TestBattle(director));
       }
     });
 
@@ -81,6 +80,11 @@ public class MainMenu extends ScreenAdapter {
 
     Tween.setCombinedAttributesLimit(4);
     Tween.registerAccessor(Actor.class, new ActorAccessor());
+  }
+
+  @Override
+  public void show() {
+    Gdx.input.setInputProcessor(stage);
   }
 
   @Override

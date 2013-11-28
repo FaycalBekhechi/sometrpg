@@ -24,9 +24,11 @@ import com.ziodyne.sometrpg.logic.models.battle.Army;
 import com.ziodyne.sometrpg.logic.models.battle.ArmyType;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
+import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.input.CameraMoveController;
+import com.ziodyne.sometrpg.view.input.GameExitController;
 import com.ziodyne.sometrpg.view.input.UnitSelectionController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.MapSelectorUpdateSystem;
@@ -43,13 +45,14 @@ public class TestBattle extends BattleScreen {
   private final Battle battle;
   private Tile selectedTile;
 
-  public TestBattle() {
-    super(new OrthographicCamera(), "maps/test/test.tmx");
+  public TestBattle(Director director) {
+    super(director, new OrthographicCamera(), "maps/test/test.tmx");
     this.tweenManager = new TweenManager();
     camera.setToOrtho(false, 30, 20);
 
     InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(new CameraMoveController(camera, tweenManager));
+    multiplexer.addProcessor(new GameExitController(director));
     Gdx.input.setInputProcessor(multiplexer);
 
     Tween.registerAccessor(Camera.class, new CameraAccessor());

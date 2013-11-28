@@ -30,7 +30,10 @@ public class Director {
   public void popScreen() {
     if (!screens.isEmpty()) {
       screens.pop();
-      game.setScreen(screens.peek());
+
+      if (!screens.isEmpty()) {
+        game.setScreen(screens.peek());
+      }
     }
   }
 }

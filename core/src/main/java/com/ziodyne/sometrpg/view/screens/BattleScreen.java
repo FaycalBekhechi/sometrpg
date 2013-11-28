@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 import java.util.HashMap;
@@ -23,11 +24,13 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected final SpriteBatch spriteBatch = new SpriteBatch();
   protected final AssetManager assetManager = new AssetManager();
   protected final OrthographicCamera camera;
+  protected final Director director;
   protected TiledMap map;
   protected Battle battle;
   protected Map<Unit, Entity> entityIndex = new HashMap<Unit, Entity>();
 
-  public BattleScreen(OrthographicCamera camera, String tiledMapPath) {
+  public BattleScreen(Director director, OrthographicCamera camera, String tiledMapPath) {
+    this.director = director;
     this.camera = camera;
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
 

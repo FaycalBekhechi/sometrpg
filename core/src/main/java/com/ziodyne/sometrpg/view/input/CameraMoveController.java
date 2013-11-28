@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class CameraMoveController extends InputAdapter {
+  private static final int DRAG_TOLERANCE = 4;
   private final OrthographicCamera camera;
   private final TweenManager tweenManager;
   private boolean ignoreNextTouchUp = false;
@@ -39,6 +40,13 @@ public class CameraMoveController extends InputAdapter {
 
   @Override
   public boolean touchDragged(int i, int i2, int i3) {
+    int dx = Gdx.input.getDeltaX();
+    int dy = Gdx.input.getDeltaY();
+
+    if (Math.abs(dx) < DRAG_TOLERANCE && Math.abs(dy) < DRAG_TOLERANCE) {
+      return false;
+    }
+
     camera.translate(new Vector3(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0));
     ignoreNextTouchUp = true;
 

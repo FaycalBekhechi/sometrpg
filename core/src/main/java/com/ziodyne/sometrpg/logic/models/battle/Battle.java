@@ -7,6 +7,7 @@ import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Battle {
@@ -19,8 +20,8 @@ public class Battle {
     this.map = map;
   }
 
-  public void setArmies(ImmutableList<Army> armies) {
-    this.armies = armies;
+  public void setArmies(List<Army> armies) {
+    this.armies = ImmutableList.copyOf(armies);
   }
 
   public void setCondition(WinCondition condition) {

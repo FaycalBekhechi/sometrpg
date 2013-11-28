@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.BattleMap;
 import com.ziodyne.sometrpg.logic.models.TerrainType;
@@ -117,7 +118,7 @@ public class TestBattle extends BattleScreen {
 
     Army playerArmy = new Army(Sets.newHashSet(player), "Greil Mercenaries", ArmyType.PLAYER);
     Army enemyArmy = new Army(Sets.newHashSet(enemy), "Dawn Brigade", ArmyType.ENEMY);
-    battle.setArmies(ImmutableList.of(playerArmy, enemyArmy));
+    battle.setArmies(Lists.newArrayList(playerArmy, enemyArmy));
 
     battle.setCondition(new Rout());
 

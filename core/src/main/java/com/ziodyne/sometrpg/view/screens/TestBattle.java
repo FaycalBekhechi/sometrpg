@@ -47,9 +47,7 @@ public class TestBattle extends ScreenAdapter {
   private final Game game;
   private final OrthographicCamera camera;
   private final TweenManager tweenManager;
-  private final Position mapSelectorPos = new Position();
   private World world;
-  private Entity tileSelectorOverlay;
   private SpriteRenderSystem spriteRenderSystem;
   private TiledMapRenderSystem mapRenderSystem;
   private MapSelectorUpdateSystem mapSelectorUpdateSystem;
@@ -65,6 +63,10 @@ public class TestBattle extends ScreenAdapter {
     this.spriteBatch = new SpriteBatch();
     this.camera = new OrthographicCamera();
     camera.setToOrtho(false, 30, 20);
+
+    InputMultiplexer multiplexer = new InputMultiplexer();
+    multiplexer.addProcessor(new CameraMoveController(camera, tweenManager));
+    Gdx.input.setInputProcessor(multiplexer);
 
     Tween.registerAccessor(Camera.class, new CameraAccessor());
 
@@ -87,27 +89,12 @@ public class TestBattle extends ScreenAdapter {
 
     world.initialize();
 
-    InputMultiplexer multiplexer = new InputMultiplexer();
-    multiplexer.addProcessor(new CameraMoveController(camera, world, tweenManager));
 
-    Gdx.input.setInputProcessor(multiplexer);
-
-    TiledMapComponent tiledMapComponent = new TiledMapComponent(tiledMap, 1 / 32f, spriteBatch);
-
-    tileSelectorOverlay = world.createEntity();
-    tileSelectorOverlay.addComponent(mapSelectorPos);
-
-    Sprite sprite = new Sprite("grid_overlay.png", 1, 1);
-    sprite.setMagFiler(Texture.TextureFilter.Linear);
-    sprite.setMinFilter(Texture.TextureFilter.Linear);
-
-    tileSelectorOverlay.addComponent(sprite);
+    Entity tileSelectorOverlay = entityFactory.createMapSelector();
     world.addEntity(tileSelectorOverlay);
     world.getManager(TagManager.class).register("map_selector", tileSelectorOverlay);
 
-    Entity map = world.createEntity();
-    map.addComponent(tiledMapComponent);
-    world.addEntity(map);
+    world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
 
     assetManager = new AssetManager();
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());

@@ -12,13 +12,11 @@ import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class CameraMoveController extends InputAdapter {
   private final OrthographicCamera camera;
-  private final World world;
   private final TweenManager tweenManager;
   private boolean ignoreNextTouchUp = false;
 
-  public CameraMoveController(OrthographicCamera camera, World world, TweenManager tweenManager) {
+  public CameraMoveController(OrthographicCamera camera, TweenManager tweenManager) {
     this.camera = camera;
-    this.world = world;
     this.tweenManager = tweenManager;
   }
 

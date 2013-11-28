@@ -20,14 +20,23 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.BattleMap;
+import com.ziodyne.sometrpg.logic.models.TerrainType;
+import com.ziodyne.sometrpg.logic.models.Tile;
+import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.battle.Army;
+import com.ziodyne.sometrpg.logic.models.battle.ArmyType;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
 import com.ziodyne.sometrpg.view.input.CameraMoveController;
+import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.MapSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
@@ -46,6 +55,7 @@ public class TestBattle extends ScreenAdapter {
   private final SpriteBatch spriteBatch;
   private AssetManager assetManager;
   private Rectangle mapBoundingRect;
+  private final Battle battle;
 
   public TestBattle(Game game) {
     this.game = game;
@@ -102,6 +112,60 @@ public class TestBattle extends ScreenAdapter {
     assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     assetManager.load("battles/test.json", Battle.class);
+
+    battle = initBattle(tileLayer);
+    initUnitEntities();
+  }
+
+  private void initUnitEntities() {
+    BattleMap map = battle.getMap();
+    for (int i = 0; i < map.getWidth(); i++) {
+      for (int j = 0; j < map.getHeight(); j++) {
+        Tile tile = map.getTile(i, j);
+        Unit unit = tile.getOccupyingUnit();
+        if (unit != null) {
+          Entity unitEntity = world.createEntity();
+
+          Sprite sprite = new Sprite("grid_overlay.png", 1, 1);
+          sprite.setMagFiler(Texture.TextureFilter.Linear);
+          sprite.setMinFilter(Texture.TextureFilter.Linear);
+          unitEntity.addComponent(sprite);
+
+          Position position = new Position(i, j);
+          unitEntity.addComponent(position);
+
+          world.addEntity(unitEntity);
+        }
+      }
+    }
+  }
+
+  private Battle initBattle(TiledMapTileLayer map) {
+    Battle battle = new Battle();
+
+    Unit player = new Unit(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test");
+    Unit enemy = new Unit(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test");
+
+    Army playerArmy = new Army(Sets.newHashSet(player), "Greil Mercenaries", ArmyType.PLAYER);
+    Army enemyArmy = new Army(Sets.newHashSet(enemy), "Dawn Brigade", ArmyType.ENEMY);
+    battle.setArmies(ImmutableList.of(playerArmy, enemyArmy));
+
+    battle.setCondition(new Rout());
+
+    Tile[][] tiles = new Tile[map.getWidth()][map.getHeight()];
+    for (int i = 0; i < map.getWidth(); i++) {
+      for (int j = 0; j < map.getHeight(); j++) {
+        // TODO: Read the tile from the tile layer and get the attribute
+        tiles[i][j] = new Tile(TerrainType.GRASS);
+      }
+    }
+
+    BattleMap battleMap = new BattleMap(tiles.length, tiles);
+    battleMap.addUnit(player, 0, 0);
+    battleMap.addUnit(enemy, tiles.length-1, tiles.length-1);
+    battle.setMap(battleMap);
+
+    return battle;
   }
 
   @Override

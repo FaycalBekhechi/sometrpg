@@ -15,6 +15,22 @@ public class Battle {
   private WinCondition condition;
   private int turnNumber;
 
+  public void setMap(BattleMap map) {
+    this.map = map;
+  }
+
+  public void setArmies(ImmutableList<Army> armies) {
+    this.armies = armies;
+  }
+
+  public void setCondition(WinCondition condition) {
+    this.condition = condition;
+  }
+
+  public void setTurnNumber(int turnNumber) {
+    this.turnNumber = turnNumber;
+  }
+
   public boolean playerWon() {
     return condition.isFulfilled(this);
   }

@@ -43,25 +43,18 @@ import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
-public class TestBattle extends ScreenAdapter {
-  private final Game game;
-  private final OrthographicCamera camera;
+public class TestBattle extends BattleScreen {
   private final TweenManager tweenManager;
-  private World world;
   private SpriteRenderSystem spriteRenderSystem;
   private TiledMapRenderSystem mapRenderSystem;
   private MapSelectorUpdateSystem mapSelectorUpdateSystem;
-  private final SpriteBatch spriteBatch;
-  private AssetManager assetManager;
   private Rectangle mapBoundingRect;
   private final Battle battle;
-  private final EntityFactory entityFactory;
+  private Tile selectedTile;
 
-  public TestBattle(Game game) {
-    this.game = game;
+  public TestBattle() {
+    super(new OrthographicCamera(), "maps/test/test.tmx");
     this.tweenManager = new TweenManager();
-    this.spriteBatch = new SpriteBatch();
-    this.camera = new OrthographicCamera();
     camera.setToOrtho(false, 30, 20);
 
     InputMultiplexer multiplexer = new InputMultiplexer();
@@ -73,9 +66,6 @@ public class TestBattle extends ScreenAdapter {
     TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
-
-    world = new World();
-    entityFactory = new EntityFactory(world);
 
     spriteRenderSystem = new SpriteRenderSystem(camera, spriteBatch);
     mapRenderSystem = new TiledMapRenderSystem(camera);
@@ -96,16 +86,16 @@ public class TestBattle extends ScreenAdapter {
 
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
 
-    assetManager = new AssetManager();
-    assetManager.setLoader(TiledMap.class, new TmxMapLoader());
     assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
     assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
 
-    assetManager.load("battles/test.json", Battle.class);
+    //assetManager.load("battles/test.json", Battle.class);
 
     battle = initBattle(tileLayer);
     initUnitEntities();
   }
+
+
 
   private void initUnitEntities() {
     BattleMap map = battle.getMap();
@@ -149,21 +139,8 @@ public class TestBattle extends ScreenAdapter {
     return battle;
   }
 
-  @Override
-  public void render(float delta) {
-    Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-    if (!assetManager.update()) {
-      System.out.println("loading done");
-    }
-
-    camera.update();
-
+  protected void update(float delta) {
     tweenManager.update(delta);
-    world.setDelta(delta);
-    world.process();
-
     mapSelectorUpdateSystem.process();
     mapRenderSystem.process();
     spriteRenderSystem.process();

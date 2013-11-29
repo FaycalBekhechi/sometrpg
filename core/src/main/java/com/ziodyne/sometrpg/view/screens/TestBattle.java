@@ -105,7 +105,7 @@ public class TestBattle extends BattleScreen {
         Tile tile = map.getTile(i, j);
         Unit unit = tile.getOccupyingUnit();
         if (unit != null) {
-          Entity unitEntity = entityFactory.createUnit(unit, "single.png", i, j);
+          Entity unitEntity = entityFactory.createUnit(unit, unit.getName().equals("Test3x") ? "single3x.png" : "single.png", i, j);
           registerUnitEntity(unit, unitEntity);
         }
       }
@@ -115,7 +115,7 @@ public class TestBattle extends BattleScreen {
   private Battle initBattle(TiledMapTileLayer map) {
     Battle battle = new Battle();
 
-    Combatant player = new Combatant(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test");
+    Combatant player = new Combatant(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test3x");
     Combatant enemy = new Combatant(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test");
 
     Army playerArmy = new Army(Sets.newHashSet(player), "Greil Mercenaries", ArmyType.PLAYER);

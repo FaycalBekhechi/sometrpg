@@ -73,7 +73,6 @@ public class TestBattle extends BattleScreen {
 
     world.setSystem(spriteRenderSystem, true);
     world.setSystem(mapRenderSystem, true);
-    world.setSystem(mapRenderSystem, true);
 
     world.setManager(new TagManager());
 
@@ -106,7 +105,7 @@ public class TestBattle extends BattleScreen {
         Tile tile = map.getTile(i, j);
         Unit unit = tile.getOccupyingUnit();
         if (unit != null) {
-          Entity unitEntity = entityFactory.createUnit(unit, "grid_overlay.png", i, j);
+          Entity unitEntity = entityFactory.createUnit(unit, "single.png", i, j);
           registerUnitEntity(unit, unitEntity);
         }
       }

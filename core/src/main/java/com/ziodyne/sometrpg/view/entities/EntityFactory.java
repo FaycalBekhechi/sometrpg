@@ -20,7 +20,7 @@ public class EntityFactory {
   public Entity createUnit(Unit unit, String texturePath, int x, int y) {
     Entity unitEntity = world.createEntity();
 
-    Sprite sprite = new Sprite("grid_overlay.png", 1, 1);
+    Sprite sprite = new Sprite(texturePath, 1, 1);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     unitEntity.addComponent(sprite);

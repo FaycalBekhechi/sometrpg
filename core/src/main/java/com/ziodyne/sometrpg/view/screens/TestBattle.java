@@ -43,17 +43,11 @@ public class TestBattle extends BattleScreen {
   private MapSelectorUpdateSystem mapSelectorUpdateSystem;
   private Rectangle mapBoundingRect;
   private final Battle battle;
-  private Tile selectedTile;
 
   public TestBattle(Director director) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx");
     this.tweenManager = new TweenManager();
     camera.setToOrtho(false, 30, 20);
-
-    InputMultiplexer multiplexer = new InputMultiplexer();
-    multiplexer.addProcessor(new CameraMoveController(camera, tweenManager));
-    multiplexer.addProcessor(new GameExitController(director));
-    Gdx.input.setInputProcessor(multiplexer);
 
     Tween.registerAccessor(Camera.class, new CameraAccessor());
 
@@ -67,8 +61,6 @@ public class TestBattle extends BattleScreen {
 
     battle = initBattle(tileLayer);
     initUnitEntities();
-
-    multiplexer.addProcessor(new UnitSelectionController(world, battle, camera));
 
 
     world.setSystem(spriteRenderSystem, true);
@@ -93,9 +85,14 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
     assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
 
+    InputMultiplexer multiplexer = new InputMultiplexer();
+    multiplexer.addProcessor(new UnitSelectionController(world, battle, camera));
+    multiplexer.addProcessor(new CameraMoveController(camera, tweenManager));
+    multiplexer.addProcessor(new GameExitController(director));
+    Gdx.input.setInputProcessor(multiplexer);
+
     //assetManager.load("battles/test.json", Battle.class);
   }
-
 
 
   private void initUnitEntities() {

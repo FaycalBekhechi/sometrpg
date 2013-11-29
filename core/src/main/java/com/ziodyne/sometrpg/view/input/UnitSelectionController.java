@@ -6,6 +6,7 @@ import com.artemis.managers.TagManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Unit;
@@ -35,22 +36,27 @@ public class UnitSelectionController extends InputAdapter {
       int x = (int)Math.floor(clickCoordinates.x);
       int y = (int)Math.floor(clickCoordinates.y);
 
+      Position pos = world.getMapper(Position.class).get(mapSelector);
+      if (mapSelector.isEnabled() && x == pos.getX() && y == pos.getY()) {
+        return false;
+      }
+
       Tile tile = battle.getMap().getTile(x, y);
       if (tile != null) {
         Unit unit = tile.getOccupyingUnit();
         if (unit != null) {
           mapSelector.enable();
-          Position pos = world.getMapper(Position.class).get(mapSelector);
           pos.setX(x);
           pos.setY(y);
+          return true;
         } else {
           mapSelector.disable();
+          return false;
         }
       } else {
         mapSelector.disable();
+        return false;
       }
-
-      return true;
     }
     return false;
   }

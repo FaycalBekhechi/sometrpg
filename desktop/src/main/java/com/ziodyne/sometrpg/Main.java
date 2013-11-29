@@ -10,8 +10,8 @@ public class Main {
    LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
    cfg.title = "sometrpg";
    cfg.useGL20 = true;
-   cfg.width = 1600;
-   cfg.height = 900;
+   cfg.width = 960;
+   cfg.height = 540;
    cfg.samples = 8;
 
    Texture.setEnforcePotImages(false);

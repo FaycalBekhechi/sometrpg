@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.logic.models;
 
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.util.ModelTestUtils;
 import org.junit.Assert;
@@ -23,8 +24,8 @@ public class BattleMapTest {
   @Test(expected = GameLogicException.class)
   public void testMoveToOccupiedTile() {
     BattleMap map = ModelTestUtils.createMap(5);
-    Unit testUnit = newTestUnit();
-    Unit otherTestUnit = newTestUnit();
+    Combatant testUnit = new Combatant(newTestUnit());
+    Combatant otherTestUnit = new Combatant(newTestUnit());
 
     map.addUnit(testUnit, 3, 3);
     map.addUnit(otherTestUnit, 2, 2);
@@ -41,7 +42,7 @@ public class BattleMapTest {
   @Test(expected = GameLogicException.class)
   public void testAddUnitTwice() {
     BattleMap map = ModelTestUtils.createMap(5);
-    Unit testUnit = newTestUnit();
+    Combatant testUnit = new Combatant(newTestUnit());
 
     map.addUnit(testUnit, 0, 0);
     map.addUnit(testUnit, 2, 2);
@@ -50,7 +51,7 @@ public class BattleMapTest {
   @Test
   public void testUnitAddition() {
     BattleMap map = ModelTestUtils.createMap(5);
-    Unit testUnit = newTestUnit();
+    Combatant testUnit = new Combatant(newTestUnit());
 
     map.addUnit(testUnit, 2, 2);
     Assert.assertTrue(map.hasUnit(testUnit));
@@ -59,7 +60,7 @@ public class BattleMapTest {
   @Test
   public void testUnitRemoval() {
     BattleMap map = ModelTestUtils.createMap(5);
-    Unit testUnit = newTestUnit();
+    Combatant testUnit = new Combatant(newTestUnit());
 
     map.addUnit(testUnit, 2, 2);
     map.removeUnit(testUnit);

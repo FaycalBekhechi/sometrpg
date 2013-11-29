@@ -1,51 +1,32 @@
 package com.ziodyne.sometrpg.logic.models.battle.conditions;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
-import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 
 public class ProtectUnits implements WinCondition {
-  private Set<Unit> unitsToProtect;
+  private final Set<Combatant> unitsToProtect;
+  private final int turnCount;
 
-  public ProtectUnits(Unit unitToProtect) {
-    this(Sets.newHashSet(unitToProtect));
+  public ProtectUnits(Combatant unitToProtect, int turnCount) {
+    this(Sets.newHashSet(unitToProtect), turnCount);
   }
 
-  public ProtectUnits(Set<Unit> unitsToProtect) {
+  public ProtectUnits(Set<Combatant> unitsToProtect, int turnCount) {
     this.unitsToProtect = unitsToProtect;
+    this.turnCount = turnCount;
   }
 
   @Override
   public boolean isFulfilled(Battle battle) {
-    final BattleMap map = battle.getMap();
-
-    Predicate<Unit> isAlive = new Predicate<Unit>() {
-      @Override
-      public boolean apply(@Nullable Unit unit) {
-        return map.hasUnit(unit);
-      }
-    };
-
-    return Iterables.all(unitsToProtect, isAlive);
+    return Iterables.all(unitsToProtect, ConditionUtils.IS_ALIVE);
   }
 
   @Override
   public boolean isFailed(Battle battle) {
-    final BattleMap map = battle.getMap();
-
-    Predicate<Unit> isNotAlive = new Predicate<Unit>() {
-      @Override
-      public boolean apply(@Nullable Unit unit) {
-        return !map.hasUnit(unit);
-      }
-    };
-
-    return Iterables.any(unitsToProtect, isNotAlive);
+    return Iterables.any(unitsToProtect, ConditionUtils.IS_DEAD);
   }
 }

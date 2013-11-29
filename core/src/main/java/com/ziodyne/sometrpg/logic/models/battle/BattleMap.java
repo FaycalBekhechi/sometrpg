@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.Range;
 import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class BattleMap {
   }
 
   /** Add a unit to the map. Blows up if it already exists. */
-  public void addUnit(Unit unit, int x, int y) {
+  public void addUnit(Combatant unit, int x, int y) {
     Tile destination = getTile(x, y);
     if (destination == null) {
       throw new TileNotFoundException(x, y);
@@ -108,7 +109,7 @@ public class BattleMap {
   private void moveUnit(Tile src, Tile dest) {
     validateMove(src, dest);
 
-    Unit movingUnit = src.getOccupyingUnit();
+    Combatant movingUnit = src.getOccupyingUnit();
 
     src.setOccupyingUnit(null);
     dest.setOccupyingUnit(movingUnit);

@@ -1,9 +1,9 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 
 public class Tile {
-  private Unit occupyingUnit;
+  private Combatant occupyingUnit;
   private boolean passable = true;
   private final TerrainType terrainType;
   
@@ -12,7 +12,7 @@ public class Tile {
     this.terrainType = terrainType;
   }
 
-  public Unit getOccupyingUnit() {
+  public Combatant getOccupyingUnit() {
     return occupyingUnit;
   }
   
@@ -28,7 +28,7 @@ public class Tile {
     this.passable = passable;
   }
 
-  public void setOccupyingUnit(Unit occupyingUnit) {
+  public void setOccupyingUnit(Combatant occupyingUnit) {
     if (occupyingUnit != null && isOccupied()){
       throw new IllegalArgumentException("Can't send a unit to an occupied square.");
     }

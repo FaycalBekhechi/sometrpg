@@ -4,11 +4,12 @@ package com.ziodyne.sometrpg.view;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Director {
   private final Game game;
-  private final Stack<Screen> screens = new Stack<Screen>();
+  private final Deque<Screen> screens = new ArrayDeque<Screen>();
 
   public Director(Game game) {
     this.game = game;
@@ -30,10 +31,7 @@ public class Director {
   public void popScreen() {
     if (!screens.isEmpty()) {
       screens.pop();
-
-      if (!screens.isEmpty()) {
-        game.setScreen(screens.peek());
-      }
     }
+    game.setScreen(screens.peek());
   }
 }

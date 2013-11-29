@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.logic.models.battle.conditions;
 
-import com.ziodyne.sometrpg.logic.models.BattleMap;
-import com.ziodyne.sometrpg.logic.models.Tile;
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;

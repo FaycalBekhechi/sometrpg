@@ -8,7 +8,7 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
-import com.ziodyne.sometrpg.logic.models.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 
 public class MapLoader extends SynchronousAssetLoader<BattleMap, MapLoader.MapParameter> {
   public MapLoader(FileHandleResolver resolver) {

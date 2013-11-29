@@ -13,16 +13,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.ziodyne.sometrpg.logic.models.BattleMap;
-import com.ziodyne.sometrpg.logic.models.TerrainType;
-import com.ziodyne.sometrpg.logic.models.Tile;
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
+import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Army;
 import com.ziodyne.sometrpg.logic.models.battle.ArmyType;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
@@ -116,8 +116,8 @@ public class TestBattle extends BattleScreen {
   private Battle initBattle(TiledMapTileLayer map) {
     Battle battle = new Battle();
 
-    Unit player = new Unit(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test");
-    Unit enemy = new Unit(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test");
+    Combatant player = new Combatant(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test");
+    Combatant enemy = new Combatant(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test");
 
     Army playerArmy = new Army(Sets.newHashSet(player), "Greil Mercenaries", ArmyType.PLAYER);
     Army enemyArmy = new Army(Sets.newHashSet(enemy), "Dawn Brigade", ArmyType.ENEMY);

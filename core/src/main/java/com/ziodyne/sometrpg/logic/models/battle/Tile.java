@@ -1,4 +1,6 @@
-package com.ziodyne.sometrpg.logic.models;
+package com.ziodyne.sometrpg.logic.models.battle;
+
+import com.ziodyne.sometrpg.logic.models.Unit;
 
 public class Tile {
   private Unit occupyingUnit;

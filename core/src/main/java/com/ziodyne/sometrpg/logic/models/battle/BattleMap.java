@@ -1,6 +1,7 @@
-package com.ziodyne.sometrpg.logic.models;
+package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.Range;
+import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 
 import java.util.HashMap;

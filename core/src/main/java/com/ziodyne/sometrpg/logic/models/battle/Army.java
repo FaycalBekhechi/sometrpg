@@ -1,15 +1,15 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 
 import java.util.Set;
 
 public class Army {
-  private final Set<Unit> units;
+  private final Set<Combatant> units;
   private final String name;
   private final ArmyType type;
 
-  public Army(Set<Unit> units, String name, ArmyType type) {
+  public Army(Set<Combatant> units, String name, ArmyType type) {
     this.units = units;
     this.name = name;
     this.type = type;
@@ -19,7 +19,7 @@ public class Army {
     return type;
   }
 
-  public Set<Unit> getUnits() {
+  public Set<Combatant> getUnits() {
     return units;
   }
 }

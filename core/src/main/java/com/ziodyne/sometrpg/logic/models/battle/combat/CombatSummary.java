@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.logic.models.battle;
+package com.ziodyne.sometrpg.logic.models.battle.combat;
 
 public class CombatSummary {
   private final UnitCombatResult attackerResult;

@@ -1,8 +1,8 @@
 package com.ziodyne.sometrpg.view.assets;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.ziodyne.sometrpg.logic.models.BattleMap;
-import com.ziodyne.sometrpg.logic.models.Tile;
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.Tile;
 
 public class Conversion {
   private Conversion() { }

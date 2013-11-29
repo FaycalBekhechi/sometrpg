@@ -1,8 +1,8 @@
 package com.ziodyne.sometrpg.logic.util;
 
-import com.ziodyne.sometrpg.logic.models.BattleMap;
-import com.ziodyne.sometrpg.logic.models.TerrainType;
-import com.ziodyne.sometrpg.logic.models.Tile;
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
+import com.ziodyne.sometrpg.logic.models.battle.Tile;
 
 public class ModelTestUtils {
   private ModelTestUtils() { }

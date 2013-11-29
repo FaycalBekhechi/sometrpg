@@ -1,5 +1,7 @@
 package com.ziodyne.sometrpg.logic.models;
 
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.util.ModelTestUtils;
 import org.junit.Assert;

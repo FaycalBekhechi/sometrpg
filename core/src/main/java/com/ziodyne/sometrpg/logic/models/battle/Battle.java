@@ -1,8 +1,7 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.ImmutableList;
-import com.ziodyne.sometrpg.logic.models.BattleMap;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 
 import javax.annotation.Nullable;
@@ -48,21 +47,21 @@ public class Battle {
     return turnNumber;
   }
 
-  public Set<Unit> getPlayerUnits() {
+  public Set<Combatant> getPlayerUnits() {
     return getUnitsSafe(getArmyByType(ArmyType.PLAYER));
   }
 
-  public Set<Unit> getEnemyUnits() {
+  public Set<Combatant> getEnemyUnits() {
     return getUnitsSafe(getArmyByType(ArmyType.ENEMY));
   }
 
-  public Set<Unit> getNeutralUnits() {
+  public Set<Combatant> getNeutralUnits() {
     return getUnitsSafe(getArmyByType(ArmyType.NEUTRAL));
   }
 
 
-  private Set<Unit> getUnitsSafe(Army army) {
-    return army == null ? new HashSet<Unit>() : army.getUnits();
+  private Set<Combatant> getUnitsSafe(Army army) {
+    return army == null ? new HashSet<Combatant>() : army.getUnits();
   }
 
   @Nullable

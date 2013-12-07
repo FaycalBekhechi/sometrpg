@@ -53,7 +53,7 @@ public class Pathfinder<T> {
 
     while (!openNodes.isEmpty()) {
       T currentCheapest = openNodes.poll();
-      if (strategy.isGoal(currentCheapest)) {
+      if (strategy.isGoal(currentCheapest, goal)) {
         return Optional.of(constructPath(breadcrumbs, goal));
       }
 

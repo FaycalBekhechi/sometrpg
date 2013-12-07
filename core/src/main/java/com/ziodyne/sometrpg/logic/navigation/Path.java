@@ -5,27 +5,27 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-public class Path {
-  private List<GridPoint2> points;
+public class Path<T> {
+  private List<T> points;
 
-  public static class Builder {
-    private List<GridPoint2> points = Lists.newArrayList();
+  public static class Builder<T> {
+    private List<T> points = Lists.newArrayList();
 
-    public Builder addPoint(GridPoint2 point) {
+    public Builder<T> addPoint(T point) {
       points.add(point);
       return this;
     }
 
-    public Path build() {
-      return new Path(points);
+    public Path<T> build() {
+      return new Path<T>(points);
     }
   }
 
-  public Path(List<GridPoint2> points) {
+  public Path(List<T> points) {
     this.points = points;
   }
 
-  public List<GridPoint2> getPoints() {
+  public List<T> getPoints() {
     return points;
   }
 }

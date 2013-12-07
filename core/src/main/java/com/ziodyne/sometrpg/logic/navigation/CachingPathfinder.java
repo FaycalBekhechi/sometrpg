@@ -8,16 +8,18 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.concurrent.ExecutionException;
 
-public class CachingPathfinder<T> extends DefaultPathfinder<T> {
+public class CachingPathfinder<T> implements Pathfinder<T> {
+  private final DefaultPathfinder<T> defaultPathfinder;
+
   public CachingPathfinder(PathfindingStrategy<T> strategy) {
-    super(strategy);
+    defaultPathfinder = new DefaultPathfinder<T>(strategy);
   }
 
   private final LoadingCache<Pair<T, T>, Optional<Path<T>>> resultCache = CacheBuilder.newBuilder()
     .build(new CacheLoader<Pair<T, T>, Optional<Path<T>>>() {
       @Override
       public Optional<Path<T>> load(Pair<T, T> key) throws Exception {
-        return CachingPathfinder.super.computePath(key.getLeft(), key.getRight());
+        return defaultPathfinder.computePath(key.getLeft(), key.getRight());
       }
     });
 

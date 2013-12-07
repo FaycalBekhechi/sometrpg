@@ -50,7 +50,10 @@ public class UnitSelectionController extends InputAdapter {
           pos.setY(y);
           return true;
         } else {
-          mapSelector.disable();
+          if (mapSelector.isEnabled()) {
+            mapSelector.disable();
+            return true;
+          }
           return false;
         }
       } else {

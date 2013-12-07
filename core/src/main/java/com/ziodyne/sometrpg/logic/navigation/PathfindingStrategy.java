@@ -8,14 +8,14 @@ public interface PathfindingStrategy<T> {
    * @param node The node to estimate
    * @return Estimate of the cost from this node to the goal
    */
-  public double estimateCost(T node);
+  public double estimateCost(T node, T goal);
 
   /**
    * Get the cost for a node
    * @param node Node for which to measure the cost
    * @return The true cost from the node to the goal.
    */
-  public double trueCost(T node);
+  public double trueCost(T node, T goal);
 
   /**
    * Get the distance between two nodes

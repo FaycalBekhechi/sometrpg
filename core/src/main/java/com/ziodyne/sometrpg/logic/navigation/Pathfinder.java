@@ -48,7 +48,7 @@ public class Pathfinder<T> {
     openNodes.add(start);
 
     exactCosts.put(start, 0d);
-    estimatedCosts.put(start, strategy.estimateCost(start));
+    estimatedCosts.put(start, strategy.estimateCost(start, goal));
 
 
     while (!openNodes.isEmpty()) {
@@ -62,7 +62,7 @@ public class Pathfinder<T> {
       Set<T> neighbors = strategy.getNeighbors(currentCheapest);
       for (T neighbor : neighbors) {
         double neighborCost = exactCosts.get(currentCheapest) + strategy.distance(currentCheapest, neighbor);
-        double heuristicScore = neighborCost + strategy.estimateCost(neighbor);
+        double heuristicScore = neighborCost + strategy.estimateCost(neighbor, goal);
         Double previousEstimate = estimatedCosts.get(neighbor);
 
         if (closedNodes.contains(neighbor) && heuristicScore >= previousEstimate) {

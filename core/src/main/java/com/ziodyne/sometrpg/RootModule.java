@@ -4,6 +4,8 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.google.inject.AbstractModule;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.ziodyne.sometrpg.view.input.CameraMoveController;
 import com.ziodyne.sometrpg.view.tween.TweenAccessorModule;
 
 public class RootModule extends AbstractModule {
@@ -20,5 +22,7 @@ public class RootModule extends AbstractModule {
     bind(TweenManager.class).toInstance(new TweenManager());
 
     install(new TweenAccessorModule());
+    install(new FactoryModuleBuilder()
+            .build(CameraMoveController.Factory.class));
   }
 }

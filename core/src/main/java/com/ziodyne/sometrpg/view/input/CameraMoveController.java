@@ -8,6 +8,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class CameraMoveController extends InputAdapter {
@@ -16,7 +19,12 @@ public class CameraMoveController extends InputAdapter {
   private final TweenManager tweenManager;
   private boolean ignoreNextTouchUp = false;
 
-  public CameraMoveController(OrthographicCamera camera, TweenManager tweenManager) {
+  public interface Factory {
+    public CameraMoveController create(OrthographicCamera camera);
+  }
+
+  @AssistedInject
+  CameraMoveController(@Assisted OrthographicCamera camera, TweenManager tweenManager) {
     this.camera = camera;
     this.tweenManager = tweenManager;
   }

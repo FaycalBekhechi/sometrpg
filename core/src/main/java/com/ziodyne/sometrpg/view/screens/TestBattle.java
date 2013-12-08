@@ -47,7 +47,8 @@ public class TestBattle extends BattleScreen {
   private final Battle battle;
 
   @Inject
-  public TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor) {
+  TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor, GameExitController gameExitController,
+             CameraMoveController.Factory cameraMoveControllerFactory) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx");
     this.tweenManager = tweenManager;
     camera.setToOrtho(false, 30, 20);
@@ -90,8 +91,8 @@ public class TestBattle extends BattleScreen {
 
     InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(new UnitSelectionController(world, battle, camera));
-    multiplexer.addProcessor(new CameraMoveController(camera, tweenManager));
-    multiplexer.addProcessor(new GameExitController(director));
+    multiplexer.addProcessor(cameraMoveControllerFactory.create(camera));
+    multiplexer.addProcessor(gameExitController);
     Gdx.input.setInputProcessor(multiplexer);
 
     //assetManager.load("battles/test.json", Battle.class);

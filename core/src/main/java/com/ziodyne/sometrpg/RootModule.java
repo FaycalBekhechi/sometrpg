@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.input.CameraMoveController;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.tween.TweenAccessorModule;
@@ -24,7 +25,11 @@ public class RootModule extends AbstractModule {
 
     install(new TweenAccessorModule());
     install(new FactoryModuleBuilder()
+            .build(BattleMapController.Factory.class));
+
+    install(new FactoryModuleBuilder()
             .build(CameraMoveController.Factory.class));
+
     install(new FactoryModuleBuilder()
             .build(SpriteRenderSystem.Factory.class));
   }

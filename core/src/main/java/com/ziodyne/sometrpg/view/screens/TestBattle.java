@@ -29,6 +29,7 @@ import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
+import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.input.CameraMoveController;
 import com.ziodyne.sometrpg.view.input.GameExitController;
 import com.ziodyne.sometrpg.view.input.UnitSelectionController;
@@ -48,7 +49,8 @@ public class TestBattle extends BattleScreen {
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor, GameExitController gameExitController,
-             CameraMoveController.Factory cameraMoveControllerFactory, SpriteRenderSystem.Factory spriteRendererFactory) {
+             CameraMoveController.Factory cameraMoveControllerFactory, SpriteRenderSystem.Factory spriteRendererFactory,
+             BattleMapController.Factory mapControllerFactory) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx");
     this.tweenManager = tweenManager;
     camera.setToOrtho(false, 30, 20);
@@ -90,6 +92,8 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     InputMultiplexer multiplexer = new InputMultiplexer();
+    multiplexer.addProcessor(mapControllerFactory.create(camera, battle, world));
+
     multiplexer.addProcessor(new UnitSelectionController(world, battle, camera));
     multiplexer.addProcessor(cameraMoveControllerFactory.create(camera));
     multiplexer.addProcessor(gameExitController);

@@ -9,10 +9,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.concurrent.ExecutionException;
 
 public class CachingPathfinder<T> implements Pathfinder<T> {
-  private final DefaultPathfinder<T> defaultPathfinder;
+  private final AStarPathfinder<T> defaultPathfinder;
 
   public CachingPathfinder(PathfindingStrategy<T> strategy) {
-    defaultPathfinder = new DefaultPathfinder<T>(strategy);
+    defaultPathfinder = new AStarPathfinder<T>(strategy);
   }
 
   private final LoadingCache<Pair<T, T>, Optional<Path<T>>> resultCache = CacheBuilder.newBuilder()

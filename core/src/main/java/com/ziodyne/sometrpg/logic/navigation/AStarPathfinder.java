@@ -11,10 +11,10 @@ import java.util.Queue;
 import java.util.Set;
 
 
-public class DefaultPathfinder<T> implements Pathfinder<T> {
+public class AStarPathfinder<T> implements Pathfinder<T> {
   private final PathfindingStrategy<T> strategy;
 
-  public DefaultPathfinder(PathfindingStrategy<T> strategy) {
+  public AStarPathfinder(PathfindingStrategy<T> strategy) {
     this.strategy = strategy;
   }
 

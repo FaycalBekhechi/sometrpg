@@ -39,6 +39,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected Entity unitSelector;
   protected Stage menuStage;
   protected Group unitActionMenu = new Group();
+  protected GridPoint2 selectedTile;
   protected Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
   protected float gridSquareSize = 32;
 
@@ -76,17 +77,19 @@ public abstract class BattleScreen extends ScreenAdapter {
         world.deleteEntity(unitSelector);
         unitSelector = null;
       }
+      selectedTile = null;
       hideActionMenu();
     } else if (battle.getMap().tileExists(selectedSquare.x, selectedSquare.y)) {
       unitSelector = entityFactory.createUnitSelector(selectedSquare);
       world.addEntity(unitSelector);
-      showActionMenu(selectedSquare);
+      selectedTile = selectedSquare;
+      showActionMenu();
     }
   }
 
-  private void showActionMenu(GridPoint2 point) {
+  private void showActionMenu() {
     TextButton testButton = new TextButton("Attack", skin);
-    Vector3 screenSpacePoint = new Vector3(point.x, point.y, 0);
+    Vector3 screenSpacePoint = new Vector3(selectedTile.x, selectedTile.y, 0);
     camera.project(screenSpacePoint);
 
 
@@ -128,6 +131,15 @@ public abstract class BattleScreen extends ScreenAdapter {
     camera.update();
     world.setDelta(delta);
     world.process();
+
+    // Anchor the unit selection menu to the selected tile.
+    if (selectedTile != null) {
+      Vector3 menuPos = new Vector3(selectedTile.x, selectedTile.y, 0);
+      camera.project(menuPos);
+
+      unitActionMenu.setX(menuPos.x);
+      unitActionMenu.setY(menuPos.y);
+    }
 
     update(delta);
 

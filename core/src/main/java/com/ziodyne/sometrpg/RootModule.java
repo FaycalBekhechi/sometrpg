@@ -1,6 +1,8 @@
 package com.ziodyne.sometrpg;
 
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.google.inject.AbstractModule;
 
 public class RootModule extends AbstractModule {
@@ -13,5 +15,7 @@ public class RootModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(Game.class).toInstance(game);
+    bind(SpriteBatch.class).toInstance(new SpriteBatch());
+    bind(TweenManager.class).toInstance(new TweenManager());
   }
 }

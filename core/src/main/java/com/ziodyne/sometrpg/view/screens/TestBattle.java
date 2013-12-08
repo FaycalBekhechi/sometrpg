@@ -46,9 +46,9 @@ public class TestBattle extends BattleScreen {
   private final Battle battle;
 
   @Inject
-  public TestBattle(Director director) {
+  public TestBattle(Director director, TweenManager tweenManager) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx");
-    this.tweenManager = new TweenManager();
+    this.tweenManager = tweenManager;
     camera.setToOrtho(false, 30, 20);
 
     Tween.registerAccessor(Camera.class, new CameraAccessor());

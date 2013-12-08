@@ -32,16 +32,17 @@ public class MainMenu extends ScreenAdapter {
   private final Button startGameButton;
   private final Button quitButton;
   private final Provider<TestBattle> testBattleProvider;
+
   private boolean menuInitialized = false;
   private boolean initializing = false;
 
   @Inject
-  public MainMenu(Director dir, Provider<TestBattle> battleProvider) {
+  public MainMenu(Director dir, TweenManager tweenManager, Provider<TestBattle> battleProvider) {
     this.testBattleProvider = battleProvider;
     this.director = dir;
     this.stage = new Stage();
     this.skin = new Skin(Gdx.files.internal("uiskin.json"));
-    this.tweenManager = new TweenManager();
+    this.tweenManager = tweenManager;
 
 
     title = new Label("Welcome to Some Tactical RPG", skin);

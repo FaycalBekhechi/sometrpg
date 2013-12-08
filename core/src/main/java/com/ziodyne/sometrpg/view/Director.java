@@ -3,6 +3,7 @@ package com.ziodyne.sometrpg.view;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.google.inject.Inject;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -11,6 +12,7 @@ public class Director {
   private final Game game;
   private final Deque<Screen> screens = new ArrayDeque<Screen>();
 
+  @Inject
   public Director(Game game) {
     this.game = game;
   }

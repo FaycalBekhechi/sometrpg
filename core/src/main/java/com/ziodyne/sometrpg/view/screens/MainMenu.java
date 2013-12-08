@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.google.inject.Inject;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.tween.ActorAccessor;
 
@@ -32,6 +33,7 @@ public class MainMenu extends ScreenAdapter {
   private boolean menuInitialized = false;
   private boolean initializing = false;
 
+  @Inject
   public MainMenu(Director dir) {
     this.director = dir;
     this.stage = new Stage();

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Camera;
 public class CameraAccessor implements TweenAccessor<Camera> {
   public static final int POSITION = 0;
 
+  CameraAccessor() { }
+
   @Override
   public int getValues(Camera target, int tweenType, float[] returnValues) {
     if (tweenType == POSITION) {

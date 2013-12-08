@@ -3,6 +3,7 @@ package com.ziodyne.sometrpg.view.screens;
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
@@ -37,7 +38,7 @@ public class MainMenu extends ScreenAdapter {
   private boolean initializing = false;
 
   @Inject
-  public MainMenu(Director dir, TweenManager tweenManager, Provider<TestBattle> battleProvider) {
+  public MainMenu(Director dir, TweenManager tweenManager, TweenAccessor<Actor> actorTweenAccessor, Provider<TestBattle> battleProvider) {
     this.testBattleProvider = battleProvider;
     this.director = dir;
     this.stage = new Stage();
@@ -85,7 +86,7 @@ public class MainMenu extends ScreenAdapter {
     stage.addActor(quitButton);
 
     Tween.setCombinedAttributesLimit(4);
-    Tween.registerAccessor(Actor.class, new ActorAccessor());
+    Tween.registerAccessor(Actor.class, actorTweenAccessor);
   }
 
   @Override

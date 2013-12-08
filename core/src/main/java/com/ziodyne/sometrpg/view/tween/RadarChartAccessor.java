@@ -5,6 +5,7 @@ import com.ziodyne.sometrpg.view.stats.charts.RadarChart;
 
 public class RadarChartAccessor implements TweenAccessor<RadarChart> {
   public static final int RADIUS = 0;
+  RadarChartAccessor() { }
 
   @Override
   public int getValues(RadarChart radarChart, int type, float[] values) {

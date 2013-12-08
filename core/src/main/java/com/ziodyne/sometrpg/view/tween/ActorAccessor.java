@@ -8,6 +8,9 @@ public class ActorAccessor implements TweenAccessor<Actor> {
   public static final int POSITION = 1;
   public static final int POSITION_Y = 2;
   public static final int OPACITY = 3;
+
+  ActorAccessor() { }
+
   @Override
   public int getValues(Actor target, int tweenType, float[] returnValues) {
     switch (tweenType) {

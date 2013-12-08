@@ -1,6 +1,7 @@
 package com.ziodyne.sometrpg.view.screens;
 
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
@@ -20,7 +21,7 @@ public class ChartTestScreen implements Screen {
   private final TweenManager tweenManager;
 
   @Inject
-  public ChartTestScreen(TweenManager tweenManager) {
+  public ChartTestScreen(TweenManager tweenManager, TweenAccessor<RadarChart> chartTweenAccessor) {
     this.tweenManager = tweenManager;
     camera = new OrthographicCamera(800, 400);
     camera.translate(0, 0);
@@ -28,7 +29,7 @@ public class ChartTestScreen implements Screen {
     Unit testUnit = ModelTestUtils.createRandomUnit();
     chart = new StatChart(testUnit, 1);
 
-    Tween.registerAccessor(RadarChart.class, new RadarChartAccessor());
+    Tween.registerAccessor(RadarChart.class, chartTweenAccessor);
   }
   
   @Override

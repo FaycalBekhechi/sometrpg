@@ -48,7 +48,7 @@ public class TestBattle extends BattleScreen {
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor, GameExitController gameExitController,
-             CameraMoveController.Factory cameraMoveControllerFactory) {
+             CameraMoveController.Factory cameraMoveControllerFactory, SpriteRenderSystem.Factory spriteRendererFactory) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx");
     this.tweenManager = tweenManager;
     camera.setToOrtho(false, 30, 20);
@@ -59,7 +59,7 @@ public class TestBattle extends BattleScreen {
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
 
-    spriteRenderSystem = new SpriteRenderSystem(camera, spriteBatch);
+    spriteRenderSystem = spriteRendererFactory.create(camera);
     mapRenderSystem = new TiledMapRenderSystem(camera);
     mapSelectorUpdateSystem = new MapSelectorUpdateSystem(world, camera, mapBoundingRect);
 

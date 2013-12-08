@@ -9,6 +9,8 @@ import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.Sprite;
@@ -29,8 +31,13 @@ public class SpriteRenderSystem extends EntitySystem {
 
   private ShaderProgram defaultShader;
 
+  public interface Factory {
+    public SpriteRenderSystem create(OrthographicCamera camera);
+  }
+
+  @AssistedInject
   @SuppressWarnings("unchecked")
-  public SpriteRenderSystem(OrthographicCamera camera, SpriteBatch spriteBatch) {
+  SpriteRenderSystem(@Assisted OrthographicCamera camera, SpriteBatch spriteBatch) {
     super(Aspect.getAspectForAll(Position.class, Sprite.class));
     this.camera = camera;
     this.batch = spriteBatch;

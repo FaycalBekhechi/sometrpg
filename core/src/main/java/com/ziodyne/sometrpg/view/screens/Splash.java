@@ -13,15 +13,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.ziodyne.sometrpg.view.Director;
 
 public class Splash implements Screen {
   private static final float SPLASH_DURATION = 1.75f;
   private static final float SPLASH_FADE_DURATION = 0.75f;
   private final Director director;
+  private final Provider<MainMenu> menuProvider;
   private final Stage stage;
-  
-  public Splash(Director director) {
+
+  @Inject
+  public Splash(Director director, Provider<MainMenu> menuProvider) {
+    this.menuProvider = menuProvider;
     this.director = director;
     this.stage = new Stage(800, 480, true);
   }
@@ -63,7 +68,7 @@ public class Splash implements Screen {
           public boolean act(float dt) {
             // This dependency should be inverted somehow, but that seems
             // challenging
-            director.replaceScreen(new MainMenu(director));
+            director.replaceScreen(menuProvider.get());
             return true;
           }
         }

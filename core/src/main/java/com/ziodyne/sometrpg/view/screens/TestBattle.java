@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
@@ -44,6 +45,7 @@ public class TestBattle extends BattleScreen {
   private Rectangle mapBoundingRect;
   private final Battle battle;
 
+  @Inject
   public TestBattle(Director director) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx");
     this.tweenManager = new TweenManager();

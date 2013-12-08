@@ -1,6 +1,7 @@
 package com.ziodyne.sometrpg.view.screens;
 
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenManager;
 import com.artemis.Entity;
 import com.artemis.managers.TagManager;
@@ -46,12 +47,12 @@ public class TestBattle extends BattleScreen {
   private final Battle battle;
 
   @Inject
-  public TestBattle(Director director, TweenManager tweenManager) {
+  public TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx");
     this.tweenManager = tweenManager;
     camera.setToOrtho(false, 30, 20);
 
-    Tween.registerAccessor(Camera.class, new CameraAccessor());
+    Tween.registerAccessor(Camera.class, cameraTweenAccessor);
 
     TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);

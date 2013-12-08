@@ -32,20 +32,17 @@ import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.input.CameraMoveController;
 import com.ziodyne.sometrpg.view.input.GameExitController;
-import com.ziodyne.sometrpg.view.input.UnitSelectionController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
-import com.ziodyne.sometrpg.view.systems.MapSelectorUpdateSystem;
+import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
-import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class TestBattle extends BattleScreen {
   private final TweenManager tweenManager;
   private SpriteRenderSystem spriteRenderSystem;
   private TiledMapRenderSystem mapRenderSystem;
-  private MapSelectorUpdateSystem mapSelectorUpdateSystem;
+  private MapHoverSelectorUpdateSystem mapSelectorUpdateSystem;
   private Rectangle mapBoundingRect;
-  private final Battle battle;
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor, GameExitController gameExitController,
@@ -63,11 +60,10 @@ public class TestBattle extends BattleScreen {
 
     spriteRenderSystem = spriteRendererFactory.create(camera);
     mapRenderSystem = new TiledMapRenderSystem(camera);
-    mapSelectorUpdateSystem = new MapSelectorUpdateSystem(world, camera, mapBoundingRect);
+    mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, camera, mapBoundingRect);
 
     battle = initBattle(tileLayer);
     initUnitEntities();
-
 
     world.setSystem(spriteRenderSystem, true);
     world.setSystem(mapRenderSystem, true);
@@ -81,10 +77,6 @@ public class TestBattle extends BattleScreen {
     world.addEntity(tileSelectorOverlay);
     world.getManager(TagManager.class).register("map_hover_selector", tileSelectorOverlay);
 
-    Entity unitSelectorOverlay = entityFactory.createMapSelector();
-    world.addEntity(unitSelectorOverlay);
-    world.getManager(TagManager.class).register("map_selector", unitSelectorOverlay);
-
 
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
 
@@ -92,9 +84,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     InputMultiplexer multiplexer = new InputMultiplexer();
-    multiplexer.addProcessor(mapControllerFactory.create(camera, battle, world));
-
-    multiplexer.addProcessor(new UnitSelectionController(world, battle, camera));
+    multiplexer.addProcessor(mapControllerFactory.create(camera, this));
     multiplexer.addProcessor(cameraMoveControllerFactory.create(camera));
     multiplexer.addProcessor(gameExitController);
     Gdx.input.setInputProcessor(multiplexer);

@@ -10,8 +10,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
@@ -28,6 +30,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected TiledMap map;
   protected Battle battle;
   protected Map<Unit, Entity> entityIndex = new HashMap<Unit, Entity>();
+  protected Entity unitSelector;
 
   public BattleScreen(Director director, OrthographicCamera camera, String tiledMapPath) {
     this.director = director;
@@ -36,6 +39,7 @@ public abstract class BattleScreen extends ScreenAdapter {
 
     assetManager.load(tiledMapPath, TiledMap.class);
   }
+
 
   public Battle getBattle() {
     return battle;
@@ -51,6 +55,27 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   public Entity getUnitEntity(Unit unit) {
     return entityIndex.get(unit);
+  }
+
+  public void setSelectedSquare(GridPoint2 selectedSquare) {
+    if (selectedSquare == null) {
+      if (unitSelector != null) {
+        world.deleteEntity(unitSelector);
+        unitSelector = null;
+      }
+    } else if (battle.getMap().tileExists(selectedSquare.x, selectedSquare.y)) {
+      unitSelector = entityFactory.createUnitSelector(selectedSquare);
+      world.addEntity(unitSelector);
+    }
+  }
+
+  public boolean isValidSquare(GridPoint2 square) {
+    return battle.getMap().tileExists(square.x, square.y);
+  }
+
+  public boolean isOccupied(GridPoint2 square) {
+    Tile tile = battle.getMap().getTile(square.x, square.y);
+    return tile != null && tile.isOccupied();
   }
 
   protected void registerUnitEntity(Unit unit, Entity entity) {

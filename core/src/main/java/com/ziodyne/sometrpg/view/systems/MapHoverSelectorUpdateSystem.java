@@ -10,12 +10,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.view.components.Position;
 
-public class MapSelectorUpdateSystem extends VoidEntitySystem {
+public class MapHoverSelectorUpdateSystem extends VoidEntitySystem {
   private final World world;
   private final Camera camera;
   private final Rectangle activeRegion;
 
-  public MapSelectorUpdateSystem(World world, Camera camera, Rectangle activeRegion) {
+  public MapHoverSelectorUpdateSystem(World world, Camera camera, Rectangle activeRegion) {
     this.world = world;
     this.camera = camera;
     this.activeRegion = activeRegion;

@@ -11,6 +11,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
@@ -31,15 +37,22 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected Battle battle;
   protected Map<Unit, Entity> entityIndex = new HashMap<Unit, Entity>();
   protected Entity unitSelector;
+  protected Stage menuStage;
+  protected Group unitActionMenu = new Group();
+  protected Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+  protected float gridSquareSize = 32;
 
-  public BattleScreen(Director director, OrthographicCamera camera, String tiledMapPath) {
+  public BattleScreen(Director director, OrthographicCamera camera, String tiledMapPath, float gridSquareSize) {
+    this.gridSquareSize = gridSquareSize;
     this.director = director;
     this.camera = camera;
+    this.menuStage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, spriteBatch);
+
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
-
     assetManager.load(tiledMapPath, TiledMap.class);
-  }
 
+    menuStage.addActor(unitActionMenu);
+  }
 
   public Battle getBattle() {
     return battle;
@@ -63,10 +76,29 @@ public abstract class BattleScreen extends ScreenAdapter {
         world.deleteEntity(unitSelector);
         unitSelector = null;
       }
+      hideActionMenu();
     } else if (battle.getMap().tileExists(selectedSquare.x, selectedSquare.y)) {
       unitSelector = entityFactory.createUnitSelector(selectedSquare);
       world.addEntity(unitSelector);
+      showActionMenu(selectedSquare);
     }
+  }
+
+  private void showActionMenu(GridPoint2 point) {
+    TextButton testButton = new TextButton("Attack", skin);
+    Vector3 screenSpacePoint = new Vector3(point.x, point.y, 0);
+    camera.project(screenSpacePoint);
+
+
+    // Offset gridSquareSize px to the right of the unit.
+    // With some extra padding
+    testButton.setX(screenSpacePoint.x + gridSquareSize + 1);
+    testButton.setY(screenSpacePoint.y);
+    unitActionMenu.addActor(testButton);
+  }
+
+  private void hideActionMenu() {
+    unitActionMenu.clear();
   }
 
   public boolean isValidSquare(GridPoint2 square) {
@@ -84,6 +116,11 @@ public abstract class BattleScreen extends ScreenAdapter {
   }
 
   @Override
+  public void resize(int width, int height) {
+    menuStage.setViewport(width, height, true);
+  }
+
+  @Override
   public void render(float delta) {
     Gdx.gl.glClearColor(0, 0, 0.2f, 1);
     Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -91,7 +128,11 @@ public abstract class BattleScreen extends ScreenAdapter {
     camera.update();
     world.setDelta(delta);
     world.process();
+
     update(delta);
+
+    menuStage.act(delta);
+    menuStage.draw();
   }
 
   protected abstract void update(float delta);

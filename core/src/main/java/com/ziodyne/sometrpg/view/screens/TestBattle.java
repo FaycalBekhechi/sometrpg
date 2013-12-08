@@ -10,6 +10,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -46,7 +47,7 @@ public class TestBattle extends BattleScreen {
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor, GameExitController gameExitController,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory) {
-    super(director, new OrthographicCamera(), "maps/test/test.tmx");
+    super(director, new OrthographicCamera(), "maps/test/test.tmx", 32f);
     this.tweenManager = tweenManager;
     camera.setToOrtho(false, 30, 20);
 
@@ -76,12 +77,13 @@ public class TestBattle extends BattleScreen {
     world.getManager(TagManager.class).register("map_hover_selector", tileSelectorOverlay);
 
 
-    world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
+    world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch, gridSquareSize));
 
     assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
     assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     InputMultiplexer multiplexer = new InputMultiplexer();
+    multiplexer.addProcessor(menuStage);
     multiplexer.addProcessor(mapControllerFactory.create(camera, this));
     multiplexer.addProcessor(gameExitController);
     Gdx.input.setInputProcessor(multiplexer);

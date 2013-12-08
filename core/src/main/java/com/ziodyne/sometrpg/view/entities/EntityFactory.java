@@ -62,10 +62,10 @@ public class EntityFactory {
     return mapSelectorEntity;
   }
 
-  public Entity createTiledMap(TiledMap map, SpriteBatch batch) {
+  public Entity createTiledMap(TiledMap map, SpriteBatch batch, float gridSquareSize) {
     Entity mapEntity = world.createEntity();
 
-    TiledMapComponent tiledMapComponent = new TiledMapComponent(map, 1 / 32f, batch);
+    TiledMapComponent tiledMapComponent = new TiledMapComponent(map, 1 / gridSquareSize, batch);
     mapEntity.addComponent(tiledMapComponent);
 
     return mapEntity;

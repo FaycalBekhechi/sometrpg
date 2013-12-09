@@ -49,13 +49,17 @@ public class TestBattle extends BattleScreen {
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx", 32f);
     this.tweenManager = tweenManager;
-    camera.setToOrtho(false, 30, 20);
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
 
     TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
-    mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
+
+    int mapWidthInTiles = tileLayer.getWidth();
+    int mapHeightInTiles = tileLayer.getHeight();
+    float tileWidth = tileLayer.getTileWidth();
+    float tileHeight = tileLayer.getTileHeight();
+    mapBoundingRect = new Rectangle(0, 0, mapWidthInTiles * tileWidth, mapHeightInTiles * tileHeight);
 
     spriteRenderSystem = spriteRendererFactory.create(camera);
     mapRenderSystem = new TiledMapRenderSystem(camera);

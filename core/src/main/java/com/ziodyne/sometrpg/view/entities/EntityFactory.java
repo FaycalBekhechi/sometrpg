@@ -38,7 +38,7 @@ public class EntityFactory {
   public Entity createMapSelector() {
     Entity mapSelectorEntity = world.createEntity();
 
-    Sprite sprite = new Sprite("grid_overlay.png", 1, 1);
+    Sprite sprite = new Sprite("grid_overlay.png", 32, 32);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
@@ -65,7 +65,7 @@ public class EntityFactory {
   public Entity createTiledMap(TiledMap map, SpriteBatch batch, float gridSquareSize) {
     Entity mapEntity = world.createEntity();
 
-    TiledMapComponent tiledMapComponent = new TiledMapComponent(map, 1 / gridSquareSize, batch);
+    TiledMapComponent tiledMapComponent = new TiledMapComponent(map, 1, batch);
     mapEntity.addComponent(tiledMapComponent);
 
     return mapEntity;

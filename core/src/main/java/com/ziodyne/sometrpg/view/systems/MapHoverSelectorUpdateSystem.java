@@ -30,12 +30,19 @@ public class MapHoverSelectorUpdateSystem extends VoidEntitySystem {
       Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
       camera.unproject(mousePosition);
 
-      double unprojectedX = mousePosition.x;
-      double unprojectedY = mousePosition.y;
+      float unprojectedX = mousePosition.x;
+      float unprojectedY = mousePosition.y;
+
+      float mapWidth = 20*32;
+      double tileX = Math.floor((unprojectedX/mapWidth)*32);
+      double tileY = Math.floor((unprojectedY/mapWidth)*32);
+      Vector3 mapHoverPOsition = new Vector3((float)tileX*32, (float)tileY*32, 0);
+      camera.project(mapHoverPOsition);
+
 
       Position pos = world.getMapper(Position.class).get(mapSelector);
-      pos.setX((float) Math.floor(unprojectedX));
-      pos.setY((float) Math.floor(unprojectedY));
+      pos.setX((float) tileX * 32);
+      pos.setY((float) tileY * 32);
 
       if (!activeRegion.contains(pos.getX(), pos.getY())) {
         mapSelector.disable();

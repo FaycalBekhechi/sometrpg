@@ -120,6 +120,7 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   @Override
   public void resize(int width, int height) {
+    camera.setToOrtho(false, width, height);
     menuStage.setViewport(width, height, true);
   }
 

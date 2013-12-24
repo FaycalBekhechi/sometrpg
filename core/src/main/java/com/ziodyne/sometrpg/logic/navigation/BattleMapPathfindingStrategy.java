@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
+import com.ziodyne.sometrpg.logic.util.MathUtils;
 
 import java.util.Set;
 
@@ -43,10 +44,10 @@ public class BattleMapPathfindingStrategy implements PathfindingStrategy<GridPoi
     int y = node.y;
 
     return Sets.newHashSet(
-      new GridPoint2(x+1, y),
-      new GridPoint2(x-1, y),
-      new GridPoint2(x, y+1),
-      new GridPoint2(x, y-1)
+      MathUtils.getEastNeighbor(node),
+      MathUtils.getWestNeighbor(node),
+      MathUtils.getSouthNeighbor(node),
+      MathUtils.getNorthNeighbor(node)
     );
   }
 

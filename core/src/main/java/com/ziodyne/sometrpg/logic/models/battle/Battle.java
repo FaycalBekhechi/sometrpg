@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.ImmutableList;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.logic.models.battle.combat.MapCombatResolver;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 
 import javax.annotation.Nullable;
@@ -14,9 +15,11 @@ public class Battle {
   private ImmutableList<Army> armies;
   private WinCondition condition;
   private int turnNumber;
+  private MapCombatResolver combatResolver;
 
   public void setMap(BattleMap map) {
     this.map = map;
+    this.combatResolver = new MapCombatResolver(map);
   }
 
   public void setArmies(List<Army> armies) {

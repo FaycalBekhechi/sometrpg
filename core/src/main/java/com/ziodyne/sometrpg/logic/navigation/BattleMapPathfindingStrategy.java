@@ -40,9 +40,6 @@ public class BattleMapPathfindingStrategy implements PathfindingStrategy<GridPoi
 
   @Override
   public Set<GridPoint2> getNeighbors(GridPoint2 node) {
-    int x = node.x;
-    int y = node.y;
-
     return Sets.newHashSet(
       MathUtils.getEastNeighbor(node),
       MathUtils.getWestNeighbor(node),

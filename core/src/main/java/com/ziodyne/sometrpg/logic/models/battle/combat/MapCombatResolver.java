@@ -34,6 +34,24 @@ public class MapCombatResolver implements CombatResolver {
   @Override
   public void execute(BattleAction action) throws InvalidBattleActionException {
     validate(action);
+
+    int damage = computeDamageSubtotal(action.getAttack(), action.getAttacker(), action.getDefender());
+    action.getDefender().applyDamage(damage);
+  }
+
+  static int computeDamageSubtotal(Attack attack, Combatant attacker, Combatant defender) {
+    int hitChance = attack.computeHitChance(attacker, defender);
+    if (Math.random() <= (hitChance/100)) {
+      int damage = attack.computeDamage(attacker, defender);
+      int critChance = attack.computeCritChance(attacker, defender);
+      if (Math.random() <= (critChance/100)) {
+        damage *= 2;
+      }
+
+      return damage;
+    }
+
+    return 0;
   }
 
   private void validate(BattleAction action) throws InvalidBattleActionException {

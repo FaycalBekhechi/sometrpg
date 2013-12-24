@@ -31,6 +31,10 @@ public class Battle {
     this.turnNumber = turnNumber;
   }
 
+  public void endTurn() {
+    this.turnNumber++;
+  }
+
   public boolean playerWon() {
     return condition.isFulfilled(this);
   }

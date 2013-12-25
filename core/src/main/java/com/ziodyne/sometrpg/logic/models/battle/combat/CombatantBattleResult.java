@@ -1,22 +1,20 @@
 package com.ziodyne.sometrpg.logic.models.battle.combat;
 
-import com.ziodyne.sometrpg.logic.models.Unit;
-
-class UnitCombatResult {
-  private final Unit unit;
+class CombatantBattleResult {
+  private final Combatant combatant;
   private final int damage;
   private final int hitChancePct;
   private final int critChancePct;
 
-  public UnitCombatResult(Unit unit, int damage, int hitChancePct, int critChancePct) {
-    this.unit = unit;
+  public CombatantBattleResult(Combatant combatant, int damage, int hitChancePct, int critChancePct) {
+    this.combatant = combatant;
     this.damage = damage;
     this.hitChancePct = hitChancePct;
     this.critChancePct = critChancePct;
   }
 
-  public Unit getUnit() {
-    return unit;
+  public Combatant getCombatant() {
+    return combatant;
   }
 
   public int getDamage() {

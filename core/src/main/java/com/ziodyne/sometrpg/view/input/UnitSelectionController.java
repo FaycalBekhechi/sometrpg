@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.components.Position;
 
 public class UnitSelectionController extends InputAdapter {
@@ -43,8 +44,8 @@ public class UnitSelectionController extends InputAdapter {
 
       Tile tile = battle.getMap().getTile(x, y);
       if (tile != null) {
-        Unit unit = tile.getOccupyingUnit();
-        if (unit != null) {
+        Combatant combatant = tile.getOccupyingUnit();
+        if (combatant != null) {
           mapSelector.enable();
           pos.setX(x);
           pos.setY(y);

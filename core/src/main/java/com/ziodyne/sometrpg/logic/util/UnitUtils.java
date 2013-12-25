@@ -11,6 +11,8 @@ import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.UnitGrowth;
 import com.ziodyne.sometrpg.logic.models.UnitStat;
 
+import javax.annotation.Nonnull;
+
 public class UnitUtils {
   private UnitUtils() { }
   
@@ -47,5 +49,15 @@ public class UnitUtils {
     }
 
     return index;
+  }
+
+  public static int getMaxHealth(Unit unit) {
+    Map<Stat, Integer> stats = indexStatSheetByValue(unit.getStatSheet());
+    Integer hp = stats.get(Stat.HP);
+    if (hp == null) {
+      throw new IllegalArgumentException("Unit has no health defined.");
+    }
+
+    return hp;
   }
 }

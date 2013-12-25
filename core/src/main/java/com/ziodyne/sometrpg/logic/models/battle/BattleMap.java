@@ -80,7 +80,7 @@ public class BattleMap {
     }
 
     validateDestinationTile(destination);
-    Long unitId = unit.getId();
+    Long unitId = unit.getUnitId();
     Tile existingOccupancy = occupyingUnits.get(unitId);
     if (existingOccupancy != null) {
       throw new GameLogicException("Unit with id: " + unitId + " is already present on this map.");
@@ -102,8 +102,16 @@ public class BattleMap {
     occupancy.setOccupyingUnit(null);
   }
 
+  public void removeUnit(Combatant combatant) {
+    removeUnit(combatant.getUnit());
+  }
+
   public boolean hasUnit(Unit unit) {
     return occupyingUnits.get(unit.getId()) != null;
+  }
+
+  public boolean hasUnit(Combatant combatant) {
+    return occupyingUnits.get(combatant.getUnitId()) != null;
   }
 
   private void moveUnit(Tile src, Tile dest) {
@@ -114,14 +122,14 @@ public class BattleMap {
     src.setOccupyingUnit(null);
     dest.setOccupyingUnit(movingUnit);
 
-    Long unitId = movingUnit.getId();
+    Long unitId = movingUnit.getUnitId();
     occupyingUnits.remove(unitId);
     occupyingUnits.put(unitId, dest);
   }
 
   /** Checks tile movement preconditions and throws exceptions when any are violated. */
   private static void validateMove(Tile src, Tile dest) throws GameLogicException {
-    Unit unitToMove = src.getOccupyingUnit();
+    Combatant unitToMove = src.getOccupyingUnit();
     if (unitToMove == null) {
       throw new GameLogicException("Invalid move: source tile is unoccupied.");
     }

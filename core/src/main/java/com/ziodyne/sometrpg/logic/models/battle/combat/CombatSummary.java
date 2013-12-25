@@ -1,19 +1,19 @@
 package com.ziodyne.sometrpg.logic.models.battle.combat;
 
 public class CombatSummary {
-  private final UnitCombatResult attackerResult;
-  private final UnitCombatResult defenderResult;
+  private final CombatantBattleResult attackerResult;
+  private final CombatantBattleResult defenderResult;
 
-  public CombatSummary(UnitCombatResult attackerResult, UnitCombatResult defenderResult) {
+  public CombatSummary(CombatantBattleResult attackerResult, CombatantBattleResult defenderResult) {
     this.attackerResult = attackerResult;
     this.defenderResult = defenderResult;
   }
 
-  public UnitCombatResult getAttackerResult() {
+  public CombatantBattleResult getAttackerResult() {
     return attackerResult;
   }
 
-  public UnitCombatResult getDefenderResult() {
+  public CombatantBattleResult getDefenderResult() {
     return defenderResult;
   }
 }

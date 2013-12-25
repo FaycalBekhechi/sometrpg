@@ -2,7 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle.combat;
 
 import com.ziodyne.sometrpg.logic.models.Unit;
 
-public class UnitCombatResult {
+class UnitCombatResult {
   private final Unit unit;
   private final int damage;
   private final int hitChancePct;

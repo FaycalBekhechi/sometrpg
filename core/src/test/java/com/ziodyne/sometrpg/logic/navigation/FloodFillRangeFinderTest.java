@@ -44,13 +44,14 @@ public class FloodFillRangeFinderTest {
     }
 
     Set<GridPoint2> smallMovementRangePoints = rangeFinder.computeRange(map, new GridPoint2(0, 0), 1);
-    Collection<Equivalence.Wrapper<GridPoint2>> equifiedPoints = Collections2.transform(smallMovementRangePoints, new Function<GridPoint2, Equivalence.Wrapper<GridPoint2>>() {
-      @Nullable
-      @Override
-      public Equivalence.Wrapper<GridPoint2> apply(@Nullable GridPoint2 input) {
-        return MathUtils.GRID_POINT_EQUIV.wrap(input);
-      }
-    });
+    Collection<Equivalence.Wrapper<GridPoint2>> equifiedPoints = Collections2.transform(smallMovementRangePoints,
+            new Function<GridPoint2, Equivalence.Wrapper<GridPoint2>>() {
+              @Nullable
+              @Override
+              public Equivalence.Wrapper<GridPoint2> apply(@Nullable GridPoint2 input) {
+                return MathUtils.GRID_POINT_EQUIV.wrap(input);
+              }
+            });
 
     Assert.assertEquals("1 square movement range from the upper left corner should yeild 3 movable squares", 3,
             equifiedPoints.size());

@@ -1,24 +1,36 @@
 package com.ziodyne.sometrpg.logic.navigation;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.google.common.base.Equivalence;
+import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class FloodFillRangeFinder implements RangeFinder {
   @Override
   public Set<GridPoint2> computeRange(BattleMap map, GridPoint2 start, int maxDistance) {
-    Set<GridPoint2> results = new HashSet<GridPoint2>();
+    Set<Equivalence.Wrapper<GridPoint2>> results = Sets.newHashSet();
 
     flood(map, start, maxDistance, 0, results);
 
-    return results;
+    Set<GridPoint2> finalResults = Sets.newHashSet();
+    for (Equivalence.Wrapper<GridPoint2> point2Wrapper : results) {
+      GridPoint2 point = point2Wrapper.get();
+      finalResults.add(point);
+    }
+
+    return finalResults;
   }
 
-  private void flood(BattleMap map, GridPoint2 node, int maxDistance, int currentDistance, Set<GridPoint2> accumulator) {
+  private void flood(BattleMap map, GridPoint2 node, int maxDistance, int currentDistance, Set<Equivalence.Wrapper<GridPoint2>> accumulator) {
     if (currentDistance > maxDistance) {
+      return;
+    }
+
+    Equivalence.Wrapper<GridPoint2> wrappedNode = MathUtils.GRID_POINT_EQUIV.wrap(node);
+    if (accumulator.contains(wrappedNode)) {
       return;
     }
 
@@ -26,7 +38,7 @@ public class FloodFillRangeFinder implements RangeFinder {
       return;
     }
 
-    accumulator.add(node);
+    accumulator.add(wrappedNode);
 
     int nextDist = currentDistance + 1;
     flood(map, MathUtils.getEastNeighbor(node), maxDistance, nextDist, accumulator);

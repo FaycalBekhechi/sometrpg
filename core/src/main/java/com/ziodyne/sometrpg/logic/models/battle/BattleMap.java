@@ -1,20 +1,21 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.google.common.base.Equivalence;
+import com.google.common.collect.Maps;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
-import org.apache.commons.lang3.tuple.Pair;
+import com.ziodyne.sometrpg.logic.util.MathUtils;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 public class BattleMap {
   private final int width;
   private final int height;
-  private final java.util.Map<Long, Tile> occupyingUnits = new HashMap<Long, Tile>();
-  private final Map<Pair<Integer, Integer>, Tile> tilesByPosition = new HashMap<Pair<Integer, Integer>, Tile>();
+  private final java.util.Map<Long, Tile> occupyingUnits = Maps.newHashMap();
+  private final Map<Equivalence.Wrapper<GridPoint2>, Tile> tilesByPosition = Maps.newHashMap();
 
   public BattleMap(Collection<Tile> tiles) {
     validateSquareness(tiles);
@@ -29,7 +30,7 @@ public class BattleMap {
   private void populateTileIndex(Collection<Tile> tiles) {
     for (Tile tile : tiles) {
       GridPoint2 pos = tile.getPosition();
-      Pair<Integer, Integer> posKey = Pair.of(pos.x, pos.y);
+      Equivalence.Wrapper<GridPoint2> posKey = getTileIndexKey(pos);
       if (tilesByPosition.containsKey(posKey)) {
         throw new GameLogicException("Grid with two tiles at position " + pos);
       }
@@ -56,7 +57,7 @@ public class BattleMap {
 
   /** Gets the tile at (x, y). Returns null if it does not exist. */
   public Tile getTile(int x, int y) {
-    return tilesByPosition.get(Pair.of(x, y));
+    return tilesByPosition.get(getTileIndexKey(new GridPoint2(x, y)));
   }
 
   /** Move the unit from the source tile to the destination tile IFF. the destination is unoccupied and passable. */
@@ -164,6 +165,10 @@ public class BattleMap {
     if (size != sqrt) {
       throw new GameLogicException("Non-square grid!");
     }
+  }
+
+  private static Equivalence.Wrapper<GridPoint2> getTileIndexKey(GridPoint2 key) {
+    return MathUtils.GRID_POINT_EQUIV.wrap(key);
   }
 
   static class TileNotFoundException extends GameLogicException {

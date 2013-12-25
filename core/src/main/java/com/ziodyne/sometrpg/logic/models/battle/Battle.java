@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.MapCombatResolver;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
+import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.navigation.FloodFillRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.RangeFinder;
 
@@ -14,8 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 public class Battle {
-  private static final int TEMP_DEFAULT_MOVEMENT_RANGE = 7;
-
   private final RangeFinder movementRangeFinder = new FloodFillRangeFinder();
   private BattleMap map;
   private ImmutableList<Army> armies;
@@ -34,7 +33,20 @@ public class Battle {
 
   public Set<GridPoint2> getMovableSquares(Combatant combatant) {
     GridPoint2 position = map.getCombatantPosition(combatant);
-    return movementRangeFinder.computeRange(map, position, TEMP_DEFAULT_MOVEMENT_RANGE);
+    if (position == null) {
+      throw new GameLogicException("Cannot get movement range for combatant that is not on the map.");
+    }
+
+    return movementRangeFinder.computeRange(map, position, combatant.getMovementRange());
+  }
+
+  public void moveCombatant(Combatant combatant, GridPoint2 destination) {
+    GridPoint2 position = map.getCombatantPosition(combatant);
+    if (position == null) {
+      throw new GameLogicException("Cannot move combatant that is not on the map.");
+    }
+
+    map.moveUnit(position.x, position.y, destination.x, destination.y);
   }
 
   public void setCondition(WinCondition condition) {

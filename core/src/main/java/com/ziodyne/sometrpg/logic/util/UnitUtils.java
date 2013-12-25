@@ -15,7 +15,9 @@ import javax.annotation.Nonnull;
 
 public class UnitUtils {
   private UnitUtils() { }
-  
+
+  public static final int DEFAULT_MOVEMENT_RANGE = 5;
+
   public static void levelUp(Unit unit) {
     UnitGrowth growths = unit.getGrowths();
     

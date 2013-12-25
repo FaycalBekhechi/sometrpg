@@ -38,4 +38,8 @@ public class Combatant {
   public int getHealth() {
     return health;
   }
+
+  public int getMovementRange() {
+    return unit.getMovementRange();
+  }
 }

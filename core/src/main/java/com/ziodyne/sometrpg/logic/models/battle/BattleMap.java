@@ -8,6 +8,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -106,6 +107,7 @@ public class BattleMap {
     occupancy.setCombatant(null);
   }
 
+  @Nullable
   public GridPoint2 getCombatantPosition(Combatant combatant) {
     long combatantId = combatant.getUnitId();
 

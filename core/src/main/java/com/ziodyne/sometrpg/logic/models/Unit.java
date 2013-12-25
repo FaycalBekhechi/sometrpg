@@ -14,10 +14,11 @@ public class Unit {
   private static final AtomicLong lastIdentifier = new AtomicLong(0L);
   
   private final long id;
-  private String name;
-  private Set<UnitStat> statSheet;
+  private final int movementRange = UnitUtils.DEFAULT_MOVEMENT_RANGE;
   private final Set<UnitStat> maxStatSheet;
   private final UnitGrowth growths;
+  private String name;
+  private Set<UnitStat> statSheet;
 
   public Unit(Set<UnitStat> maxStatSheet, UnitGrowth growths, Set<UnitStat> statSheet, String name) {
     this.id = lastIdentifier.incrementAndGet();
@@ -50,7 +51,11 @@ public class Unit {
       }
     }
   }
-  
+
+  public int getMovementRange() {
+    return movementRange;
+  }
+
   public String getName() {
     return name;
   }

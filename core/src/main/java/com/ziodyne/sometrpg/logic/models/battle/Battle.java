@@ -40,15 +40,6 @@ public class Battle {
     return movementRangeFinder.computeRange(map, position, combatant.getMovementRange());
   }
 
-  public void moveCombatant(Combatant combatant, GridPoint2 destination) {
-    GridPoint2 position = map.getCombatantPosition(combatant);
-    if (position == null) {
-      throw new GameLogicException("Cannot move combatant that is not on the map.");
-    }
-
-    map.moveUnit(position.x, position.y, destination.x, destination.y);
-  }
-
   public void setCondition(WinCondition condition) {
     this.condition = condition;
   }

@@ -42,6 +42,10 @@ public class BattleMap {
     return height;
   }
 
+  public boolean isPassable(int x, int y) {
+    return tileExists(x, y);
+  }
+
   public boolean tileExists(int x, int y) {
     return getTile(x, y) != null;
   }

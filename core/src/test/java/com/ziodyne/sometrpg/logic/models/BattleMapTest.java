@@ -63,7 +63,7 @@ public class BattleMapTest {
     Combatant testUnit = new Combatant(newTestUnit());
 
     map.addUnit(testUnit, 2, 2);
-    map.removeUnit(testUnit);
+    map.removeCombatant(testUnit);
 
     Assert.assertFalse(map.hasUnit(testUnit));
   }
@@ -72,8 +72,9 @@ public class BattleMapTest {
   public void testRemoveNonexistantUnit() {
     BattleMap map = ModelTestUtils.createMap(5);
     Unit testUnit = newTestUnit();
+    Combatant combatant = new Combatant(testUnit);
 
-    map.removeUnit(testUnit);
+    map.removeCombatant(combatant);
   }
 
   @Test

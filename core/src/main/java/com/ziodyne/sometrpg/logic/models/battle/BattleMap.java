@@ -91,8 +91,8 @@ public class BattleMap {
   }
 
   /** Remove a unit from the map. Blows up if it does not exist. */
-  public void removeUnit(Unit unit) {
-    Long unitId = unit.getId();
+  public void removeCombatant(Combatant combatant) {
+    Long unitId = combatant.getUnitId();
     Tile occupancy = occupyingUnits.get(unitId);
     if (occupancy == null) {
       throw  new GameLogicException("Unit with id: " + unitId + " does not exist on this map.");
@@ -100,10 +100,6 @@ public class BattleMap {
 
     occupyingUnits.remove(unitId);
     occupancy.setOccupyingUnit(null);
-  }
-
-  public void removeUnit(Combatant combatant) {
-    removeUnit(combatant.getUnit());
   }
 
   public boolean hasUnit(Unit unit) {

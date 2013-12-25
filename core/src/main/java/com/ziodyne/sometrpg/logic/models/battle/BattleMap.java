@@ -1,11 +1,13 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
+import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.collect.Range;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class BattleMap {
   private final Tile[][] tiles;
@@ -104,6 +106,22 @@ public class BattleMap {
 
     occupyingUnits.remove(unitId);
     occupancy.setOccupyingUnit(null);
+  }
+
+  public GridPoint2 getCombatantPosition(Combatant combatant) {
+    long combatantId = combatant.getUnitId();
+
+    // TODO: Find a new internal representation that makes this sublinear
+    for (int rowIdx = 0; rowIdx < mapIndices.upperEndpoint(); rowIdx++) {
+      Tile[] row = tiles[rowIdx];
+      for (int colIdx = 0; colIdx < row.length; colIdx++) {
+        Tile tile = row[colIdx];
+        if (tile.getOccupyingUnit().getUnitId() == combatantId) {
+          return new GridPoint2(rowIdx, colIdx);
+        }
+      }
+    }
+    return null;
   }
 
   public boolean hasUnit(Unit unit) {

@@ -15,12 +15,13 @@ import java.util.Set;
 
 public class Battle {
   private static final int TEMP_DEFAULT_MOVEMENT_RANGE = 7;
+
+  private final RangeFinder movementRangeFinder = new FloodFillRangeFinder();
   private BattleMap map;
   private ImmutableList<Army> armies;
   private WinCondition condition;
   private int turnNumber;
   private MapCombatResolver combatResolver;
-  private RangeFinder movementRangeFinder = new FloodFillRangeFinder();
 
   public void setMap(BattleMap map) {
     this.map = map;

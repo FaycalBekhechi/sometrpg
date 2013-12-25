@@ -1,39 +1,40 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.google.common.collect.Range;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BattleMap {
-  private final Tile[][] tiles;
   private final int width;
   private final int height;
-  private final Range<Integer> mapIndices;
   private final java.util.Map<Long, Tile> occupyingUnits = new HashMap<Long, Tile>();
+  private final Map<Pair<Integer, Integer>, Tile> tilesByPosition = new HashMap<Pair<Integer, Integer>, Tile>();
 
-  public BattleMap(int size, Tile[][] tiles) {
-    super();
-    this.width = size;
-    this.height = size;
-
-    mapIndices = Range.closedOpen(0, size);
-
-    if (tiles.length != size) {
-      throw new GameLogicException("Non-square grid: Row of invalid size.");
+  public BattleMap(Collection<Tile> tiles) {
+    double sqrt = Math.sqrt(tiles.size());
+    int size = (int)sqrt;
+    if (size != sqrt) {
+      throw new GameLogicException("Non-square grid!");
     }
 
-    for (Tile[] row : tiles) {
-      if (row.length != size) {
-        throw new GameLogicException("Non-square grid: Column of invalid size.");
+    this.width = this.height = size;
+
+
+    for (Tile tile : tiles) {
+      GridPoint2 pos = tile.getPosition();
+      Pair<Integer, Integer> posKey = Pair.of(pos.x, pos.y);
+      if (tilesByPosition.containsKey(posKey)) {
+        throw new GameLogicException("Grid with two tiles at position " + pos);
       }
-    }
 
-    this.tiles = tiles;
+      tilesByPosition.put(posKey, tile);
+    }
   }
 
   public int getWidth() {
@@ -54,12 +55,7 @@ public class BattleMap {
 
   /** Gets the tile at (x, y). Returns null if it does not exist. */
   public Tile getTile(int x, int y) {
-    if (!mapIndices.contains(x) ||
-        !mapIndices.contains(y)) {
-      return null;
-    }
-
-    return tiles[x][y];
+    return tilesByPosition.get(Pair.of(x, y));
   }
 
   /** Move the unit from the source tile to the destination tile IFF. the destination is unoccupied and passable. */
@@ -93,7 +89,7 @@ public class BattleMap {
     }
 
     occupyingUnits.put(unitId, destination);
-    destination.setOccupyingUnit(unit);
+    destination.setCombatant(unit);
   }
 
   /** Remove a unit from the map. Blows up if it does not exist. */
@@ -105,22 +101,18 @@ public class BattleMap {
     }
 
     occupyingUnits.remove(unitId);
-    occupancy.setOccupyingUnit(null);
+    occupancy.setCombatant(null);
   }
 
   public GridPoint2 getCombatantPosition(Combatant combatant) {
     long combatantId = combatant.getUnitId();
 
-    // TODO: Find a new internal representation that makes this sublinear
-    for (int rowIdx = 0; rowIdx < mapIndices.upperEndpoint(); rowIdx++) {
-      Tile[] row = tiles[rowIdx];
-      for (int colIdx = 0; colIdx < row.length; colIdx++) {
-        Tile tile = row[colIdx];
-        if (tile.getOccupyingUnit().getUnitId() == combatantId) {
-          return new GridPoint2(rowIdx, colIdx);
-        }
+    for (Tile tile : tilesByPosition.values()) {
+      if (tile.getCombatant().getUnitId() == combatantId) {
+        return tile.getPosition();
       }
     }
+
     return null;
   }
 
@@ -135,10 +127,10 @@ public class BattleMap {
   private void moveUnit(Tile src, Tile dest) {
     validateMove(src, dest);
 
-    Combatant movingUnit = src.getOccupyingUnit();
+    Combatant movingUnit = src.getCombatant();
 
-    src.setOccupyingUnit(null);
-    dest.setOccupyingUnit(movingUnit);
+    src.setCombatant(null);
+    dest.setCombatant(movingUnit);
 
     Long unitId = movingUnit.getUnitId();
     occupyingUnits.remove(unitId);
@@ -147,7 +139,7 @@ public class BattleMap {
 
   /** Checks tile movement preconditions and throws exceptions when any are violated. */
   private static void validateMove(Tile src, Tile dest) throws GameLogicException {
-    Combatant unitToMove = src.getOccupyingUnit();
+    Combatant unitToMove = src.getCombatant();
     if (unitToMove == null) {
       throw new GameLogicException("Invalid move: source tile is unoccupied.");
     }

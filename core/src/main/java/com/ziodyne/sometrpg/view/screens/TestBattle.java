@@ -10,7 +10,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -36,6 +35,9 @@ import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class TestBattle extends BattleScreen {
   private final TweenManager tweenManager;
@@ -97,8 +99,9 @@ public class TestBattle extends BattleScreen {
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         Tile tile = map.getTile(i, j);
-        Unit unit = tile.getOccupyingUnit().getUnit();
-        if (unit != null) {
+        Combatant combatant = tile.getCombatant();
+        if (combatant != null) {
+          Unit unit = combatant.getUnit();
           Entity unitEntity = entityFactory.createUnit(unit, unit.getName().equals("Test3x") ? "single3x.png" : "single.png", i, j);
           registerUnitEntity(unit, unitEntity);
         }
@@ -118,17 +121,17 @@ public class TestBattle extends BattleScreen {
 
     battle.setCondition(new Rout());
 
-    Tile[][] tiles = new Tile[map.getWidth()][map.getHeight()];
+    Set<Tile> tiles = new HashSet<Tile>(map.getHeight());
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         // TODO: Read the tile from the tile layer and get the attribute
-        tiles[i][j] = new Tile(TerrainType.GRASS);
+        tiles.add(new Tile(TerrainType.GRASS, i, j));
       }
     }
 
-    BattleMap battleMap = new BattleMap(tiles.length, tiles);
+    BattleMap battleMap = new BattleMap(tiles);
     battleMap.addUnit(player, 0, 0);
-    battleMap.addUnit(enemy, tiles.length-1, tiles.length-1);
+    battleMap.addUnit(enemy, map.getWidth()-1, map.getHeight()-1);
     battle.setMap(battleMap);
 
     return battle;

@@ -6,10 +6,8 @@ import com.artemis.managers.TagManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
-import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.components.Position;
@@ -44,7 +42,7 @@ public class UnitSelectionController extends InputAdapter {
 
       Tile tile = battle.getMap().getTile(x, y);
       if (tile != null) {
-        Combatant combatant = tile.getOccupyingUnit();
+        Combatant combatant = tile.getCombatant();
         if (combatant != null) {
           mapSelector.enable();
           pos.setX(x);

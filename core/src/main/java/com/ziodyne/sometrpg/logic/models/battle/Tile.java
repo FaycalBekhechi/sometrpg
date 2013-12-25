@@ -1,23 +1,30 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
+import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 
 public class Tile {
-  private Combatant occupyingUnit;
+  private Combatant combatant;
   private boolean passable = true;
   private final TerrainType terrainType;
+  private final GridPoint2 position;
   
-  public Tile(TerrainType terrainType) {
+  public Tile(TerrainType terrainType, int row, int col) {
     super();
     this.terrainType = terrainType;
+    this.position = new GridPoint2(row, col);
   }
 
-  public Combatant getOccupyingUnit() {
-    return occupyingUnit;
+  public GridPoint2 getPosition() {
+    return position;
+  }
+
+  public Combatant getCombatant() {
+    return combatant;
   }
   
   public boolean isOccupied() {
-    return occupyingUnit != null;
+    return combatant != null;
   }
 
   public boolean isPassable() {
@@ -28,12 +35,12 @@ public class Tile {
     this.passable = passable;
   }
 
-  public void setOccupyingUnit(Combatant occupyingUnit) {
-    if (occupyingUnit != null && isOccupied()){
+  public void setCombatant(Combatant combatant) {
+    if (combatant != null && isOccupied()){
       throw new IllegalArgumentException("Can't send a unit to an occupied square.");
     }
     
-    this.occupyingUnit = occupyingUnit;
+    this.combatant = combatant;
   }
 
   public TerrainType getTerrainType() {

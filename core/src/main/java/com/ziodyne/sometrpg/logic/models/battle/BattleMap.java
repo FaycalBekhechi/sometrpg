@@ -17,15 +17,16 @@ public class BattleMap {
   private final Map<Pair<Integer, Integer>, Tile> tilesByPosition = new HashMap<Pair<Integer, Integer>, Tile>();
 
   public BattleMap(Collection<Tile> tiles) {
+    validateSquareness(tiles);
+
     double sqrt = Math.sqrt(tiles.size());
     int size = (int)sqrt;
-    if (size != sqrt) {
-      throw new GameLogicException("Non-square grid!");
-    }
-
     this.width = this.height = size;
 
+    populateTileIndex(tiles);
+  }
 
+  private void populateTileIndex(Collection<Tile> tiles) {
     for (Tile tile : tiles) {
       GridPoint2 pos = tile.getPosition();
       Pair<Integer, Integer> posKey = Pair.of(pos.x, pos.y);
@@ -154,6 +155,14 @@ public class BattleMap {
 
     if (!dest.isPassable()) {
       throw new GameLogicException("Invalid move: cannot move to impassable tile.");
+    }
+  }
+
+  private static void validateSquareness(Collection<Tile> tiles) {
+    double sqrt = Math.sqrt(tiles.size());
+    int size = (int)sqrt;
+    if (size != sqrt) {
+      throw new GameLogicException("Non-square grid!");
     }
   }
 

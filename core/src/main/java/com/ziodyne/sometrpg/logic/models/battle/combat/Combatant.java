@@ -4,6 +4,8 @@ import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.UnitGrowth;
 import com.ziodyne.sometrpg.logic.models.UnitStat;
 import com.ziodyne.sometrpg.logic.util.UnitUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Set;
 
@@ -41,5 +43,27 @@ public class Combatant {
 
   public int getMovementRange() {
     return unit.getMovementRange();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+
+    if (!(obj instanceof Combatant)) {
+      return false;
+    }
+
+    return new EqualsBuilder()
+            .append(unit, ((Combatant) obj).getUnit())
+            .build();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+            .append(unit)
+            .build();
   }
 }

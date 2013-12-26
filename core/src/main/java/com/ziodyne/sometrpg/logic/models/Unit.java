@@ -9,6 +9,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ziodyne.sometrpg.logic.util.UnitUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Unit {
   private static final AtomicLong lastIdentifier = new AtomicLong(0L);
@@ -82,5 +84,27 @@ public class Unit {
 
   public long getId() {
     return id;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+            .append(id)
+            .build();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+
+    if (!(obj instanceof Unit)) {
+      return false;
+    }
+
+    return new EqualsBuilder()
+            .append(id, ((Unit) obj).getId())
+            .build();
   }
 }

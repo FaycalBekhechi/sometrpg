@@ -31,6 +31,18 @@ public class Battle {
     this.armies = ImmutableList.copyOf(armies);
   }
 
+  public void moveCombatant(Combatant combatant, GridPoint2 destination) {
+    validateCombatantStatus(combatant);
+    validateCombatantTurn(combatant);
+
+    GridPoint2 currentPos = map.getCombatantPosition(combatant);
+    if (currentPos == null) {
+      throw new GameLogicException("Cannot move combatant not on the map.");
+    }
+
+    map.moveUnit(currentPos.x, currentPos.y, destination.x, destination.y);
+  }
+
   public Set<GridPoint2> getMovableSquares(Combatant combatant) {
     GridPoint2 position = map.getCombatantPosition(combatant);
     if (position == null) {
@@ -83,6 +95,19 @@ public class Battle {
 
   private Set<Combatant> getUnitsSafe(Army army) {
     return army == null ? new HashSet<Combatant>() : army.getUnits();
+  }
+
+  private void validateCombatantTurn(Combatant combatant) {
+    Army currentArmy = getCurrentTurnArmy();
+    if (!currentArmy.contains(combatant)) {
+      throw new GameLogicException("It is not this combatant's turn.");
+    }
+  }
+
+  private static void validateCombatantStatus(Combatant combatant) {
+    if (!combatant.isAlive()) {
+      throw new GameLogicException("Combatant is dead.");
+    }
   }
 
   @Nullable

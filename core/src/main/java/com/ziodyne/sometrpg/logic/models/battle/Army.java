@@ -19,6 +19,10 @@ public class Army {
     return type;
   }
 
+  public boolean contains(Combatant combatant) {
+    return units.contains(combatant);
+  }
+
   public Set<Combatant> getUnits() {
     return units;
   }

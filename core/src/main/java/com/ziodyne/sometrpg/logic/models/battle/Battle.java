@@ -22,15 +22,6 @@ public class Battle {
   private int turnNumber;
   private MapCombatResolver combatResolver;
 
-  public void setMap(BattleMap map) {
-    this.map = map;
-    this.combatResolver = new MapCombatResolver(map);
-  }
-
-  public void setArmies(List<Army> armies) {
-    this.armies = ImmutableList.copyOf(armies);
-  }
-
   public void moveCombatant(Combatant combatant, GridPoint2 destination) {
     validateCombatantStatus(combatant);
     validateCombatantTurn(combatant);
@@ -52,14 +43,6 @@ public class Battle {
     return movementRangeFinder.computeRange(map, position, combatant.getMovementRange());
   }
 
-  public void setCondition(WinCondition condition) {
-    this.condition = condition;
-  }
-
-  public void setTurnNumber(int turnNumber) {
-    this.turnNumber = turnNumber;
-  }
-
   public void endTurn() {
     this.turnNumber++;
   }
@@ -70,14 +53,6 @@ public class Battle {
 
   public Army getCurrentTurnArmy() {
     return armies.get(turnNumber % armies.size());
-  }
-
-  public BattleMap getMap() {
-    return map;
-  }
-
-  public int getTurnNumber() {
-    return turnNumber;
   }
 
   public Set<Combatant> getPlayerUnits() {
@@ -92,6 +67,30 @@ public class Battle {
     return getUnitsSafe(getArmyByType(ArmyType.NEUTRAL));
   }
 
+  public void setCondition(WinCondition condition) {
+    this.condition = condition;
+  }
+
+  public void setTurnNumber(int turnNumber) {
+    this.turnNumber = turnNumber;
+  }
+
+  public void setMap(BattleMap map) {
+    this.map = map;
+    this.combatResolver = new MapCombatResolver(map);
+  }
+
+  public void setArmies(List<Army> armies) {
+    this.armies = ImmutableList.copyOf(armies);
+  }
+
+  public BattleMap getMap() {
+    return map;
+  }
+
+  public int getTurnNumber() {
+    return turnNumber;
+  }
 
   private Set<Combatant> getUnitsSafe(Army army) {
     return army == null ? new HashSet<Combatant>() : army.getUnits();

@@ -16,12 +16,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DefaultBattle implements Battle {
+public class DefaultBattle implements Battle, TileNavigable, TurnBased {
   private final RangeFinder movementRangeFinder = new FloodFillRangeFinder();
   private final BattleMap map;
   private final ImmutableList<Army> armies;
   private final WinCondition condition;
   private MapCombatResolver combatResolver;
+  private Set<Combatant> actedThisTurn = Sets.newHashSet();
+  private Set<Combatant> movedThisTurn = Sets.newHashSet();
 
   private int turnNumber;
 
@@ -54,11 +56,23 @@ public class DefaultBattle implements Battle {
 
     GridPoint2 destPos = destination.getPosition();
     map.moveUnit(currentPos.x, currentPos.y, destPos.x, destPos.y);
+
+    recordMovement(combatant);
   }
 
   @Override
   public void executeAttack(Combatant attacker, Attack attack, Combatant defender) {
+    if (actedThisTurn.contains(attacker)) {
+      throw new GameLogicException("Cannot perform two actions on the same turn.");
+    }
 
+    if (!defender.isAlive()) {
+      throw new GameLogicException("Cannot attack a dead combatant.");
+    }
+
+    // Attacking also consumes your one move for a turn
+    recordMovement(attacker);
+    recordAction(attacker);
   }
 
   @Override
@@ -113,6 +127,27 @@ public class DefaultBattle implements Battle {
   public Set<Combatant> getNeutralUnits() {
     return getUnitsSafe(getArmyByType(ArmyType.NEUTRAL));
   }
+
+  @Override
+  public void endTurn() {
+    actedThisTurn = Sets.newHashSet();
+    movedThisTurn = Sets.newHashSet();
+    turnNumber++;
+  }
+
+  private void recordAction(Combatant combatant) {
+    actedThisTurn.add(combatant);
+  }
+
+  private void recordMovement(Combatant combatant) {
+    movedThisTurn.add(combatant);
+  }
+
+  private boolean isTurnComplete() {
+    Army currentArmy = getCurrentTurnArmy();
+    return actedThisTurn.containsAll(currentArmy.units);
+  }
+
 
   private Set<Combatant> getUnitsSafe(Army army) {
     return army == null ? new HashSet<Combatant>() : army.getUnits();

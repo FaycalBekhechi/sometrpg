@@ -5,9 +5,9 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import java.util.Set;
 
 public class Army {
-  private final Set<Combatant> units;
-  private final String name;
-  private final ArmyType type;
+  public final Set<Combatant> units;
+  public final String name;
+  public final ArmyType type;
 
   public Army(Set<Combatant> units, String name, ArmyType type) {
     this.units = units;

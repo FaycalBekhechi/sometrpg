@@ -2,7 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle.conditions;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
-import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 
 import java.util.Set;
@@ -21,12 +21,12 @@ public class ProtectUnits implements WinCondition {
   }
 
   @Override
-  public boolean isFulfilled(Battle battle) {
+  public boolean isFulfilled(SomeTRPGBattle battle) {
     return Iterables.all(unitsToProtect, ConditionUtils.IS_ALIVE);
   }
 
   @Override
-  public boolean isFailed(Battle battle) {
+  public boolean isFailed(SomeTRPGBattle battle) {
     return Iterables.any(unitsToProtect, ConditionUtils.IS_DEAD);
   }
 }

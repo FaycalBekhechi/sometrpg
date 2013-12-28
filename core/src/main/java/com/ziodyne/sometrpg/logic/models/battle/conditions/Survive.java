@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.logic.models.battle.conditions;
 
 import com.google.common.collect.Iterables;
-import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 
 public class Survive implements WinCondition {
   private int turnGoal;
@@ -11,12 +11,12 @@ public class Survive implements WinCondition {
   }
 
   @Override
-  public boolean isFulfilled(Battle battle) {
+  public boolean isFulfilled(SomeTRPGBattle battle) {
     return battle.getTurnNumber() >= turnGoal;
   }
 
   @Override
-  public boolean isFailed(Battle battle) {
+  public boolean isFailed(SomeTRPGBattle battle) {
     return Iterables.all(battle.getPlayerUnits(), ConditionUtils.IS_DEAD);
   }
 }

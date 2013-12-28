@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DefaultBattle implements Battle, TileNavigable, TurnBased {
+public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private final RangeFinder movementRangeFinder = new FloodFillRangeFinder();
   private final BattleMap map;
   private final ImmutableList<Army> armies;
@@ -27,7 +27,7 @@ public class DefaultBattle implements Battle, TileNavigable, TurnBased {
 
   private int turnNumber;
 
-  public DefaultBattle(BattleMap map, List<Army> armies, WinCondition condition) {
+  public SomeTRPGBattle(BattleMap map, List<Army> armies, WinCondition condition) {
     this.map = map;
     this.armies = ImmutableList.copyOf(armies);
     this.condition = condition;

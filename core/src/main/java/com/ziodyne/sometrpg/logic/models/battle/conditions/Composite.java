@@ -2,7 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle.conditions;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -21,7 +21,7 @@ public abstract class Composite implements WinCondition {
     }
 
     @Override
-    public boolean isFulfilled(final Battle battle) {
+    public boolean isFulfilled(final SomeTRPGBattle battle) {
       Predicate<WinCondition> fulfilled = new Predicate<WinCondition>() {
         @Override
         public boolean apply(@Nullable WinCondition condition) {
@@ -33,7 +33,7 @@ public abstract class Composite implements WinCondition {
     }
 
     @Override
-    public boolean isFailed(final Battle battle) {
+    public boolean isFailed(final SomeTRPGBattle battle) {
       Predicate<WinCondition> failed = new Predicate<WinCondition>() {
         @Override
         public boolean apply(@Nullable WinCondition condition) {
@@ -52,7 +52,7 @@ public abstract class Composite implements WinCondition {
     }
 
     @Override
-    public boolean isFulfilled(final Battle battle) {
+    public boolean isFulfilled(final SomeTRPGBattle battle) {
       Predicate<WinCondition> fulfilled = new Predicate<WinCondition>() {
         @Override
         public boolean apply(@Nullable WinCondition condition) {
@@ -64,7 +64,7 @@ public abstract class Composite implements WinCondition {
     }
 
     @Override
-    public boolean isFailed(final Battle battle) {
+    public boolean isFailed(final SomeTRPGBattle battle) {
       Predicate<WinCondition> failed = new Predicate<WinCondition>() {
         @Override
         public boolean apply(@Nullable WinCondition condition) {

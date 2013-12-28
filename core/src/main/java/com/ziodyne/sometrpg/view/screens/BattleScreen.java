@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.ziodyne.sometrpg.logic.models.Unit;
-import com.ziodyne.sometrpg.logic.models.battle.DefaultBattle;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
@@ -33,7 +33,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected final OrthographicCamera camera;
   protected final Director director;
   protected TiledMap map;
-  protected DefaultBattle battle;
+  protected SomeTRPGBattle battle;
   protected Map<Unit, Entity> entityIndex = new HashMap<Unit, Entity>();
   protected Entity unitSelector;
   protected Stage menuStage;
@@ -54,7 +54,7 @@ public abstract class BattleScreen extends ScreenAdapter {
     menuStage.addActor(unitActionMenu);
   }
 
-  public DefaultBattle getBattle() {
+  public SomeTRPGBattle getBattle() {
     return battle;
   }
 

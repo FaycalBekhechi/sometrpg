@@ -8,10 +8,10 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
-import com.ziodyne.sometrpg.logic.models.battle.DefaultBattle;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import org.apache.commons.io.FilenameUtils;
 
-public class BattleLoader extends SynchronousAssetLoader<DefaultBattle, BattleLoader.BattleParameter> {
+public class BattleLoader extends SynchronousAssetLoader<SomeTRPGBattle, BattleLoader.BattleParameter> {
   // Defer to the core deserializer for the heavy lifting.
   private final com.ziodyne.sometrpg.logic.loader.BattleLoader battleLoader;
 
@@ -21,7 +21,7 @@ public class BattleLoader extends SynchronousAssetLoader<DefaultBattle, BattleLo
   }
 
   @Override
-  public DefaultBattle load(AssetManager assetManager, String fileName, FileHandle file, BattleParameter parameter) {
+  public SomeTRPGBattle load(AssetManager assetManager, String fileName, FileHandle file, BattleParameter parameter) {
     BattleMap map = assetManager.get(getTmxFilepath(fileName), BattleMap.class);
     return battleLoader.load(map, file.file());
   }
@@ -41,5 +41,5 @@ public class BattleLoader extends SynchronousAssetLoader<DefaultBattle, BattleLo
     return FilenameUtils.getBaseName(fileName) + ".tmx";
   }
 
-  public static class BattleParameter extends AssetLoaderParameters<DefaultBattle> { }
+  public static class BattleParameter extends AssetLoaderParameters<SomeTRPGBattle> { }
 }

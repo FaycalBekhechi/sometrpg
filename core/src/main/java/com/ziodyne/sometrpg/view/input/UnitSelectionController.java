@@ -8,7 +8,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
-import com.ziodyne.sometrpg.logic.models.battle.DefaultBattle;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.components.Position;
@@ -16,10 +16,10 @@ import com.ziodyne.sometrpg.view.components.Position;
 public class UnitSelectionController extends InputAdapter {
 
   private final World world;
-  private final DefaultBattle battle;
+  private final SomeTRPGBattle battle;
   private final OrthographicCamera camera;
 
-  public UnitSelectionController(World world, DefaultBattle battle, OrthographicCamera camera) {
+  public UnitSelectionController(World world, SomeTRPGBattle battle, OrthographicCamera camera) {
     this.world = world;
     this.battle = battle;
     this.camera = camera;

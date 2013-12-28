@@ -10,17 +10,26 @@ import com.ziodyne.sometrpg.logic.navigation.FloodFillRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.RangeFinder;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Battle {
   private final RangeFinder movementRangeFinder = new FloodFillRangeFinder();
-  private BattleMap map;
-  private ImmutableList<Army> armies;
-  private WinCondition condition;
-  private int turnNumber;
+  private final BattleMap map;
+  private final ImmutableList<Army> armies;
+  private final WinCondition condition;
   private MapCombatResolver combatResolver;
+
+  private int turnNumber;
+
+  public Battle(BattleMap map, List<Army> armies, WinCondition condition) {
+    this.map = map;
+    this.armies = ImmutableList.copyOf(armies);
+    this.condition = condition;
+    this.combatResolver = new MapCombatResolver(map);
+  }
 
   public void moveCombatant(Combatant combatant, GridPoint2 destination) {
     validateCombatantStatus(combatant);
@@ -65,23 +74,6 @@ public class Battle {
 
   public Set<Combatant> getNeutralUnits() {
     return getUnitsSafe(getArmyByType(ArmyType.NEUTRAL));
-  }
-
-  public void setCondition(WinCondition condition) {
-    this.condition = condition;
-  }
-
-  public void setTurnNumber(int turnNumber) {
-    this.turnNumber = turnNumber;
-  }
-
-  public void setMap(BattleMap map) {
-    this.map = map;
-    this.combatResolver = new MapCombatResolver(map);
-  }
-
-  public void setArmies(List<Army> armies) {
-    this.armies = ImmutableList.copyOf(armies);
   }
 
   public BattleMap getMap() {

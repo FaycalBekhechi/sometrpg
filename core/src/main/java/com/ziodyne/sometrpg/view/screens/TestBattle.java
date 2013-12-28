@@ -26,6 +26,7 @@ import com.ziodyne.sometrpg.logic.models.battle.ArmyType;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
+import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
@@ -37,6 +38,7 @@ import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class TestBattle extends BattleScreen {
@@ -110,16 +112,12 @@ public class TestBattle extends BattleScreen {
   }
 
   private Battle initBattle(TiledMapTileLayer map) {
-    Battle battle = new Battle();
 
     Combatant player = new Combatant(new Unit(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test3x"));
     Combatant enemy = new Combatant(new Unit(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
 
     Army playerArmy = new Army(Sets.newHashSet(player), "Greil Mercenaries", ArmyType.PLAYER);
     Army enemyArmy = new Army(Sets.newHashSet(enemy), "Dawn Brigade", ArmyType.ENEMY);
-    battle.setArmies(Lists.newArrayList(playerArmy, enemyArmy));
-
-    battle.setCondition(new Rout());
 
     Set<Tile> tiles = new HashSet<Tile>(map.getHeight());
     for (int i = 0; i < map.getWidth(); i++) {
@@ -132,9 +130,11 @@ public class TestBattle extends BattleScreen {
     BattleMap battleMap = new BattleMap(tiles);
     battleMap.addUnit(player, 0, 0);
     battleMap.addUnit(enemy, map.getWidth()-1, map.getHeight()-1);
-    battle.setMap(battleMap);
 
-    return battle;
+    List<Army> armies = Lists.newArrayList(playerArmy, enemyArmy);
+    WinCondition winCondition = new Rout();
+
+    return new Battle(battleMap, armies, winCondition);
   }
 
   protected void update(float delta) {

@@ -8,7 +8,7 @@ import com.ziodyne.sometrpg.logic.util.ModelTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SomeTRPGBattleMapTest {
+public class BattleMapTest {
 
   private static Unit newTestUnit() {
     return com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils.createUnit();

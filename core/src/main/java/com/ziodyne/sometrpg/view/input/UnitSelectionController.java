@@ -6,6 +6,7 @@ import com.artemis.managers.TagManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.logic.models.battle.DefaultBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
@@ -32,21 +33,21 @@ public class UnitSelectionController extends InputAdapter {
 
       Vector3 clickCoordinates = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
       camera.unproject(clickCoordinates);
-      int x = (int)Math.floor(clickCoordinates.x);
-      int y = (int)Math.floor(clickCoordinates.y);
+      int gridX = (int)Math.floor(clickCoordinates.x);
+      int gridY = (int)Math.floor(clickCoordinates.y);
 
       Position pos = world.getMapper(Position.class).get(mapSelector);
-      if (mapSelector.isEnabled() && x == pos.getX() && y == pos.getY()) {
+      if (mapSelector.isEnabled() && gridX == pos.getX() && gridY == pos.getY()) {
         return false;
       }
 
-      Tile tile = battle.getMap().getTile(x, y);
+      Tile tile = battle.getTile(new GridPoint2(gridX, gridY));
       if (tile != null) {
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
           mapSelector.enable();
-          pos.setX(x);
-          pos.setY(y);
+          pos.setX(gridX);
+          pos.setY(gridY);
           return true;
         } else {
           if (mapSelector.isEnabled()) {

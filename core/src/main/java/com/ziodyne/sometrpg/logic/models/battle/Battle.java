@@ -18,4 +18,5 @@ public interface Battle {
   public Set<Combatant> getEnemyUnits();
   public Set<Combatant> getNeutralUnits();
   public Tile getTile(GridPoint2 point);
+  public boolean tileExists(GridPoint2 point);
 }

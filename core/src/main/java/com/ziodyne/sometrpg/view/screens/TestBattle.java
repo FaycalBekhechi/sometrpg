@@ -47,6 +47,7 @@ public class TestBattle extends BattleScreen {
   private TiledMapRenderSystem mapRenderSystem;
   private MapHoverSelectorUpdateSystem mapSelectorUpdateSystem;
   private Rectangle mapBoundingRect;
+  private BattleMap map;
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor, GameExitController gameExitController,
@@ -97,7 +98,6 @@ public class TestBattle extends BattleScreen {
 
 
   private void initUnitEntities() {
-    BattleMap map = battle.getMap();
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         Tile tile = map.getTile(i, j);
@@ -130,6 +130,7 @@ public class TestBattle extends BattleScreen {
     BattleMap battleMap = new BattleMap(tiles);
     battleMap.addUnit(player, 0, 0);
     battleMap.addUnit(enemy, map.getWidth()-1, map.getHeight()-1);
+    this.map = battleMap;
 
     List<Army> armies = Lists.newArrayList(playerArmy, enemyArmy);
     WinCondition winCondition = new Rout();

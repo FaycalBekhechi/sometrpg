@@ -78,7 +78,7 @@ public abstract class BattleScreen extends ScreenAdapter {
       }
       selectedTile = null;
       hideActionMenu();
-    } else if (battle.getMap().tileExists(selectedSquare.x, selectedSquare.y)) {
+    } else if (battle.tileExists(selectedSquare)) {
       unitSelector = entityFactory.createUnitSelector(selectedSquare);
       world.addEntity(unitSelector);
       selectedTile = selectedSquare;
@@ -104,11 +104,11 @@ public abstract class BattleScreen extends ScreenAdapter {
   }
 
   public boolean isValidSquare(GridPoint2 square) {
-    return battle.getMap().tileExists(square.x, square.y);
+    return battle.tileExists(square);
   }
 
   public boolean isOccupied(GridPoint2 square) {
-    Tile tile = battle.getMap().getTile(square.x, square.y);
+    Tile tile = battle.getTile(square);
     return tile != null && tile.isOccupied();
   }
 

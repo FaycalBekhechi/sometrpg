@@ -33,6 +33,11 @@ public class DefaultBattle implements Battle {
   }
 
   @Override
+  public boolean tileExists(GridPoint2 point) {
+    return map.tileExists(point.x, point.y);
+  }
+
+  @Override
   public Tile getTile(GridPoint2 point) {
     return map.getTile(point.x, point.y);
   }
@@ -107,10 +112,6 @@ public class DefaultBattle implements Battle {
   @Override
   public Set<Combatant> getNeutralUnits() {
     return getUnitsSafe(getArmyByType(ArmyType.NEUTRAL));
-  }
-
-  public BattleMap getMap() {
-    return map;
   }
 
   private Set<Combatant> getUnitsSafe(Army army) {

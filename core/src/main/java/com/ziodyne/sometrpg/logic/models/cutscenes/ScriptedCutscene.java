@@ -1,12 +1,17 @@
 package com.ziodyne.sometrpg.logic.models.cutscenes;
 
+import com.ziodyne.sometrpg.logic.models.cutscenes.actions.CutsceneAction;
+
 import java.util.List;
 
-public abstract class AbstractCutscene implements Cutscene {
+/**
+ * Default abstract implementation of {@link Cutscene} that works from a script.
+ */
+public abstract class ScriptedCutscene implements Cutscene {
   private List<CutsceneAction> script;
   private int actionIndex;
 
-  public AbstractCutscene(List<CutsceneAction> script) {
+  public ScriptedCutscene(List<CutsceneAction> script) {
     this.script = script;
   }
 

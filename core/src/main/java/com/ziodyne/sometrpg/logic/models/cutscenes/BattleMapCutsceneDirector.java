@@ -2,8 +2,12 @@ package com.ziodyne.sometrpg.logic.models.cutscenes;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.cutscenes.actions.DialogueAction;
+import com.ziodyne.sometrpg.logic.models.cutscenes.actions.MapMovementAction;
+import com.ziodyne.sometrpg.logic.models.cutscenes.actions.StageEntranceAction;
+import com.ziodyne.sometrpg.logic.models.cutscenes.actions.StageExitAction;
 
-public class BattleMapCutsceneDirector implements MapCutsceneDirector {
+public class BattleMapCutsceneDirector implements CutsceneDirector {
   private final BattleMap map;
 
   public BattleMapCutsceneDirector(BattleMap map) {
@@ -20,6 +24,16 @@ public class BattleMapCutsceneDirector implements MapCutsceneDirector {
 
   @Override
   public void direct(DialogueAction dialogueAction) {
+
+  }
+
+  @Override
+  public void direct(StageEntranceAction stageEntranceAction) {
+
+  }
+
+  @Override
+  public void direct(StageExitAction stageExitAction) {
 
   }
 }

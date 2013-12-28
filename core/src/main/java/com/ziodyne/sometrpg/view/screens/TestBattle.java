@@ -18,12 +18,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.DefaultBattle;
 import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.Army;
 import com.ziodyne.sometrpg.logic.models.battle.ArmyType;
-import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
@@ -84,7 +84,7 @@ public class TestBattle extends BattleScreen {
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch, gridSquareSize));
 
     assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
-    assetManager.setLoader(Battle.class, new BattleLoader(new InternalFileHandleResolver()));
+    assetManager.setLoader(DefaultBattle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);
@@ -111,7 +111,7 @@ public class TestBattle extends BattleScreen {
     }
   }
 
-  private Battle initBattle(TiledMapTileLayer map) {
+  private DefaultBattle initBattle(TiledMapTileLayer map) {
 
     Combatant player = new Combatant(new Unit(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test3x"));
     Combatant enemy = new Combatant(new Unit(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
@@ -134,7 +134,7 @@ public class TestBattle extends BattleScreen {
     List<Army> armies = Lists.newArrayList(playerArmy, enemyArmy);
     WinCondition winCondition = new Rout();
 
-    return new Battle(battleMap, armies, winCondition);
+    return new DefaultBattle(battleMap, armies, winCondition);
   }
 
   protected void update(float delta) {

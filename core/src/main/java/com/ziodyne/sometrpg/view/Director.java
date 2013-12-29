@@ -32,8 +32,11 @@ public class Director {
 
   public void popScreen() {
     if (!screens.isEmpty()) {
-      screens.pop();
+      Screen previousScreen = screens.pop();
+      previousScreen.dispose();
     }
-    game.setScreen(screens.peek());
+    Screen newScreen = screens.peek();
+
+    game.setScreen(newScreen);
   }
 }

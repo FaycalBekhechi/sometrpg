@@ -32,7 +32,6 @@ import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
-import com.ziodyne.sometrpg.view.input.GameExitController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
@@ -54,7 +53,7 @@ public class TestBattle extends BattleScreen {
   private BattleMap map;
 
   @Inject
-  TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor, GameExitController gameExitController,
+  TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<Sprite> spriteTweenAccessor) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx", 32f);
@@ -78,8 +77,9 @@ public class TestBattle extends BattleScreen {
     world.setSystem(new BattleUnitDeathSystem());
     world.setSystem(new DeathFadeSystem(tweenManager));
     world.setSystem(new BattleUnitMovementSystem(map));
-    world.setSystem(spriteRenderSystem, true);
-    world.setSystem(mapRenderSystem, true);
+    world.setSystem(mapSelectorUpdateSystem);
+    world.setSystem(mapRenderSystem);
+    world.setSystem(spriteRenderSystem);
 
     world.setManager(new TagManager());
 
@@ -99,7 +99,6 @@ public class TestBattle extends BattleScreen {
     InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);
     multiplexer.addProcessor(mapControllerFactory.create(camera, this));
-    multiplexer.addProcessor(gameExitController);
     Gdx.input.setInputProcessor(multiplexer);
 
     //assetManager.load("battles/test.json", Battle.class);
@@ -149,8 +148,5 @@ public class TestBattle extends BattleScreen {
 
   protected void update(float delta) {
     tweenManager.update(delta);
-    mapSelectorUpdateSystem.process();
-    mapRenderSystem.process();
-    spriteRenderSystem.process();
   }
 }

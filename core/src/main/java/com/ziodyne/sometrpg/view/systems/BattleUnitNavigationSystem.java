@@ -23,7 +23,6 @@ public class BattleUnitNavigationSystem extends EntityProcessingSystem {
 
   private final TweenManager tweenManager;
 
-  @Inject
   public BattleUnitNavigationSystem(TweenManager tweenManager) {
     super(Aspect.getAspectForAll(Position.class, Navigating.class));
     this.tweenManager = tweenManager;

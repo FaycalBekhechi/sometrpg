@@ -7,6 +7,7 @@ public class Sprite extends Component {
   private Texture texture;
   private Texture.TextureFilter minFilter;
   private Texture.TextureFilter magFiler;
+  private float alpha;
   private final float width;
   private final float height;
 
@@ -20,6 +21,19 @@ public class Sprite extends Component {
     texture = new Texture(path);
     this.width = width;
     this.height = height;
+  }
+
+  public Sprite(String path, float width, float height, float alpha) {
+    this(path, width, height);
+    this.alpha = alpha;
+  }
+
+  public float getAlpha() {
+    return alpha;
+  }
+
+  public void setAlpha(float alpha) {
+    this.alpha = alpha;
   }
 
   public Texture getTexture() {

@@ -7,9 +7,11 @@ import com.artemis.annotations.Mapper;
 import com.artemis.systems.EntityProcessingSystem;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
+import com.ziodyne.sometrpg.view.components.DeathFade;
+import com.ziodyne.sometrpg.view.components.Sprite;
 
 /**
- * Removes all dead combatant entities from the world.
+ * Finds dead units and enqueues them for fade-out -> deletion.
  */
 public class BattleUnitDeathSystem extends EntityProcessingSystem {
   @Mapper
@@ -17,15 +19,15 @@ public class BattleUnitDeathSystem extends EntityProcessingSystem {
 
   @SuppressWarnings("unchecked")
   public BattleUnitDeathSystem() {
-    super(Aspect.getAspectForAll(BattleUnit.class));
+    super(Aspect.getAspectForAll(BattleUnit.class, Sprite.class).exclude(DeathFade.class));
   }
 
   @Override
-  protected void process(Entity entity) {
+  protected void process(final Entity entity) {
     BattleUnit unitComponent = unitComponentMapper.get(entity);
     Combatant combatant = unitComponent.combatant;
     if (!combatant.isAlive()) {
-      entity.deleteFromWorld();
+      entity.addComponent(new DeathFade());
     }
   }
 }

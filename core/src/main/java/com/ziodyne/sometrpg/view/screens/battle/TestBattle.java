@@ -57,7 +57,7 @@ public class TestBattle extends BattleScreen {
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx", 32f);
     this.tweenManager = tweenManager;
-    camera.setToOrtho(false, 30, 20);
+    camera.setToOrtho(false, 32, 18);
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
 

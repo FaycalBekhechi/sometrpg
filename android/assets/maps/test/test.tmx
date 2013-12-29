@@ -5,12 +5,6 @@
  </tileset>
  <tileset firstgid="73" name="Anya" tilewidth="32" tileheight="32">
   <image source="tileset/anya.png" width="384" height="384"/>
-  <tile id="80">
-   <properties>
-    <property name="object" value="true"/>
-    <property name="texture" value="wood1.png"/>
-   </properties>
-  </tile>
  </tileset>
  <layer name="Ground" width="20" height="20">
   <data encoding="base64" compression="zlib">
@@ -26,5 +20,6 @@
   <object gid="153" x="224" y="268"/>
   <object gid="153" x="209" y="293"/>
   <object gid="153" x="352" y="251"/>
+  <object gid="153" x="217" y="425"/>
  </objectgroup>
 </map>

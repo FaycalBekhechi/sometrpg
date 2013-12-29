@@ -88,13 +88,12 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   private void showActionMenu() {
     TextButton testButton = new TextButton("Attack", skin);
-    Vector3 screenSpacePoint = new Vector3(selectedTile.x, selectedTile.y, 0);
-    camera.project(screenSpacePoint);
+    Vector3 screenSpacePoint = new Vector3(selectedTile.x + gridSquareSize, selectedTile.y, 0);
+    camera.unproject(screenSpacePoint);
 
 
     // Offset gridSquareSize px to the right of the unit.
-    // With some extra padding
-    testButton.setX(screenSpacePoint.x + gridSquareSize + 1);
+    testButton.setX(screenSpacePoint.x);
     testButton.setY(screenSpacePoint.y);
     unitActionMenu.addActor(testButton);
   }

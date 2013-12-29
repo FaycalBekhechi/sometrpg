@@ -112,7 +112,8 @@ public class BattleMap {
     long combatantId = combatant.getUnitId();
 
     for (Tile tile : tilesByPosition.values()) {
-      if (tile.getCombatant().getUnitId() == combatantId) {
+      Combatant combatantOnTile = tile.getCombatant();
+      if (combatantOnTile != null && combatantOnTile.getUnitId() == combatantId) {
         return tile.getPosition();
       }
     }

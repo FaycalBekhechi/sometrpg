@@ -45,9 +45,14 @@ public class UnitSelectionController extends InputAdapter {
       if (tile != null) {
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
-          mapSelector.enable();
-          pos.setX(gridX);
-          pos.setY(gridY);
+          if (mapSelector.isEnabled())  {
+            battle.moveCombatant(combatant, tile);
+            mapSelector.disable();
+          } else {
+            mapSelector.enable();
+            pos.setX(gridX);
+            pos.setY(gridY);
+          }
           return true;
         } else {
           if (mapSelector.isEnabled()) {

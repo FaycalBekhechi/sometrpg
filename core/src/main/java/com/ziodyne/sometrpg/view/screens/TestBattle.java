@@ -32,7 +32,9 @@ import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.input.GameExitController;
+import com.ziodyne.sometrpg.view.input.UnitSelectionController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
+import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
@@ -69,6 +71,7 @@ public class TestBattle extends BattleScreen {
     battle = initBattle(tileLayer);
     initUnitEntities();
 
+    world.setSystem(new BattleUnitMovementSystem(map));
     world.setSystem(spriteRenderSystem, true);
     world.setSystem(mapRenderSystem, true);
 
@@ -104,7 +107,7 @@ public class TestBattle extends BattleScreen {
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
           Unit unit = combatant.getUnit();
-          Entity unitEntity = entityFactory.createUnit(unit, unit.getName().equals("Test3x") ? "single3x.png" : "single.png", i, j);
+          Entity unitEntity = entityFactory.createUnit(map, combatant, "single.png");
           registerUnitEntity(unit, unitEntity);
         }
       }

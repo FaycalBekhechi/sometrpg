@@ -8,6 +8,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.GridPoint2;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
@@ -21,7 +24,7 @@ public class EntityFactory {
     this.world = world;
   }
 
-  public Entity createUnit(Unit unit, String texturePath, int x, int y) {
+  public Entity createUnit(BattleMap map, Combatant combatant, String texturePath) {
     Entity unitEntity = world.createEntity();
 
     Sprite sprite = new Sprite(texturePath, 1, 1);
@@ -29,8 +32,15 @@ public class EntityFactory {
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     unitEntity.addComponent(sprite);
 
-    Position position = new Position(x, y);
+    GridPoint2 pos = map.getCombatantPosition(combatant);
+    if (pos == null) {
+      throw new IllegalArgumentException("Must provide a combatant that is actually on the map.");
+    }
+
+    Position position = new Position(pos.x, pos.y);
     unitEntity.addComponent(position);
+
+    unitEntity.addComponent(new BattleUnit(combatant));
 
     return unitEntity;
   }

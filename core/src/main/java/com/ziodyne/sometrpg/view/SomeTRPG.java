@@ -5,7 +5,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.ziodyne.sometrpg.RootModule;
 import com.ziodyne.sometrpg.view.screens.MainMenu;
-import com.ziodyne.sometrpg.view.screens.TestBattle;
 
 public class SomeTRPG extends Game {
 

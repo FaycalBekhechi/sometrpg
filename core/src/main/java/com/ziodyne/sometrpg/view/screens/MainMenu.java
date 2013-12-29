@@ -7,9 +7,7 @@ import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.ziodyne.sometrpg.view.Director;
+import com.ziodyne.sometrpg.view.screens.battle.TestBattle;
 import com.ziodyne.sometrpg.view.tween.ActorAccessor;
 
 public class MainMenu extends ScreenAdapter {

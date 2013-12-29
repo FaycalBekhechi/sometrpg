@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.view.screens;
+package com.ziodyne.sometrpg.view.screens.battle;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenAccessor;
@@ -32,8 +32,8 @@ import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.input.GameExitController;
-import com.ziodyne.sometrpg.view.input.UnitSelectionController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
+import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
@@ -71,6 +71,7 @@ public class TestBattle extends BattleScreen {
     battle = initBattle(tileLayer);
     initUnitEntities();
 
+    world.setSystem(new BattleUnitDeathSystem());
     world.setSystem(new BattleUnitMovementSystem(map));
     world.setSystem(spriteRenderSystem, true);
     world.setSystem(mapRenderSystem, true);

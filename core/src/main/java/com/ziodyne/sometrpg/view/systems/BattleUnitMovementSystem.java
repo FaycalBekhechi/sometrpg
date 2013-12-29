@@ -10,6 +10,9 @@ import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.Position;
 
+/**
+ * Updates the {@link Position} of {@link BattleUnit} entities to reflect their map positions.
+ */
 public class BattleUnitMovementSystem extends EntityProcessingSystem {
   private final BattleMap map;
 

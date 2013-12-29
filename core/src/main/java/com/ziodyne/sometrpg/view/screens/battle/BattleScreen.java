@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.view.screens;
+package com.ziodyne.sometrpg.view.screens.battle;
 
 import com.artemis.Entity;
 import com.artemis.World;

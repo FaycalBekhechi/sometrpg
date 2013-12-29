@@ -32,7 +32,7 @@ public class DeathFadeSystem extends EntityProcessingSystem {
   protected void process(final Entity entity) {
     Sprite spriteComponent = spriteComponentMapper.get(entity);
     Tween.to(spriteComponent, SpriteComponentAccessor.ALPHA, 0.5f)
-            .target(0)
+            .target(0f)
             .ease(TweenEquations.easeOutCubic)
             .setCallback(new TweenCallback() {
               @Override

@@ -77,6 +77,9 @@ public class SpriteRenderSystem extends EntitySystem {
 
       batch.setShader(program);
 
+      Color color = Color.WHITE;
+      batch.setColor(color.r, color.g, color.b, sprite.getAlpha());
+
       batch.draw(sprite.getTexture(), pos.getX(), pos.getY(), sprite.getWidth(), sprite.getHeight());
     }
   }

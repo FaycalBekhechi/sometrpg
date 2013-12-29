@@ -8,8 +8,10 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector3;
+import com.google.common.base.Optional;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
@@ -39,6 +41,15 @@ public class BattleMapController extends InputAdapter {
     int x = (int)Math.floor(clickCoordinates.x);
     int y = (int)Math.floor(clickCoordinates.y);
     GridPoint2 selectedPoint = new GridPoint2(x, y);
+
+    if (button == Input.Buttons.RIGHT) {
+      Optional<Combatant> combatantResult = battleScreen.getCombatant(selectedPoint);
+      if (combatantResult.isPresent()) {
+        Combatant combatant = combatantResult.get();
+        combatant.applyDamage(Integer.MAX_VALUE);
+        return true;
+      }
+    }
 
     // Click outisde the map bounds
     if (!battleScreen.isValidSquare(selectedPoint)) {

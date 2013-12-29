@@ -30,6 +30,7 @@ import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
+import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.input.GameExitController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
@@ -54,12 +55,14 @@ public class TestBattle extends BattleScreen {
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor, GameExitController gameExitController,
-             SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory) {
+             SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
+             TweenAccessor<Sprite> spriteTweenAccessor) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx", 32f);
     this.tweenManager = tweenManager;
     camera.setToOrtho(false, 32, 18);
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
+    Tween.registerAccessor(Sprite.class, spriteTweenAccessor);
 
     TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);

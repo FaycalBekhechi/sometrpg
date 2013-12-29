@@ -13,6 +13,7 @@ import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
+import com.ziodyne.sometrpg.view.components.DeathFade;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;

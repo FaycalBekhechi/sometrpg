@@ -16,9 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.google.common.base.Optional;
 import com.ziodyne.sometrpg.logic.models.Unit;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
@@ -109,6 +111,15 @@ public abstract class BattleScreen extends ScreenAdapter {
   public boolean isOccupied(GridPoint2 square) {
     Tile tile = battle.getTile(square);
     return tile != null && tile.isOccupied();
+  }
+
+  public Optional<Combatant> getCombatant(GridPoint2 square) {
+    Tile tile = battle.getTile(square);
+    if (tile == null) {
+      return Optional.absent();
+    }
+
+    return Optional.fromNullable(tile.getCombatant());
   }
 
   protected void registerUnitEntity(Unit unit, Entity entity) {

@@ -7,7 +7,7 @@ public class Sprite extends Component {
   private Texture texture;
   private Texture.TextureFilter minFilter;
   private Texture.TextureFilter magFiler;
-  private float alpha;
+  private float alpha = 1;
   private final float width;
   private final float height;
 

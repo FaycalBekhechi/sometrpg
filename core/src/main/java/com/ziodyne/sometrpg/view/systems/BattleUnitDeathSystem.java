@@ -28,6 +28,7 @@ public class BattleUnitDeathSystem extends EntityProcessingSystem {
     Combatant combatant = unitComponent.combatant;
     if (!combatant.isAlive()) {
       entity.addComponent(new DeathFade());
+      entity.changedInWorld();
     }
   }
 }

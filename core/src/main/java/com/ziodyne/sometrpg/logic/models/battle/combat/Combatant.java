@@ -12,11 +12,9 @@ import java.util.Set;
 public class Combatant {
   private final Unit unit;
   private int health;
-  private boolean alive = true;
 
   public Combatant(Unit unit) {
     this.unit = unit;
-    this.alive = true;
     this.health = UnitUtils.getMaxHealth(unit);
   }
 
@@ -30,7 +28,7 @@ public class Combatant {
   }
 
   public boolean isAlive() {
-    return alive;
+    return health > 0;
   }
 
   public Unit getUnit() {

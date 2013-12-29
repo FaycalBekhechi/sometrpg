@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.logic.navigation;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.collect.Lists;
 
 import java.util.List;

@@ -2,9 +2,11 @@ package com.ziodyne.sometrpg.view.entities;
 
 import com.artemis.Entity;
 import com.artemis.World;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.GridPoint2;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.Unit;

@@ -12,6 +12,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
+/**
+ * An extension to {@link OrthogonalTiledMapRenderer} that supports tile map objects to render
+ * textured objects at arbitrary locations on the map.
+ */
 public class ObjectAwareTmxRenderer extends OrthogonalTiledMapRenderer {
 
   public ObjectAwareTmxRenderer(TiledMap map, float unitScale, SpriteBatch spriteBatch) {

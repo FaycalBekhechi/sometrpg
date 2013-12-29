@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 
 /**
  * An extension to {@link OrthogonalTiledMapRenderer} that supports tile map objects to render
@@ -41,10 +40,10 @@ public class ObjectAwareTmxRenderer extends OrthogonalTiledMapRenderer {
         float height = textureRegion.getRegionHeight() * unitScale;
 
         // Scale the object's position by the tile scale
-        Vector3 objectPosition = new Vector3(rect.x, rect.y, 0);
-        objectPosition = objectPosition.scl(unitScale);
+        float posX = rect.x * unitScale;
+        float posY = rect.y * unitScale;
 
-        spriteBatch.draw(textureRegion, objectPosition.x, objectPosition.y, width, height);
+        spriteBatch.draw(textureRegion, posX, posY, width, height);
       }
     }
   }

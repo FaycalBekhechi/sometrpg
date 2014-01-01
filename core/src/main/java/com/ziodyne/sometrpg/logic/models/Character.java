@@ -12,7 +12,10 @@ import com.ziodyne.sometrpg.logic.util.UnitUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class Unit {
+/**
+ * This is the representation of a character that is not related to a specific unit on the battlefield.
+ */
+public class Character {
   private static final AtomicLong lastIdentifier = new AtomicLong(0L);
   
   private final long id;
@@ -22,7 +25,7 @@ public class Unit {
   private String name;
   private Set<UnitStat> statSheet;
 
-  public Unit(Set<UnitStat> maxStatSheet, UnitGrowth growths, Set<UnitStat> statSheet, String name) {
+  public Character(Set<UnitStat> maxStatSheet, UnitGrowth growths, Set<UnitStat> statSheet, String name) {
     this.id = lastIdentifier.incrementAndGet();
     this.maxStatSheet = Objects.requireNonNull(maxStatSheet);
     this.growths = Objects.requireNonNull(growths);
@@ -99,12 +102,12 @@ public class Unit {
       return false;
     }
 
-    if (!(obj instanceof Unit)) {
+    if (!(obj instanceof Character)) {
       return false;
     }
 
     return new EqualsBuilder()
-            .append(id, ((Unit) obj).getId())
+            .append(id, ((Character) obj).getId())
             .build();
   }
 }

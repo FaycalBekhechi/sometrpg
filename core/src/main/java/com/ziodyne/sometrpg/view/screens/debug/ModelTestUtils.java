@@ -8,7 +8,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.Constants;
 import com.ziodyne.sometrpg.logic.models.Stat;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.UnitGrowth;
 import com.ziodyne.sometrpg.logic.models.UnitStat;
 
@@ -61,19 +61,19 @@ public class ModelTestUtils {
     return new UnitGrowth(rawGrowths);
   }
   
-  public static Unit createUnit() {
-    return new Unit(createMaxStats(), createGrowth(), createStats(), "Test");
+  public static Character createUnit() {
+    return new Character(createMaxStats(), createGrowth(), createStats(), "Test");
   }
 
-  public static Unit createRandomUnit() {
-    return new Unit(homogeneousStats(Constants.STAT_MAX), createGrowth(), randomStats(), "Test Random");
+  public static Character createRandomUnit() {
+    return new Character(homogeneousStats(Constants.STAT_MAX), createGrowth(), randomStats(), "Test Random");
   }
   
-  public static Unit createMaxedUnit() {
-    return new Unit(homogeneousStats(Constants.STAT_MAX), createGrowth(), homogeneousStats(Constants.STAT_MAX), "Test");
+  public static Character createMaxedUnit() {
+    return new Character(homogeneousStats(Constants.STAT_MAX), createGrowth(), homogeneousStats(Constants.STAT_MAX), "Test");
   }
   
-  public static Unit createCrappyUnit() {
-    return new Unit(createMaxStats(), createGrowth(), createMinStats(), "Test");
+  public static Character createCrappyUnit() {
+    return new Character(createMaxStats(), createGrowth(), createMinStats(), "Test");
   }
 }

@@ -1,20 +1,20 @@
 package com.ziodyne.sometrpg.view.stats.charts;
 
 import com.badlogic.gdx.math.Polygon;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.view.stats.StatChartUtils;
 
 public class StatChart extends RadarChart {
-  public StatChart(Unit unit) {
-    super(unit);
+  public StatChart(Character character) {
+    super(character);
   }
 
-  public StatChart(Unit unit, float radius) {
-    super(unit, radius);
+  public StatChart(Character character, float radius) {
+    super(character, radius);
   }
 
   @Override
-  protected Polygon generateChart(Unit unit, float radius) {
-    return StatChartUtils.getStatRadarChart(unit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
+  protected Polygon generateChart(Character character, float radius) {
+    return StatChartUtils.getStatRadarChart(character, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
   }
 }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.logic.models.Constants;
 import com.ziodyne.sometrpg.logic.models.Stat;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.UnitGrowth;
 import com.ziodyne.sometrpg.logic.util.UnitUtils;
 
@@ -59,13 +59,13 @@ public class StatChartUtils {
   }
 
   /**
-   * Get the growth radar chart for a {@link Unit}
+   * Get the growth radar chart for a {@link com.ziodyne.sometrpg.logic.models.Character}
    *
-   * @param unit  The {@link Unit} for which to generate the chart.
+   * @param character  The {@link com.ziodyne.sometrpg.logic.models.Character} for which to generate the chart.
    * @return A {@link Polygon} representing a radar chart of the growths of a unit.
    */
-  public static Polygon getGrowthRadarChart(Unit unit, EnumSet<Stat> chartedStats, float radius) {
-    UnitGrowth growths = unit.getGrowths();
+  public static Polygon getGrowthRadarChart(Character character, EnumSet<Stat> chartedStats, float radius) {
+    UnitGrowth growths = character.getGrowths();
 
     // Convert growths stored as percentages to values in the interval [0,1]
     List<Float> unitGrowthRatios = new ArrayList<Float>(chartedStats.size());
@@ -83,13 +83,13 @@ public class StatChartUtils {
   }
 
   /**
-   * Get the stat value radar chart for a {@link Unit}
+   * Get the stat value radar chart for a {@link com.ziodyne.sometrpg.logic.models.Character}
    *
-   * @param unit The {@link Unit} for which to generate the chart.
+   * @param character The {@link com.ziodyne.sometrpg.logic.models.Character} for which to generate the chart.
    * @return A {@link Polygon} representing a radar chart of the stats of a unit.
    */
-  public static Polygon getStatRadarChart(Unit unit, EnumSet<Stat> chartedStats, float radius) {
-    Map<Stat, Integer> statSheet = UnitUtils.indexStatSheetByValue(unit.getStatSheet());
+  public static Polygon getStatRadarChart(Character character, EnumSet<Stat> chartedStats, float radius) {
+    Map<Stat, Integer> statSheet = UnitUtils.indexStatSheetByValue(character.getStatSheet());
 
     List<Float> unitStatRatios = new ArrayList<Float>(chartedStats.size());
     for (Stat stat : chartedStats) {
@@ -102,13 +102,13 @@ public class StatChartUtils {
   }
 
   /**
-   * Get the stat cap radar chart for a {@link Unit}
+   * Get the stat cap radar chart for a {@link com.ziodyne.sometrpg.logic.models.Character}
    *
-   * @param unit The {@link Unit} for which to generate the chart.
+   * @param character The {@link com.ziodyne.sometrpg.logic.models.Character} for which to generate the chart.
    * @return A {@link Polygon} representing a radar chart of the stats of a unit.
    */
-  public static Polygon getMaxStatRadarChart(Unit unit, EnumSet<Stat> chartedStats, float radius) {
-    Map<Stat, Integer> maxStatSheet = UnitUtils.indexStatSheetByValue(unit.getMaxStatSheet());
+  public static Polygon getMaxStatRadarChart(Character character, EnumSet<Stat> chartedStats, float radius) {
+    Map<Stat, Integer> maxStatSheet = UnitUtils.indexStatSheetByValue(character.getMaxStatSheet());
 
     List<Float> unitMaxStatRatios = new ArrayList<Float>(chartedStats.size());
     for (Stat stat : chartedStats) {

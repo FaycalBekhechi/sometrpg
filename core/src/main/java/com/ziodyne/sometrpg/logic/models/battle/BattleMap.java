@@ -3,7 +3,7 @@ package com.ziodyne.sometrpg.logic.models.battle;
 import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.base.Equivalence;
 import com.google.common.collect.Maps;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
@@ -121,8 +121,8 @@ public class BattleMap {
     return null;
   }
 
-  public boolean hasUnit(Unit unit) {
-    return occupyingUnits.get(unit.getId()) != null;
+  public boolean hasUnit(Character character) {
+    return occupyingUnits.get(character.getId()) != null;
   }
 
   public boolean hasUnit(Combatant combatant) {

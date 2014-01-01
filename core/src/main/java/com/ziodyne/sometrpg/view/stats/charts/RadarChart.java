@@ -4,25 +4,25 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Polygon;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.view.stats.StatChartUtils;
 
 public abstract class RadarChart {
   private final Polygon polygon;
-  private final Unit unit;
+  private final Character character;
   protected float radius;
 
-  public RadarChart(Unit unit) {
-    this(unit, 5f);
+  public RadarChart(Character character) {
+    this(character, 5f);
   }
 
-  public RadarChart(Unit unit, float radius) {
-    this.unit = unit;
+  public RadarChart(Character character, float radius) {
+    this.character = character;
     this.radius = radius;
-    this.polygon = generateChart(unit, radius);
+    this.polygon = generateChart(character, radius);
   }
 
-  protected abstract Polygon generateChart(Unit unit, float radius);
+  protected abstract Polygon generateChart(Character character, float radius);
 
   public void render(Camera camera) {
     Mesh mesh = StatChartUtils.generateFanMesh(polygon);

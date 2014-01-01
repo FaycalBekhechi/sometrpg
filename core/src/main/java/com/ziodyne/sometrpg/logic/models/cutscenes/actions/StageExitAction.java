@@ -1,6 +1,6 @@
 package com.ziodyne.sometrpg.logic.models.cutscenes.actions;
 
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.cutscenes.CutsceneDirector;
 
 public class StageExitAction implements CutsceneAction {
@@ -9,11 +9,11 @@ public class StageExitAction implements CutsceneAction {
     STAGE_RIGHT
   }
 
-  public final Unit unit;
+  public final Character character;
   public final Type type;
 
-  public StageExitAction(Unit unit, Type type) {
-    this.unit = unit;
+  public StageExitAction(Character character, Type type) {
+    this.character = character;
     this.type = type;
   }
 

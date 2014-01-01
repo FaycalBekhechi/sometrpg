@@ -9,7 +9,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.google.inject.Inject;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.stats.charts.RadarChart;
 import com.ziodyne.sometrpg.view.stats.charts.StatChart;
@@ -26,8 +26,8 @@ public class ChartTestScreen implements Screen {
     camera = new OrthographicCamera(800, 400);
     camera.translate(0, 0);
 
-    Unit testUnit = ModelTestUtils.createRandomUnit();
-    chart = new StatChart(testUnit, 1);
+    Character testCharacter = ModelTestUtils.createRandomUnit();
+    chart = new StatChart(testCharacter, 1);
 
     Tween.registerAccessor(RadarChart.class, chartTweenAccessor);
   }

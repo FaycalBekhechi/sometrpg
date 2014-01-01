@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Lists;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 
 public class StatChartUtilsTest {
   
@@ -23,10 +23,10 @@ public class StatChartUtilsTest {
   
   @Test
   public void testGrowthPolygonGeneration() {
-    Unit testUnit = ModelTestUtils.createMaxedUnit();
+    Character testCharacter = ModelTestUtils.createMaxedUnit();
     
     int radius = 5;
-    Polygon radarChart = StatChartUtils.getStatRadarChart(testUnit, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
+    Polygon radarChart = StatChartUtils.getStatRadarChart(testCharacter, StatChartUtils.DEFAULT_CHARTED_STATS, radius);
     
     // We expect 2 vertices per stat because the 2d vertices are stored in a flattened array
     Assert.assertEquals(radarChart.getTransformedVertices().length, StatChartUtils.DEFAULT_CHARTED_STATS.size()*2);
@@ -39,8 +39,8 @@ public class StatChartUtilsTest {
     
     Assert.assertEquals(radius*2, firstPoint.dst(opposingPoint), epsilon);
     
-    Unit crappyUnit = ModelTestUtils.createCrappyUnit();
-    Polygon crappyRadarChart = StatChartUtils.getGrowthRadarChart(crappyUnit, StatChartUtils.DEFAULT_CHARTED_STATS, 0);
+    Character crappyCharacter = ModelTestUtils.createCrappyUnit();
+    Polygon crappyRadarChart = StatChartUtils.getGrowthRadarChart(crappyCharacter, StatChartUtils.DEFAULT_CHARTED_STATS, 0);
     
     float[] vertices = crappyRadarChart.getTransformedVertices();
     for (int i = 0; i < vertices.length; i++) {

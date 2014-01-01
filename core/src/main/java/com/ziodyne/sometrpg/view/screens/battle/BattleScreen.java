@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.google.common.base.Optional;
-import com.ziodyne.sometrpg.logic.models.Unit;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -36,7 +36,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected final Director director;
   protected TiledMap map;
   protected SomeTRPGBattle battle;
-  protected Map<Unit, Entity> entityIndex = new HashMap<Unit, Entity>();
+  protected Map<Character, Entity> entityIndex = new HashMap<Character, Entity>();
   protected Entity unitSelector;
   protected Stage menuStage;
   protected Group unitActionMenu = new Group();
@@ -68,8 +68,8 @@ public abstract class BattleScreen extends ScreenAdapter {
     return map;
   }
 
-  public Entity getUnitEntity(Unit unit) {
-    return entityIndex.get(unit);
+  public Entity getUnitEntity(Character character) {
+    return entityIndex.get(character);
   }
 
   public void setSelectedSquare(GridPoint2 selectedSquare) {
@@ -122,8 +122,8 @@ public abstract class BattleScreen extends ScreenAdapter {
     return Optional.fromNullable(tile.getCombatant());
   }
 
-  protected void registerUnitEntity(Unit unit, Entity entity) {
-    entityIndex.put(unit, entity);
+  protected void registerUnitEntity(Character character, Entity entity) {
+    entityIndex.put(character, entity);
     world.addEntity(entity);
   }
 

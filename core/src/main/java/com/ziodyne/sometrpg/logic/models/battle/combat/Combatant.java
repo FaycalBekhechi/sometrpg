@@ -1,21 +1,20 @@
 package com.ziodyne.sometrpg.logic.models.battle.combat;
 
-import com.ziodyne.sometrpg.logic.models.Unit;
-import com.ziodyne.sometrpg.logic.models.UnitGrowth;
-import com.ziodyne.sometrpg.logic.models.UnitStat;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.util.UnitUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.Set;
-
+/**
+ * This is the representation of a character on the battlefield.
+ */
 public class Combatant {
-  private final Unit unit;
+  private final Character character;
   private int health;
 
-  public Combatant(Unit unit) {
-    this.unit = unit;
-    this.health = UnitUtils.getMaxHealth(unit);
+  public Combatant(Character character) {
+    this.character = character;
+    this.health = UnitUtils.getMaxHealth(character);
   }
 
   public void applyDamage(int amount) {
@@ -24,15 +23,15 @@ public class Combatant {
   }
 
   public long getUnitId() {
-    return unit.getId();
+    return character.getId();
   }
 
   public boolean isAlive() {
     return health > 0;
   }
 
-  public Unit getUnit() {
-    return unit;
+  public Character getCharacter() {
+    return character;
   }
 
   public int getHealth() {
@@ -40,7 +39,7 @@ public class Combatant {
   }
 
   public int getMovementRange() {
-    return unit.getMovementRange();
+    return character.getMovementRange();
   }
 
   @Override
@@ -54,14 +53,14 @@ public class Combatant {
     }
 
     return new EqualsBuilder()
-            .append(unit, ((Combatant) obj).getUnit())
+            .append(character, ((Combatant) obj).getCharacter())
             .build();
   }
 
   @Override
   public int hashCode() {
     return new HashCodeBuilder(17, 37)
-            .append(unit)
+            .append(character)
             .build();
   }
 }

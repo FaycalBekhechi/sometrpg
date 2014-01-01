@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class BattleMapTest {
 
-  private static Unit newTestUnit() {
+  private static Character newTestUnit() {
     return com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils.createUnit();
   }
 
@@ -71,8 +71,8 @@ public class BattleMapTest {
   @Test(expected = GameLogicException.class)
   public void testRemoveNonexistantUnit() {
     BattleMap map = ModelTestUtils.createMap(5);
-    Unit testUnit = newTestUnit();
-    Combatant combatant = new Combatant(testUnit);
+    Character testCharacter = newTestUnit();
+    Combatant combatant = new Combatant(testCharacter);
 
     map.removeCombatant(combatant);
   }

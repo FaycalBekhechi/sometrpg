@@ -10,9 +10,9 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -28,6 +28,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.view.Director;
+import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
@@ -40,30 +41,53 @@ import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class TestBattle extends BattleScreen {
-  private final TweenManager tweenManager;
+  private TweenManager tweenManager;
   private SpriteRenderSystem spriteRenderSystem;
   private TiledMapRenderSystem mapRenderSystem;
   private MapHoverSelectorUpdateSystem mapSelectorUpdateSystem;
   private Rectangle mapBoundingRect;
   private BattleMap map;
+  private TweenAccessor<Sprite> spriteTweenAccessor;
+  private TweenAccessor<Camera> cameraTweenAccessor;
+  private SpriteRenderSystem.Factory spriteRendererFactory;
+  private BattleMapController.Factory mapControllerFactory;
+  private AssetBundleLoader bundleLoader;
+  private boolean initialized;
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
-             TweenAccessor<Sprite> spriteTweenAccessor) {
+             TweenAccessor<Sprite> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory) {
     super(director, new OrthographicCamera(), "maps/test/test.tmx", 32f);
+
     this.tweenManager = tweenManager;
+    this.cameraTweenAccessor = cameraTweenAccessor;
+    this.spriteRendererFactory = spriteRendererFactory;
+    this.spriteTweenAccessor = spriteTweenAccessor;
+    this.mapControllerFactory = mapControllerFactory;
+    this.bundleLoader = bundleLoaderFactory.create(assetManager, "data/test.bundle");
+
+    try {
+      bundleLoader.load();
+    } catch (IOException e) {
+      System.out.println("Failed to load bundle file.");
+    }
+  }
+
+  private void initalizeBattle() {
+
     camera.setToOrtho(false, 32, 18);
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
     Tween.registerAccessor(Sprite.class, spriteTweenAccessor);
 
-    TiledMap tiledMap = new TmxMapLoader().load("maps/test/test.tmx");
+    TiledMap tiledMap = assetManager.get("maps/test/test.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
 
@@ -86,7 +110,7 @@ public class TestBattle extends BattleScreen {
     world.initialize();
 
 
-    Entity tileSelectorOverlay = entityFactory.createMapSelector();
+    Entity tileSelectorOverlay = entityFactory.createMapSelector(assetManager.get("grid_overlay.png", Texture.class));
     world.addEntity(tileSelectorOverlay);
     world.getManager(TagManager.class).register("map_hover_selector", tileSelectorOverlay);
 
@@ -101,18 +125,19 @@ public class TestBattle extends BattleScreen {
     multiplexer.addProcessor(mapControllerFactory.create(camera, this));
     Gdx.input.setInputProcessor(multiplexer);
 
-    //assetManager.load("battles/test.json", Battle.class);
+    initialized = true;
   }
 
 
   private void initUnitEntities() {
+    Texture unitTexture = assetManager.get("single.png");
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
           Character character = combatant.getCharacter();
-          Entity unitEntity = entityFactory.createUnit(map, combatant, "single.png");
+          Entity unitEntity = entityFactory.createUnit(map, combatant, unitTexture);
           registerUnitEntity(character, unitEntity);
         }
       }
@@ -147,6 +172,12 @@ public class TestBattle extends BattleScreen {
   }
 
   protected void update(float delta) {
-    tweenManager.update(delta);
+    if (initialized) {
+      tweenManager.update(delta);
+    } else {
+      if (bundleLoader.update()) {
+        initalizeBattle();
+      }
+    }
   }
 }

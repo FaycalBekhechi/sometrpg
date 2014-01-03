@@ -23,10 +23,10 @@ public class EntityFactory {
     this.world = world;
   }
 
-  public Entity createUnit(BattleMap map, Combatant combatant, String texturePath) {
+  public Entity createUnit(BattleMap map, Combatant combatant, Texture texture) {
     Entity unitEntity = world.createEntity();
 
-    Sprite sprite = new Sprite(texturePath, 1, 1);
+    Sprite sprite = new Sprite(texture, 1, 1);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     unitEntity.addComponent(sprite);
@@ -44,10 +44,10 @@ public class EntityFactory {
     return unitEntity;
   }
 
-  public Entity createMapSelector() {
+  public Entity createMapSelector(Texture texture) {
     Entity mapSelectorEntity = world.createEntity();
 
-    Sprite sprite = new Sprite("grid_overlay.png", 1, 1);
+    Sprite sprite = new Sprite(texture, 1, 1);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
@@ -57,10 +57,10 @@ public class EntityFactory {
     return mapSelectorEntity;
   }
 
-  public Entity createUnitSelector(GridPoint2 point) {
+  public Entity createUnitSelector(GridPoint2 point, Texture tex) {
     Entity mapSelectorEntity = world.createEntity();
 
-    Sprite sprite = new Sprite("grid_overlay.png", 1, 1);
+    Sprite sprite = new Sprite(tex, 1, 1);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 

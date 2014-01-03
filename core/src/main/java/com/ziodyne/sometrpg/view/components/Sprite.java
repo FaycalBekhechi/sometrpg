@@ -11,20 +11,20 @@ public class Sprite extends Component {
   private final float width;
   private final float height;
 
-  public Sprite(String path) {
-    texture = new Texture(path);
+  public Sprite(Texture texture) {
+    this.texture = texture;
     width = texture.getWidth();
     height = texture.getHeight();
   }
 
-  public Sprite(String path, float width, float height) {
-    texture = new Texture(path);
+  public Sprite(Texture texture, float width, float height) {
+    this.texture = texture;
     this.width = width;
     this.height = height;
   }
 
-  public Sprite(String path, float width, float height, float alpha) {
-    this(path, width, height);
+  public Sprite(Texture texture, float width, float height, float alpha) {
+    this(texture, width, height);
     this.alpha = alpha;
   }
 

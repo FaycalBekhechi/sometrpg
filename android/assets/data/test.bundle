@@ -8,7 +8,11 @@
     "path": "data/libgdx.png"
   },
   {
+    "type": "texture",
+    "path": "grid_overlay.png"
+  },
+  {
     "type": "map",
-    "path": "maps/test.tmx"
+    "path": "maps/test/test.tmx"
   }
 ]

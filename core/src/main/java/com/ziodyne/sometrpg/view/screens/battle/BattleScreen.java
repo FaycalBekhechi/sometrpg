@@ -7,6 +7,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -81,7 +82,8 @@ public abstract class BattleScreen extends ScreenAdapter {
       selectedTile = null;
       hideActionMenu();
     } else if (battle.tileExists(selectedSquare)) {
-      unitSelector = entityFactory.createUnitSelector(selectedSquare);
+      Texture selectorTexture = assetManager.get("grid_overlay.png");
+      unitSelector = entityFactory.createUnitSelector(selectedSquare, selectorTexture);
       world.addEntity(unitSelector);
       selectedTile = selectedSquare;
       showActionMenu();

@@ -11,6 +11,7 @@ import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
+import com.ziodyne.sometrpg.view.components.MapGridOverlay;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
@@ -74,6 +75,18 @@ public class EntityFactory {
     mapSelectorEntity.addComponent(new UnitSelector());
 
     return mapSelectorEntity;
+  }
+
+  public Entity createMapGridOverlay(int rows, int columns, float size, GridPoint2 pos) {
+    Entity overlayEntity = world.createEntity();
+
+    MapGridOverlay gridOverlayComponent = new MapGridOverlay(rows, columns, size, 0.3f);
+    overlayEntity.addComponent(gridOverlayComponent);
+
+    Position positionComponent = new Position(pos.x, pos.y);
+    overlayEntity.addComponent(positionComponent);
+
+    return overlayEntity;
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch, float gridSquareSize) {

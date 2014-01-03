@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -41,6 +42,7 @@ import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
 import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
+import com.ziodyne.sometrpg.view.systems.MapOverlayRenderSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 
@@ -112,6 +114,7 @@ public class TestBattle extends BattleScreen {
     world.setSystem(new BattleUnitMovementSystem(map));
     world.setSystem(mapSelectorUpdateSystem);
     world.setSystem(mapRenderSystem);
+    world.setSystem(new MapOverlayRenderSystem(camera));
     world.setSystem(spriteRenderSystem);
 
     world.setManager(new TagManager());
@@ -125,6 +128,9 @@ public class TestBattle extends BattleScreen {
 
 
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch, gridSquareSize));
+
+    Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32, new GridPoint2());
+    world.addEntity(mapGridOverlay);
 
 
     InputMultiplexer multiplexer = new InputMultiplexer();

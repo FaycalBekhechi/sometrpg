@@ -23,6 +23,7 @@ import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.Director;
+import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 import java.util.HashMap;
@@ -30,9 +31,9 @@ import java.util.Map;
 
 public abstract class BattleScreen extends ScreenAdapter {
   protected final World world = new World();
-  protected final EntityFactory entityFactory = new EntityFactory(world);
   protected final SpriteBatch spriteBatch = new SpriteBatch();
   protected final AssetManager assetManager = new AssetManager();
+  protected final EntityFactory entityFactory = new EntityFactory(world, new AssetManagerRepository(assetManager));
   protected final OrthographicCamera camera;
   protected final Director director;
   protected TiledMap map;
@@ -45,14 +46,11 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
   protected float gridSquareSize = 32;
 
-  public BattleScreen(Director director, OrthographicCamera camera, String tiledMapPath, float gridSquareSize) {
+  public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize) {
     this.gridSquareSize = gridSquareSize;
     this.director = director;
     this.camera = camera;
     this.menuStage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false, spriteBatch);
-
-    assetManager.setLoader(TiledMap.class, new TmxMapLoader());
-    assetManager.load(tiledMapPath, TiledMap.class);
 
     menuStage.addActor(unitActionMenu);
   }
@@ -82,8 +80,7 @@ public abstract class BattleScreen extends ScreenAdapter {
       selectedTile = null;
       hideActionMenu();
     } else if (battle.tileExists(selectedSquare)) {
-      Texture selectorTexture = assetManager.get("grid_overlay.png");
-      unitSelector = entityFactory.createUnitSelector(selectedSquare, selectorTexture);
+      unitSelector = entityFactory.createUnitSelector(selectedSquare);
       world.addEntity(unitSelector);
       selectedTile = selectedSquare;
       showActionMenu();

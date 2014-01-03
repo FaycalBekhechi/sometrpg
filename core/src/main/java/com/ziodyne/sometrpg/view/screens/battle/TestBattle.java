@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -64,7 +65,7 @@ public class TestBattle extends BattleScreen {
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<Sprite> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory) {
-    super(director, new OrthographicCamera(), "maps/test/test.tmx", 32f);
+    super(director, new OrthographicCamera(), 32f);
 
     this.tweenManager = tweenManager;
     this.cameraTweenAccessor = cameraTweenAccessor;
@@ -72,6 +73,10 @@ public class TestBattle extends BattleScreen {
     this.spriteTweenAccessor = spriteTweenAccessor;
     this.mapControllerFactory = mapControllerFactory;
     this.bundleLoader = bundleLoaderFactory.create(assetManager, "data/test.bundle");
+
+    assetManager.setLoader(TiledMap.class, new TmxMapLoader());
+    assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
+    assetManager.setLoader(SomeTRPGBattle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     try {
       bundleLoader.load();
@@ -110,15 +115,13 @@ public class TestBattle extends BattleScreen {
     world.initialize();
 
 
-    Entity tileSelectorOverlay = entityFactory.createMapSelector(assetManager.get("grid_overlay.png", Texture.class));
+    Entity tileSelectorOverlay = entityFactory.createMapSelector();
     world.addEntity(tileSelectorOverlay);
     world.getManager(TagManager.class).register("map_hover_selector", tileSelectorOverlay);
 
 
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch, gridSquareSize));
 
-    assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
-    assetManager.setLoader(SomeTRPGBattle.class, new BattleLoader(new InternalFileHandleResolver()));
 
     InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.view.assets.AssetRepository;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
@@ -17,10 +18,12 @@ import com.ziodyne.sometrpg.view.components.UnitSelector;
 
 public class EntityFactory {
   private final World world;
+  private final AssetRepository repository;
 
   @Inject
-  public EntityFactory(World world) {
+  public EntityFactory(World world, AssetRepository repository) {
     this.world = world;
+    this.repository = repository;
   }
 
   public Entity createUnit(BattleMap map, Combatant combatant, Texture texture) {
@@ -44,9 +47,10 @@ public class EntityFactory {
     return unitEntity;
   }
 
-  public Entity createMapSelector(Texture texture) {
+  public Entity createMapSelector() {
     Entity mapSelectorEntity = world.createEntity();
 
+    Texture texture = repository.get("grid_overlay.png");
     Sprite sprite = new Sprite(texture, 1, 1);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
@@ -57,10 +61,11 @@ public class EntityFactory {
     return mapSelectorEntity;
   }
 
-  public Entity createUnitSelector(GridPoint2 point, Texture tex) {
+  public Entity createUnitSelector(GridPoint2 point) {
     Entity mapSelectorEntity = world.createEntity();
 
-    Sprite sprite = new Sprite(tex, 1, 1);
+    Texture texture = repository.get("grid_overlay.png");
+    Sprite sprite = new Sprite(texture, 1, 1);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 

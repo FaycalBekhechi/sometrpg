@@ -2,6 +2,8 @@ package com.ziodyne.sometrpg.view.assets;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
@@ -46,5 +48,28 @@ public abstract class Asset<T> {
 
   public void setPath(String path) {
     this.path = path;
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder()
+        .append(type)
+        .append(path)
+        .append(clazz)
+        .build();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (!(other instanceof Asset)) {
+      return false;
+    }
+
+    Asset otherAsset = (Asset)other;
+    return new EqualsBuilder()
+        .append(type, otherAsset.type)
+        .append(path, otherAsset.path)
+        .append(clazz, otherAsset.clazz)
+        .isEquals();
   }
 }

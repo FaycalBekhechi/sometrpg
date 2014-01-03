@@ -10,9 +10,11 @@ import com.google.inject.assistedinject.AssistedInject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -32,7 +34,7 @@ public class AssetBundleLoader {
 
   private boolean isLoading;
 
-  private List<Asset<?>> remainingAssets = new LinkedList<Asset<?>>();
+  private Set<Asset<?>> remainingAssets = new HashSet<Asset<?>>();
 
   private int totalNumAssets;
 
@@ -57,8 +59,9 @@ public class AssetBundleLoader {
     FileHandle bundleFile = Gdx.files.internal(bundlePath);
     InputStream fileStream = bundleFile.read();
 
-    List<Asset<?>> assets = objectMapper.readValue(fileStream, new TypeReference<List<Asset<?>>>() { });
+    Set<Asset<?>> assets = objectMapper.readValue(fileStream, new TypeReference<Set<Asset<?>>>() { });
     totalNumAssets = assets.size();
+    System.out.println("Loading asset bundle with: " + totalNumAssets + " assets.");
     for (Asset<?> asset : assets) {
       remainingAssets.add(asset);
       assetManager.load(asset.getPath(), asset.getClazz());

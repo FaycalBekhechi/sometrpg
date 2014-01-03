@@ -8,7 +8,9 @@ import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
@@ -80,7 +82,18 @@ public class SpriteRenderSystem extends EntitySystem {
       Color color = Color.WHITE;
       batch.setColor(color.r, color.g, color.b, sprite.getAlpha());
 
-      batch.draw(sprite.getTexture(), pos.getX(), pos.getY(), sprite.getWidth(), sprite.getHeight());
+      float x = pos.getX();
+      float y = pos.getY();
+      float width = sprite.getWidth();
+      float height = sprite.getHeight();
+
+      Texture texture = sprite.getTexture();
+      if (texture == null) {
+        TextureRegion region = sprite.getRegion();
+        batch.draw(region, x, y, width, height);
+      } else {
+        batch.draw(texture, x, y, width, height);
+      }
     }
   }
 

@@ -2,8 +2,11 @@ package com.ziodyne.sometrpg.view.components;
 
 import com.artemis.Component;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import org.apache.commons.lang3.Validate;
 
 public class Sprite extends Component {
+  private TextureRegion region;
   private Texture texture;
   private Texture.TextureFilter minFilter;
   private Texture.TextureFilter magFiler;
@@ -11,21 +14,18 @@ public class Sprite extends Component {
   private final float width;
   private final float height;
 
-  public Sprite(Texture texture) {
-    this.texture = texture;
-    width = texture.getWidth();
-    height = texture.getHeight();
-  }
-
   public Sprite(Texture texture, float width, float height) {
+    Validate.notNull(texture);
     this.texture = texture;
     this.width = width;
     this.height = height;
   }
 
-  public Sprite(Texture texture, float width, float height, float alpha) {
-    this(texture, width, height);
-    this.alpha = alpha;
+  public Sprite(TextureRegion region, float width, float height) {
+    Validate.notNull(region);
+    this.width = width;
+    this.height = height;
+    this.region = region;
   }
 
   public float getAlpha() {
@@ -34,6 +34,10 @@ public class Sprite extends Component {
 
   public void setAlpha(float alpha) {
     this.alpha = alpha;
+  }
+
+  public TextureRegion getRegion() {
+    return region;
   }
 
   public Texture getTexture() {

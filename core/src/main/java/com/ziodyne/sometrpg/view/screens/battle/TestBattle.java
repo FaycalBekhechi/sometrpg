@@ -11,6 +11,10 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -32,6 +36,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.view.Director;
+import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
@@ -128,6 +133,7 @@ public class TestBattle extends BattleScreen {
 
 
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch, gridSquareSize));
+    initializeMapObjects(tiledMap);
 
     Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32, new GridPoint2());
     world.addEntity(mapGridOverlay);
@@ -142,6 +148,19 @@ public class TestBattle extends BattleScreen {
     logger.log("Battle intialized.");
   }
 
+  private void initializeMapObjects(TiledMap tiledMap) {
+    for (MapLayer layer : tiledMap.getLayers()) {
+      if (!(layer instanceof TiledMapTileLayer)) {
+        for (MapObject object : layer.getObjects()) {
+          TextureRegion region = TiledMapUtils.getTextureRegion(object.getProperties(), tiledMap);
+          if (region != null) {
+            Entity entity = entityFactory.createMapObject((RectangleMapObject)object, region, 1/gridSquareSize);
+            world.addEntity(entity);
+          }
+        }
+      }
+    }
+  }
 
   private void initUnitEntities() {
     Texture unitTexture = assetManager.get("single.png");

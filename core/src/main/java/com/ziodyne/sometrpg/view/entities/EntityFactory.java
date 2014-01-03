@@ -4,8 +4,12 @@ import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Rectangle;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -87,6 +91,22 @@ public class EntityFactory {
     overlayEntity.addComponent(positionComponent);
 
     return overlayEntity;
+  }
+
+  public Entity createMapObject(RectangleMapObject object, TextureRegion region, float scale) {
+    Entity mapObj = world.createEntity();
+
+    Rectangle rect = object.getRectangle();
+    Position pos = new Position(rect.x*scale, rect.y*scale);
+
+    float width = region.getRegionWidth()*scale;
+    float height = region.getRegionHeight()*scale;
+    Sprite sprite = new Sprite(region, width, height);
+
+    mapObj.addComponent(pos);
+    mapObj.addComponent(sprite);
+
+    return mapObj;
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch, float gridSquareSize) {

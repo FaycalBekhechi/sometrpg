@@ -7,13 +7,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 
@@ -25,6 +25,8 @@ public class AssetBundleLoader {
   public interface Factory {
     public AssetBundleLoader create(AssetManager assetManager, String bundlePath);
   }
+
+  private final Logger logger = new GdxLogger(AssetBundleLoader.class);
 
   private final AssetManager assetManager;
 
@@ -61,7 +63,8 @@ public class AssetBundleLoader {
 
     Set<Asset<?>> assets = objectMapper.readValue(fileStream, new TypeReference<Set<Asset<?>>>() { });
     totalNumAssets = assets.size();
-    System.out.println("Loading asset bundle with: " + totalNumAssets + " assets.");
+    logger.log("Loading asset bundle with " + totalNumAssets + " assets.");
+
     for (Asset<?> asset : assets) {
       remainingAssets.add(asset);
       assetManager.load(asset.getPath(), asset.getClazz());

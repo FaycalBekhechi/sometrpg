@@ -18,6 +18,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
@@ -48,6 +50,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TestBattle extends BattleScreen {
+  private final Logger logger = new GdxLogger(TestBattle.class);
   private TweenManager tweenManager;
   private SpriteRenderSystem spriteRenderSystem;
   private TiledMapRenderSystem mapRenderSystem;
@@ -81,11 +84,12 @@ public class TestBattle extends BattleScreen {
     try {
       bundleLoader.load();
     } catch (IOException e) {
-      System.out.println("Failed to load bundle file.");
+      logger.error("Failed to load bundle file.", e);
     }
   }
 
   private void initalizeBattle() {
+    logger.log("Initializing battle.");
 
     camera.setToOrtho(false, 32, 18);
 
@@ -129,6 +133,7 @@ public class TestBattle extends BattleScreen {
     Gdx.input.setInputProcessor(multiplexer);
 
     initialized = true;
+    logger.log("Battle intialized.");
   }
 
 

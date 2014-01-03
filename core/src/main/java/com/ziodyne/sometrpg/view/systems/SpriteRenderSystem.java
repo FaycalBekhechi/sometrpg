@@ -69,6 +69,7 @@ public class SpriteRenderSystem extends EntitySystem {
 
   @Override
   protected void processEntities(ImmutableBag<Entity> entites) {
+    // Group eneities by their layer
     SetMultimap<SpriteLayer, Entity> entitiesByLayer = HashMultimap.create();
     for (int i = 0; i < entites.size(); i++) {
       Entity entity = entites.get(i);
@@ -78,6 +79,7 @@ public class SpriteRenderSystem extends EntitySystem {
       entitiesForLayer.add(entity);
     }
 
+    // Render each layer in declaration order
     for (SpriteLayer layer : SpriteLayer.values()) {
       for (Entity entity : entitiesByLayer.get(layer)) {
         render(entity);

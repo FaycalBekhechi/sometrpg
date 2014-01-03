@@ -16,7 +16,7 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 })
 public abstract class Asset<T> {
   private String type;
-  private String filename;
+  private String path;
   private Class<T> clazz;
 
   protected Asset(String type, Class<T> clazz) {
@@ -40,11 +40,11 @@ public abstract class Asset<T> {
     this.type = type;
   }
 
-  public String getFilename() {
-    return filename;
+  public String getPath() {
+    return path;
   }
 
-  public void setFilename(String filename) {
-    this.filename = filename;
+  public void setPath(String path) {
+    this.path = path;
   }
 }

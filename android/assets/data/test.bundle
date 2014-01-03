@@ -1,0 +1,10 @@
+[
+  {
+    "type": "texture",
+    "path": "single.png"
+  },
+  {
+    "type": "texture",
+    "path": "data/libgdx.png"
+  }
+]

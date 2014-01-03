@@ -20,6 +20,7 @@ import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
 import com.ziodyne.sometrpg.view.components.UnitSelector;
+import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 
 public class EntityFactory {
   private final World world;
@@ -34,7 +35,7 @@ public class EntityFactory {
   public Entity createUnit(BattleMap map, Combatant combatant, Texture texture) {
     Entity unitEntity = world.createEntity();
 
-    Sprite sprite = new Sprite(texture, 1, 1);
+    Sprite sprite = new Sprite(texture, 1, 1, SpriteLayer.FOREGROUND);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     unitEntity.addComponent(sprite);
@@ -56,7 +57,7 @@ public class EntityFactory {
     Entity mapSelectorEntity = world.createEntity();
 
     Texture texture = repository.get("grid_overlay.png");
-    Sprite sprite = new Sprite(texture, 1, 1);
+    Sprite sprite = new Sprite(texture, 1, 1, SpriteLayer.BACKGROUND);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
@@ -70,7 +71,7 @@ public class EntityFactory {
     Entity mapSelectorEntity = world.createEntity();
 
     Texture texture = repository.get("grid_overlay.png");
-    Sprite sprite = new Sprite(texture, 1, 1);
+    Sprite sprite = new Sprite(texture, 1, 1, SpriteLayer.BACKGROUND);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
@@ -101,7 +102,7 @@ public class EntityFactory {
 
     float width = region.getRegionWidth()*scale;
     float height = region.getRegionHeight()*scale;
-    Sprite sprite = new Sprite(region, width, height);
+    Sprite sprite = new Sprite(region, width, height, SpriteLayer.FOREGROUND);
 
     mapObj.addComponent(pos);
     mapObj.addComponent(sprite);

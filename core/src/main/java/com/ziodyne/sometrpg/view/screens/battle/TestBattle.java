@@ -41,6 +41,7 @@ import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
@@ -59,7 +60,6 @@ import java.util.Set;
 public class TestBattle extends BattleScreen {
   private final Logger logger = new GdxLogger(TestBattle.class);
   private TweenManager tweenManager;
-  private SpriteRenderSystem spriteRenderSystem;
   private TiledMapRenderSystem mapRenderSystem;
   private MapHoverSelectorUpdateSystem mapSelectorUpdateSystem;
   private Rectangle mapBoundingRect;
@@ -107,7 +107,8 @@ public class TestBattle extends BattleScreen {
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
 
-    spriteRenderSystem = spriteRendererFactory.create(camera);
+    SpriteRenderSystem spriteRenderSystem = spriteRendererFactory.create(camera);
+
     mapRenderSystem = new TiledMapRenderSystem(camera);
     mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, camera, mapBoundingRect);
 
@@ -118,6 +119,14 @@ public class TestBattle extends BattleScreen {
     world.setSystem(new DeathFadeSystem(tweenManager));
     world.setSystem(new BattleUnitMovementSystem(map));
     world.setSystem(mapSelectorUpdateSystem);
+
+    /**
+     * Render Order:
+     *   - Map Tiles
+     *   - Grid Overlay
+     *   - Background Sprites
+     *   - Foreground Sprites
+     */
     world.setSystem(mapRenderSystem);
     world.setSystem(new MapOverlayRenderSystem(camera));
     world.setSystem(spriteRenderSystem);

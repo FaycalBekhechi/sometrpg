@@ -12,7 +12,7 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 )
 @JsonSubTypes({
         @Type(value = TextureAsset.class, name = "texture"),
-        @Type(value = TiledMapAsset.class, name = "tiledMap")
+        @Type(value = TiledMapAsset.class, name = "map")
 })
 public abstract class Asset<T> {
   private String type;

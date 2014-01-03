@@ -6,5 +6,9 @@
   {
     "type": "texture",
     "path": "data/libgdx.png"
+  },
+  {
+    "type": "map",
+    "path": "maps/test.tmx"
   }
 ]

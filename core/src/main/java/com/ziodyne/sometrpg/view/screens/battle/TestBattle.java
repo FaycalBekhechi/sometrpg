@@ -205,7 +205,7 @@ public class TestBattle extends BattleScreen {
     }
 
     BattleMap battleMap = new BattleMap(tiles);
-    battleMap.addUnit(player, 0, 0);
+    battleMap.addUnit(player, 5, 5);
     battleMap.addUnit(enemy, map.getWidth()-1, map.getHeight()-1);
     this.map = battleMap;
 

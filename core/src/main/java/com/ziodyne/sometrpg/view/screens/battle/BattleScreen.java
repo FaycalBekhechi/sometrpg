@@ -151,8 +151,6 @@ public abstract class BattleScreen extends ScreenAdapter {
 
     update(delta);
 
-    menuStage.act(delta);
-    menuStage.draw();
   }
 
   protected abstract void update(float delta);

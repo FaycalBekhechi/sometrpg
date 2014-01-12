@@ -145,7 +145,7 @@ public class TestBattle extends BattleScreen {
     world.addEntity(mapGridOverlay);
 
     Entity stage = entityFactory.createStage(menuStage);
-    //world.addEntity(stage);
+    world.addEntity(stage);
 
 
     InputMultiplexer multiplexer = new InputMultiplexer();

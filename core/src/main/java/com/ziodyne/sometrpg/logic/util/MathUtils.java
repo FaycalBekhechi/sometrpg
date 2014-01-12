@@ -44,12 +44,16 @@ public class MathUtils {
     }
   };
 
+  public static int manhattanDistance(GridPoint2 start, GridPoint2 end) {
+    return Math.abs(start.x - end.x) + Math.abs(start.y - end.y);
+  }
+
   public static GridPoint2 getNorthNeighbor(GridPoint2 point) {
-    return new GridPoint2(point.x, point.y - 1);
+    return new GridPoint2(point.x, point.y + 1);
   }
 
   public static GridPoint2 getSouthNeighbor(GridPoint2 point) {
-    return new GridPoint2(point.x, point.y + 1);
+    return new GridPoint2(point.x, point.y - 1);
   }
 
   public static GridPoint2 getWestNeighbor(GridPoint2 point) {

@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.google.common.base.Optional;
+import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
@@ -28,6 +29,7 @@ import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class BattleScreen extends ScreenAdapter {
   protected final World world = new World();
@@ -45,6 +47,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected GridPoint2 selectedTile;
   protected Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
   protected float gridSquareSize = 32;
+  private Set<Entity> currentMovableTiles = Sets.newHashSet();
 
   public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize) {
     this.gridSquareSize = gridSquareSize;
@@ -69,6 +72,21 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   public Entity getUnitEntity(Character character) {
     return entityIndex.get(character);
+  }
+
+  public void showMoveRange(Combatant combatant) {
+    if (currentMovableTiles != null) {
+      for (Entity ent : currentMovableTiles) {
+        ent.deleteFromWorld();
+      }
+    }
+
+    for (Tile tile : battle.getMovableTiles(combatant)) {
+      GridPoint2 position = tile.getPosition();
+      Entity ent = entityFactory.createUnitSelector(position);
+      world.addEntity(ent);
+      currentMovableTiles.add(ent);
+    }
   }
 
   public void setSelectedSquare(GridPoint2 selectedSquare) {

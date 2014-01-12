@@ -63,6 +63,11 @@ public class BattleMapController extends InputAdapter {
     }
 
     battleScreen.setSelectedSquare(selectedPoint);
+    Optional<Combatant> combatantOptional = battleScreen.getCombatant(selectedPoint);
+    if (combatantOptional.isPresent()) {
+      battleScreen.showMoveRange(combatantOptional.get());
+    }
+
     return true;
   }
 

@@ -86,7 +86,7 @@ public class EntityFactory {
   public Entity createMapGridOverlay(int rows, int columns, float size, GridPoint2 pos) {
     Entity overlayEntity = world.createEntity();
 
-    MapGridOverlay gridOverlayComponent = new MapGridOverlay(rows, columns, size, 0.3f);
+    MapGridOverlay gridOverlayComponent = new MapGridOverlay(rows, columns, size, 0.0f);
     overlayEntity.addComponent(gridOverlayComponent);
 
     Position positionComponent = new Position(pos.x, pos.y);

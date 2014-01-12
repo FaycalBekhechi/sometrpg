@@ -11,15 +11,50 @@
    eJytlD0KwzAMhb2UpplKSwPN3h7A3qX736o2KPD4kDN1eFhS9GMrT/JSigeqwGEfp0EeZwuYyAdqcmr+GnEmuQ32JvcwqeWIbcit97Kktie1XGKrxFfxY1+ynng57yF7R/u94/snfDoeHVvginNgCQzbLTD0teMZuAYOu/pv4bOFPr6/xLaKzyL5l/Ab+qXjLdghz/R94pPxTmXlTPY/ZzxXHpjkddh1DsjRhlrKadbK5skAjXPxIf8zfmdcZS310zdl/eFcktucN9bRXum7s53B+/GdZzuGO0Xf5knN7L8xNru7oyZ3ie4r7rwGmbas/zOesO8Z5/hfODPa40P/AShKTag=
   </data>
  </layer>
- <layer name="Props" width="20" height="20">
-  <data encoding="base64" compression="zlib">
-   eJxjYBgFQwkcHGgHDCAYrH4/S4FeevrpHBCfp6N9o2D4AwBfCgSu
-  </data>
- </layer>
- <objectgroup name="Object Layer 1" width="20" height="20">
+ <objectgroup name="Blocking" width="20" height="20">
+  <object x="352" y="384" width="32" height="32">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </object>
+  <object x="320" y="384" width="32" height="32">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </object>
+  <object x="288" y="352" width="32" height="32">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </object>
+  <object x="256" y="352" width="32" height="32">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Props" width="20" height="20">
   <object gid="153" x="224" y="268"/>
   <object gid="153" x="209" y="293"/>
   <object gid="153" x="352" y="251"/>
   <object gid="153" x="217" y="425"/>
+  <object gid="193" x="128" y="352"/>
+  <object name="Blocked" type="blocked" gid="206" x="320" y="416">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </object>
+  <object gid="207" x="352" y="416">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </object>
+  <object gid="163" x="128" y="448"/>
+  <object gid="175" x="256" y="384"/>
+  <object gid="176" x="288" y="384">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

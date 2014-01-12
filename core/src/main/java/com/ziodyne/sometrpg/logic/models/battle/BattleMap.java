@@ -49,7 +49,8 @@ public class BattleMap {
   }
 
   public boolean isPassable(int x, int y) {
-    return tileExists(x, y);
+    Tile tile = getTile(x, y);
+    return tile != null && tile.isPassable();
   }
 
   public boolean tileExists(int x, int y) {

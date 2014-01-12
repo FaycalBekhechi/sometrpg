@@ -14,8 +14,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
@@ -41,7 +43,6 @@ import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
-import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.*;
@@ -106,7 +107,7 @@ public class TestBattle extends BattleScreen {
     mapRenderSystem = new TiledMapRenderSystem(camera);
     mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, camera, mapBoundingRect);
 
-    battle = initBattle(tileLayer);
+    battle = initBattle(tiledMap);
     initUnitEntities();
 
     world.setSystem(new BattleUnitDeathSystem());
@@ -188,7 +189,9 @@ public class TestBattle extends BattleScreen {
     }
   }
 
-  private SomeTRPGBattle initBattle(TiledMapTileLayer map) {
+  private SomeTRPGBattle initBattle(TiledMap map) {
+
+    TiledMapTileLayer tileLayer = (TiledMapTileLayer)map.getLayers().get(0);
 
     Combatant player = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test3x"));
     Combatant enemy = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
@@ -196,18 +199,36 @@ public class TestBattle extends BattleScreen {
     Army playerArmy = new Army(Sets.newHashSet(player), "Greil Mercenaries", ArmyType.PLAYER);
     Army enemyArmy = new Army(Sets.newHashSet(enemy), "Dawn Brigade", ArmyType.ENEMY);
 
-    Set<Tile> tiles = new HashSet<Tile>(map.getHeight());
-    for (int i = 0; i < map.getWidth(); i++) {
-      for (int j = 0; j < map.getHeight(); j++) {
+    Set<Tile> tiles = new HashSet<Tile>(tileLayer.getHeight());
+    for (int i = 0; i < tileLayer.getWidth(); i++) {
+      for (int j = 0; j < tileLayer.getHeight(); j++) {
         // TODO: Read the tile from the tile layer and get the attribute
-        tiles.add(new Tile(TerrainType.GRASS, i, j));
+        Tile tile = new Tile(TerrainType.GRASS, i, j);
+        tiles.add(tile);
       }
     }
 
     BattleMap battleMap = new BattleMap(tiles);
-    battleMap.addUnit(player, 5, 5);
-    battleMap.addUnit(enemy, map.getWidth()-1, map.getHeight()-1);
+    battleMap.addUnit(player, 7, 8);
+    battleMap.addUnit(enemy, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
     this.map = battleMap;
+
+
+    MapLayer blockingLayer = map.getLayers().get("Blocking");
+    for (MapObject object : blockingLayer.getObjects()) {
+      RectangleMapObject rect = (RectangleMapObject)object;
+      Rectangle locationRect = rect.getRectangle();
+      int x = Math.round(locationRect.x / gridSquareSize);
+      int y = Math.round(locationRect.y / gridSquareSize);
+
+      Tile tile = battleMap.getTile(x, y);
+      if (tile != null) {
+        MapProperties props = object.getProperties();
+        if (Boolean.valueOf((String)props.get("blocked"))) {
+          tile.setPassable(false);
+        }
+      }
+    }
 
     List<Army> armies = Lists.newArrayList(playerArmy, enemyArmy);
     WinCondition winCondition = new Rout();

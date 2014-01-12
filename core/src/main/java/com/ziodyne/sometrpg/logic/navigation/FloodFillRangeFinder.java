@@ -23,7 +23,7 @@ public class FloodFillRangeFinder implements RangeFinder {
     return finalResults;
   }
 
-  private Set<Equivalence.Wrapper<GridPoint2>> floodFill(BattleMap map, GridPoint2 start, int maxDistance) {
+  private static Set<Equivalence.Wrapper<GridPoint2>> floodFill(BattleMap map, GridPoint2 start, int maxDistance) {
     Set<Equivalence.Wrapper<GridPoint2>> results = Sets.newHashSet();
 
     Stack<GridPoint2> fringe = new Stack<GridPoint2>();

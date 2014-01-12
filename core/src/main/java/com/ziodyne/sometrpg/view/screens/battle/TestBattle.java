@@ -44,13 +44,7 @@ import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
-import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
-import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
-import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
-import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
-import com.ziodyne.sometrpg.view.systems.MapOverlayRenderSystem;
-import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
-import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
+import com.ziodyne.sometrpg.view.systems.*;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -119,6 +113,7 @@ public class TestBattle extends BattleScreen {
     world.setSystem(new DeathFadeSystem(tweenManager));
     world.setSystem(new BattleUnitMovementSystem(map));
     world.setSystem(mapSelectorUpdateSystem);
+    world.setSystem(new StageUpdateSystem());
 
     /**
      * Render Order:
@@ -126,10 +121,12 @@ public class TestBattle extends BattleScreen {
      *   - Grid Overlay
      *   - Background Sprites
      *   - Foreground Sprites
+     *   - Menu/HUD
      */
     world.setSystem(mapRenderSystem);
     world.setSystem(new MapOverlayRenderSystem(camera));
     world.setSystem(spriteRenderSystem);
+    world.setSystem(new StageRenderSystem());
 
     world.setManager(new TagManager());
 
@@ -146,6 +143,9 @@ public class TestBattle extends BattleScreen {
 
     Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32, new GridPoint2());
     world.addEntity(mapGridOverlay);
+
+    Entity stage = entityFactory.createStage(menuStage);
+    //world.addEntity(stage);
 
 
     InputMultiplexer multiplexer = new InputMultiplexer();

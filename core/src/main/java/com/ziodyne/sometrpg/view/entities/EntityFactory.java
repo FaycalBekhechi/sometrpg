@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -117,5 +118,14 @@ public class EntityFactory {
     mapEntity.addComponent(tiledMapComponent);
 
     return mapEntity;
+  }
+
+  public Entity createStage(Stage gdxStage) {
+    Entity entity = world.createEntity();
+
+    com.ziodyne.sometrpg.view.components.Stage stageComponent = new com.ziodyne.sometrpg.view.components.Stage(gdxStage);
+    entity.addComponent(stageComponent);
+
+    return entity;
   }
 }

@@ -118,12 +118,14 @@ public class TestBattle extends BattleScreen {
     /**
      * Render Order:
      *   - Map Tiles
+     *   - Map Movement Ranges
      *   - Grid Overlay
      *   - Background Sprites
      *   - Foreground Sprites
      *   - Menu/HUD
      */
     world.setSystem(mapRenderSystem);
+    world.setSystem(new MapMovementOverlayRenderer(camera));
     world.setSystem(new MapOverlayRenderSystem(camera));
     world.setSystem(spriteRenderSystem);
     world.setSystem(new StageRenderSystem());

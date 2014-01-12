@@ -15,13 +15,10 @@ import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
-import com.ziodyne.sometrpg.view.components.BattleUnit;
-import com.ziodyne.sometrpg.view.components.MapGridOverlay;
-import com.ziodyne.sometrpg.view.components.Position;
-import com.ziodyne.sometrpg.view.components.Sprite;
-import com.ziodyne.sometrpg.view.components.TiledMapComponent;
-import com.ziodyne.sometrpg.view.components.UnitSelector;
+import com.ziodyne.sometrpg.view.components.*;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
+
+import java.util.Set;
 
 public class EntityFactory {
   private final World world;
@@ -52,6 +49,15 @@ public class EntityFactory {
     unitEntity.addComponent(new BattleUnit(combatant));
 
     return unitEntity;
+  }
+
+  public Entity createMapMovementOverlay(Set<GridPoint2> locations) {
+    Entity movementOverlay = world.createEntity();
+
+    MapMovementOverlay movementOverlayComponent = new MapMovementOverlay(locations);
+    movementOverlay.addComponent(movementOverlayComponent);
+
+    return movementOverlay;
   }
 
   public Entity createMapSelector() {
@@ -86,7 +92,7 @@ public class EntityFactory {
   public Entity createMapGridOverlay(int rows, int columns, float size, GridPoint2 pos) {
     Entity overlayEntity = world.createEntity();
 
-    MapGridOverlay gridOverlayComponent = new MapGridOverlay(rows, columns, size, 0.0f);
+    MapGridOverlay gridOverlayComponent = new MapGridOverlay(rows, columns, size, 0.3f);
     overlayEntity.addComponent(gridOverlayComponent);
 
     Position positionComponent = new Position(pos.x, pos.y);

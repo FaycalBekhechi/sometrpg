@@ -47,7 +47,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected GridPoint2 selectedTile;
   protected Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
   protected float gridSquareSize = 32;
-  private Set<Entity> currentMovableTiles = Sets.newHashSet();
+  private Entity currentMovementOverlay;
 
   public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize) {
     this.gridSquareSize = gridSquareSize;
@@ -74,19 +74,24 @@ public abstract class BattleScreen extends ScreenAdapter {
     return entityIndex.get(character);
   }
 
-  public void showMoveRange(Combatant combatant) {
-    if (currentMovableTiles != null) {
-      for (Entity ent : currentMovableTiles) {
-        ent.deleteFromWorld();
-      }
+  private void setMovementOverlay(Entity overlay) {
+    if (currentMovementOverlay != null) {
+      currentMovementOverlay.deleteFromWorld();
     }
 
+    world.addEntity(overlay);
+    currentMovementOverlay = overlay;
+  }
+
+  public void showMoveRange(Combatant combatant) {
+
+    Set<GridPoint2> locations = Sets.newHashSet();
     for (Tile tile : battle.getMovableTiles(combatant)) {
-      GridPoint2 position = tile.getPosition();
-      Entity ent = entityFactory.createUnitSelector(position);
-      world.addEntity(ent);
-      currentMovableTiles.add(ent);
+      locations.add(tile.getPosition());
     }
+
+    Entity movementOverlay = entityFactory.createMapMovementOverlay(locations);
+    setMovementOverlay(movementOverlay);
   }
 
   public void setSelectedSquare(GridPoint2 selectedSquare) {

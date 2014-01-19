@@ -39,7 +39,8 @@ public class Tile {
     if (combatant != null && isOccupied()){
       throw new IllegalArgumentException("Can't send a unit to an occupied square.");
     }
-    
+
+    this.passable = combatant != null;
     this.combatant = combatant;
   }
 

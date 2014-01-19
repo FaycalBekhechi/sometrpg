@@ -1,22 +1,45 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.base.Equivalence;
 import com.google.common.collect.Maps;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
+import org.jgraph.graph.DefaultEdge;
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.FloydWarshallShortestPaths;
+import org.jgrapht.event.GraphEdgeChangeEvent;
+import org.jgrapht.event.GraphListener;
+import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.graph.ListenableUndirectedGraph;
+import org.jgrapht.graph.SimpleGraph;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class BattleMap {
+  private static final Logger logger = new GdxLogger(BattleMap.class);
+
   private final int width;
+
   private final int height;
+
   private final java.util.Map<Long, Tile> occupyingUnits = Maps.newHashMap();
+
   private final Map<Equivalence.Wrapper<GridPoint2>, Tile> tilesByPosition = Maps.newHashMap();
+
+  private final ListenableUndirectedGraph<Equivalence.Wrapper<GridPoint2>, DefaultEdge> graph =
+          new ListenableUndirectedGraph<Equivalence.Wrapper<GridPoint2>, DefaultEdge>(DefaultEdge.class);
+
+  private Collection<GraphPath<Equivalence.Wrapper<GridPoint2>, DefaultEdge>> allShortestPaths;
 
   public BattleMap(Collection<Tile> tiles) {
     validateSquareness(tiles);
@@ -26,6 +49,66 @@ public class BattleMap {
     this.width = this.height = size;
 
     populateTileIndex(tiles);
+    populateGraph(tiles);
+  }
+
+  private void populateGraph(Collection<Tile> tiles) {
+    for (Tile tile : tiles) {
+      GridPoint2 pos = tile.getPosition();
+      Equivalence.Wrapper<GridPoint2> wrappedPosition = MathUtils.GRID_POINT_EQUIV.wrap(pos);
+      graph.addVertex(wrappedPosition);
+
+      // Only add edges out of passable tiles
+      if (tile.isPassable()) {
+        for (GridPoint2 neighbor : MathUtils.getNeighbors(pos)) {
+
+          // Only add edges into passable tiles
+          if (tileExists(neighbor.x, neighbor.y) &&
+              isPassable(neighbor.x, neighbor.y)) {
+
+
+            Equivalence.Wrapper<GridPoint2> wrappedNeighbor = MathUtils.GRID_POINT_EQUIV.wrap(neighbor);
+            if (!graph.containsVertex(wrappedNeighbor)) {
+              graph.addVertex(wrappedNeighbor);
+            }
+
+            graph.addEdge(wrappedPosition, wrappedNeighbor);
+          }
+        }
+      }
+    }
+
+    graph.addGraphListener(new GraphListener<Equivalence.Wrapper<GridPoint2>, DefaultEdge>() {
+      @Override
+      public void edgeAdded(GraphEdgeChangeEvent<Equivalence.Wrapper<GridPoint2>, DefaultEdge> e) {
+        updateShortestPaths();
+      }
+
+      @Override
+      public void edgeRemoved(GraphEdgeChangeEvent<Equivalence.Wrapper<GridPoint2>, DefaultEdge> e) {
+        updateShortestPaths();
+      }
+
+      @Override
+      public void vertexAdded(GraphVertexChangeEvent<Equivalence.Wrapper<GridPoint2>> e) {
+
+      }
+
+      @Override
+      public void vertexRemoved(GraphVertexChangeEvent<Equivalence.Wrapper<GridPoint2>> e) {
+
+      }
+    });
+
+    updateShortestPaths();
+  }
+
+  private void updateShortestPaths() {
+    allShortestPaths = new FloydWarshallShortestPaths<Equivalence.Wrapper<GridPoint2>, DefaultEdge>(graph).getShortestPaths();
+  }
+
+  public Collection<GraphPath<Equivalence.Wrapper<GridPoint2>, DefaultEdge>> getAllShortestPaths() {
+    return allShortestPaths;
   }
 
   private void populateTileIndex(Collection<Tile> tiles) {
@@ -38,6 +121,10 @@ public class BattleMap {
 
       tilesByPosition.put(posKey, tile);
     }
+  }
+
+  public Graph<Equivalence.Wrapper<GridPoint2>, DefaultEdge> getGraph() {
+    return graph;
   }
 
   public int getWidth() {
@@ -55,6 +142,24 @@ public class BattleMap {
 
   public boolean tileExists(int x, int y) {
     return getTile(x, y) != null;
+  }
+
+  public void setPassable(int x, int y, boolean passable) {
+    if (tileExists(x, y)) {
+      getTile(x, y).setPassable(passable);
+
+      GridPoint2 point = new GridPoint2(x, y);
+      Equivalence.Wrapper<GridPoint2> wrappedPoint = MathUtils.GRID_POINT_EQUIV.wrap(point);
+      if (passable) {
+        for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
+          graph.addEdge(MathUtils.GRID_POINT_EQUIV.wrap(neighbor), wrappedPoint);
+        }
+      } else {
+        for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
+          graph.removeEdge(MathUtils.GRID_POINT_EQUIV.wrap(neighbor), wrappedPoint);
+        }
+      }
+    }
   }
 
   /** Gets the tile at (x, y). Returns null if it does not exist. */

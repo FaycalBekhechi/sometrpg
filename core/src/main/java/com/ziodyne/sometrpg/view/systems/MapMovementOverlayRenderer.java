@@ -9,9 +9,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.components.MapMovementOverlay;
 
 /**
@@ -42,7 +42,6 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
     shapeRenderer.setColor(movementOverlay.color);
 
     for (GridPoint2 point : movementOverlay.points) {
-      //logger.log(String.format("Render movement range: (%s, %s).", point.x, point.y));
       renderMovementTile(point);
     }
 

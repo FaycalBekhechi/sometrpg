@@ -1,14 +1,13 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.MapCombatResolver;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
-import com.ziodyne.sometrpg.logic.navigation.FloodFillRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.FloydWarshallRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.RangeFinder;
 

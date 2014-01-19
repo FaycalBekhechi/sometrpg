@@ -17,12 +17,9 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
-import com.google.common.base.Equivalence;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -39,6 +36,7 @@ import com.ziodyne.sometrpg.logic.models.battle.ArmyType;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
@@ -204,13 +202,13 @@ public class TestBattle extends BattleScreen {
     Army enemyArmy = new Army(Sets.newHashSet(enemy), "Dawn Brigade", ArmyType.ENEMY);
 
     Set<Tile> tiles = new HashSet<Tile>(tileLayer.getHeight());
-    Map<Equivalence.Wrapper<GridPoint2>, Tile> pointToTile = Maps.newHashMap();
+    Map<GridPoint2, Tile> pointToTile = Maps.newHashMap();
     for (int i = 0; i < tileLayer.getWidth(); i++) {
       for (int j = 0; j < tileLayer.getHeight(); j++) {
         // TODO: Read the tile from the tile layer and get the attribute
         Tile tile = new Tile(TerrainType.GRASS, i, j);
         tiles.add(tile);
-        pointToTile.put(MathUtils.GRID_POINT_EQUIV.wrap(new GridPoint2(i, j)), tile);
+        pointToTile.put(new GridPoint2(i, j), tile);
       }
     }
 
@@ -222,7 +220,7 @@ public class TestBattle extends BattleScreen {
       int x = Math.round(locationRect.x / gridSquareSize);
       int y = Math.round(locationRect.y / gridSquareSize);
 
-      Tile tile = pointToTile.get(MathUtils.GRID_POINT_EQUIV.wrap(new GridPoint2(x, y)));
+      Tile tile = pointToTile.get(new GridPoint2(x, y));
       if (tile != null) {
         MapProperties props = object.getProperties();
         if (Boolean.valueOf((String)props.get("blocked"))) {

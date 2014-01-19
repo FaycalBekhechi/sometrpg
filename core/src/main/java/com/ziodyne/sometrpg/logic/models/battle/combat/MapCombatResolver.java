@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.logic.models.battle.combat;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 public class MapCombatResolver implements CombatResolver {
   private final BattleMap map;

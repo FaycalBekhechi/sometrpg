@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 public class Tile {
   private Combatant combatant;

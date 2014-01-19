@@ -1,11 +1,11 @@
 package com.ziodyne.sometrpg.logic.models.cutscenes;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.cutscenes.actions.DialogueAction;
 import com.ziodyne.sometrpg.logic.models.cutscenes.actions.MapMovementAction;
 import com.ziodyne.sometrpg.logic.models.cutscenes.actions.StageEntranceAction;
 import com.ziodyne.sometrpg.logic.models.cutscenes.actions.StageExitAction;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 public class BattleMapCutsceneDirector implements CutsceneDirector {
   private final BattleMap map;
@@ -19,7 +19,9 @@ public class BattleMapCutsceneDirector implements CutsceneDirector {
     GridPoint2 actorPos = map.getCombatantPosition(mapMovementAction.actor);
     GridPoint2 destination = mapMovementAction.destination.getPosition();
 
-    map.moveUnit(actorPos.x, actorPos.y, destination.x, destination.y);
+    if (actorPos != null) {
+      map.moveUnit(actorPos.x, actorPos.y, destination.x, destination.y);
+    }
   }
 
   @Override

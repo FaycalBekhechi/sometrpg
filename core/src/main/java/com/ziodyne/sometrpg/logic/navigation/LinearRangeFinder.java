@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.logic.navigation;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
 
 import java.util.HashSet;

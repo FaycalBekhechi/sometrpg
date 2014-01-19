@@ -2,7 +2,7 @@ package com.ziodyne.sometrpg.view.components;
 
 import com.artemis.Component;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.GridPoint2;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 import java.util.Set;
 

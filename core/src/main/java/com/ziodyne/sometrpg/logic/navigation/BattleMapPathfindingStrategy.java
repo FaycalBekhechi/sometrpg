@@ -1,9 +1,8 @@
 package com.ziodyne.sometrpg.logic.navigation;
 
-import com.badlogic.gdx.math.GridPoint2;
-import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
 
 import java.util.Set;
@@ -40,12 +39,7 @@ public class BattleMapPathfindingStrategy implements PathfindingStrategy<GridPoi
 
   @Override
   public Set<GridPoint2> getNeighbors(GridPoint2 node) {
-    return Sets.newHashSet(
-      MathUtils.getEastNeighbor(node),
-      MathUtils.getWestNeighbor(node),
-      MathUtils.getSouthNeighbor(node),
-      MathUtils.getNorthNeighbor(node)
-    );
+    return MathUtils.getNeighbors(node);
   }
 
   @Override

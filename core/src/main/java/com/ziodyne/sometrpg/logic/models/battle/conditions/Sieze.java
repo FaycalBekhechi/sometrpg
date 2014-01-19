@@ -1,12 +1,12 @@
 package com.ziodyne.sometrpg.logic.models.battle.conditions;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.collect.Iterables;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 public class Sieze implements WinCondition {
   private int goalTileX;

@@ -1,7 +1,5 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.base.Equivalence;
 import com.google.common.collect.Maps;
 import com.ziodyne.sometrpg.logging.GdxLogger;
@@ -9,6 +7,7 @@ import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
 import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.Graph;
@@ -18,11 +17,9 @@ import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
 import org.jgrapht.graph.ListenableUndirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public class BattleMap {
@@ -34,12 +31,12 @@ public class BattleMap {
 
   private final java.util.Map<Long, Tile> occupyingUnits = Maps.newHashMap();
 
-  private final Map<Equivalence.Wrapper<GridPoint2>, Tile> tilesByPosition = Maps.newHashMap();
+  private final Map<GridPoint2, Tile> tilesByPosition = Maps.newHashMap();
 
-  private final ListenableUndirectedGraph<Equivalence.Wrapper<GridPoint2>, DefaultEdge> graph =
-          new ListenableUndirectedGraph<Equivalence.Wrapper<GridPoint2>, DefaultEdge>(DefaultEdge.class);
+  private final ListenableUndirectedGraph<GridPoint2, DefaultEdge> graph =
+          new ListenableUndirectedGraph<GridPoint2, DefaultEdge>(DefaultEdge.class);
 
-  private Collection<GraphPath<Equivalence.Wrapper<GridPoint2>, DefaultEdge>> allShortestPaths;
+  private Collection<GraphPath<GridPoint2, DefaultEdge>> allShortestPaths;
 
   public BattleMap(Collection<Tile> tiles) {
     validateSquareness(tiles);
@@ -55,8 +52,7 @@ public class BattleMap {
   private void populateGraph(Collection<Tile> tiles) {
     for (Tile tile : tiles) {
       GridPoint2 pos = tile.getPosition();
-      Equivalence.Wrapper<GridPoint2> wrappedPosition = MathUtils.GRID_POINT_EQUIV.wrap(pos);
-      graph.addVertex(wrappedPosition);
+      graph.addVertex(pos);
 
       // Only add edges out of passable tiles
       if (tile.isPassable()) {
@@ -66,36 +62,34 @@ public class BattleMap {
           if (tileExists(neighbor.x, neighbor.y) &&
               isPassable(neighbor.x, neighbor.y)) {
 
-
-            Equivalence.Wrapper<GridPoint2> wrappedNeighbor = MathUtils.GRID_POINT_EQUIV.wrap(neighbor);
-            if (!graph.containsVertex(wrappedNeighbor)) {
-              graph.addVertex(wrappedNeighbor);
+            if (!graph.containsVertex(neighbor)) {
+              graph.addVertex(neighbor);
             }
 
-            graph.addEdge(wrappedPosition, wrappedNeighbor);
+            graph.addEdge(pos, neighbor);
           }
         }
       }
     }
 
-    graph.addGraphListener(new GraphListener<Equivalence.Wrapper<GridPoint2>, DefaultEdge>() {
+    graph.addGraphListener(new GraphListener<GridPoint2, DefaultEdge>() {
       @Override
-      public void edgeAdded(GraphEdgeChangeEvent<Equivalence.Wrapper<GridPoint2>, DefaultEdge> e) {
+      public void edgeAdded(GraphEdgeChangeEvent<GridPoint2, DefaultEdge> e) {
         updateShortestPaths();
       }
 
       @Override
-      public void edgeRemoved(GraphEdgeChangeEvent<Equivalence.Wrapper<GridPoint2>, DefaultEdge> e) {
+      public void edgeRemoved(GraphEdgeChangeEvent<GridPoint2, DefaultEdge> e) {
         updateShortestPaths();
       }
 
       @Override
-      public void vertexAdded(GraphVertexChangeEvent<Equivalence.Wrapper<GridPoint2>> e) {
+      public void vertexAdded(GraphVertexChangeEvent<GridPoint2> e) {
 
       }
 
       @Override
-      public void vertexRemoved(GraphVertexChangeEvent<Equivalence.Wrapper<GridPoint2>> e) {
+      public void vertexRemoved(GraphVertexChangeEvent<GridPoint2> e) {
 
       }
     });
@@ -104,26 +98,25 @@ public class BattleMap {
   }
 
   private void updateShortestPaths() {
-    allShortestPaths = new FloydWarshallShortestPaths<Equivalence.Wrapper<GridPoint2>, DefaultEdge>(graph).getShortestPaths();
+    allShortestPaths = new FloydWarshallShortestPaths<GridPoint2, DefaultEdge>(graph).getShortestPaths();
   }
 
-  public Collection<GraphPath<Equivalence.Wrapper<GridPoint2>, DefaultEdge>> getAllShortestPaths() {
+  public Collection<GraphPath<GridPoint2, DefaultEdge>> getAllShortestPaths() {
     return allShortestPaths;
   }
 
   private void populateTileIndex(Collection<Tile> tiles) {
     for (Tile tile : tiles) {
       GridPoint2 pos = tile.getPosition();
-      Equivalence.Wrapper<GridPoint2> posKey = getTileIndexKey(pos);
-      if (tilesByPosition.containsKey(posKey)) {
+      if (tilesByPosition.containsKey(pos)) {
         throw new GameLogicException("Grid with two tiles at position " + pos);
       }
 
-      tilesByPosition.put(posKey, tile);
+      tilesByPosition.put(pos, tile);
     }
   }
 
-  public Graph<Equivalence.Wrapper<GridPoint2>, DefaultEdge> getGraph() {
+  public Graph<GridPoint2, DefaultEdge> getGraph() {
     return graph;
   }
 
@@ -149,14 +142,13 @@ public class BattleMap {
       getTile(x, y).setPassable(passable);
 
       GridPoint2 point = new GridPoint2(x, y);
-      Equivalence.Wrapper<GridPoint2> wrappedPoint = MathUtils.GRID_POINT_EQUIV.wrap(point);
       if (passable) {
         for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
-          graph.addEdge(MathUtils.GRID_POINT_EQUIV.wrap(neighbor), wrappedPoint);
+          graph.addEdge(neighbor, point);
         }
       } else {
         for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
-          graph.removeEdge(MathUtils.GRID_POINT_EQUIV.wrap(neighbor), wrappedPoint);
+          graph.removeEdge(neighbor, point);
         }
       }
     }
@@ -164,7 +156,7 @@ public class BattleMap {
 
   /** Gets the tile at (x, y). Returns null if it does not exist. */
   public Tile getTile(int x, int y) {
-    return tilesByPosition.get(getTileIndexKey(new GridPoint2(x, y)));
+    return tilesByPosition.get(new GridPoint2(x, y));
   }
 
   /** Move the unit from the source tile to the destination tile IFF. the destination is unoccupied and passable. */
@@ -274,10 +266,6 @@ public class BattleMap {
     if (size != sqrt) {
       throw new GameLogicException("Non-square grid!");
     }
-  }
-
-  private static Equivalence.Wrapper<GridPoint2> getTileIndexKey(GridPoint2 key) {
-    return MathUtils.GRID_POINT_EQUIV.wrap(key);
   }
 
   static class TileNotFoundException extends GameLogicException {

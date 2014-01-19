@@ -9,6 +9,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.MapCombatResolver;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.navigation.FloodFillRangeFinder;
+import com.ziodyne.sometrpg.logic.navigation.FloydWarshallRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.RangeFinder;
 
 import javax.annotation.Nullable;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
-  private final RangeFinder movementRangeFinder = new FloodFillRangeFinder();
+  private final RangeFinder movementRangeFinder = new FloydWarshallRangeFinder();
   private final BattleMap map;
   private final ImmutableList<Army> armies;
   private final WinCondition condition;

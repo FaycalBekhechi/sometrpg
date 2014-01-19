@@ -2,10 +2,12 @@ package com.ziodyne.sometrpg.logic.util;
 
 import com.badlogic.gdx.math.GridPoint2;
 import com.google.common.base.Equivalence;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class MathUtils {
 
@@ -43,6 +45,15 @@ public class MathUtils {
               .build();
     }
   };
+
+  public static Set<GridPoint2> getNeighbors(GridPoint2 start) {
+    return Sets.newHashSet(
+            MathUtils.getEastNeighbor(start),
+            MathUtils.getWestNeighbor(start),
+            MathUtils.getNorthNeighbor(start),
+            MathUtils.getSouthNeighbor(start)
+    );
+  }
 
   public static int manhattanDistance(GridPoint2 start, GridPoint2 end) {
     return Math.abs(start.x - end.x) + Math.abs(start.y - end.y);

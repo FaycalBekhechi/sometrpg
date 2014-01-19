@@ -10,12 +10,16 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.GridPoint2;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.components.MapMovementOverlay;
 
 /**
  * Renders {@link MapMovementOverlay} entities as highlighted tiles.
  */
 public class MapMovementOverlayRenderer extends EntityProcessingSystem {
+  private static final Logger logger = new GdxLogger(MapMovementOverlayRenderer.class);
+
   @Mapper
   private ComponentMapper<MapMovementOverlay> mapOverlayMapper;
 
@@ -38,6 +42,7 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
     shapeRenderer.setColor(movementOverlay.color);
 
     for (GridPoint2 point : movementOverlay.points) {
+      //logger.log(String.format("Render movement range: (%s, %s).", point.x, point.y));
       renderMovementTile(point);
     }
 

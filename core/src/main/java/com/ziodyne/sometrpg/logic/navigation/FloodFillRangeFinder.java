@@ -12,6 +12,7 @@ import java.util.Stack;
 public class FloodFillRangeFinder implements RangeFinder {
   @Override
   public Set<GridPoint2> computeRange(BattleMap map, GridPoint2 start, int maxDistance) {
+
     Set<GridPoint2> finalResults = Sets.newHashSet();
     Set<Equivalence.Wrapper<GridPoint2>> results = floodFill(map, start, maxDistance);
 

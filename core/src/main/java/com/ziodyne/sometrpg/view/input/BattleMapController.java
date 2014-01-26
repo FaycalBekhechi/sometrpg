@@ -13,6 +13,7 @@ import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class BattleMapController extends InputAdapter {
@@ -21,14 +22,17 @@ public class BattleMapController extends InputAdapter {
   private final OrthographicCamera camera;
   private final TweenManager tweenManager;
   private final BattleScreen battleScreen;
+  private final BattleContext context;
   private boolean ignoreNextTouchUp = false;
 
   public interface Factory {
-    public BattleMapController create(OrthographicCamera camera, BattleScreen battleScreen);
+    public BattleMapController create(OrthographicCamera camera, BattleScreen battleScreen, BattleContext context);
   }
 
   @AssistedInject
-  BattleMapController(@Assisted OrthographicCamera camera, @Assisted BattleScreen battleScreen, TweenManager tweenManager) {
+  BattleMapController(@Assisted OrthographicCamera camera, @Assisted BattleScreen battleScreen,
+                      @Assisted BattleContext context, TweenManager tweenManager) {
+    this.context = context;
     this.camera = camera;
     this.tweenManager = tweenManager;
     this.battleScreen = battleScreen;

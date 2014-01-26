@@ -46,18 +46,13 @@ import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
-import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
-import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
-import com.ziodyne.sometrpg.view.screens.battle.state.BattleFlow;
-import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
+import com.ziodyne.sometrpg.view.screens.battle.state.*;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.*;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TestBattle extends BattleScreen {
   private final Logger logger = new GdxLogger(TestBattle.class);
@@ -70,16 +65,19 @@ public class TestBattle extends BattleScreen {
   private TweenAccessor<Camera> cameraTweenAccessor;
   private SpriteRenderSystem.Factory spriteRendererFactory;
   private BattleMapController.Factory mapControllerFactory;
+  private PlayerTurnListener.Factory turnListenerFactory;
   private AssetBundleLoader bundleLoader;
   private boolean initialized;
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
-             TweenAccessor<Sprite> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory) {
+             TweenAccessor<Sprite> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
+             PlayerTurnListener.Factory turnListenerFactory) {
     super(director, new OrthographicCamera(), 32f);
 
     this.tweenManager = tweenManager;
+    this.turnListenerFactory = turnListenerFactory;
     this.cameraTweenAccessor = cameraTweenAccessor;
     this.spriteRendererFactory = spriteRendererFactory;
     this.spriteTweenAccessor = spriteTweenAccessor;
@@ -161,27 +159,19 @@ public class TestBattle extends BattleScreen {
     final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);
 
-    final BattleMapController mapController = mapControllerFactory.create(camera, this);
-    multiplexer.addProcessor(mapController);
+
     Gdx.input.setInputProcessor(multiplexer);
 
     initialized = true;
 
-
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
-    flow.whenEnter(BattleState.PLAYER_TURN, new ContextHandler<BattleContext>() {
-      @Override
-      public void call(BattleContext context) throws Exception {
-        multiplexer.addProcessor(mapController);
-      }
-    });
+    List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
+      turnListenerFactory.create(multiplexer, camera, this)
+    );
 
-    flow.whenLeave(BattleState.PLAYER_TURN, new ContextHandler<BattleContext>() {
-      @Override
-      public void call(BattleContext context) throws Exception {
-        multiplexer.removeProcessor(mapController);
-      }
-    });
+    for (FlowListener<BattleContext> listener : listeners) {
+      listener.bind(flow);
+    }
 
     flow.whenEnter(BattleState.SELECTING_UNIT_ACTION, new ContextHandler<BattleContext>() {
       @Override
@@ -200,9 +190,26 @@ public class TestBattle extends BattleScreen {
     flow.whenEnter(BattleState.UNIT_MOVING, new ContextHandler<BattleContext>() {
       @Override
       public void call(BattleContext context) throws Exception {
+        // This is instant for now
         context.trigger(BattleEvent.UNIT_MOVED);
       }
     });
+
+    flow.whenEvent(BattleEvent.FRIENDLY_UNIT_SELECTED, new ContextHandler<BattleContext>() {
+      @Override
+      public void call(BattleContext context) throws Exception {
+        // Show the unit selector
+      }
+    });
+
+    flow.whenEvent(BattleEvent.FRIENDLY_UNIT_SELECTION_CANCEL, new ContextHandler<BattleContext>() {
+      @Override
+      public void call(BattleContext context) throws Exception {
+        // Hide the unit selector
+      }
+    });
+
+    flow.start(new BattleContext());
 
     logger.log("Battle intialized.");
   }

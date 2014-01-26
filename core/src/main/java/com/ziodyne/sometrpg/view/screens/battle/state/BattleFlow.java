@@ -36,10 +36,12 @@ public class BattleFlow {
       on(ENEMY_UNIT_SELECTED).to(SHOWING_UNIT_DETAILS).transit(
         on(UNIT_DETAILS_CLOSED).to(PLAYER_TURN)
       ),
-      on(FRIENDLY_UNIT_STATS_SELECTED).to(SHOWING_UNIT_DETAILS).transit(
-        on(UNIT_DETAILS_CLOSED).to(PLAYER_TURN)
+      on(FRIENDLY_UNIT_STATS_SELECTED).to(SHOWING_UNIT_DETAILS),
+      on(FRIENDLY_ACTIONS_EXHAUSTED).to(ENEMY_TURN).transit(
+        on(ENEMY_TURN_FINISH).to(PLAYER_TURN)
       ),
-      on(FRIENDLY_ACTIONS_EXHAUSTED).to(ENEMY_TURN)
+      on(BATTLE_LOST).finish(END_SCREEN),
+      on(BATTLE_WON).finish(END_SCREEN)
     );
 
   private BattleFlow() { }

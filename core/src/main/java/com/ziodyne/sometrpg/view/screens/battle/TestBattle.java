@@ -169,7 +169,7 @@ public class TestBattle extends BattleScreen {
 
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
-      turnListenerFactory.create(multiplexer, camera, this),
+      turnListenerFactory.create(camera, this),
       new UnitActionSelectListener(),
       new SelectingMoveLocation(this),
       new UnitMoving(this)

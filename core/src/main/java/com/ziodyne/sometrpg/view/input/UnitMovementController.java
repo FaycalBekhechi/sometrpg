@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.view.input;
 
 import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
@@ -36,6 +37,20 @@ public class UnitMovementController extends InputAdapter {
       context.movementDestination = selectedPoint;
       try {
         context.trigger(BattleEvent.MOVE_LOC_SELECTED);
+        return true;
+      } catch (LogicViolationError e) {
+
+      }
+    }
+
+    return false;
+  }
+
+  @Override
+  public boolean keyUp(int keycode) {
+    if (Input.Keys.ESCAPE == keycode) {
+      try {
+        context.trigger(BattleEvent.MOVE_ACTION_CANCEL);
         return true;
       } catch (LogicViolationError e) {
 

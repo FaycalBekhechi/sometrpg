@@ -21,7 +21,7 @@ public class BattleFlow {
             on(ACTIONS_EXHAUSTED).to(PLAYER_TURN),
             on(UNIT_MOVED).to(SELECTING_UNIT_ACTION)
           ),
-          on(MOVE_ACTION_CANCEL).to(SELECTING_UNIT_ACTION)
+          on(MOVE_ACTION_CANCEL).to(PLAYER_TURN)
         ),
         on(ATTACK_SELECTED).to(SELECTING_ATTACK_TARGET).transit(
           on(TARGET_SELECTED).to(AWAITING_ATTACK_CONFIRMATION).transit(

@@ -1,5 +1,7 @@
 package com.ziodyne.sometrpg.view.screens.battle;
 
+import au.com.ds.ef.EasyFlow;
+import au.com.ds.ef.call.ContextHandler;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenManager;
@@ -37,7 +39,6 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
-import com.ziodyne.sometrpg.logic.util.MathUtils;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
@@ -45,6 +46,10 @@ import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleFlow;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.*;
 
@@ -153,12 +158,52 @@ public class TestBattle extends BattleScreen {
     world.addEntity(stage);
 
 
-    InputMultiplexer multiplexer = new InputMultiplexer();
+    final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);
-    multiplexer.addProcessor(mapControllerFactory.create(camera, this));
+
+    final BattleMapController mapController = mapControllerFactory.create(camera, this);
+    multiplexer.addProcessor(mapController);
     Gdx.input.setInputProcessor(multiplexer);
 
     initialized = true;
+
+
+    EasyFlow<BattleContext> flow = BattleFlow.FLOW;
+    flow.whenEnter(BattleState.PLAYER_TURN, new ContextHandler<BattleContext>() {
+      @Override
+      public void call(BattleContext context) throws Exception {
+        multiplexer.addProcessor(mapController);
+      }
+    });
+
+    flow.whenLeave(BattleState.PLAYER_TURN, new ContextHandler<BattleContext>() {
+      @Override
+      public void call(BattleContext context) throws Exception {
+        multiplexer.removeProcessor(mapController);
+      }
+    });
+
+    flow.whenEnter(BattleState.SELECTING_UNIT_ACTION, new ContextHandler<BattleContext>() {
+      @Override
+      public void call(BattleContext context) throws Exception {
+        // Show the unit action menu
+      }
+    });
+
+    flow.whenEnter(BattleState.SELECTING_MOVE_LOCATION, new ContextHandler<BattleContext>() {
+      @Override
+      public void call(BattleContext context) throws Exception {
+        // Show the movement range overlay
+      }
+    });
+
+    flow.whenEnter(BattleState.UNIT_MOVING, new ContextHandler<BattleContext>() {
+      @Override
+      public void call(BattleContext context) throws Exception {
+        context.trigger(BattleEvent.UNIT_MOVED);
+      }
+    });
+
     logger.log("Battle intialized.");
   }
 

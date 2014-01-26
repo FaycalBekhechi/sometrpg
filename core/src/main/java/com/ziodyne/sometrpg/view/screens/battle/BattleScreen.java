@@ -81,6 +81,13 @@ public abstract class BattleScreen extends ScreenAdapter {
     currentMovementOverlay = overlay;
   }
 
+  public void hideMoveRange() {
+    if (currentMovementOverlay != null) {
+      currentMovementOverlay.deleteFromWorld();
+      currentMovementOverlay = null;
+    }
+  }
+
   public void showMoveRange(Combatant combatant) {
 
     Set<GridPoint2> locations = Sets.newHashSet();

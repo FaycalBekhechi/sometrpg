@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.input;
 
+import au.com.ds.ef.err.LogicViolationError;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
@@ -14,6 +15,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class BattleMapController extends InputAdapter {
@@ -66,10 +68,15 @@ public class BattleMapController extends InputAdapter {
       return doCameraPan(button);
     }
 
-    battleScreen.setSelectedSquare(selectedPoint);
     Optional<Combatant> combatantOptional = battleScreen.getCombatant(selectedPoint);
     if (combatantOptional.isPresent()) {
-      battleScreen.showMoveRange(combatantOptional.get());
+      context.selectedCombatant = combatantOptional.get();
+      context.selectedSquare = selectedPoint;
+      try {
+        context.trigger(BattleEvent.FRIENDLY_UNIT_SELECTED);
+      } catch (LogicViolationError e) {
+
+      }
     }
 
     return true;

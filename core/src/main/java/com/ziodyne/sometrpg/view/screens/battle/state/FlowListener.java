@@ -4,6 +4,7 @@ import au.com.ds.ef.EasyFlow;
 import au.com.ds.ef.StateEnum;
 import au.com.ds.ef.StatefulContext;
 import au.com.ds.ef.call.ContextHandler;
+import au.com.ds.ef.err.LogicViolationError;
 
 /**
  * An abstract class to ease the sharing of state between onEnter/onLeave event handlers.
@@ -16,8 +17,8 @@ public abstract class FlowListener<T extends StatefulContext> {
     this.state = state;
   }
 
-  public abstract void onLeave(T conext);
-  public abstract void onEnter(T context);
+  public abstract void onLeave(T conext) throws LogicViolationError;
+  public abstract void onEnter(T context) throws LogicViolationError;
 
   public void bind(EasyFlow<T> flow) {
     flow.whenEnter(state, new ContextHandler<T>() {

@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
+import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.google.inject.assistedinject.Assisted;
@@ -36,15 +37,15 @@ public class PlayerTurnListener extends FlowListener<BattleContext> {
   }
 
   @Override
-  public void onLeave(BattleContext context) {
-    multiplexer.removeProcessor(controller);
+  public void onEnter(BattleContext context) throws LogicViolationError {
+    // Check if it still should be the player's turn.
+    // If not, trigger friendly_actions_exhausted
+    context.mapController = controllerFactory.create(camera, screen, context);
+    multiplexer.addProcessor(context.mapController);
   }
 
   @Override
-  public void onEnter(BattleContext context) {
-    // Check if it still should be the player's turn.
-    // If not, trigger friendly_actions_exhausted
-    controller = controllerFactory.create(camera, screen, context);
-    multiplexer.addProcessor(controller);
+  public void onLeave(BattleContext context) throws LogicViolationError {
+    multiplexer.removeProcessor(controller);
   }
 }

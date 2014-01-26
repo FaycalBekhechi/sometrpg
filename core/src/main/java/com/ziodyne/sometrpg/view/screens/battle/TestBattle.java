@@ -48,6 +48,8 @@ import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.SelectingMoveLocation;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelectListener;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.*;
 
@@ -166,48 +168,14 @@ public class TestBattle extends BattleScreen {
 
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
-      turnListenerFactory.create(multiplexer, camera, this)
+      turnListenerFactory.create(multiplexer, camera, this),
+      new UnitActionSelectListener(),
+      new SelectingMoveLocation(this)
     );
 
     for (FlowListener<BattleContext> listener : listeners) {
       listener.bind(flow);
     }
-
-    flow.whenEnter(BattleState.SELECTING_UNIT_ACTION, new ContextHandler<BattleContext>() {
-      @Override
-      public void call(BattleContext context) throws Exception {
-        // Show the unit action menu
-      }
-    });
-
-    flow.whenEnter(BattleState.SELECTING_MOVE_LOCATION, new ContextHandler<BattleContext>() {
-      @Override
-      public void call(BattleContext context) throws Exception {
-        // Show the movement range overlay
-      }
-    });
-
-    flow.whenEnter(BattleState.UNIT_MOVING, new ContextHandler<BattleContext>() {
-      @Override
-      public void call(BattleContext context) throws Exception {
-        // This is instant for now
-        context.trigger(BattleEvent.UNIT_MOVED);
-      }
-    });
-
-    flow.whenEvent(BattleEvent.FRIENDLY_UNIT_SELECTED, new ContextHandler<BattleContext>() {
-      @Override
-      public void call(BattleContext context) throws Exception {
-        // Show the unit selector
-      }
-    });
-
-    flow.whenEvent(BattleEvent.FRIENDLY_UNIT_SELECTION_CANCEL, new ContextHandler<BattleContext>() {
-      @Override
-      public void call(BattleContext context) throws Exception {
-        // Hide the unit selector
-      }
-    });
 
     flow.start(new BattleContext());
 

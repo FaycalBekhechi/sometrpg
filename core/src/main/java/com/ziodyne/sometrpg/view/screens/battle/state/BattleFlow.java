@@ -42,7 +42,7 @@ public class BattleFlow {
       ),
       on(BATTLE_LOST).finish(END_SCREEN),
       on(BATTLE_WON).finish(END_SCREEN)
-    );
+    ).trace();
 
   private BattleFlow() { }
 }

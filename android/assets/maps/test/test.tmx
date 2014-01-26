@@ -8,7 +8,7 @@
  </tileset>
  <layer name="Ground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJytlD0KwzAMhb2UpplKSwPN3h7A3qX736o2KPD4kDN1eFhS9GMrT/JSigeqwGEfp0EeZwuYyAdqcmr+GnEmuQ32JvcwqeWIbcit97Kktie1XGKrxFfxY1+ynng57yF7R/u94/snfDoeHVvginNgCQzbLTD0teMZuAYOu/pv4bOFPr6/xLaKzyL5l/Ab+qXjLdghz/R94pPxTmXlTPY/ZzxXHpjkddh1DsjRhlrKadbK5skAjXPxIf8zfmdcZS310zdl/eFcktucN9bRXum7s53B+/GdZzuGO0Xf5knN7L8xNru7oyZ3ie4r7rwGmbas/zOesO8Z5/hfODPa40P/AShKTag=
+   eJy1U0EKgDAM2/v0LJ71A94HO+q7VXBQSpNGxENgrm3WxrSVUtqPqO5chXgVcqPvKOa50Hus76guykezRnP5WD8PACOZg/W8BtguzImGrH+fNxk+xoG4vG43337heGB16HdIw4hvATpYZJ5j/zbzH+Nhfs3mYvMr/ni7Axm/sj9IY+YTtrdIo2xWtVbde8UTrEZ9S9FAwRedLE7YWr2c
   </data>
  </layer>
  <objectgroup name="Blocking" width="20" height="20">
@@ -73,7 +73,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Props" width="20" height="20" visible="0">
+ <objectgroup name="Props" width="20" height="20">
   <object gid="153" x="224" y="268"/>
   <object gid="153" x="209" y="293"/>
   <object gid="153" x="352" y="251"/>
@@ -104,5 +104,10 @@
     <property name="blocked" value="true"/>
    </properties>
   </object>
+  <object gid="103" x="448" y="288"/>
+  <object gid="103" x="448" y="320"/>
+  <object gid="103" x="448" y="320"/>
+  <object gid="103" x="448" y="320"/>
+  <object gid="122" x="512" y="32"/>
  </objectgroup>
 </map>

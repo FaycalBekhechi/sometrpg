@@ -17,7 +17,7 @@ public abstract class FlowListener<T extends StatefulContext> {
     this.state = state;
   }
 
-  public abstract void onLeave(T conext) throws LogicViolationError;
+  public abstract void onLeave(T context) throws LogicViolationError;
   public abstract void onEnter(T context) throws LogicViolationError;
 
   public void bind(EasyFlow<T> flow) {

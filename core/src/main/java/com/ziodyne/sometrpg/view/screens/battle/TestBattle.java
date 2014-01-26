@@ -50,6 +50,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.*;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.SelectingMoveLocation;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelectListener;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitMoving;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.*;
 
@@ -170,7 +171,8 @@ public class TestBattle extends BattleScreen {
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       turnListenerFactory.create(multiplexer, camera, this),
       new UnitActionSelectListener(),
-      new SelectingMoveLocation(this)
+      new SelectingMoveLocation(this),
+      new UnitMoving(this)
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

@@ -18,7 +18,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
-public class BattleMapController extends InputAdapter {
+public class BattleMapController extends InputAdapter implements Toggleable {
   private static final int DRAG_TOLERANCE = 4;
 
   private final OrthographicCamera camera;
@@ -26,6 +26,7 @@ public class BattleMapController extends InputAdapter {
   private final BattleScreen battleScreen;
   private final BattleContext context;
   private boolean ignoreNextTouchUp = false;
+  private boolean enabled = true;
 
   public interface Factory {
     public BattleMapController create(OrthographicCamera camera, BattleScreen battleScreen, BattleContext context);
@@ -41,7 +42,26 @@ public class BattleMapController extends InputAdapter {
   }
 
   @Override
+  public void enable() {
+    enabled = true;
+  }
+
+  @Override
+  public void disable() {
+    enabled = false;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  @Override
   public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    if (!isEnabled()) {
+      return false;
+    }
+
     Vector3 clickCoordinates = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     camera.unproject(clickCoordinates);
     int x = (int)Math.floor(clickCoordinates.x);
@@ -83,6 +103,10 @@ public class BattleMapController extends InputAdapter {
   }
 
   private boolean doCameraPan(int button) {
+    if (!isEnabled()) {
+      return false;
+    }
+
     if (button != Input.Buttons.LEFT) {
       return false;
     }
@@ -108,6 +132,10 @@ public class BattleMapController extends InputAdapter {
 
   @Override
   public boolean touchDragged(int screenX, int screenY, int pointer) {
+    if (!isEnabled()) {
+      return false;
+    }
+
     int dx = Gdx.input.getDeltaX();
     int dy = Gdx.input.getDeltaY();
 

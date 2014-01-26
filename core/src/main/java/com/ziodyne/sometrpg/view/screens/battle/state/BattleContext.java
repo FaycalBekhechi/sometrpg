@@ -9,4 +9,5 @@ public class BattleContext extends StatefulContext {
   public Combatant selectedCombatant;
   public GridPoint2 selectedSquare;
   public BattleMapController mapController;
+  public GridPoint2 movementDestination;
 }

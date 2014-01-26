@@ -23,6 +23,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
+import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 import java.util.HashMap;
@@ -88,7 +89,19 @@ public abstract class BattleScreen extends ScreenAdapter {
     }
   }
 
-  public void showMoveRange(Combatant combatant) {
+  public void moveCombatant(Combatant combatant, GridPoint2 dest) {
+    Entity unitEntity = getUnitEntity(combatant.getCharacter());
+    Position pos = unitEntity.getComponent(Position.class);
+    pos.setX(dest.x);
+    pos.setY(dest.y);
+
+    unitEntity.changedInWorld();
+
+    Tile tile = battle.getTile(dest);
+    battle.moveCombatant(combatant, tile);
+  }
+
+  public Set<GridPoint2> showMoveRange(Combatant combatant) {
 
     Set<GridPoint2> locations = Sets.newHashSet();
     for (Tile tile : battle.getMovableTiles(combatant)) {
@@ -97,6 +110,8 @@ public abstract class BattleScreen extends ScreenAdapter {
 
     Entity movementOverlay = entityFactory.createMapMovementOverlay(locations);
     setMovementOverlay(movementOverlay);
+
+    return locations;
   }
 
   public void setSelectedSquare(GridPoint2 selectedSquare) {

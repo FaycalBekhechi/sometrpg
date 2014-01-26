@@ -137,6 +137,23 @@ public class BattleMap {
     return getTile(x, y) != null;
   }
 
+  public void setPassable(int x, int y, boolean passable) {
+    if (tileExists(x, y)) {
+      getTile(x, y).setPassable(passable);
+
+      GridPoint2 point = new GridPoint2(x, y);
+      if (passable) {
+        for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
+          graph.addEdge(neighbor, point);
+        }
+      } else {
+        for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
+          graph.removeEdge(neighbor, point);
+        }
+      }
+    }
+  }
+
   /** Gets the tile at (x, y). Returns null if it does not exist. */
   public Tile getTile(int x, int y) {
     return tilesByPosition.get(new GridPoint2(x, y));
@@ -174,8 +191,6 @@ public class BattleMap {
 
     occupyingUnits.put(unitId, destination);
     destination.setCombatant(unit);
-
-    disconnectPoint(destination.getPosition());
   }
 
   /** Remove a unit from the map. Blows up if it does not exist. */
@@ -188,8 +203,6 @@ public class BattleMap {
 
     occupyingUnits.remove(unitId);
     occupancy.setCombatant(null);
-
-    connectPoint(occupancy.getPosition());
   }
 
   @Nullable
@@ -214,18 +227,6 @@ public class BattleMap {
     return occupyingUnits.get(combatant.getUnitId()) != null;
   }
 
-  private void disconnectPoint(GridPoint2 point) {
-    for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
-      graph.removeEdge(neighbor, point);
-    }
-  }
-
-  private void connectPoint(GridPoint2 point) {
-    for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
-      graph.addEdge(neighbor, point);
-    }
-  }
-
   private void moveUnit(Tile src, Tile dest) {
     validateMove(src, dest);
 
@@ -237,12 +238,6 @@ public class BattleMap {
     Long unitId = movingUnit.getUnitId();
     occupyingUnits.remove(unitId);
     occupyingUnits.put(unitId, dest);
-
-    GridPoint2 destinationPos = dest.getPosition();
-    GridPoint2 sourcePos = src.getPosition();
-
-    disconnectPoint(destinationPos);
-    connectPoint(sourcePos);
   }
 
   /** Checks tile movement preconditions and throws exceptions when any are violated. */

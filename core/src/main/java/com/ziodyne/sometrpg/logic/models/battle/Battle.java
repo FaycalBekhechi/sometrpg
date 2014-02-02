@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 
 import java.util.Set;
 
@@ -64,4 +65,11 @@ public interface Battle {
    * @return <tt>true</tt> if the battle is lost
    */
   public boolean isLost();
+
+  /**
+   * Get which actions a combatant can do right now.
+   * @param combatant The combatant
+   * @return A {@link Set} of {@link CombatantAction}s a Combatant can take.
+   */
+  public Set<CombatantAction> getAvailableActions(Combatant combatant);
 }

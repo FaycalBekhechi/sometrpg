@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -12,6 +13,7 @@ import com.ziodyne.sometrpg.logic.navigation.FloydWarshallRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.RangeFinder;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -133,6 +135,11 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     actedThisTurn = Sets.newHashSet();
     movedThisTurn = Sets.newHashSet();
     turnNumber++;
+  }
+
+  @Override
+  public Set<CombatantAction> getAvailableActions(Combatant combatant) {
+    return EnumSet.allOf(CombatantAction.class);
   }
 
   private void recordAction(Combatant combatant) {

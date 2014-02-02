@@ -2,6 +2,8 @@ package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+import com.ziodyne.sometrpg.logic.models.*;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -13,6 +15,7 @@ import com.ziodyne.sometrpg.logic.navigation.FloydWarshallRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.RangeFinder;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -139,7 +142,20 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
   @Override
   public Set<CombatantAction> getAvailableActions(Combatant combatant) {
-    return EnumSet.allOf(CombatantAction.class);
+    Set<CombatantAction> actions = EnumSet.noneOf(CombatantAction.class);
+
+    // If the combatant hasn't performed an attack action this turn,
+    // allow them to attack.
+    if (!actedThisTurn.contains(combatant)) {
+      Character character = combatant.getCharacter();
+      actions.addAll(character.getAttackActions());
+    }
+
+    if (!movedThisTurn.contains(combatant)) {
+      actions.add(CombatantAction.MOVE);
+    }
+
+    return actions;
   }
 
   private void recordAction(Combatant combatant) {

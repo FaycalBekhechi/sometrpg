@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.google.common.collect.Sets;
+import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ziodyne.sometrpg.logic.util.UnitUtils;
@@ -24,6 +26,13 @@ public class Character {
   private final UnitGrowth growths;
   private String name;
   private Set<UnitStat> statSheet;
+  private Set<CombatantAction> attackActions = EnumSet.of(CombatantAction.ATTACK);
+
+  public Character(Set<UnitStat> maxStatSheet, UnitGrowth growths, String name, Set<UnitStat> statSheet,
+                   Set<CombatantAction> attackActions) {
+    this(maxStatSheet, growths, statSheet, name);
+    this.attackActions = Sets.union(this.attackActions, attackActions);
+  }
 
   public Character(Set<UnitStat> maxStatSheet, UnitGrowth growths, Set<UnitStat> statSheet, String name) {
     this.id = lastIdentifier.incrementAndGet();
@@ -33,28 +42,6 @@ public class Character {
     this.name = Objects.requireNonNull(StringUtils.trimToNull(name));
     
     validateStats();
-  }
-
-  private void validateStats() {
-    Map<Stat, Integer> currentStats = UnitUtils.indexStatSheetByValue(statSheet);
-    Map<Stat, Integer> maxStats = UnitUtils.indexStatSheetByValue(maxStatSheet);
-    
-    for (Stat stat : EnumSet.allOf(Stat.class)) {
-      Integer value = currentStats.get(stat);
-      Integer cap = maxStats.get(stat);
-      
-      if (value == null) {
-        throw new IllegalArgumentException("Unit missing stat value for: " + stat.name());
-      }
-      
-      if (cap == null) {
-        throw new IllegalArgumentException("Unit missing stat cap value for: " + stat.name());
-      }
-      
-      if (value > cap) {
-        throw new IllegalArgumentException("Unit stats too high for: " + stat.name());
-      }
-    }
   }
 
   public int getMovementRange() {
@@ -87,6 +74,32 @@ public class Character {
 
   public long getId() {
     return id;
+  }
+
+  public Set<CombatantAction> getAttackActions() {
+    return attackActions;
+  }
+
+  private void validateStats() {
+    Map<Stat, Integer> currentStats = UnitUtils.indexStatSheetByValue(statSheet);
+    Map<Stat, Integer> maxStats = UnitUtils.indexStatSheetByValue(maxStatSheet);
+
+    for (Stat stat : EnumSet.allOf(Stat.class)) {
+      Integer value = currentStats.get(stat);
+      Integer cap = maxStats.get(stat);
+
+      if (value == null) {
+        throw new IllegalArgumentException("Unit missing stat value for: " + stat.name());
+      }
+
+      if (cap == null) {
+        throw new IllegalArgumentException("Unit missing stat cap value for: " + stat.name());
+      }
+
+      if (value > cap) {
+        throw new IllegalArgumentException("Unit stats too high for: " + stat.name());
+      }
+    }
   }
 
   @Override

@@ -7,6 +7,9 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
+/**
+ * Logic for entering and exiting the state where a unit is moving
+ */
 public class UnitMoving extends FlowListener<BattleContext> {
   private final BattleScreen battleScreen;
 

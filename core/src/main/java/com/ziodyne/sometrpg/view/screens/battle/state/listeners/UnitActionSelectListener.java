@@ -6,6 +6,9 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
+/**
+ * Logic for entering and exiting the state where the player is selecting an action for a unit.
+ */
 public class UnitActionSelectListener extends FlowListener<BattleContext> {
   public UnitActionSelectListener() {
     super(BattleState.SELECTING_UNIT_ACTION);

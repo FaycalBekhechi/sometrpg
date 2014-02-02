@@ -1,7 +1,6 @@
 package com.ziodyne.sometrpg.view.screens.battle;
 
 import au.com.ds.ef.EasyFlow;
-import au.com.ds.ef.call.ContextHandler;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenManager;
@@ -52,10 +51,23 @@ import com.ziodyne.sometrpg.view.screens.battle.state.listeners.SelectingMoveLoc
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelectListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitMoving;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
-import com.ziodyne.sometrpg.view.systems.*;
+import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
+import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
+import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
+import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
+import com.ziodyne.sometrpg.view.systems.MapMovementOverlayRenderer;
+import com.ziodyne.sometrpg.view.systems.MapOverlayRenderSystem;
+import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
+import com.ziodyne.sometrpg.view.systems.StageRenderSystem;
+import com.ziodyne.sometrpg.view.systems.StageUpdateSystem;
+import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TestBattle extends BattleScreen {
   private final Logger logger = new GdxLogger(TestBattle.class);

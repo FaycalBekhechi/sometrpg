@@ -12,6 +12,9 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
+/**
+ * Logic for entering and exiting the initial player turn state
+ */
 public class PlayerTurnListener extends FlowListener<BattleContext> {
   private final OrthographicCamera camera;
 

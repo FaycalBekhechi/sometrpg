@@ -75,8 +75,6 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
       throw new GameLogicException("Cannot attack a dead combatant.");
     }
 
-    // Attacking also consumes your one move for a turn
-    recordMovement(attacker);
     recordAction(attacker);
   }
 

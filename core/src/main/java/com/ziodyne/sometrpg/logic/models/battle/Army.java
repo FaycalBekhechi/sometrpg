@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
+import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 
 import java.util.Set;
@@ -23,7 +24,18 @@ public class Army {
     return units.contains(combatant);
   }
 
-  public Set<Combatant> getUnits() {
+  public Set<Combatant> getCombatants() {
     return units;
+  }
+
+  public Set<Combatant> getLivingCombatants() {
+    Set<Combatant> living = Sets.newHashSet();
+    for (Combatant combatant : getCombatants()) {
+      if (combatant.isAlive()) {
+        living.add(combatant);
+      }
+    }
+
+    return living;
   }
 }

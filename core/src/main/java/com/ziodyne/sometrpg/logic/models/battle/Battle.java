@@ -72,4 +72,11 @@ public interface Battle {
    * @return A {@link Set} of {@link CombatantAction}s a Combatant can take.
    */
   public Set<CombatantAction> getAvailableActions(Combatant combatant);
+
+  /**
+   * Get the number of squares a combatant can move this turn. (Taking into account squares already moved)
+   * @param combatant The Combatant being moved
+   * @return The # of squares left to move this combatant has.
+   */
+  public int getMovementRangeRemaining(Combatant combatant);
 }

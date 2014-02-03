@@ -1,8 +1,8 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.ziodyne.sometrpg.logic.models.*;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
@@ -15,10 +15,10 @@ import com.ziodyne.sometrpg.logic.navigation.FloydWarshallRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.RangeFinder;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
@@ -29,6 +29,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private MapCombatResolver combatResolver;
   private Set<Combatant> actedThisTurn = Sets.newHashSet();
   private Set<Combatant> movedThisTurn = Sets.newHashSet();
+  private Map<Combatant, Integer> movementSquaresRemaining = Maps.newHashMap();
 
   private int turnNumber;
 
@@ -136,6 +137,12 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     actedThisTurn = Sets.newHashSet();
     movedThisTurn = Sets.newHashSet();
     turnNumber++;
+
+    movementSquaresRemaining = Maps.newHashMap();
+    Army newArmy = getCurrentTurnArmy();
+    for (Combatant combatant : newArmy.getLivingCombatants()) {
+      movementSquaresRemaining.put(combatant, combatant.getMovementRange());
+    }
   }
 
   @Override
@@ -156,12 +163,27 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     return actions;
   }
 
+  @Override
+  public int getMovementRangeRemaining(Combatant combatant) {
+    Integer remainingSquares = movementSquaresRemaining.get(combatant);
+    if (remainingSquares == null) {
+      throw new IllegalArgumentException("Combatant does not exist on map.");
+    }
+
+    return remainingSquares;
+  }
+
   private void recordAction(Combatant combatant) {
     actedThisTurn.add(combatant);
   }
 
   private void recordMovement(Combatant combatant) {
     movedThisTurn.add(combatant);
+  }
+
+  private void recordMovement(Combatant combatant, int numSquares) {
+    Integer remainingSquares = movementSquaresRemaining.get(combatant);
+    movementSquaresRemaining.put(combatant, remainingSquares - numSquares);
   }
 
   private boolean isTurnComplete() {
@@ -171,7 +193,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
 
   private Set<Combatant> getUnitsSafe(Army army) {
-    return army == null ? new HashSet<Combatant>() : army.getUnits();
+    return army == null ? new HashSet<Combatant>() : army.getCombatants();
   }
 
   private void validateCombatantTurn(Combatant combatant) {

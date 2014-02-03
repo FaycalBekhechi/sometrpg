@@ -1,6 +1,8 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import au.com.ds.ef.err.LogicViolationError;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,6 +26,7 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
   private OrthographicCamera camera;
   private Stage stage;
   private ActionMenu actionMenu;
+  private InputProcessor previousInputProcessor;
 
   public UnitActionSelectListener(Skin skin, OrthographicCamera camera, Stage stage) {
     super(BattleState.SELECTING_UNIT_ACTION);
@@ -36,6 +39,10 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
   @Override
   public void onLeave(BattleContext context) throws LogicViolationError {
     actionMenu.clear();
+    context.mapController.enable();;
+    if (previousInputProcessor != null) {
+      Gdx.input.setInputProcessor(previousInputProcessor);
+    }
   }
 
   @Override
@@ -60,5 +67,8 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
     });
 
     stage.addActor(actionMenu);
+    previousInputProcessor = Gdx.input.getInputProcessor();
+    Gdx.input.setInputProcessor(stage);
+    context.mapController.disable();
   }
 }

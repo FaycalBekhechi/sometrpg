@@ -12,29 +12,29 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
-import com.ziodyne.sometrpg.view.components.MapMovementOverlay;
+import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
 
 /**
- * Renders {@link MapMovementOverlay} entities as highlighted tiles.
+ * Renders {@link com.ziodyne.sometrpg.view.components.MapSquareOverlay} entities as highlighted tiles.
  */
 public class MapMovementOverlayRenderer extends EntityProcessingSystem {
   private static final Logger logger = new GdxLogger(MapMovementOverlayRenderer.class);
 
   @Mapper
-  private ComponentMapper<MapMovementOverlay> mapOverlayMapper;
+  private ComponentMapper<MapSquareOverlay> mapOverlayMapper;
 
   private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
   private final OrthographicCamera camera;
 
   public MapMovementOverlayRenderer(OrthographicCamera camera) {
-    super(Aspect.getAspectForAll(MapMovementOverlay.class));
+    super(Aspect.getAspectForAll(MapSquareOverlay.class));
     this.camera = camera;
   }
 
   @Override
   protected void process(Entity e) {
-    MapMovementOverlay movementOverlay = mapOverlayMapper.get(e);
+    MapSquareOverlay movementOverlay = mapOverlayMapper.get(e);
 
     Gdx.gl.glEnable(GL10.GL_BLEND);
     shapeRenderer.setProjectionMatrix(camera.combined);

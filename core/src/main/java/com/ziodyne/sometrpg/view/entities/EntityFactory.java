@@ -53,7 +53,7 @@ public class EntityFactory {
   public Entity createMapMovementOverlay(Set<GridPoint2> locations) {
     Entity movementOverlay = world.createEntity();
 
-    MapMovementOverlay movementOverlayComponent = new MapMovementOverlay(locations);
+    MapSquareOverlay movementOverlayComponent = new MapSquareOverlay(locations);
     movementOverlay.addComponent(movementOverlayComponent);
 
     return movementOverlay;

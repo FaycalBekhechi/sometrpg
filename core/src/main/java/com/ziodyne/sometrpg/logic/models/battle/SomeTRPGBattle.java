@@ -95,6 +95,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     }
 
     return movableTiles;
+
   }
 
   @Override

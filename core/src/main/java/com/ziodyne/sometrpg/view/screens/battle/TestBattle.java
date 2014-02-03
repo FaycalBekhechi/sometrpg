@@ -182,7 +182,7 @@ public class TestBattle extends BattleScreen {
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       turnListenerFactory.create(camera, this),
-      new UnitActionSelectListener(),
+      new UnitActionSelectListener(skin, camera, menuStage),
       new SelectingMoveLocation(this),
       new UnitMoving(this)
     );
@@ -191,7 +191,7 @@ public class TestBattle extends BattleScreen {
       listener.bind(flow);
     }
 
-    flow.start(new BattleContext());
+    flow.start(new BattleContext(battle));
 
     logger.log("Battle intialized.");
   }

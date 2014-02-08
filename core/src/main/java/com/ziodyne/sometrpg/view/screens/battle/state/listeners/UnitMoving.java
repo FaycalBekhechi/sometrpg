@@ -26,6 +26,7 @@ public class UnitMoving extends FlowListener<BattleContext> {
   @Override
   public void onEnter(BattleContext context) throws LogicViolationError {
     battleScreen.moveCombatant(context.selectedCombatant, context.movementDestination);
+    context.selectedSquare = context.movementDestination;
 
     // Unit movement is instant for now
     context.trigger(BattleEvent.UNIT_MOVED);

@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.Character;
@@ -121,29 +120,11 @@ public abstract class BattleScreen extends ScreenAdapter {
         unitSelector = null;
       }
       selectedTile = null;
-      hideActionMenu();
     } else if (battle.tileExists(selectedSquare)) {
       unitSelector = entityFactory.createUnitSelector(selectedSquare);
       world.addEntity(unitSelector);
       selectedTile = selectedSquare;
-      showActionMenu();
     }
-  }
-
-  private void showActionMenu() {
-    TextButton testButton = new TextButton("Attack", skin);
-    Vector3 screenSpacePoint = new Vector3(selectedTile.x + gridSquareSize, selectedTile.y, 0);
-    camera.unproject(screenSpacePoint);
-
-
-    // Offset gridSquareSize px to the right of the unit.
-    testButton.setX(screenSpacePoint.x);
-    testButton.setY(screenSpacePoint.y);
-    unitActionMenu.addActor(testButton);
-  }
-
-  private void hideActionMenu() {
-    unitActionMenu.clear();
   }
 
   public boolean isValidSquare(GridPoint2 square) {

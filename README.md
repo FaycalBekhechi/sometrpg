@@ -8,13 +8,13 @@ A tactical role-playing game I'm working on that currently lacks a name, or a pr
 
 Technologies
 --------
-- LibGDX (http://libgdx.badlogicgames.com)
+- [LibGDX](http://libgdx.badlogicgames.com)
   - Cross-platform OpenGL wrapper and application library
-- Artemis (http://gamadu.com/artemis)
+- [Artemis](http://gamadu.com/artemis)
   - Entity-Component framework to compartmentalize per-frame game logic
-- EasyFlow (https://github.com/Beh01der/EasyFlow)
+- [EasyFlow](https://github.com/Beh01der/EasyFlow)
   - Observable finite state machine library to organize user interaction flows
-- JGraphT (http://jgrapht.org/)
+- [JGraphT](http://jgrapht.org/)
   - Common graph algorithms
-- Gradle (http://www.gradle.org/)
+- [Gradle](http://www.gradle.org/)
   - Build system

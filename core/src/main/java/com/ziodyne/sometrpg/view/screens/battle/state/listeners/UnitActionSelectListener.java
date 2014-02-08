@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
@@ -23,6 +25,7 @@ import java.util.Set;
  * Logic for entering and exiting the state where the player is selecting an action for a unit.
  */
 public class UnitActionSelectListener extends FlowListener<BattleContext> {
+  private static final Logger LOG = new GdxLogger(UnitActionSelectListener.class);
   private Skin skin;
   private OrthographicCamera camera;
   private Stage stage;
@@ -56,6 +59,7 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
     Combatant selectedCombatant = context.selectedCombatant;
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
     if (allowedActions.isEmpty()) {
+      LOG.log("Unit actions exhausted.");
       context.trigger(BattleEvent.ACTIONS_EXHAUSTED);
     } else {
 
@@ -70,15 +74,24 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
       actionMenu.addSelectedListener(new ActionSelectedHandler() {
         @Override
         public void handle(CombatantAction selectedAction) throws Exception {
-          // For now, we always just select Move.
-          context.trigger(BattleEvent.MOVE_ACTION_SELECTED);
+          switch (selectedAction) {
+            case ATTACK:
+              context.trigger(BattleEvent.ATTACK_ACTION_SELECTED);
+              break;
+            case MOVE:
+              context.trigger(BattleEvent.MOVE_ACTION_SELECTED);
+              break;
+            default:
+              throw new IllegalArgumentException("Combatant action " + selectedAction + " not mapped to event.");
+          }
         }
       });
-      
+
       stage.addActor(actionMenu);
       previousInputProcessor = Gdx.input.getInputProcessor();
       Gdx.input.setInputProcessor(stage);
       context.mapController.disable();
     }
   }
+
 }

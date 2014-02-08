@@ -46,6 +46,7 @@ import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackTargetSelectionListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.SelectingMoveLocation;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelectListener;
@@ -184,7 +185,8 @@ public class TestBattle extends BattleScreen {
       turnListenerFactory.create(camera, this),
       new UnitActionSelectListener(skin, camera, menuStage),
       new SelectingMoveLocation(this),
-      new UnitMoving(this)
+      new UnitMoving(this),
+      new AttackTargetSelectionListener()
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

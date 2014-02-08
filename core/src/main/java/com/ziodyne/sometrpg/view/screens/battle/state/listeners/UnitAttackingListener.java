@@ -27,6 +27,11 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
     if (allowedActions.isEmpty()) {
       context.trigger(BattleEvent.ACTIONS_EXHAUSTED);
     } else {
+      Combatant attacker = context.selectedCombatant;
+      Combatant defender = context.defendingCombatant;
+      context.battle.executeAttack(attacker, context.attackToExecute, defender);
+
+      // Attacking is instant for now
       context.trigger(BattleEvent.UNIT_ATTACKED);
     }
   }

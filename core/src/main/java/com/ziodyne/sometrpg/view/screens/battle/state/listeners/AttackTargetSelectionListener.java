@@ -3,6 +3,7 @@ package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
 import com.google.common.base.Optional;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.WeaponAttack;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
@@ -34,7 +35,10 @@ public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
   @Override
   public void onEnter(final BattleContext context) throws LogicViolationError {
     context.mapController.disable();
-    Set<GridPoint2> attackSquares = screen.showAttackRange(context.selectedCombatant, new WeaponAttack());
+    Attack attack = new WeaponAttack();
+    context.attackToExecute = attack;
+
+    Set<GridPoint2> attackSquares = screen.showAttackRange(context.selectedCombatant, attack);
 
     gridSelectionController = new GridSelectionController(screen.getCamera(), attackSquares, new GridSelectionController.SelectionHandler() {
       @Override

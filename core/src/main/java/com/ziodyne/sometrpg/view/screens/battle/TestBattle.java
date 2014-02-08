@@ -1,6 +1,9 @@
 package com.ziodyne.sometrpg.view.screens.battle;
 
 import au.com.ds.ef.EasyFlow;
+import au.com.ds.ef.StatefulContext;
+import au.com.ds.ef.call.ExecutionErrorHandler;
+import au.com.ds.ef.err.ExecutionError;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenManager;
@@ -197,6 +200,13 @@ public class TestBattle extends BattleScreen {
       listener.bind(flow);
     }
 
+    flow.whenError(new ExecutionErrorHandler<StatefulContext>() {
+      @Override
+      public void call(ExecutionError error, StatefulContext context) {
+        logger.error(error.getMessage(), error.getCause());
+      }
+    });
+
     flow.start(new BattleContext(battle));
 
     logger.log("Battle intialized.");
@@ -271,7 +281,7 @@ public class TestBattle extends BattleScreen {
 
     BattleMap battleMap = new BattleMap(tiles);
     battleMap.addUnit(player, 7, 8);
-    battleMap.addUnit(enemy, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
+    battleMap.addUnit(enemy, 10, 10);
     this.map = battleMap;
 
 

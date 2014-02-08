@@ -15,10 +15,10 @@ public class BattleFlow {
   public static final EasyFlow<BattleContext> FLOW =
     from(PLAYER_TURN).transit(
       on(FRIENDLY_UNIT_SELECTED).to(SELECTING_UNIT_ACTION).transit(
+        on(ACTIONS_EXHAUSTED).to(PLAYER_TURN),
         on(FRIENDLY_UNIT_SELECTION_CANCEL).to(PLAYER_TURN),
         on(MOVE_ACTION_SELECTED).to(SELECTING_MOVE_LOCATION).transit(
           on(MOVE_LOC_SELECTED).to(UNIT_MOVING).transit(
-            on(ACTIONS_EXHAUSTED).to(PLAYER_TURN),
             on(UNIT_MOVED).to(SELECTING_UNIT_ACTION)
           ),
           on(MOVE_ACTION_CANCEL).to(PLAYER_TURN)
@@ -26,7 +26,6 @@ public class BattleFlow {
         on(ATTACK_ACTION_SELECTED).to(SELECTING_ATTACK_TARGET).transit(
           on(TARGET_SELECTED).to(AWAITING_ATTACK_CONFIRMATION).transit(
             on(ATTACK_CONFIRMED).to(UNIT_ATTACKING).transit(
-              on(ACTIONS_EXHAUSTED).to(PLAYER_TURN),
               on(UNIT_ATTACKED).to(SELECTING_UNIT_ACTION)
             ),
             on(ATTACK_CANCEL).to(SELECTING_ATTACK_TARGET)

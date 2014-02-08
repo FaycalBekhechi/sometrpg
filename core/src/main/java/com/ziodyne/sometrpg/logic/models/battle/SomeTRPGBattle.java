@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.Character;
+import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -75,6 +76,8 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     if (!defender.isAlive()) {
       throw new GameLogicException("Cannot attack a dead combatant.");
     }
+
+    combatResolver.execute(new BattleAction(attacker, defender, attack));
 
     recordAction(attacker);
   }

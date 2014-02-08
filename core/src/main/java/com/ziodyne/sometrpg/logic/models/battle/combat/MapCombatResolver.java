@@ -22,7 +22,7 @@ public class MapCombatResolver implements CombatResolver {
       return false;
     }
 
-    return false;
+    return true;
   }
 
   @Override

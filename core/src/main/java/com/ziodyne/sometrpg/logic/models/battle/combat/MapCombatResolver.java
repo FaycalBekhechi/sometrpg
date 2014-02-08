@@ -22,6 +22,10 @@ public class MapCombatResolver implements CombatResolver {
       return false;
     }
 
+    if (isFriendlyFire(action)) {
+      return false;
+    }
+
     return true;
   }
 
@@ -37,6 +41,12 @@ public class MapCombatResolver implements CombatResolver {
 
     int damage = computeDamageSubtotal(action.getAttack(), action.getAttacker(), action.getDefender());
     action.getDefender().applyDamage(damage);
+  }
+
+  private static boolean isFriendlyFire(BattleAction action) {
+    Combatant attacker = action.getAttacker();
+    Combatant defender = action.getDefender();
+    return attacker.getArmy().equals(defender.getArmy());
   }
 
   static int computeDamageSubtotal(Attack attack, Combatant attacker, Combatant defender) {

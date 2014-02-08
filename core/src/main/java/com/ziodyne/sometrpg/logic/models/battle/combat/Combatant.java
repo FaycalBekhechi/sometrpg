@@ -1,6 +1,7 @@
 package com.ziodyne.sometrpg.logic.models.battle.combat;
 
 import com.ziodyne.sometrpg.logic.models.Character;
+import com.ziodyne.sometrpg.logic.models.battle.Army;
 import com.ziodyne.sometrpg.logic.util.UnitUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -9,12 +10,21 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * This is the representation of a character on the battlefield.
  */
 public class Combatant {
+  private Army army;
   private final Character character;
   private int health;
 
   public Combatant(Character character) {
     this.character = character;
     this.health = UnitUtils.getMaxHealth(character);
+  }
+
+  public Army getArmy() {
+    return army;
+  }
+
+  public void setArmy(Army army) {
+    this.army = army;
   }
 
   public void applyDamage(int amount) {

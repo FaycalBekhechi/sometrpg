@@ -248,8 +248,11 @@ public class TestBattle extends BattleScreen {
     Combatant player = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test3x"));
     Combatant enemy = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
 
-    Army playerArmy = new Army(Sets.newHashSet(player), "Greil Mercenaries", ArmyType.PLAYER);
-    Army enemyArmy = new Army(Sets.newHashSet(enemy), "Dawn Brigade", ArmyType.ENEMY);
+    Army playerArmy = new Army("Greil Mercenaries", ArmyType.PLAYER);
+    playerArmy.addCombatant(player);
+
+    Army enemyArmy = new Army("Dawn Brigade", ArmyType.ENEMY);
+    enemyArmy.addCombatant(enemy);
 
     Set<Tile> tiles = new HashSet<Tile>(tileLayer.getHeight());
     Map<GridPoint2, Tile> pointToTile = Maps.newHashMap();

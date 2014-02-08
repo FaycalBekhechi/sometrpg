@@ -6,6 +6,9 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
+/**
+ * A handler for the state where a the user must confirm a preview of an action.
+ */
 public class AttackConfirmationListener extends FlowListener<BattleContext> {
   public AttackConfirmationListener() {
     super(BattleState.AWAITING_ATTACK_CONFIRMATION);

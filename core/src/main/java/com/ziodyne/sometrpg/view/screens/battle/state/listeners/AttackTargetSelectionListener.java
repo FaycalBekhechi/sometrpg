@@ -16,6 +16,9 @@ import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
 import java.util.Set;
 
+/**
+ * Handler for the state where a user is selecting a target for their attack.
+ */
 public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
   private final BattleScreen screen;
   private GridSelectionController gridSelectionController;

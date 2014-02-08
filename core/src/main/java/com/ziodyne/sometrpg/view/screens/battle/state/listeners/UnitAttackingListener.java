@@ -10,6 +10,9 @@ import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
 import java.util.Set;
 
+/**
+ * A handle for the state where an attack is being executed.
+ */
 public class UnitAttackingListener extends FlowListener<BattleContext> {
   public UnitAttackingListener() {
     super(BattleState.UNIT_ATTACKING);

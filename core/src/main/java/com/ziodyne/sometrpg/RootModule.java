@@ -42,10 +42,6 @@ public class RootModule extends AbstractModule {
 
   @Provides
   public ObjectMapper provideJacksonMapper() {
-    ObjectMapper mapper = new ObjectMapper();
-
-    // Configure any global mapper settings here in the future.
-
-    return mapper;
+    return new ObjectMapper();
   }
 }

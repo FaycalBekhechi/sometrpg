@@ -11,9 +11,7 @@ public class ModelTestUtils {
   private ModelTestUtils() { }
 
   public static BattleMap createEmptyMap() {
-    BattleMap map = new BattleMap(new HashSet<Tile>());
-
-    return map;
+    return new BattleMap(new HashSet<Tile>());
   }
 
   public static BattleMap createMap(int size) {

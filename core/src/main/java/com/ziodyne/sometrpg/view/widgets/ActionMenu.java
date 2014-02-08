@@ -18,8 +18,8 @@ public class ActionMenu extends Group {
   private static final Logger LOG = new GdxLogger(ActionMenu.class);
 
   private ActionSelectedHandler selectedHandler;
-  private Set<CombatantAction> availableActions;
-  private Skin skin;
+  private final Set<CombatantAction> availableActions;
+  private final Skin skin;
 
   public ActionMenu(Set<CombatantAction> availableActions, Skin skin) {
     this.availableActions = availableActions;

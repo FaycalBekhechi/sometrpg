@@ -36,7 +36,7 @@ public class AssetBundleLoader {
 
   private boolean isLoading;
 
-  private Set<Asset<?>> remainingAssets = new HashSet<Asset<?>>();
+  private final Set<Asset<?>> remainingAssets = new HashSet<Asset<?>>();
 
   private int totalNumAssets;
 

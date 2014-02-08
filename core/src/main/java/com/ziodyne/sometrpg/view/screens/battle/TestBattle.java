@@ -51,6 +51,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackTargetSele
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.SelectingMoveLocation;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelectListener;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitAttackingListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitMoving;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
@@ -188,7 +189,8 @@ public class TestBattle extends BattleScreen {
       new SelectingMoveLocation(this),
       new UnitMoving(this),
       new AttackTargetSelectionListener(),
-      new AttackConfirmationListener()
+      new AttackConfirmationListener(),
+      new UnitAttackingListener()
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

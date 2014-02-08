@@ -39,7 +39,7 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
   @Override
   public void onLeave(BattleContext context) throws LogicViolationError {
     actionMenu.clear();
-    context.mapController.enable();;
+    context.mapController.enable();
     if (previousInputProcessor != null) {
       Gdx.input.setInputProcessor(previousInputProcessor);
     }

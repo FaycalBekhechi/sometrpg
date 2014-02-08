@@ -2,7 +2,6 @@ package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;

@@ -43,8 +43,8 @@ public class StatChartUtilsTest {
     Polygon crappyRadarChart = StatChartUtils.getGrowthRadarChart(crappyCharacter, StatChartUtils.DEFAULT_CHARTED_STATS, 0);
     
     float[] vertices = crappyRadarChart.getTransformedVertices();
-    for (int i = 0; i < vertices.length; i++) {
-      if (Math.abs(0 - vertices[i]) > epsilon) {
+    for (float vertex : vertices) {
+      if (Math.abs(0 - vertex) > epsilon) {
         Assert.fail("Zero radius radar chart has non-zero (fuzzy match) vertex...");
       }
     }

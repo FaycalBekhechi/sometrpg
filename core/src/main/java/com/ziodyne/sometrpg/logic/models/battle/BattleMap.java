@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
-import com.google.common.base.Equivalence;
 import com.google.common.collect.Maps;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;

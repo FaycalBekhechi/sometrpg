@@ -8,7 +8,6 @@ import com.artemis.Entity;
 import com.artemis.annotations.Mapper;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.math.GridPoint2;
-import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.view.components.Navigating;
 import com.ziodyne.sometrpg.view.components.Position;

@@ -94,7 +94,7 @@ public class BattleMapController extends InputAdapter implements Toggleable {
       context.selectedSquare = selectedPoint;
       try {
         context.trigger(BattleEvent.FRIENDLY_UNIT_SELECTED);
-      } catch (LogicViolationError e) {
+      } catch (LogicViolationError ignored) {
 
       }
     }

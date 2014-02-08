@@ -1,19 +1,13 @@
 package com.ziodyne.sometrpg.logic.navigation;
 
-import com.google.common.base.Equivalence;
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
-import com.ziodyne.sometrpg.logic.util.MathUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -38,7 +38,7 @@ public class UnitMovementController extends InputAdapter {
       try {
         context.trigger(BattleEvent.MOVE_LOC_SELECTED);
         return true;
-      } catch (LogicViolationError e) {
+      } catch (LogicViolationError ignored) {
 
       }
     }
@@ -52,7 +52,7 @@ public class UnitMovementController extends InputAdapter {
       try {
         context.trigger(BattleEvent.MOVE_ACTION_CANCEL);
         return true;
-      } catch (LogicViolationError e) {
+      } catch (LogicViolationError ignored) {
 
       }
     }

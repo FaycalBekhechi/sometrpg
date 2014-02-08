@@ -16,6 +16,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.widgets.ActionMenu;
 import com.ziodyne.sometrpg.view.widgets.ActionSelectedHandler;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
@@ -25,6 +26,8 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
   private Skin skin;
   private OrthographicCamera camera;
   private Stage stage;
+
+  @Nullable
   private ActionMenu actionMenu;
   private InputProcessor previousInputProcessor;
 
@@ -38,7 +41,10 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
 
   @Override
   public void onLeave(BattleContext context) throws LogicViolationError {
-    actionMenu.clear();
+    if (actionMenu != null) {
+      actionMenu.clear();
+    }
+
     context.mapController.enable();
     if (previousInputProcessor != null) {
       Gdx.input.setInputProcessor(previousInputProcessor);
@@ -49,26 +55,30 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
   public void onEnter(final BattleContext context) throws LogicViolationError {
     Combatant selectedCombatant = context.selectedCombatant;
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
+    if (allowedActions.isEmpty()) {
+      context.trigger(BattleEvent.ACTIONS_EXHAUSTED);
+    } else {
 
-    actionMenu = new ActionMenu(allowedActions, skin);
+      actionMenu = new ActionMenu(allowedActions, skin);
 
-    Vector3 screenSpaceSelectionCoords = new Vector3(context.selectedSquare.x+1, context.selectedSquare.y, 0);
-    camera.project(screenSpaceSelectionCoords);
+      Vector3 screenSpaceSelectionCoords = new Vector3(context.selectedSquare.x+1, context.selectedSquare.y, 0);
+      camera.project(screenSpaceSelectionCoords);
 
-    actionMenu.setX(screenSpaceSelectionCoords.x);
-    actionMenu.setY(screenSpaceSelectionCoords.y);
+      actionMenu.setX(screenSpaceSelectionCoords.x);
+      actionMenu.setY(screenSpaceSelectionCoords.y);
 
-    actionMenu.addSelectedListener(new ActionSelectedHandler() {
-      @Override
-      public void handle(CombatantAction selectedAction) throws Exception {
-        // For now, we always just select Move.
-        context.trigger(BattleEvent.MOVE_ACTION_SELECTED);
-      }
-    });
-
-    stage.addActor(actionMenu);
-    previousInputProcessor = Gdx.input.getInputProcessor();
-    Gdx.input.setInputProcessor(stage);
-    context.mapController.disable();
+      actionMenu.addSelectedListener(new ActionSelectedHandler() {
+        @Override
+        public void handle(CombatantAction selectedAction) throws Exception {
+          // For now, we always just select Move.
+          context.trigger(BattleEvent.MOVE_ACTION_SELECTED);
+        }
+      });
+      
+      stage.addActor(actionMenu);
+      previousInputProcessor = Gdx.input.getInputProcessor();
+      Gdx.input.setInputProcessor(stage);
+      context.mapController.disable();
+    }
   }
 }

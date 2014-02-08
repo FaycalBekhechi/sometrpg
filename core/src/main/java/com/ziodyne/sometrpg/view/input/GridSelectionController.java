@@ -1,27 +1,29 @@
 package com.ziodyne.sometrpg.view.input;
 
-import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
-import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
-import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 
 import java.util.Set;
 
-public class UnitMovementController extends InputAdapter {
+public class GridSelectionController extends InputAdapter {
   private final Set<GridPoint2> bounds;
   private final OrthographicCamera camera;
-  private final BattleContext context;
+  private final SelectionHandler handler;
+
+  public static interface SelectionHandler {
+    public void handleSelection(GridPoint2 selectedPoint);
+    public void handleCancelation();
+  }
 
 
-  public UnitMovementController(OrthographicCamera camera, Set<GridPoint2> bounds, BattleContext context) {
+  public GridSelectionController(OrthographicCamera camera, Set<GridPoint2> bounds, SelectionHandler handler) {
     this.camera = camera;
     this.bounds = bounds;
-    this.context = context;
+    this.handler = handler;
   }
 
   @Override
@@ -34,13 +36,7 @@ public class UnitMovementController extends InputAdapter {
     GridPoint2 selectedPoint = new GridPoint2(x, y);
 
     if (bounds.contains(selectedPoint)) {
-      context.movementDestination = selectedPoint;
-      try {
-        context.trigger(BattleEvent.MOVE_LOC_SELECTED);
-        return true;
-      } catch (LogicViolationError ignored) {
-
-      }
+      handler.handleSelection(selectedPoint);
     }
 
     return false;
@@ -49,12 +45,7 @@ public class UnitMovementController extends InputAdapter {
   @Override
   public boolean keyUp(int keycode) {
     if (Input.Keys.ESCAPE == keycode) {
-      try {
-        context.trigger(BattleEvent.MOVE_ACTION_CANCEL);
-        return true;
-      } catch (LogicViolationError ignored) {
-
-      }
+      handler.handleCancelation();
     }
 
     return false;

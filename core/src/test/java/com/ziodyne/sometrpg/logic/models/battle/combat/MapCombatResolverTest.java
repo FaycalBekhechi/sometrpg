@@ -20,6 +20,11 @@ public class MapCombatResolverTest {
   public void testComputeDamageSubtotal() throws Exception {
     Attack missingAttack = new Attack() {
       @Override
+      public int getRange() {
+        return Integer.MAX_VALUE;
+      }
+
+      @Override
       public int computeDamage(Combatant attacker, Combatant defender) {
         return 20;
       }
@@ -41,6 +46,11 @@ public class MapCombatResolverTest {
     final int baseDamage = 20;
     Attack crittingAttack = new Attack() {
       @Override
+      public int getRange() {
+        return Integer.MAX_VALUE;
+      }
+
+      @Override
       public int computeDamage(Combatant attacker, Combatant defender) {
         return baseDamage;
       }
@@ -61,6 +71,11 @@ public class MapCombatResolverTest {
 
     final int basicAttackDamage = 15;
     Attack regularAttack = new Attack() {
+      @Override
+      public int getRange() {
+        return Integer.MAX_VALUE;
+      }
+
       @Override
       public int computeDamage(Combatant attacker, Combatant defender) {
         return 15;

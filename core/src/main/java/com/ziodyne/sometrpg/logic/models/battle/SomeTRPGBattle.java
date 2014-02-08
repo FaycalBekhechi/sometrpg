@@ -79,6 +79,23 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     recordAction(attacker);
   }
 
+  public Set<Tile> getAttackableTiles(Combatant combatant, Attack attack) {
+    GridPoint2 position = map.getCombatantPosition(combatant);
+    if (position == null) {
+      throw new GameLogicException("Cannot get attack range for combatant that is not on the map.");
+    }
+
+    Set<GridPoint2> attackablePoints = movementRangeFinder.computeRange(map, position, attack.getRange()+1);
+
+    Set<Tile> attackableTiles = Sets.newHashSet();
+    for (GridPoint2 point : attackablePoints) {
+      Tile tile = map.getTile(point.x, point.y);
+      attackableTiles.add(tile);
+    }
+
+    return attackableTiles;
+  }
+
   @Override
   public Set<Tile> getMovableTiles(Combatant combatant) {
     GridPoint2 position = map.getCombatantPosition(combatant);

@@ -3,9 +3,10 @@ package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
-import com.ziodyne.sometrpg.view.input.UnitMovementController;
+import com.ziodyne.sometrpg.view.input.GridSelectionController;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
@@ -17,7 +18,7 @@ import java.util.Set;
  */
 public class SelectingMoveLocation extends FlowListener<BattleContext> {
   private final BattleScreen battle;
-  private UnitMovementController movementController;
+  private GridSelectionController movementController;
 
   public SelectingMoveLocation(BattleScreen screen) {
     super(BattleState.SELECTING_MOVE_LOCATION);
@@ -32,10 +33,25 @@ public class SelectingMoveLocation extends FlowListener<BattleContext> {
   }
 
   @Override
-  public void onEnter(BattleContext context) throws LogicViolationError {
+  public void onEnter(final BattleContext context) throws LogicViolationError {
     context.mapController.disable();
     Set<GridPoint2> bounds = battle.showMoveRange(context.selectedCombatant);
-    movementController = new UnitMovementController(battle.getCamera(), bounds, context);
+    movementController = new GridSelectionController(battle.getCamera(), bounds, new GridSelectionController.SelectionHandler() {
+      @Override
+      public void handleSelection(GridPoint2 selectedPoint) {
+        context.movementDestination = selectedPoint;
+        try {
+          context.trigger(BattleEvent.MOVE_LOC_SELECTED);
+        } catch (LogicViolationError ignored) {  }
+      }
+
+      @Override
+      public void handleCancelation() {
+        try {
+          context.trigger(BattleEvent.MOVE_ACTION_CANCEL);
+        } catch (LogicViolationError ignored) { }
+      }
+    });
     Gdx.input.setInputProcessor(movementController);
   }
 }

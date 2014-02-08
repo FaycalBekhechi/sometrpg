@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.view.entities;
 
 import com.artemis.Entity;
 import com.artemis.World;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -48,6 +49,15 @@ public class EntityFactory {
     unitEntity.addComponent(new BattleUnit(combatant));
 
     return unitEntity;
+  }
+
+  public Entity createMapAttackOverlay(Set<GridPoint2> locations) {
+    Entity movementOverlay = world.createEntity();
+
+    MapSquareOverlay movementOverlayComponent = new MapSquareOverlay(locations, new Color(1, 0, 0, 0.5f));
+    movementOverlay.addComponent(movementOverlayComponent);
+
+    return movementOverlay;
   }
 
   public Entity createMapMovementOverlay(Set<GridPoint2> locations) {

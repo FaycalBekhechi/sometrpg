@@ -30,7 +30,8 @@ public class BattleFlow {
               on(UNIT_ATTACKED).to(SELECTING_UNIT_ACTION)
             ),
             on(ATTACK_CANCEL).to(SELECTING_ATTACK_TARGET)
-          )
+          ),
+          on(ATTACK_CANCEL).to(PLAYER_TURN)
         )
       ),
       on(ENEMY_UNIT_SELECTED).to(SHOWING_UNIT_DETAILS).transit(

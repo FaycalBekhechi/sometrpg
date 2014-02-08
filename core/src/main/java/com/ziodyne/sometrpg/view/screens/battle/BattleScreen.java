@@ -18,7 +18,9 @@ import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.logic.models.battle.combat.WeaponAttack;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
@@ -46,6 +48,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
   protected float gridSquareSize = 32;
   private Entity currentMovementOverlay;
+  private Entity currentAttackOverlay;
 
   public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize) {
     this.gridSquareSize = gridSquareSize;
@@ -70,6 +73,22 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   public Entity getUnitEntity(Character character) {
     return entityIndex.get(character);
+  }
+
+  private void setAttackOverlay(Entity overlay) {
+    if (currentAttackOverlay != null) {
+      currentAttackOverlay.deleteFromWorld();
+    }
+
+    world.addEntity(overlay);
+    currentAttackOverlay = overlay;
+  }
+
+  public void hideAttackRange() {
+    if (currentAttackOverlay != null) {
+      currentAttackOverlay.deleteFromWorld();
+      currentAttackOverlay = null;
+    }
   }
 
   private void setMovementOverlay(Entity overlay) {
@@ -98,6 +117,22 @@ public abstract class BattleScreen extends ScreenAdapter {
 
     Tile tile = battle.getTile(dest);
     battle.moveCombatant(combatant, tile);
+  }
+
+  public void attackCombatant(Combatant attacker, Combatant defender) {
+    battle.executeAttack(attacker, new WeaponAttack(), defender);
+  }
+
+  public Set<GridPoint2> showAttackRange(Combatant combatant, Attack attack) {
+    Set<GridPoint2> locations = Sets.newHashSet();
+    for (Tile tile : battle.getAttackableTiles(combatant, attack)) {
+      locations.add(tile.getPosition());
+    }
+
+    Entity attackOverlay = entityFactory.createMapAttackOverlay(locations);
+    setAttackOverlay(attackOverlay);
+
+    return locations;
   }
 
   public Set<GridPoint2> showMoveRange(Combatant combatant) {

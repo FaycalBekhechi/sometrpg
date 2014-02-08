@@ -192,7 +192,7 @@ public class TestBattle extends BattleScreen {
       new SelectingMoveLocation(this),
       new UnitMoving(this),
       new AttackTargetSelectionListener(this),
-      new AttackConfirmationListener(),
+      new AttackConfirmationListener(skin, menuStage, camera),
       new UnitAttackingListener()
     );
 

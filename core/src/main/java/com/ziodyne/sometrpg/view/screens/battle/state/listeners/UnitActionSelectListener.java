@@ -15,6 +15,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
+import com.ziodyne.sometrpg.view.screens.battle.state.InputStealingFlowListener;
 import com.ziodyne.sometrpg.view.widgets.ActionMenu;
 import com.ziodyne.sometrpg.view.widgets.ActionSelectedHandler;
 
@@ -24,7 +25,7 @@ import java.util.Set;
 /**
  * Logic for entering and exiting the state where the player is selecting an action for a unit.
  */
-public class UnitActionSelectListener extends FlowListener<BattleContext> {
+public class UnitActionSelectListener extends InputStealingFlowListener<BattleContext> {
   private static final Logger LOG = new GdxLogger(UnitActionSelectListener.class);
   private Skin skin;
   private OrthographicCamera camera;
@@ -32,7 +33,6 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
 
   @Nullable
   private ActionMenu actionMenu;
-  private InputProcessor previousInputProcessor;
 
   public UnitActionSelectListener(Skin skin, OrthographicCamera camera, Stage stage) {
     super(BattleState.SELECTING_UNIT_ACTION);
@@ -44,18 +44,19 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
 
   @Override
   public void onLeave(BattleContext context) throws LogicViolationError {
+    super.onLeave(context);
+
     if (actionMenu != null) {
       actionMenu.clear();
     }
 
     context.mapController.enable();
-    if (previousInputProcessor != null) {
-      Gdx.input.setInputProcessor(previousInputProcessor);
-    }
   }
 
   @Override
   public void onEnter(final BattleContext context) throws LogicViolationError {
+    super.onEnter(context);
+
     Combatant selectedCombatant = context.selectedCombatant;
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
     if (allowedActions.isEmpty()) {
@@ -88,7 +89,6 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> {
       });
 
       stage.addActor(actionMenu);
-      previousInputProcessor = Gdx.input.getInputProcessor();
       Gdx.input.setInputProcessor(stage);
       context.mapController.disable();
     }

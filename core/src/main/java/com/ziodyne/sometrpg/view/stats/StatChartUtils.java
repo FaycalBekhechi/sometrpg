@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class StatChartUtils {
 
-  // The charts show every stat except level and HP
-  public static final EnumSet<Stat> DEFAULT_CHARTED_STATS = EnumSet.complementOf(EnumSet.of(Stat.LEVEL, Stat.HP));
+  // The charts show every stat except movement, level and HP
+  public static final EnumSet<Stat> DEFAULT_CHARTED_STATS = EnumSet.complementOf(EnumSet.of(Stat.LEVEL, Stat.HP, Stat.MOVEMENT));
 
   private StatChartUtils() { }
 

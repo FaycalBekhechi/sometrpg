@@ -9,6 +9,7 @@ import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -59,4 +60,5 @@ public class ActionMenu extends Group {
   private Actor createControlForAction(CombatantAction action) {
     return new TextButton(action.toString(), skin);
   }
+
 }

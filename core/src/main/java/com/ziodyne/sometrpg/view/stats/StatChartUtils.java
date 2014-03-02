@@ -89,7 +89,7 @@ public class StatChartUtils {
    * @return A {@link Polygon} representing a radar chart of the stats of a unit.
    */
   public static Polygon getStatRadarChart(Character character, EnumSet<Stat> chartedStats, float radius) {
-    Map<Stat, Integer> statSheet = UnitUtils.indexStatSheetByValue(character.getStatSheet());
+    Map<Stat, Integer> statSheet = character.getStatSheet();
 
     List<Float> unitStatRatios = new ArrayList<Float>(chartedStats.size());
     for (Stat stat : chartedStats) {
@@ -108,7 +108,7 @@ public class StatChartUtils {
    * @return A {@link Polygon} representing a radar chart of the stats of a unit.
    */
   public static Polygon getMaxStatRadarChart(Character character, EnumSet<Stat> chartedStats, float radius) {
-    Map<Stat, Integer> maxStatSheet = UnitUtils.indexStatSheetByValue(character.getMaxStatSheet());
+    Map<Stat, Integer> maxStatSheet = character.getMaxStatSheet();
 
     List<Float> unitMaxStatRatios = new ArrayList<Float>(chartedStats.size());
     for (Stat stat : chartedStats) {

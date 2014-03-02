@@ -8,5 +8,6 @@ public enum Stat {
   SPEED,
   SKILL,
   LUCK,
-  LEVEL
+  LEVEL,
+  MOVEMENT
 }

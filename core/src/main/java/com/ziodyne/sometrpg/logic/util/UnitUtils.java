@@ -19,19 +19,19 @@ public class UnitUtils {
   public static void levelUp(Character character) {
     UnitGrowth growths = character.getGrowths();
     
-    Set<UnitStat> newStatSheet = new HashSet<UnitStat>(Stat.values().length);
-    for (UnitStat stat : character.getStatSheet()) {
-      if (willGrow(growths, stat)) {
-        newStatSheet.add(new UnitStat(stat.getValue() + 1, stat.getStat()));
+    Map<Stat, Integer> newStatSheet = new HashMap<Stat, Integer>(Stat.values().length);
+    for (Map.Entry<Stat, Integer> stat : character.getStatSheet().entrySet()) {
+      if (willGrow(growths, stat.getKey(), stat.getValue())) {
+        newStatSheet.put(stat.getKey(), stat.getValue()+1);
       } else {
-        newStatSheet.add(new UnitStat(stat.getValue(), stat.getStat()));
+        newStatSheet.put(stat.getKey(), stat.getValue());
       }
     }
     
     character.setStatSheet(newStatSheet);
   }
   
-  private static boolean willGrow(UnitGrowth growths, UnitStat stat) {
+  private static boolean willGrow(UnitGrowth growths, Stat stat, Integer value) {
     return Math.random() < growths.getGrowthChance(stat);
   }
   
@@ -52,7 +52,7 @@ public class UnitUtils {
   }
 
   public static int getMaxHealth(Character character) {
-    Map<Stat, Integer> stats = indexStatSheetByValue(character.getStatSheet());
+    Map<Stat, Integer> stats = character.getStatSheet();
     Integer hp = stats.get(Stat.HP);
     if (hp == null) {
       throw new IllegalArgumentException("Unit has no health defined.");

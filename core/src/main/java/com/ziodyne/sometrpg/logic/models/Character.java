@@ -21,20 +21,19 @@ public class Character {
   private static final AtomicLong lastIdentifier = new AtomicLong(0L);
   
   private final long id;
-  private final int movementRange = UnitUtils.DEFAULT_MOVEMENT_RANGE;
-  private final Set<UnitStat> maxStatSheet;
+  private final Map<Stat, Integer> maxStatSheet;
   private final UnitGrowth growths;
   private String name;
-  private Set<UnitStat> statSheet;
+  private Map<Stat, Integer> statSheet;
   private Set<CombatantAction> attackActions = EnumSet.of(CombatantAction.ATTACK);
 
-  public Character(Set<UnitStat> maxStatSheet, UnitGrowth growths, String name, Set<UnitStat> statSheet,
+  public Character(Map<Stat, Integer> maxStatSheet, UnitGrowth growths, String name, Map<Stat, Integer> statSheet,
                    Set<CombatantAction> attackActions) {
     this(maxStatSheet, growths, statSheet, name);
     this.attackActions = Sets.union(this.attackActions, attackActions);
   }
 
-  public Character(Set<UnitStat> maxStatSheet, UnitGrowth growths, Set<UnitStat> statSheet, String name) {
+  public Character(Map<Stat, Integer> maxStatSheet, UnitGrowth growths, Map<Stat, Integer> statSheet, String name) {
     this.id = lastIdentifier.incrementAndGet();
     this.maxStatSheet = Objects.requireNonNull(maxStatSheet);
     this.growths = Objects.requireNonNull(growths);
@@ -45,7 +44,7 @@ public class Character {
   }
 
   public int getMovementRange() {
-    return movementRange;
+    return statSheet.get(Stat.MOVEMENT);
   }
 
   public String getName() {
@@ -56,18 +55,26 @@ public class Character {
     this.name = name;
   }
 
-  public Set<UnitStat> getMaxStatSheet() {
+  public Map<Stat, Integer> getMaxStatSheet() {
+
     return maxStatSheet;
   }
 
-  public Set<UnitStat> getStatSheet() {
+  public Map<Stat, Integer> getStatSheet() {
+
     return statSheet;
   }
 
-  public void setStatSheet(Set<UnitStat> statSheet) {
+  public void setStatSheet(Map<Stat, Integer> statSheet) {
+
     this.statSheet = statSheet;
   }
-  
+
+  public void setAttackActions(Set<CombatantAction> attackActions) {
+
+    this.attackActions = attackActions;
+  }
+
   public UnitGrowth getGrowths() {
     return growths;
   }
@@ -81,12 +88,9 @@ public class Character {
   }
 
   private void validateStats() {
-    Map<Stat, Integer> currentStats = UnitUtils.indexStatSheetByValue(statSheet);
-    Map<Stat, Integer> maxStats = UnitUtils.indexStatSheetByValue(maxStatSheet);
-
     for (Stat stat : EnumSet.allOf(Stat.class)) {
-      Integer value = currentStats.get(stat);
-      Integer cap = maxStats.get(stat);
+      Integer value = statSheet.get(stat);
+      Integer cap = maxStatSheet.get(stat);
 
       if (value == null) {
         throw new IllegalArgumentException("Unit missing stat value for: " + stat.name());

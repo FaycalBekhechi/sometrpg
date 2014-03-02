@@ -9,45 +9,40 @@ import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.Constants;
 import com.ziodyne.sometrpg.logic.models.Stat;
 import com.ziodyne.sometrpg.logic.models.Character;
+import com.ziodyne.sometrpg.logic.models.StatSheetBuilder;
 import com.ziodyne.sometrpg.logic.models.UnitGrowth;
 import com.ziodyne.sometrpg.logic.models.UnitStat;
 
 public class ModelTestUtils {
   private ModelTestUtils() { }
   
-  public static Set<UnitStat> homogeneousStats(int value) {
-    EnumSet<Stat> stats = EnumSet.allOf(Stat.class);
-    
-    Set<UnitStat> results = Sets.newHashSet();
-    
-    for (Stat stat : stats) {
-      results.add(new UnitStat(value, stat));
+  public static Map<Stat, Integer> homogeneousStats(int value) {
+    StatSheetBuilder builder = new StatSheetBuilder();
+    for (Stat stat : EnumSet.allOf(Stat.class)) {
+      builder.set(stat, value);
     }
-    
-    return results;  
+
+    return builder.build();
   }
 
-  public static Set<UnitStat> randomStats() {
-    EnumSet<Stat> stats = EnumSet.allOf(Stat.class);
-
-    Set<UnitStat> results = Sets.newHashSet();
-
-    for (Stat stat : stats) {
-      results.add(new UnitStat(Math.round((long) (Math.random() * Constants.STAT_MAX)), stat));
+  public static Map<Stat, Integer> randomStats() {
+    StatSheetBuilder builder = new StatSheetBuilder();
+    for (Stat stat : EnumSet.allOf(Stat.class)) {
+      builder.set(stat, Math.round((long) (Math.random() * Constants.STAT_MAX)));
     }
 
-    return results;
+    return builder.build();
   }
   
-  public static Set<UnitStat> createStats() {
+  public static Map<Stat, Integer> createStats() {
     return homogeneousStats(10);
   }
   
-  public static Set<UnitStat> createMinStats() {
+  public static Map<Stat, Integer> createMinStats() {
     return homogeneousStats(0);
   }
   
-  public static Set<UnitStat> createMaxStats() {
+  public static Map<Stat, Integer> createMaxStats() {
     return homogeneousStats(40);
   }
   

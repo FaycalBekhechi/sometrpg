@@ -1,5 +1,7 @@
 package com.ziodyne.sometrpg.logic.models;
 
+import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
@@ -8,6 +10,14 @@ import org.junit.Test;
 import com.google.common.collect.Sets;
 
 public class CharacterTest {
+  private static Map<Stat, Integer> defaultStats() {
+    StatSheetBuilder builder = new StatSheetBuilder();
+    for (Stat stat : EnumSet.allOf(Stat.class)) {
+      builder.set(stat, 20);
+    }
+
+    return builder.build();
+  }
 
   @Test(expected = IllegalArgumentException.class)
   public void testStatsOverCap() {
@@ -21,16 +31,17 @@ public class CharacterTest {
   
   @Test(expected = IllegalArgumentException.class)
   public void testMaxStatsMissing() {
-    Set<UnitStat> maxStats = Sets.newHashSet();
-    maxStats.add(new UnitStat(20, Stat.HP));
-    
+    Map<Stat, Integer> maxStats = defaultStats();
+    maxStats.put(Stat.HP, 20);
+
     new Character(maxStats, ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(30), "test");
   }
   
   @Test(expected = IllegalArgumentException.class)
   public void testStatsMissing() {
-    Set<UnitStat> stats = Sets.newHashSet();
-    stats.add(new UnitStat(20, Stat.HP));
+    Map<Stat, Integer> stats = defaultStats();
+    stats.put(Stat.HP, 20);
+
     
     new Character(ModelTestUtils.homogeneousStats(30), ModelTestUtils.createGrowth(), stats, "test");
   }

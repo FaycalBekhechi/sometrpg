@@ -40,7 +40,7 @@ public class CharacterTest {
   @Test(expected = IllegalArgumentException.class)
   public void testStatsMissing() {
     Map<Stat, Integer> stats = defaultStats();
-    stats.put(Stat.HP, 20);
+    stats.remove(Stat.HP);
 
     
     new Character(ModelTestUtils.homogeneousStats(30), ModelTestUtils.createGrowth(), stats, "test");

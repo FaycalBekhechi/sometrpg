@@ -26,7 +26,7 @@ public class CharacterTest {
   
   @Test(expected = IllegalArgumentException.class)
   public void testStatsOverHardCap() {
-    new Character(ModelTestUtils.homogeneousStats(2000), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(400), "Test");
+    new Character(ModelTestUtils.homogeneousStats(200), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(400), "Test");
   }
   
   @Test(expected = IllegalArgumentException.class)

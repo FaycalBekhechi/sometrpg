@@ -36,6 +36,11 @@ public class Sprite extends Component {
     this.region = region;
   }
 
+  public void setRegion(TextureRegion region) {
+
+    this.region = region;
+  }
+
   public SpriteLayer getLayer() {
     return layer;
   }

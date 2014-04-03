@@ -57,6 +57,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelect
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitAttackingListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitMoving;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
+import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
 import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
@@ -137,6 +138,7 @@ public class TestBattle extends BattleScreen {
     initUnitEntities();
 
     world.setSystem(new BattleUnitDeathSystem());
+    world.setSystem(new AnimationKeyFrameSystem());
     world.setSystem(new DeathFadeSystem(tweenManager));
     world.setSystem(new BattleUnitMovementSystem(map));
     world.setSystem(mapSelectorUpdateSystem);

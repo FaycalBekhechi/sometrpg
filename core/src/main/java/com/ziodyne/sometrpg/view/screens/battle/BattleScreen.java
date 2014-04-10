@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
@@ -169,6 +170,13 @@ public abstract class BattleScreen extends ScreenAdapter {
   public boolean isOccupied(GridPoint2 square) {
     Tile tile = battle.getTile(square);
     return tile != null && tile.isOccupied();
+  }
+
+  public boolean isUnitTurn(Combatant combatant) {
+
+    Preconditions.checkNotNull(combatant);
+    Set<Combatant> currentCombatants = battle.getCurrentTurnArmy().getCombatants();
+    return currentCombatants.contains(combatant);
   }
 
   public Optional<Combatant> getCombatant(GridPoint2 square) {

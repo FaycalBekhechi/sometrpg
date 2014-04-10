@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.input.GridSelectionController;
@@ -26,30 +25,26 @@ public class SelectingMoveLocation extends FlowListener<BattleContext> {
   }
 
   @Override
-  public void onLeave(BattleContext context) throws LogicViolationError {
+  public void onLeave(BattleContext context) {
     context.mapController.enable();
     battle.hideMoveRange();
     Gdx.input.setInputProcessor(null);
   }
 
   @Override
-  public void onEnter(final BattleContext context) throws LogicViolationError {
+  public void onEnter(final BattleContext context) {
     context.mapController.disable();
     Set<GridPoint2> bounds = battle.showMoveRange(context.selectedCombatant);
     movementController = new GridSelectionController(battle.getCamera(), bounds, new GridSelectionController.SelectionHandler() {
       @Override
       public void handleSelection(GridPoint2 selectedPoint) {
         context.movementDestination = selectedPoint;
-        try {
-          context.trigger(BattleEvent.MOVE_LOC_SELECTED);
-        } catch (LogicViolationError ignored) {  }
+        context.safeTrigger(BattleEvent.MOVE_LOC_SELECTED);
       }
 
       @Override
       public void handleCancelation() {
-        try {
-          context.trigger(BattleEvent.MOVE_ACTION_CANCEL);
-        } catch (LogicViolationError ignored) { }
+        context.safeTrigger(BattleEvent.MOVE_ACTION_CANCEL);
       }
     });
     Gdx.input.setInputProcessor(movementController);

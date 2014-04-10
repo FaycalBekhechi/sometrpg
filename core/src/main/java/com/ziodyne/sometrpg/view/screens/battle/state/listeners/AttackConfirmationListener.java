@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -31,7 +32,7 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
   }
 
   @Override
-  public void onLeave(BattleContext context) throws LogicViolationError {
+  public void onLeave(BattleContext context) {
     super.onLeave(context);
 
     if (confirmationDialog != null) {
@@ -40,12 +41,10 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
   }
 
   @Override
-  public void onEnter(final BattleContext context) throws LogicViolationError {
+  public void onEnter(final BattleContext context) {
     super.onEnter(context);
     Optional<BattleAction> action = context.getAction();
-    if (!action.isPresent()) {
-      throw new LogicViolationError("Attack confirmation requested with no attack to perform.");
-    }
+    Preconditions.checkState(action.isPresent(), "Attack confirmation requested with no attack to perform.");
 
     confirmationDialog = new AttackPreviewConfirmationDialog(action.get(), skin);
 
@@ -58,9 +57,8 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
     confirmationDialog.setConfirmedHandler(new AttackPreviewConfirmationDialog.ConfirmedHandler() {
       @Override
       public void onConfirmed() {
-        try {
-          context.trigger(BattleEvent.ATTACK_CONFIRMED);
-        } catch (LogicViolationError ignored) { }
+
+        context.safeTrigger(BattleEvent.ATTACK_CONFIRMED);
       }
     });
 

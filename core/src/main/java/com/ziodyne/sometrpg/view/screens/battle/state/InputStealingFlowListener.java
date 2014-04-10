@@ -2,7 +2,6 @@ package com.ziodyne.sometrpg.view.screens.battle.state;
 
 import au.com.ds.ef.StateEnum;
 import au.com.ds.ef.StatefulContext;
-import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
@@ -18,12 +17,12 @@ public class InputStealingFlowListener<T extends StatefulContext> extends FlowLi
   }
 
   @Override
-  public void onLeave(T context) throws LogicViolationError {
+  public void onLeave(T context) {
     Gdx.input.setInputProcessor(previousInputProcessor);
   }
 
   @Override
-  public void onEnter(T context) throws LogicViolationError {
+  public void onEnter(T context) {
     previousInputProcessor = Gdx.input.getInputProcessor();
   }
 }

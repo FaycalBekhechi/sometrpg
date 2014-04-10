@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
 import com.google.common.base.Optional;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -29,14 +28,14 @@ public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
   }
 
   @Override
-  public void onLeave(BattleContext context) throws LogicViolationError {
+  public void onLeave(BattleContext context) {
     screen.hideAttackRange();
     context.mapController.enable();
     Gdx.input.setInputProcessor(null);
   }
 
   @Override
-  public void onEnter(final BattleContext context) throws LogicViolationError {
+  public void onEnter(final BattleContext context) {
     context.mapController.disable();
     Attack attack = new WeaponAttack();
     context.attackToExecute = attack;
@@ -49,17 +48,13 @@ public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
         Optional<Combatant> defender = screen.getCombatant(selectedPoint);
         if (defender.isPresent()) {
           context.defendingCombatant = defender.get();
-          try {
-            context.trigger(BattleEvent.TARGET_SELECTED);
-          } catch (LogicViolationError ignored) { }
+          context.safeTrigger(BattleEvent.TARGET_SELECTED);
         }
       }
 
       @Override
       public void handleCancelation() {
-        try {
-          context.trigger(BattleEvent.ATTACK_CANCEL);
-        } catch (LogicViolationError ignored) { }
+        context.safeTrigger(BattleEvent.ATTACK_CANCEL);
       }
     });
     Gdx.input.setInputProcessor(gridSelectionController);

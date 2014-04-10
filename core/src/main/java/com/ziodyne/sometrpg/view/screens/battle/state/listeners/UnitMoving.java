@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import au.com.ds.ef.err.LogicViolationError;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -19,16 +18,16 @@ public class UnitMoving extends FlowListener<BattleContext> {
   }
 
   @Override
-  public void onLeave(BattleContext context) throws LogicViolationError {
+  public void onLeave(BattleContext context) {
 
   }
 
   @Override
-  public void onEnter(BattleContext context) throws LogicViolationError {
+  public void onEnter(BattleContext context) {
     battleScreen.moveCombatant(context.selectedCombatant, context.movementDestination);
     context.selectedSquare = context.movementDestination;
 
     // Unit movement is instant for now
-    context.trigger(BattleEvent.UNIT_MOVED);
+    context.safeTrigger(BattleEvent.UNIT_MOVED);
   }
 }

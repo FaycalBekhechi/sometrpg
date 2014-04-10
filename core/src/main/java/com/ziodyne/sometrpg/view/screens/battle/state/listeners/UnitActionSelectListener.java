@@ -1,8 +1,6 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,7 +12,6 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
-import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.InputStealingFlowListener;
 import com.ziodyne.sometrpg.view.widgets.ActionMenu;
 import com.ziodyne.sometrpg.view.widgets.ActionSelectedHandler;
@@ -43,7 +40,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
   }
 
   @Override
-  public void onLeave(BattleContext context) throws LogicViolationError {
+  public void onLeave(BattleContext context) {
     super.onLeave(context);
 
     if (actionMenu != null) {
@@ -54,14 +51,14 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
   }
 
   @Override
-  public void onEnter(final BattleContext context) throws LogicViolationError {
+  public void onEnter(final BattleContext context) {
     super.onEnter(context);
 
     Combatant selectedCombatant = context.selectedCombatant;
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
     if (allowedActions.isEmpty()) {
       LOG.log("Unit actions exhausted.");
-      context.trigger(BattleEvent.ACTIONS_EXHAUSTED);
+      context.safeTrigger(BattleEvent.ACTIONS_EXHAUSTED);
     } else {
 
       actionMenu = new ActionMenu(allowedActions, skin);
@@ -77,10 +74,10 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
         public void handle(CombatantAction selectedAction) throws Exception {
           switch (selectedAction) {
             case ATTACK:
-              context.trigger(BattleEvent.ATTACK_ACTION_SELECTED);
+              context.safeTrigger(BattleEvent.ATTACK_ACTION_SELECTED);
               break;
             case MOVE:
-              context.trigger(BattleEvent.MOVE_ACTION_SELECTED);
+              context.safeTrigger(BattleEvent.MOVE_ACTION_SELECTED);
               break;
             default:
               throw new IllegalArgumentException("Combatant action " + selectedAction + " not mapped to event.");

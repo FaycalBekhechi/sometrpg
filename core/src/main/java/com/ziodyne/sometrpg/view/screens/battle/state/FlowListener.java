@@ -4,7 +4,6 @@ import au.com.ds.ef.EasyFlow;
 import au.com.ds.ef.StateEnum;
 import au.com.ds.ef.StatefulContext;
 import au.com.ds.ef.call.ContextHandler;
-import au.com.ds.ef.err.LogicViolationError;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 
@@ -21,8 +20,8 @@ public abstract class FlowListener<T extends StatefulContext> {
     this.state = state;
   }
 
-  public abstract void onLeave(T context) throws LogicViolationError;
-  public abstract void onEnter(T context) throws LogicViolationError;
+  public abstract void onLeave(T context);
+  public abstract void onEnter(T context);
 
   public void bind(EasyFlow<T> flow) {
     flow.whenEnter(state, new ContextHandler<T>() {

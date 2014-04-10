@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import au.com.ds.ef.err.LogicViolationError;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
@@ -19,23 +18,23 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
   }
 
   @Override
-  public void onLeave(BattleContext context) throws LogicViolationError {
+  public void onLeave(BattleContext context) {
 
   }
 
   @Override
-  public void onEnter(BattleContext context) throws LogicViolationError {
+  public void onEnter(BattleContext context) {
     Combatant selectedCombatant = context.selectedCombatant;
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
     if (allowedActions.isEmpty()) {
-      context.trigger(BattleEvent.ACTIONS_EXHAUSTED);
+      context.safeTrigger(BattleEvent.ACTIONS_EXHAUSTED);
     } else {
       Combatant attacker = context.selectedCombatant;
       Combatant defender = context.defendingCombatant;
       context.battle.executeAttack(attacker, context.attackToExecute, defender);
 
       // Attacking is instant for now
-      context.trigger(BattleEvent.UNIT_ATTACKED);
+      context.safeTrigger(BattleEvent.UNIT_ATTACKED);
     }
   }
 }

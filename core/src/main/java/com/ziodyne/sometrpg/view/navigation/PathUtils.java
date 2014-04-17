@@ -19,7 +19,7 @@ public class PathUtils {
   public static List<PathSegment> segmentPath(Path<GridPoint2> path) {
     List<GridPoint2> points = path.getPoints();
     if (points.isEmpty()) {
-      return new ArrayList<PathSegment>();
+      return new ArrayList<>();
     }
 
     List<PathSegment> result = new ArrayList<PathSegment>();

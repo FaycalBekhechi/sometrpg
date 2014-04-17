@@ -1,0 +1,33 @@
+{
+  "characters": [
+    {
+      "name": "Chrom",
+      "assets": {
+        "portrait": "chrom_portrait.png",
+        "animations": {
+          "idle": "chrom_idle.png"
+        }
+      },
+      "stats": {
+        "hp": 85,
+        "str": 60,
+        "spd": 40,
+        "skill": 60,
+        "def": 45,
+        "luck": 70,
+        "res": 40,
+        "mov": 5
+      },
+      "growths": {
+        "hp": 85,
+        "str": 60,
+        "spd": 40,
+        "skill": 60,
+        "def": 45,
+        "luck": 70,
+        "res": 40,
+        "mov": 1
+      }
+    }
+  ]
+}

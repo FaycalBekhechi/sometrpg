@@ -8,6 +8,10 @@
     "path": "units_fuckit.png"
   },
   {
+    "type": "spriteSheet",
+    "path": "data/idle_sheet.json"
+  },
+  {
     "type": "texture",
     "path": "data/libgdx.png"
   },

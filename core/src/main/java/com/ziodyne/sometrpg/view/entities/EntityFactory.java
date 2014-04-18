@@ -70,7 +70,6 @@ public class EntityFactory {
 
     Array<TextureRegion> regions = new Array<>();
     for (int i = 0; i < nFrames; i++) {
-      System.out.println("y:" + (i*frameDims));
       TextureRegion region = new TextureRegion(texture, 0, i*frameDims, frameDims, frameDims);
       regions.add(region);
     }

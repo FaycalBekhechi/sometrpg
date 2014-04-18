@@ -34,8 +34,6 @@ public class AnimationKeyFrameSystem extends EntitySystem {
       SpriteAnimation animation = animationMapper.get(entity);
       Sprite sprite = spriteMapper.get(entity);
 
-
-      TextureRegion region = animation.getCurrentFrame();
       sprite.setRegion(animation.getCurrentFrame());
       animation.tick();
       entity.changedInWorld();

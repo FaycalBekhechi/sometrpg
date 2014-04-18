@@ -1,0 +1,11 @@
+{
+  "grid_size": 40,
+  "animations": [
+    {
+      "name": "mc_idle",
+      "start": [0, 0],
+      "end": [0, 3],
+      "frame_length": 100
+    }
+  ]
+}

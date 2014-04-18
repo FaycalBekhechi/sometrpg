@@ -11,6 +11,7 @@ import com.artemis.Entity;
 import com.artemis.managers.TagManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -30,6 +31,7 @@ import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
@@ -48,6 +50,7 @@ import com.ziodyne.sometrpg.view.assets.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.GameSpec;
 import com.ziodyne.sometrpg.view.assets.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
+import com.ziodyne.sometrpg.view.assets.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
@@ -109,9 +112,12 @@ public class TestBattle extends BattleScreen {
     this.bundleLoader = bundleLoaderFactory.create(assetManager, "data/test.bundle");
 
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
-    assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
-    assetManager.setLoader(SomeTRPGBattle.class, new BattleLoader(new InternalFileHandleResolver()));
-    assetManager.setLoader(GameSpec.class, new GameSpecLoader(new InternalFileHandleResolver()));
+
+    FileHandleResolver resolver = new InternalFileHandleResolver();
+    assetManager.setLoader(BattleMap.class, new MapLoader(resolver));
+    assetManager.setLoader(SomeTRPGBattle.class, new BattleLoader(resolver));
+    assetManager.setLoader(GameSpec.class, new GameSpecLoader(resolver));
+    assetManager.setLoader(SpriteSheet.class, new SpriteSheetAssetLoader(resolver));
 
     try {
       bundleLoader.load();

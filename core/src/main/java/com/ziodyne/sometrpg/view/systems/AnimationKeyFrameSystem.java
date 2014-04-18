@@ -7,6 +7,7 @@ import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
 
@@ -33,7 +34,10 @@ public class AnimationKeyFrameSystem extends EntitySystem {
       SpriteAnimation animation = animationMapper.get(entity);
       Sprite sprite = spriteMapper.get(entity);
 
-      sprite.setRegion(animation.getKeyFrame(Gdx.graphics.getDeltaTime()));
+
+      TextureRegion region = animation.getCurrentFrame();
+      sprite.setRegion(animation.getCurrentFrame());
+      animation.tick();
       entity.changedInWorld();
     }
   }

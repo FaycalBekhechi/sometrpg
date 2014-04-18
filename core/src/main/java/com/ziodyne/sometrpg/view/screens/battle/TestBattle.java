@@ -232,14 +232,14 @@ public class TestBattle extends BattleScreen {
   }
 
   private void initUnitEntities() {
-    Texture unitTexture = assetManager.get("single.png");
+    Texture unitTexture = assetManager.get("units_fuckit.png");
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
           Character character = combatant.getCharacter();
-          Entity unitEntity = entityFactory.createUnit(map, combatant, unitTexture);
+          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, 3, 40);
           registerUnitEntity(character, unitEntity);
         }
       }

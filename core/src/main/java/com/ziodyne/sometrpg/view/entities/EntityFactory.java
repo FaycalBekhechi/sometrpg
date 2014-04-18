@@ -1,15 +1,19 @@
 package com.ziodyne.sometrpg.view.entities;
 
+import javax.xml.soap.Text;
+
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -49,6 +53,38 @@ public class EntityFactory {
     unitEntity.addComponent(new BattleUnit(combatant));
 
     return unitEntity;
+  }
+
+  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture, int nFrames, int frameDims) {
+    Entity result = world.createEntity();
+
+    GridPoint2 pos = map.getCombatantPosition(combatant);
+    if (pos == null) {
+      throw new IllegalArgumentException("Must provide a combatant that is actually on the map.");
+    }
+
+    Position position = new Position(pos.x, pos.y);
+    result.addComponent(position);
+
+    result.addComponent(new BattleUnit(combatant));
+
+    Array<TextureRegion> regions = new Array<>();
+    for (int i = 0; i < nFrames; i++) {
+      System.out.println("y:" + (i*frameDims));
+      TextureRegion region = new TextureRegion(texture, 0, i*frameDims, frameDims, frameDims);
+      regions.add(region);
+    }
+
+    Animation animation = new Animation(0.5f, regions, Animation.LOOP);
+    SpriteAnimation animationComponent = new SpriteAnimation(animation);
+    result.addComponent(animationComponent);
+
+    Sprite sprite = new Sprite(regions.get(0), 1, 1, SpriteLayer.FOREGROUND);
+    sprite.setMagFiler(Texture.TextureFilter.Linear);
+    sprite.setMinFilter(Texture.TextureFilter.Linear);
+    result.addComponent(sprite);
+
+    return result;
   }
 
   public Entity createMapAttackOverlay(Set<GridPoint2> locations) {

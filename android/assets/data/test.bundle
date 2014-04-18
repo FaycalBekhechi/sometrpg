@@ -5,6 +5,10 @@
   },
   {
     "type": "texture",
+    "path": "units_fuckit.png"
+  },
+  {
+    "type": "texture",
     "path": "data/libgdx.png"
   },
   {

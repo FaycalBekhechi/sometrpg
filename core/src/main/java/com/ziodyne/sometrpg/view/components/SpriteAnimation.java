@@ -1,6 +1,7 @@
 package com.ziodyne.sometrpg.view.components;
 
 import com.artemis.Component;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.apache.commons.lang3.Validate;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.Validate;
 public class SpriteAnimation extends Component {
 
   private final Animation animation;
+  private float currentTime = 0L;
 
   public SpriteAnimation(Animation animation) {
 
@@ -20,5 +22,19 @@ public class SpriteAnimation extends Component {
 
   public TextureRegion getKeyFrame(float time) {
     return animation.getKeyFrame(time);
+  }
+
+  public TextureRegion getCurrentFrame() {
+    return getKeyFrame(getCurrentTime());
+  }
+
+  public float getCurrentTime() {
+
+    return currentTime;
+  }
+
+  public void tick() {
+    float time = Gdx.graphics.getDeltaTime();
+    currentTime += time;
   }
 }

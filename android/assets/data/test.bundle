@@ -14,5 +14,9 @@
   {
     "type": "map",
     "path": "maps/test/test.tmx"
+  },
+  {
+    "type": "gameSpec",
+    "path": "data/game.json"
   }
 ]

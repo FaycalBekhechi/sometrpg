@@ -45,6 +45,8 @@ import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
+import com.ziodyne.sometrpg.view.assets.GameSpec;
+import com.ziodyne.sometrpg.view.assets.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
@@ -109,6 +111,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
     assetManager.setLoader(BattleMap.class, new MapLoader(new InternalFileHandleResolver()));
     assetManager.setLoader(SomeTRPGBattle.class, new BattleLoader(new InternalFileHandleResolver()));
+    assetManager.setLoader(GameSpec.class, new GameSpecLoader(new InternalFileHandleResolver()));
 
     try {
       bundleLoader.load();

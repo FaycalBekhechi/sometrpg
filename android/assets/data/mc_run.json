@@ -3,19 +3,19 @@
   "animations": {
     "run_south": {
       "start": [0,0],
-      "end": [0,7],
+      "end": [0,6],
       "frame_length": 100
     },
 
     "run_north": {
       "start": [1,0],
-      "end": [1,7],
+      "end": [1,6],
       "frame_length": 100
     },
 
     "run_west": {
       "start": [2,0],
-      "end": [2,7],
+      "end": [2,6],
       "frame_length": 100
     }
   }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
@@ -70,11 +71,9 @@ public class EntityFactory {
     result.addComponent(new BattleUnit(combatant));
 
     int frameDims = 40;
-    int nFrames = spec.getNumFrames();
     Array<TextureRegion> regions = new Array<>();
-    for (int i = 0; i < nFrames; i++) {
-      TextureRegion region = new TextureRegion(texture, 2*frameDims, i*frameDims, frameDims, frameDims);
-      regions.add(region);
+    for (Vector2 frameCoord : spec.getFrameCoords()) {
+      regions.add(new TextureRegion(texture, (int)frameCoord.x*frameDims, (int)frameCoord.y*frameDims, frameDims, frameDims));
     }
 
     Animation animation = new Animation(spec.getFrameDurationMs() / 1000f, regions, Animation.LOOP);

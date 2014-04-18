@@ -19,7 +19,7 @@ public enum PlayMode {
     this.gdxPlayMode = gdxPlayMode;
   }
 
-  public static final Map<String, PlayMode> MODE_MAP = new HashMap<>();
+  private static final Map<String, PlayMode> MODE_MAP = new HashMap<>();
   static {
     MODE_MAP.put("normal", NORMAL);
     MODE_MAP.put("reversed", REVERSED);

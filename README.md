@@ -1,6 +1,7 @@
 sometrpg
 ========
 
+![test battle](http://i.minus.com/ibfLAlBbCD8HD0.png "SomeTRPG")
 
 [![Build Status](https://travis-ci.org/rgee/sometrpg.png)](https://travis-ci.org/rgee/sometrpg)
 

@@ -3,8 +3,6 @@ package com.ziodyne.sometrpg.logic.loader.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AnimationSpec {
-  private String name;
-
   @JsonProperty("start")
   private int[] startCoords;
 
@@ -13,11 +11,6 @@ public class AnimationSpec {
 
   @JsonProperty("frame_length")
   private long frameDurationMs;
-
-  public String getName() {
-
-    return name;
-  }
 
   public int[] getStartCoords() {
 

@@ -76,6 +76,7 @@ import com.ziodyne.sometrpg.view.systems.StageUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -239,17 +240,22 @@ public class TestBattle extends BattleScreen {
   }
 
   private void initUnitEntities() {
-    Texture unitTexture = assetManager.get("data/mc_run.png");
-    SpriteSheet mcRunSheet = assetManager.get("data/mc_run.json");
-    AnimationSpec run = mcRunSheet.getAnimationSpecs().get("run_west");
+    Texture unitTexture = assetManager.get("data/idle_sheet.png");
+    SpriteSheet mcRunSheet = assetManager.get("data/idle_sheet.json");
 
+    List<AnimationSpec> specs = new ArrayList<>();
+    specs.addAll(mcRunSheet.getAnimationSpecs().values());
+
+    int total = 0;
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
+          AnimationSpec spec = specs.get( total % specs.size());
+          total++;
           Character character = combatant.getCharacter();
-          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, run);
+          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, spec);
           registerUnitEntity(character, unitEntity);
         }
       }
@@ -261,13 +267,21 @@ public class TestBattle extends BattleScreen {
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)map.getLayers().get(0);
 
     Combatant player = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test3x"));
-    Combatant enemy = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
+    Combatant halb = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
+    Combatant swordboard = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
+    Combatant strike = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
+    Combatant fire = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
+    Combatant mace = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
 
     Army playerArmy = new Army("Greil Mercenaries", ArmyType.PLAYER);
     playerArmy.addCombatant(player);
 
     Army enemyArmy = new Army("Dawn Brigade", ArmyType.ENEMY);
-    enemyArmy.addCombatant(enemy);
+    enemyArmy.addCombatant(halb);
+    enemyArmy.addCombatant(swordboard);
+    enemyArmy.addCombatant(strike);
+    enemyArmy.addCombatant(fire);
+    enemyArmy.addCombatant(mace);
 
     Set<Tile> tiles = new HashSet<Tile>(tileLayer.getHeight());
     Map<GridPoint2, Tile> pointToTile = Maps.newHashMap();
@@ -299,7 +313,10 @@ public class TestBattle extends BattleScreen {
 
     BattleMap battleMap = new BattleMap(tiles);
     battleMap.addUnit(player, 7, 8);
-    battleMap.addUnit(enemy, 10, 10);
+    battleMap.addUnit(halb, 10, 10);
+    battleMap.addUnit(strike, 5, 5);
+    battleMap.addUnit(mace, 2, 6);
+    battleMap.addUnit(fire, 7, 9);
     this.map = battleMap;
 
 

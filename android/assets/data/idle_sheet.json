@@ -3,33 +3,33 @@
   "animations": {
     "mc_idle": {
       "start": [0, 0],
-      "end": [0, 3],
-      "frame_length": 100
+      "end": [0, 2],
+      "frame_length": 300
     },
     "halberd_idle": {
       "start": [1, 0],
-      "end": [1, 3],
-      "frame_length": 100
+      "end": [1, 2],
+      "frame_length": 300
     },
     "swordboard_idle": {
       "start": [2, 0],
-      "end": [2, 3],
-      "frame_length": 100
+      "end": [2, 2],
+      "frame_length": 300
     },
     "strikemage_idle": {
       "start": [3, 0],
-      "end": [3, 3],
-      "frame_length": 100
+      "end": [3, 2],
+      "frame_length": 300
     },
     "firemage_idle": {
       "start": [4, 0],
-      "end": [4, 3],
-      "frame_length": 100
+      "end": [4, 2],
+      "frame_length": 300
     },
     "mace_idle": {
       "start": [5,0],
-      "end": [5,3],
-      "frame_length": 100
+      "end": [5,2],
+      "frame_length": 300
     }
   }
 }

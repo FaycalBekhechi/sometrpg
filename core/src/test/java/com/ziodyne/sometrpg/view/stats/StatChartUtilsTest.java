@@ -68,22 +68,6 @@ public class StatChartUtilsTest {
     assertEpsilonEquals(expectedSecond, actualSecond, epsilon);
   }
   
-  @Test
-  public void testUnitCircleSampling() {
-    int nSamples = 2;
-    List<Vector2> samples = StatChartUtils.uniformSampleUnitCircle(nSamples);
-    
-    Assert.assertEquals(2, samples.size());
-    
-    Vector2 first = samples.get(0);
-    Vector2 second = samples.get(1);
-    
-    Vector2 correctFirst = new Vector2(0, 1);
-    Vector2 correctSecond = new Vector2(0, -1);
-    
-    assertEpsilonEquals(correctFirst, first, epsilon);
-    assertEpsilonEquals(correctSecond, second, epsilon);
-  }
 
   @Test
   public void testVertexArrayConversion() {

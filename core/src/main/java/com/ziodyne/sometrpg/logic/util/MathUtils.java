@@ -20,7 +20,7 @@ public class MathUtils {
    * @return A list of two-dimensional vectors
    */
   public static List<Vector2> uniformSampleUnitCircle(int numSamples) {
-    List<Vector2> samples = new ArrayList<Vector2>();
+    List<Vector2> samples = new ArrayList<>();
 
     if (numSamples <= 0) {
       return samples;

@@ -13,6 +13,14 @@
   },
   {
     "type": "texture",
+    "path": "data/mc_run.png"
+  },
+  {
+    "type": "spriteSheet",
+    "path": "data/mc_run.json"
+  },
+  {
+    "type": "texture",
     "path": "data/libgdx.png"
   },
   {

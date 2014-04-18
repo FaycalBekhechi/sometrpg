@@ -104,6 +104,8 @@ public class BattleMapController extends InputAdapter implements Toggleable {
       context.safeTrigger(event);
     }
 
+    ignoreNextTouchUp = false;
+
     return true;
   }
 

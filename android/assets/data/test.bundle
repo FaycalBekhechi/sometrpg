@@ -5,7 +5,7 @@
   },
   {
     "type": "texture",
-    "path": "units_fuckit.png"
+    "path": "data/idle_sheet.png"
   },
   {
     "type": "spriteSheet",

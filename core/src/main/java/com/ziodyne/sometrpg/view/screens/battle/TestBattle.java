@@ -238,7 +238,7 @@ public class TestBattle extends BattleScreen {
   }
 
   private void initUnitEntities() {
-    Texture unitTexture = assetManager.get("units_fuckit.png");
+    Texture unitTexture = assetManager.get("data/idle_sheet.png");
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         Tile tile = map.getTile(i, j);

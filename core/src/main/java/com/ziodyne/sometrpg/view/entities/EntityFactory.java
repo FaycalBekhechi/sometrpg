@@ -70,7 +70,7 @@ public class EntityFactory {
     result.addComponent(new BattleUnit(combatant));
 
     int frameDims = 40;
-    int nFrames = 7;
+    int nFrames = spec.getNumFrames();
     Array<TextureRegion> regions = new Array<>();
     for (int i = 0; i < nFrames; i++) {
       TextureRegion region = new TextureRegion(texture, 2*frameDims, i*frameDims, frameDims, frameDims);

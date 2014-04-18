@@ -22,6 +22,12 @@ public class AnimationSpec {
     return endCoords;
   }
 
+  public int getNumFrames() {
+
+    return (int)Math.sqrt(Math.pow(startCoords[0] - endCoords[0], 2) +
+                          Math.pow(startCoords[1] - endCoords[1], 2));
+  }
+
   public long getFrameDurationMs() {
 
     return frameDurationMs;

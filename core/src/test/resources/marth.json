@@ -1,11 +1,11 @@
 {
   "characters": [
     {
-      "name": "Chrom",
+      "name": "Marth",
       "assets": {
-        "portrait": "chrom_portrait.png",
+        "portrait": "marth_portrait.png",
         "animations": {
-          "idle": "chrom_idle.png"
+          "idle": "marth_idle.png"
         }
       },
       "stats": {

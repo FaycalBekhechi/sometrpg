@@ -13,6 +13,7 @@ import com.ziodyne.sometrpg.logic.models.Constants;
 import com.ziodyne.sometrpg.logic.models.Stat;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.UnitGrowth;
+import com.ziodyne.sometrpg.logic.util.MathUtils;
 import com.ziodyne.sometrpg.logic.util.UnitUtils;
 
 import java.util.ArrayList;
@@ -132,7 +133,7 @@ public class StatChartUtils {
    static List<Vector2> getScaledChartVertices(List<Float> scalingFactors, float radius) {
 
     // Generate normalized vectors representing each 'point' of the radar chart
-    List<Vector2> unitCircleVectors = uniformSampleUnitCircle(scalingFactors.size());
+    List<Vector2> unitCircleVectors = MathUtils.uniformSampleUnitCircle(scalingFactors.size());
     List<Vector2> scaledVertices = new ArrayList<Vector2>();
 
     for (int i = 0; i < scalingFactors.size(); i++) {
@@ -165,35 +166,4 @@ public class StatChartUtils {
     return vertices;
   }
 
-  /**
-   * Generate a uniform sampling of vectors corresponding to points on the unit circle.
-   *
-   * @param numSamples The number of samples to generate
-   * @return A list of two-dimensional vectors
-   */
-  static List<Vector2> uniformSampleUnitCircle(int numSamples) {
-    List<Vector2> samples = new ArrayList<Vector2>();
-
-    if (numSamples <= 0) {
-      return samples;
-    }
-
-    float sampleFrequencyDegrees = 360f/numSamples;
-
-    // Generate samples along the unit circle by rotating the normalized 'up' vector
-    // around the circle at evenly-distributed intervals.
-    Vector3 startPoint = new Vector3(0f, 1f, 0f);
-    Matrix4 rotation = new Matrix4();
-    
-    for (int i = 0; i <= numSamples-1; i++) {
-      Vector3 rotated = startPoint.cpy();
-
-      rotation.setToRotation(0f, 0f, 1f, sampleFrequencyDegrees*i);
-
-      rotated.rot(rotation);
-      samples.add(new Vector2(rotated.x, rotated.y));
-    }
-
-    return samples;
-  }
 }

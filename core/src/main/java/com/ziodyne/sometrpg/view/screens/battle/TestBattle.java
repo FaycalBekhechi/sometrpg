@@ -31,6 +31,7 @@ import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
@@ -238,14 +239,17 @@ public class TestBattle extends BattleScreen {
   }
 
   private void initUnitEntities() {
-    Texture unitTexture = assetManager.get("data/idle_sheet.png");
+    Texture unitTexture = assetManager.get("data/mc_run.png");
+    SpriteSheet mcRunSheet = assetManager.get("data/mc_run.json");
+    AnimationSpec run = mcRunSheet.getAnimationSpecs().get("run_west");
+
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
           Character character = combatant.getCharacter();
-          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, 3, 40);
+          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, run);
           registerUnitEntity(character, unitEntity);
         }
       }

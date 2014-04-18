@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
+import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
@@ -55,7 +56,7 @@ public class EntityFactory {
     return unitEntity;
   }
 
-  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture, int nFrames, int frameDims) {
+  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture, AnimationSpec spec) {
     Entity result = world.createEntity();
 
     GridPoint2 pos = map.getCombatantPosition(combatant);
@@ -68,13 +69,15 @@ public class EntityFactory {
 
     result.addComponent(new BattleUnit(combatant));
 
+    int frameDims = 40;
+    int nFrames = 7;
     Array<TextureRegion> regions = new Array<>();
     for (int i = 0; i < nFrames; i++) {
-      TextureRegion region = new TextureRegion(texture, 4*frameDims, i*frameDims, frameDims, frameDims);
+      TextureRegion region = new TextureRegion(texture, 2*frameDims, i*frameDims, frameDims, frameDims);
       regions.add(region);
     }
 
-    Animation animation = new Animation(0.5f, regions, Animation.LOOP);
+    Animation animation = new Animation(spec.getFrameDurationMs() / 1000f, regions, Animation.LOOP);
     SpriteAnimation animationComponent = new SpriteAnimation(animation);
     result.addComponent(animationComponent);
 

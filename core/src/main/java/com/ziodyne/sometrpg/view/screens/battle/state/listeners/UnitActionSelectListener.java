@@ -63,7 +63,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
 
       actionMenu = new ActionMenu(allowedActions, skin);
 
-      Vector3 screenSpaceSelectionCoords = new Vector3(context.selectedSquare.x+1, context.selectedSquare.y, 0);
+      Vector3 screenSpaceSelectionCoords = new Vector3(context.selectedSquare.x, context.selectedSquare.y, 0);
       camera.project(screenSpaceSelectionCoords);
 
       actionMenu.setX(screenSpaceSelectionCoords.x);

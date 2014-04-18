@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.widgets;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.logic.util.MathUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -17,6 +19,7 @@ import java.util.Set;
  */
 public class ActionMenu extends Group {
   private static final Logger LOG = new GdxLogger(ActionMenu.class);
+  private static final int RADIUS = 100;
 
   private ActionSelectedHandler selectedHandler;
   private final Set<CombatantAction> availableActions;
@@ -34,10 +37,15 @@ public class ActionMenu extends Group {
   }
 
   private void initialize() {
-    float dy = 0;
+    List<Vector2> samples = MathUtils.uniformSampleUnitCircle(availableActions.size());
+    int i = 0;
     for (final CombatantAction action : availableActions) {
       Actor control = createControlForAction(action);
-      control.setY(dy);
+
+      Vector2 pos = samples.get(i);
+      pos.scl(RADIUS);
+
+      control.setPosition(pos.x, pos.y);
 
       control.addListener(new ChangeListener() {
         @Override
@@ -53,7 +61,7 @@ public class ActionMenu extends Group {
       });
 
       addActor(control);
-      dy += 30;
+      i++;
     }
   }
 

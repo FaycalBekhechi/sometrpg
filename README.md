@@ -16,5 +16,7 @@ Technologies
   - Observable finite state machine library to organize user interaction flows
 - [JGraphT](http://jgrapht.org/)
   - Common graph algorithms
+- [Guice](https://code.google.com/p/google-guice/)
+  - Dependency injection
 - [Gradle](http://www.gradle.org/)
   - Build system

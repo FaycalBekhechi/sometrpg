@@ -1,6 +1,6 @@
 package com.ziodyne.sometrpg.logic.loader.models;
 
-import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,14 +9,14 @@ public class SpriteSheet {
   private int gridSize;
 
   @JsonProperty("animations")
-  private List<AnimationSpec> animationSpecs;
+  private Map<String, AnimationSpec> animationSpecs;
 
   public int getGridSize() {
 
     return gridSize;
   }
 
-  public List<AnimationSpec> getAnimationSpecs() {
+  public Map<String, AnimationSpec> getAnimationSpecs() {
 
     return animationSpecs;
   }

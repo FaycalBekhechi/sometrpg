@@ -73,10 +73,10 @@ public class EntityFactory {
     int frameDims = 40;
     Array<TextureRegion> regions = new Array<>();
     for (Vector2 frameCoord : spec.getFrameCoords()) {
-      regions.add(new TextureRegion(texture, (int)frameCoord.x*frameDims, frameCoord.y*frameDims, frameDims, frameDims));
+      regions.add(new TextureRegion(texture, (int)frameCoord.x*frameDims, (int)frameCoord.y*frameDims, frameDims, frameDims));
     }
 
-    Animation animation = new Animation(spec.getFrameDurationMs() / 1000f, regions, Animation.LOOP);
+    Animation animation = new Animation(spec.getFrameDurationMs() / 1000f, regions, spec.getPlayMode().getGdxPlayMode());
     SpriteAnimation animationComponent = new SpriteAnimation(animation);
     result.addComponent(animationComponent);
 

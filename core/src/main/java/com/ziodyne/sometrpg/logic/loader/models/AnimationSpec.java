@@ -19,6 +19,14 @@ public class AnimationSpec {
   @JsonProperty("frame_length")
   private long frameDurationMs;
 
+  @JsonProperty("mode")
+  private PlayMode playMode = PlayMode.LOOP;
+
+  public PlayMode getPlayMode() {
+
+    return playMode;
+  }
+
   public int[] getStartCoords() {
 
     return startCoords;

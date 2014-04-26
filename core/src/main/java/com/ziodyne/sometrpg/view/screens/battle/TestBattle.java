@@ -256,9 +256,14 @@ public class TestBattle extends BattleScreen {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
-          AnimationSpec spec = specs.get(total % specs.size());
           Map<MapAnimation, AnimationSpec> animationSpecs = new HashMap<>();
-          animationSpecs.put(MapAnimation.IDLE, spec);
+
+          AnimationSpec idleSpec = specs.get(total % specs.size());
+          animationSpecs.put(MapAnimation.IDLE, idleSpec);
+
+          // fuck it. Just use the adjacent idle animation for attacks for now...
+          AnimationSpec attackSpec = specs.get((total + 1) % specs.size());
+          animationSpecs.put(MapAnimation.ATTACK, attackSpec);
 
           total++;
           Character character = combatant.getCharacter();

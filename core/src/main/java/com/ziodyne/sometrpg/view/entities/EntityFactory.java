@@ -19,6 +19,7 @@ import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.AnimationType;
+import com.ziodyne.sometrpg.view.animation.AnimationUtils;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.MapGridOverlay;
@@ -55,17 +56,12 @@ public class EntityFactory {
     Position position = new Position(pos.x, pos.y);
     result.addComponent(position);
 
-    int frameDims = 40;
     Map<AnimationType, Animation> anims = new HashMap<>();
     for (Map.Entry<AnimationType, AnimationSpec> specEntry : animations.entrySet()) {
+      AnimationType type = specEntry.getKey();
       AnimationSpec spec = specEntry.getValue();
-      Array<TextureRegion> regions = new Array<>();
-      for (Vector2 frameCoord : spec.getFrameCoords()) {
-        regions.add(new TextureRegion(texture, (int)frameCoord.x*frameDims, (int)frameCoord.y*frameDims, frameDims, frameDims));
-      }
 
-      Animation animation = new Animation(spec.getFrameDurationMs() / 1000f, regions, spec.getPlayMode().getGdxPlayMode());
-      anims.put(specEntry.getKey(), animation);
+      anims.put(type, AnimationUtils.createFromSpec(texture, spec));
     }
 
     Animation idle = anims.get(AnimationType.IDLE);

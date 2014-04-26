@@ -1,5 +1,22 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
+import java.util.List;
+
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Timeline;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+import com.artemis.Entity;
+import com.google.common.base.Optional;
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.navigation.Path;
+import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import com.ziodyne.sometrpg.view.components.Position;
+import com.ziodyne.sometrpg.view.navigation.PathSegment;
+import com.ziodyne.sometrpg.view.navigation.PathUtils;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -11,10 +28,16 @@ import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
  */
 public class UnitMoving extends FlowListener<BattleContext> {
   private final BattleScreen battleScreen;
+  private final Pathfinder<GridPoint2> pathfinder;
+  private final BattleMap map;
+  private final TweenManager tweenManager;
 
-  public UnitMoving(BattleScreen screen) {
+  public UnitMoving(BattleScreen screen, Pathfinder<GridPoint2> pathfinder, BattleMap map, TweenManager tweenManager) {
     super(BattleState.UNIT_MOVING);
     this.battleScreen = screen;
+    this.pathfinder = pathfinder;
+    this.tweenManager = tweenManager;
+    this.map = map;
   }
 
   @Override
@@ -23,11 +46,45 @@ public class UnitMoving extends FlowListener<BattleContext> {
   }
 
   @Override
-  public void onEnter(BattleContext context) {
+  public void onEnter(final BattleContext context) {
+    GridPoint2 combatantLoc = map.getCombatantPosition(context.selectedCombatant);
     battleScreen.moveCombatant(context.selectedCombatant, context.movementDestination);
     context.selectedSquare = context.movementDestination;
 
-    // Unit movement is instant for now
-    context.safeTrigger(BattleEvent.UNIT_MOVED);
+    com.ziodyne.sometrpg.logic.models.Character character = context.selectedCombatant.getCharacter();
+    Entity entity = battleScreen.getUnitEntity(character);
+
+    Position position = entity.getComponent(Position.class);
+    if (position != null) {
+      Timeline movement = Timeline.createSequence();
+      Optional<Path<GridPoint2>> path = pathfinder.computePath(combatantLoc, context.selectedSquare);
+      if (path.isPresent()) {
+        List<PathSegment> segmentedPath = PathUtils.segmentPath(path.get());
+
+        for (int i = 0; i < segmentedPath.size(); i++) {
+          PathSegment segment = segmentedPath.get(i);
+          PathSegment.Type type = segment.getType();
+          if (type != PathSegment.Type.START &&
+              type != PathSegment.Type.END) {
+
+            PathSegment next = segmentedPath.get(i + 1);
+            GridPoint2 nextPoint = next.getPoint();
+            Tween segTween = Tween
+              .to(position, 1, 0.5f)
+              .target(nextPoint.x, nextPoint.y)
+              .ease(TweenEquations.easeOutCubic);
+            movement.push(segTween);
+          }
+        }
+      }
+
+      movement.setCallback(new TweenCallback() {
+        @Override
+        public void onEvent(int i, BaseTween<?> baseTween) {
+          context.safeTrigger(BattleEvent.UNIT_MOVED);
+        }
+      })
+      .start(tweenManager);
+    }
   }
 }

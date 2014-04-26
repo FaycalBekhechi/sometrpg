@@ -213,7 +213,7 @@ public class TestBattle extends BattleScreen {
       turnListenerFactory.create(camera, this, pathfinder),
       new UnitActionSelectListener(skin, camera, menuStage),
       new SelectingMoveLocation(this),
-      new UnitMoving(this),
+      new UnitMoving(this, pathfinder, map, tweenManager),
       new AttackTargetSelectionListener(this),
       new AttackConfirmationListener(skin, menuStage, camera),
       new UnitAttackingListener(this, world)

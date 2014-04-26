@@ -269,7 +269,7 @@ public class TestBattle extends BattleScreen {
           total++;
           Character character = combatant.getCharacter();
 
-          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, animationSpecs);
+          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, animationSpecs, mcRunSheet.getGridSize());
           registerUnitEntity(character, unitEntity);
         }
       }

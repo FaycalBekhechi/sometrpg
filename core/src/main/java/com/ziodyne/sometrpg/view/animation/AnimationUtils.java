@@ -13,16 +13,14 @@ import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 public class AnimationUtils {
   private AnimationUtils() { }
 
-  // TODO: Get this from the spec
-  private static final int frameSize = 40;
-
   /**
    * Create a LibGDX Animation from an Animation spec and a Texture
    * @param texture The {@link Texture} from which to draw frames
    * @param spec The {@link AnimationSpec} describing the animation.
+   * @param frameSize The size of each frame on the sprite sheet
    * @return An {@link Animation} from the input
    */
-  public static Animation createFromSpec(Texture texture, AnimationSpec spec) {
+  public static Animation createFromSpec(Texture texture, AnimationSpec spec, int frameSize) {
 
     Array<TextureRegion> textureRegions = new Array<>();
     for (Vector2 frameCoord : spec.getFrameCoords()) {

@@ -5,16 +5,16 @@ import java.util.Map;
 import com.artemis.Component;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
-import com.ziodyne.sometrpg.view.MapAnimation;
+import com.ziodyne.sometrpg.view.AnimationType;
 
 public class BattleUnit extends Component {
   public final Combatant combatant;
 
-  private MapAnimation animType = MapAnimation.IDLE;
+  private AnimationType animType = AnimationType.IDLE;
 
-  private final Map<MapAnimation, Animation> anims;
+  private final Map<AnimationType, Animation> anims;
 
-  public BattleUnit(Combatant combatant, Map<MapAnimation, Animation> anims) {
+  public BattleUnit(Combatant combatant, Map<AnimationType, Animation> anims) {
 
     this.combatant = combatant;
     this.anims = anims;
@@ -24,12 +24,12 @@ public class BattleUnit extends Component {
     return anims.get(animType);
   }
 
-  public void setAnimType(MapAnimation animType) {
+  public void setAnimType(AnimationType animType) {
 
     this.animType = animType;
   }
 
-  public MapAnimation getAnimType() {
+  public AnimationType getAnimType() {
 
     return animType;
   }

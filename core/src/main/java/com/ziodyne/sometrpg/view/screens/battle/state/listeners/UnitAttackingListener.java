@@ -1,11 +1,10 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import com.artemis.Entity;
-import com.artemis.World;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
-import com.ziodyne.sometrpg.view.MapAnimation;
+import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
@@ -47,13 +46,13 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
       Entity defendingEntity = getEntityForCombatant(defender);
 
       BattleUnit attackingBattleUnit = attackingEntity.getComponent(BattleUnit.class);
-      attackingBattleUnit.setAnimType(MapAnimation.ATTACK);
+      attackingBattleUnit.setAnimType(AnimationType.ATTACK);
 
       BattleUnit defendingBattleUnit = defendingEntity.getComponent(BattleUnit.class);
       if (result.wasEvaded()) {
-        defendingBattleUnit.setAnimType(MapAnimation.DODGE);
+        defendingBattleUnit.setAnimType(AnimationType.DODGE);
       } else {
-        defendingBattleUnit.setAnimType(MapAnimation.BE_HIT);
+        defendingBattleUnit.setAnimType(AnimationType.BE_HIT);
       }
 
       // Attacking is instant for now

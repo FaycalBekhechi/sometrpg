@@ -27,7 +27,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
@@ -44,8 +43,8 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.Director;
-import com.ziodyne.sometrpg.view.MapAnimation;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
@@ -256,14 +255,14 @@ public class TestBattle extends BattleScreen {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
-          Map<MapAnimation, AnimationSpec> animationSpecs = new HashMap<>();
+          Map<AnimationType, AnimationSpec> animationSpecs = new HashMap<>();
 
           AnimationSpec idleSpec = specs.get(total % specs.size());
-          animationSpecs.put(MapAnimation.IDLE, idleSpec);
+          animationSpecs.put(AnimationType.IDLE, idleSpec);
 
           // fuck it. Just use the adjacent idle animation for attacks for now...
           AnimationSpec attackSpec = specs.get((total + 1) % specs.size());
-          animationSpecs.put(MapAnimation.ATTACK, attackSpec);
+          animationSpecs.put(AnimationType.ATTACK, attackSpec);
 
           total++;
           Character character = combatant.getCharacter();

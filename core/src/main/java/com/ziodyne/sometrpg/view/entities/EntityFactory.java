@@ -18,7 +18,7 @@ import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
-import com.ziodyne.sometrpg.view.MapAnimation;
+import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.MapGridOverlay;
@@ -44,7 +44,7 @@ public class EntityFactory {
     this.repository = repository;
   }
 
-  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture, Map<MapAnimation, AnimationSpec> animations) {
+  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture, Map<AnimationType, AnimationSpec> animations) {
     Entity result = world.createEntity();
 
     GridPoint2 pos = map.getCombatantPosition(combatant);
@@ -56,8 +56,8 @@ public class EntityFactory {
     result.addComponent(position);
 
     int frameDims = 40;
-    Map<MapAnimation, Animation> anims = new HashMap<>();
-    for (Map.Entry<MapAnimation, AnimationSpec> specEntry : animations.entrySet()) {
+    Map<AnimationType, Animation> anims = new HashMap<>();
+    for (Map.Entry<AnimationType, AnimationSpec> specEntry : animations.entrySet()) {
       AnimationSpec spec = specEntry.getValue();
       Array<TextureRegion> regions = new Array<>();
       for (Vector2 frameCoord : spec.getFrameCoords()) {
@@ -68,7 +68,7 @@ public class EntityFactory {
       anims.put(specEntry.getKey(), animation);
     }
 
-    Animation idle = anims.get(MapAnimation.IDLE);
+    Animation idle = anims.get(AnimationType.IDLE);
     SpriteAnimation animationComponent = new SpriteAnimation(idle);
     result.addComponent(animationComponent);
 

@@ -42,6 +42,9 @@ import com.ziodyne.sometrpg.logic.models.battle.ArmyType;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
+import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
+import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
+import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.Director;
@@ -101,6 +104,7 @@ public class TestBattle extends BattleScreen {
   private PlayerTurnListener.Factory turnListenerFactory;
   private AssetBundleLoader bundleLoader;
   private boolean initialized;
+  private Pathfinder<GridPoint2> pathfinder;
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
@@ -206,7 +210,7 @@ public class TestBattle extends BattleScreen {
 
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
-      turnListenerFactory.create(camera, this),
+      turnListenerFactory.create(camera, this, pathfinder),
       new UnitActionSelectListener(skin, camera, menuStage),
       new SelectingMoveLocation(this),
       new UnitMoving(this),
@@ -341,7 +345,7 @@ public class TestBattle extends BattleScreen {
     battleMap.addUnit(fire, 7, 9);
     this.map = battleMap;
 
-
+    this.pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battleMap));
 
     List<Army> armies = Lists.newArrayList(playerArmy, enemyArmy);
     WinCondition winCondition = new Rout();

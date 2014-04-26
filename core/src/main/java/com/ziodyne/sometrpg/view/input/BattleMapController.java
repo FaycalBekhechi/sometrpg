@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.view.input;
 
-import au.com.ds.ef.err.LogicViolationError;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
@@ -11,7 +10,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.google.common.base.Optional;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.logic.navigation.Path;
+import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
@@ -19,26 +22,30 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class BattleMapController extends InputAdapter implements Toggleable {
+  private static final Logger LOG = new GdxLogger(BattleMapController.class);
   private static final int DRAG_TOLERANCE = 4;
 
   private final OrthographicCamera camera;
   private final TweenManager tweenManager;
   private final BattleScreen battleScreen;
   private final BattleContext context;
+  private final Pathfinder<GridPoint2> pathfinder;
   private boolean ignoreNextTouchUp = false;
   private boolean enabled = true;
 
   public interface Factory {
-    public BattleMapController create(OrthographicCamera camera, BattleScreen battleScreen, BattleContext context);
+    public BattleMapController create(OrthographicCamera camera, BattleScreen battleScreen, BattleContext context,
+                                      Pathfinder<GridPoint2> pathfinder);
   }
 
   @AssistedInject
   BattleMapController(@Assisted OrthographicCamera camera, @Assisted BattleScreen battleScreen,
-                      @Assisted BattleContext context, TweenManager tweenManager) {
+                      @Assisted BattleContext context, @Assisted Pathfinder<GridPoint2> pathfinder, TweenManager tweenManager) {
     this.context = context;
     this.camera = camera;
     this.tweenManager = tweenManager;
     this.battleScreen = battleScreen;
+    this.pathfinder = pathfinder;
   }
 
   @Override
@@ -62,11 +69,17 @@ public class BattleMapController extends InputAdapter implements Toggleable {
       return false;
     }
 
+
     Vector3 clickCoordinates = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     camera.unproject(clickCoordinates);
     int x = (int)Math.floor(clickCoordinates.x);
     int y = (int)Math.floor(clickCoordinates.y);
     GridPoint2 selectedPoint = new GridPoint2(x, y);
+
+    Optional<Path<GridPoint2>> path = pathfinder.computePath(selectedPoint, new GridPoint2(0, 1));
+    if (path.isPresent()) {
+      LOG.debug(path.get().getPoints().toString());
+    }
 
     if (button == Input.Buttons.RIGHT) {
       Optional<Combatant> combatantResult = battleScreen.getCombatant(selectedPoint);

@@ -36,6 +36,12 @@ public class GridPoint2 {
 	}
 
   @Override
+  public String toString() {
+
+    return "(" + x + ", " + y + ")";
+  }
+
+  @Override
   public int hashCode() {
     return Objects.hashCode(x, y);
   }

@@ -36,7 +36,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
   }
 
   @Override
-  public void onEnter(BattleContext context) {
+  public void onEnter(final BattleContext context) {
     Combatant selectedCombatant = context.selectedCombatant;
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
     if (allowedActions.isEmpty()) {
@@ -64,16 +64,14 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
         public void run() {
           attackingBattleUnit.setAnimType(AnimationType.IDLE);
           defendingBattleUnit.setAnimType(AnimationType.IDLE);
+          context.safeTrigger(BattleEvent.UNIT_ATTACKED);
         }
       };
 
       Entity process = world.createEntity();
-      process.addComponent(new TimedProcess(resetAnimations, 300));
+      process.addComponent(new TimedProcess(resetAnimations, 1300));
 
       world.addEntity(process);
-
-      // Attacking is instant for now
-      context.safeTrigger(BattleEvent.UNIT_ATTACKED);
     }
   }
 

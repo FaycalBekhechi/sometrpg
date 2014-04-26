@@ -45,6 +45,7 @@ import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.Director;
+import com.ziodyne.sometrpg.view.MapAnimation;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.BattleLoader;
@@ -79,6 +80,7 @@ import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -254,10 +256,14 @@ public class TestBattle extends BattleScreen {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
-          AnimationSpec spec = specs.get( total % specs.size());
+          AnimationSpec spec = specs.get(total % specs.size());
+          Map<MapAnimation, AnimationSpec> animationSpecs = new HashMap<>();
+          animationSpecs.put(MapAnimation.IDLE, spec);
+
           total++;
           Character character = combatant.getCharacter();
-          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, spec);
+
+          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, animationSpecs);
           registerUnitEntity(character, unitEntity);
         }
       }

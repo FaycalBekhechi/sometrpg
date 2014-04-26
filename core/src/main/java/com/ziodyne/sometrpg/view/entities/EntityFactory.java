@@ -1,7 +1,5 @@
 package com.ziodyne.sometrpg.view.entities;
 
-import javax.xml.soap.Text;
-
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
@@ -15,7 +13,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
@@ -23,7 +20,14 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.MapAnimation;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
-import com.ziodyne.sometrpg.view.components.*;
+import com.ziodyne.sometrpg.view.components.BattleUnit;
+import com.ziodyne.sometrpg.view.components.MapGridOverlay;
+import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
+import com.ziodyne.sometrpg.view.components.Position;
+import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.components.SpriteAnimation;
+import com.ziodyne.sometrpg.view.components.TiledMapComponent;
+import com.ziodyne.sometrpg.view.components.UnitSelector;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 
 import java.util.HashMap;
@@ -40,7 +44,7 @@ public class EntityFactory {
     this.repository = repository;
   }
 
-  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture, AnimationSpec spec) {
+  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture, Map<MapAnimation, AnimationSpec> animations) {
     Entity result = world.createEntity();
 
     GridPoint2 pos = map.getCombatantPosition(combatant);
@@ -52,22 +56,26 @@ public class EntityFactory {
     result.addComponent(position);
 
     int frameDims = 40;
-    Array<TextureRegion> regions = new Array<>();
-    for (Vector2 frameCoord : spec.getFrameCoords()) {
-      regions.add(new TextureRegion(texture, (int)frameCoord.x*frameDims, (int)frameCoord.y*frameDims, frameDims, frameDims));
+    Map<MapAnimation, Animation> anims = new HashMap<>();
+    for (Map.Entry<MapAnimation, AnimationSpec> specEntry : animations.entrySet()) {
+      AnimationSpec spec = specEntry.getValue();
+      Array<TextureRegion> regions = new Array<>();
+      for (Vector2 frameCoord : spec.getFrameCoords()) {
+        regions.add(new TextureRegion(texture, (int)frameCoord.x*frameDims, (int)frameCoord.y*frameDims, frameDims, frameDims));
+      }
+
+      Animation animation = new Animation(spec.getFrameDurationMs() / 1000f, regions, spec.getPlayMode().getGdxPlayMode());
+      anims.put(specEntry.getKey(), animation);
     }
 
-    Animation animation = new Animation(spec.getFrameDurationMs() / 1000f, regions, spec.getPlayMode().getGdxPlayMode());
-    SpriteAnimation animationComponent = new SpriteAnimation(animation);
+    Animation idle = anims.get(MapAnimation.IDLE);
+    SpriteAnimation animationComponent = new SpriteAnimation(idle);
     result.addComponent(animationComponent);
 
-    Sprite sprite = new Sprite(regions.get(0), 1, 1, SpriteLayer.FOREGROUND);
+    Sprite sprite = new Sprite(idle.getKeyFrame(0), 1, 1, SpriteLayer.FOREGROUND);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     result.addComponent(sprite);
-
-    Map<MapAnimation, Animation> anims = new HashMap<>();
-    anims.put(MapAnimation.IDLE, animation);
 
     result.addComponent(new BattleUnit(combatant, anims));
 

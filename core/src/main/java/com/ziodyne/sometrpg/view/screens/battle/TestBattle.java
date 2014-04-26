@@ -53,6 +53,7 @@ import com.ziodyne.sometrpg.view.assets.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.assets.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackConfirmationListener;
@@ -245,11 +246,13 @@ public class TestBattle extends BattleScreen {
   }
 
   private void initUnitEntities() {
-    Texture unitTexture = assetManager.get("data/idle_sheet.png");
-    SpriteSheet mcRunSheet = assetManager.get("data/idle_sheet.json");
+    Texture attackTexture = assetManager.get("data/mc_attackfront.png");
+    Texture idleTexture = assetManager.get("data/idle_sheet.png");
+    SpriteSheet idleSheet = assetManager.get("data/idle_sheet.json");
+    SpriteSheet attackSheet = assetManager.get("data/mc_attackfront.json");
 
     List<AnimationSpec> specs = new ArrayList<>();
-    specs.addAll(mcRunSheet.getAnimationSpecs().values());
+    specs.addAll(idleSheet.getAnimationSpecs().values());
 
     int total = 0;
     for (int i = 0; i < map.getWidth(); i++) {
@@ -257,19 +260,18 @@ public class TestBattle extends BattleScreen {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
-          Map<AnimationType, AnimationSpec> animationSpecs = new HashMap<>();
 
           AnimationSpec idleSpec = specs.get(total % specs.size());
-          animationSpecs.put(AnimationType.IDLE, idleSpec);
-
-          // fuck it. Just use the adjacent idle animation for attacks for now...
-          AnimationSpec attackSpec = specs.get((total + 1) % specs.size());
-          animationSpecs.put(AnimationType.ATTACK, attackSpec);
+          AnimationSpec attackSpec = new ArrayList<>(attackSheet.getAnimationSpecs().values()).get(0);
 
           total++;
           Character character = combatant.getCharacter();
 
-          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, unitTexture, animationSpecs, mcRunSheet.getGridSize());
+          Set<UnitEntityAnimation> anims = new HashSet<>();
+          anims.add(new UnitEntityAnimation(idleTexture, AnimationType.IDLE, idleSpec, idleSheet.getGridSize()));
+          anims.add(new UnitEntityAnimation(attackTexture, AnimationType.ATTACK, attackSpec, attackSheet.getGridSize()));
+
+          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, anims);
           registerUnitEntity(character, unitEntity);
         }
       }

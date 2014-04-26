@@ -13,6 +13,14 @@
   },
   {
     "type": "texture",
+    "path": "data/mc_attackfront.png"
+  },
+  {
+    "type": "spriteSheet",
+    "path": "data/mc_attackfront.json"
+  },
+  {
+    "type": "texture",
     "path": "data/mc_run.png"
   },
   {

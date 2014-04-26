@@ -45,8 +45,7 @@ public class EntityFactory {
     this.repository = repository;
   }
 
-  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture,
-                                   Map<AnimationType, AnimationSpec> animations, int gridSize) {
+  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Set<UnitEntityAnimation> animations) {
     Entity result = world.createEntity();
 
     GridPoint2 pos = map.getCombatantPosition(combatant);
@@ -58,11 +57,12 @@ public class EntityFactory {
     result.addComponent(position);
 
     Map<AnimationType, Animation> anims = new HashMap<>();
-    for (Map.Entry<AnimationType, AnimationSpec> specEntry : animations.entrySet()) {
-      AnimationType type = specEntry.getKey();
-      AnimationSpec spec = specEntry.getValue();
+    for (UnitEntityAnimation entityAnimation : animations) {
+      AnimationType type = entityAnimation.getType();
+      AnimationSpec spec = entityAnimation.getSpec();
+      Texture tex = entityAnimation.getTexture();
 
-      anims.put(type, AnimationUtils.createFromSpec(texture, spec, gridSize));
+      anims.put(type, AnimationUtils.createFromSpec(tex, spec, entityAnimation.getGridSize()));
     }
 
     Animation idle = anims.get(AnimationType.IDLE);

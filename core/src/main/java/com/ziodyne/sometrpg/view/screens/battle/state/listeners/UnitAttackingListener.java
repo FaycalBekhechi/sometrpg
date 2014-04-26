@@ -2,10 +2,10 @@ package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import com.artemis.Entity;
 import com.artemis.World;
-import com.ziodyne.sometrpg.logic.models.*;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.view.MapAnimation;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
@@ -20,13 +20,11 @@ import java.util.Set;
  */
 public class UnitAttackingListener extends FlowListener<BattleContext> {
   private final BattleScreen screen;
-  private final World world;
 
-  public UnitAttackingListener(BattleScreen screen, World world) {
+  public UnitAttackingListener(BattleScreen screen) {
 
     super(BattleState.UNIT_ATTACKING);
     this.screen = screen;
-    this.world = world;
   }
 
   @Override
@@ -48,12 +46,14 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
       Entity attackingEntity = getEntityForCombatant(attacker);
       Entity defendingEntity = getEntityForCombatant(defender);
 
+      BattleUnit attackingBattleUnit = attackingEntity.getComponent(BattleUnit.class);
+      attackingBattleUnit.setAnimType(MapAnimation.ATTACK);
 
-
+      BattleUnit defendingBattleUnit = defendingEntity.getComponent(BattleUnit.class);
       if (result.wasEvaded()) {
-        // TODO: Run 'evade' animation for defender
+        defendingBattleUnit.setAnimType(MapAnimation.DODGE);
       } else {
-        // TODO: Run 'attacked' animation for defender
+        defendingBattleUnit.setAnimType(MapAnimation.BE_HIT);
       }
 
       // Attacking is instant for now

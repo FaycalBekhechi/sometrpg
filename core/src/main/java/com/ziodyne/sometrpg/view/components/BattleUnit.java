@@ -24,6 +24,11 @@ public class BattleUnit extends Component {
     return anims.get(animType);
   }
 
+  public void setAnimType(MapAnimation animType) {
+
+    this.animType = animType;
+  }
+
   public MapAnimation getAnimType() {
 
     return animType;

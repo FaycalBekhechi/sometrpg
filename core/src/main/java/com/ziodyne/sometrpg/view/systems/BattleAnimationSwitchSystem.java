@@ -39,8 +39,10 @@ public class BattleAnimationSwitchSystem extends EntitySystem {
       // than the one already goin'.
       // TODO: Use a more sophisticated equality check.
       Animation animation = unit.getCurrentAnimation();
-      if (!animation.equals(spriteAnimation.getAnimation())) {
-        spriteAnimation.setAnimation(animation);
+      if (animation != null) {
+        if (!spriteAnimation.getAnimation().equals(animation)) {
+          spriteAnimation.setAnimation(animation);
+        }
       }
     }
   }

@@ -210,7 +210,7 @@ public class TestBattle extends BattleScreen {
       new UnitMoving(this),
       new AttackTargetSelectionListener(this),
       new AttackConfirmationListener(skin, menuStage, camera),
-      new UnitAttackingListener(this, world)
+      new UnitAttackingListener(this)
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
+import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
@@ -31,7 +32,12 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
     } else {
       Combatant attacker = context.selectedCombatant;
       Combatant defender = context.defendingCombatant;
-      context.battle.executeAttack(attacker, context.attackToExecute, defender);
+      CombatResult result = context.battle.executeAttack(attacker, context.attackToExecute, defender);
+
+      // TODO: Run 'attack' animation for attacker
+      if (result.wasEvaded()) {
+        // TODO: Run 'evade' animation for defender
+      }
 
       // Attacking is instant for now
       context.safeTrigger(BattleEvent.UNIT_ATTACKED);

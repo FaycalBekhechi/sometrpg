@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
+import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -68,7 +69,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   }
 
   @Override
-  public void executeAttack(Combatant attacker, Attack attack, Combatant defender) {
+  public CombatResult executeAttack(Combatant attacker, Attack attack, Combatant defender) {
     if (actedThisTurn.contains(attacker)) {
       throw new GameLogicException("Cannot perform two actions on the same turn.");
     }
@@ -77,9 +78,11 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
       throw new GameLogicException("Cannot attack a dead combatant.");
     }
 
-    combatResolver.execute(new BattleAction(attacker, defender, attack));
+    CombatResult result = combatResolver.execute(new BattleAction(attacker, defender, attack));
 
     recordAction(attacker);
+
+    return result;
   }
 
   public Set<Tile> getAttackableTiles(Combatant combatant, Attack attack) {

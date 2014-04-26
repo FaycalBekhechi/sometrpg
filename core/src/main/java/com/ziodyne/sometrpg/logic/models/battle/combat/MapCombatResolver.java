@@ -36,11 +36,21 @@ public class MapCombatResolver implements CombatResolver {
   }
 
   @Override
-  public void execute(BattleAction action) throws InvalidBattleActionException {
+  public CombatResult execute(BattleAction action) throws InvalidBattleActionException {
     validate(action);
 
-    int damage = computeDamageSubtotal(action.getAttack(), action.getAttacker(), action.getDefender());
-    action.getDefender().applyDamage(damage);
+    Attack attack = action.getAttack();
+    Combatant attacker = action.getAttacker();
+    Combatant defender = action.getDefender();
+
+    boolean evaded = !doesAttackHit(attack, attacker, defender);
+    int damage = 0;
+    if (!evaded) {
+      damage = computeDamageSubtotal(attack, attacker, defender);
+      action.getDefender().applyDamage(damage);
+    }
+
+    return new CombatResult(damage, evaded);
   }
 
   private static boolean isFriendlyFire(BattleAction action) {
@@ -49,19 +59,20 @@ public class MapCombatResolver implements CombatResolver {
     return attacker.getArmy().equals(defender.getArmy());
   }
 
-  static int computeDamageSubtotal(Attack attack, Combatant attacker, Combatant defender) {
-    int hitChance = attack.computeHitChance(attacker, defender);
-    if (Math.random() <= (hitChance/100)) {
-      int damage = attack.computeDamage(attacker, defender);
-      int critChance = attack.computeCritChance(attacker, defender);
-      if (Math.random() <= (critChance/100)) {
-        damage *= 2;
-      }
+  static boolean doesAttackHit(Attack attack, Combatant attacker, Combatant defender) {
 
-      return damage;
+    int hitChance = attack.computeHitChance(attacker, defender);
+    return Math.random() <= (hitChance/100);
+  }
+
+  static int computeDamageSubtotal(Attack attack, Combatant attacker, Combatant defender) {
+    int damage = attack.computeDamage(attacker, defender);
+    int critChance = attack.computeCritChance(attacker, defender);
+    if (Math.random() <= (critChance/100)) {
+      damage *= 2;
     }
 
-    return 0;
+    return damage;
   }
 
   private void validate(BattleAction action) throws InvalidBattleActionException {

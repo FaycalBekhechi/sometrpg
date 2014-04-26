@@ -38,6 +38,15 @@ public class BattleMapPathfindingStrategy implements PathfindingStrategy<GridPoi
   }
 
   @Override
+  public boolean isPassable(GridPoint2 node) {
+    Tile target = map.getTile(node.x, node.y);
+
+    return target != null &&
+           !target.isOccupied() &&
+           target.isPassable();
+  }
+
+  @Override
   public Set<GridPoint2> getNeighbors(GridPoint2 node) {
     return MathUtils.getNeighbors(node);
   }

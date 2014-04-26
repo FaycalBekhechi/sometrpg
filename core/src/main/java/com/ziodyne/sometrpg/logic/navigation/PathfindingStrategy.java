@@ -33,4 +33,11 @@ public interface PathfindingStrategy<T> {
    * @return {@code true} if the node is the goal {@code false} otherwise
    */
   public boolean isGoal(T node, T goal);
+
+  /**
+   * Check if a node is passable.
+   * @param node The node to check
+   * @return True if the node is passable. False otherwise.
+   */
+  public boolean isPassable(T node);
 }

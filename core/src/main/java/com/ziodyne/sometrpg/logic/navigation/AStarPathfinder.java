@@ -19,6 +19,10 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
   }
 
   public Optional<Path<T>> computePath(T start, T goal) {
+    if (!strategy.isPassable(goal) || !strategy.isPassable(start)) {
+      return Optional.absent();
+    }
+
     final Map<T, Double> exactCosts = Maps.newHashMap();
     final Map<T, Double> estimatedCosts = Maps.newHashMap();
     Set<T> closedNodes = Sets.newHashSet();

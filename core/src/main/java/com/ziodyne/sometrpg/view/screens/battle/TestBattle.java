@@ -75,6 +75,7 @@ import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
+import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -157,6 +158,7 @@ public class TestBattle extends BattleScreen {
     world.setSystem(mapSelectorUpdateSystem);
     world.setSystem(new StageUpdateSystem());
     world.setSystem(new BattleAnimationSwitchSystem());
+    world.setSystem(new TimedProcessRunnerSystem());
 
     /**
      * Render Order:
@@ -209,7 +211,7 @@ public class TestBattle extends BattleScreen {
       new UnitMoving(this),
       new AttackTargetSelectionListener(this),
       new AttackConfirmationListener(skin, menuStage, camera),
-      new UnitAttackingListener(this)
+      new UnitAttackingListener(this, world)
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

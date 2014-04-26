@@ -29,6 +29,14 @@
   },
   {
     "type": "texture",
+    "path": "data/mc_attackback.png"
+  },
+  {
+    "type": "spriteSheet",
+    "path": "data/mc_attackback.json"
+  },
+  {
+    "type": "texture",
     "path": "data/mc_run.png"
   },
   {

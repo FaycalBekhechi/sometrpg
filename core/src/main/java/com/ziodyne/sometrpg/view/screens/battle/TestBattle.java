@@ -250,8 +250,8 @@ public class TestBattle extends BattleScreen {
   }
 
   private void initUnitEntities() {
-    Texture attackTexture = assetManager.get("data/mc_attackfront.png");
-    SpriteSheet attackSheet = assetManager.get("data/mc_attackfront.json");
+    Texture attackTexture = assetManager.get("data/mc_attackback.png");
+    SpriteSheet attackSheet = assetManager.get("data/mc_attackback.json");
 
     Texture idleTexture = assetManager.get("data/idle_sheet.png");
     SpriteSheet idleSheet = assetManager.get("data/idle_sheet.json");

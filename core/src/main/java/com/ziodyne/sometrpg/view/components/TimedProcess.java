@@ -4,12 +4,16 @@ import com.artemis.Component;
 import com.badlogic.gdx.Gdx;
 import com.google.common.base.Preconditions;
 
+/**
+ * A timed process is a runnable that will be executed after a specified number of milliseconds. This runs
+ * on the regular game loop, on the main thread.
+ */
 public class TimedProcess extends Component {
   private final Runnable onComplete;
   private float runningTime = 0L;
   private float ttl = 0L;
 
-  public TimedProcess(Runnable onComplete, long ttl) {
+  public TimedProcess(Runnable onComplete, float ttl) {
 
     this.onComplete = onComplete;
     this.ttl = ttl;

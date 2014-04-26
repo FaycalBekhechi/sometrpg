@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.view.navigation;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.navigation.Path;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,9 +27,9 @@ public class PathUtilsTest {
     Assert.assertEquals("The type of the last segment should be END", PathSegment.Type.END, last.getType());
 
     PathSegment firstCurve = segmentedPath.get(3);
-    Assert.assertEquals("The fourth path segment should be a north to west turn.", PathSegment.Type.N2W, firstCurve.getType());
+    Assert.assertEquals("The fourth path segment should be a north to west turn.", PathSegment.Type.N2E, firstCurve.getType());
 
     PathSegment postCurveStraight = segmentedPath.get(4);
-    Assert.assertEquals("The fifth path segment after the turn should continue west.", PathSegment.Type.W, postCurveStraight.getType());
+    Assert.assertEquals("The fifth path segment after the turn should continue west.", PathSegment.Type.E, postCurveStraight.getType());
   }
 }

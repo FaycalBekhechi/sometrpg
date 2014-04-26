@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.view.navigation;
 
-import com.badlogic.gdx.math.GridPoint2;
 import com.ziodyne.sometrpg.logic.navigation.Path;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,11 +117,11 @@ public class PathUtils {
    * @return A {@link Type} describing the direction.
    */
   private static Type computeDirection(GridPoint2 start, GridPoint2 end) {
-    if (start.x > end.x) {
+    if (start.x < end.x) {
       return Type.E;
     }
 
-    if (start.x < end.x) {
+    if (start.x > end.x) {
       return Type.W;
     }
 

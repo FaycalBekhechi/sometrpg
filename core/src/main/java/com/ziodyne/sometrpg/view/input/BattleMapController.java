@@ -16,6 +16,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import com.ziodyne.sometrpg.view.navigation.PathUtils;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -78,7 +79,7 @@ public class BattleMapController extends InputAdapter implements Toggleable {
 
     Optional<Path<GridPoint2>> path = pathfinder.computePath(selectedPoint, new GridPoint2(0, 1));
     if (path.isPresent()) {
-      LOG.debug(path.get().getPoints().toString());
+      LOG.debug(PathUtils.segmentPath(path.get()).toString());
     }
 
     if (button == Input.Buttons.RIGHT) {

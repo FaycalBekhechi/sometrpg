@@ -1,6 +1,6 @@
 package com.ziodyne.sometrpg.view.navigation;
 
-import com.badlogic.gdx.math.GridPoint2;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 public class PathSegment {
   public static enum Type {

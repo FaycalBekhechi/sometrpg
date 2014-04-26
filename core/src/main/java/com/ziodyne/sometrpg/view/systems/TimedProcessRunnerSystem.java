@@ -8,6 +8,9 @@ import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.ziodyne.sometrpg.view.components.TimedProcess;
 
+/**
+ * Tick and execute {@link com.ziodyne.sometrpg.view.components.TimedProcess} on Artemis' time.
+ */
 public class TimedProcessRunnerSystem extends EntitySystem {
   @Mapper
   private ComponentMapper<TimedProcess> processMapper;

@@ -11,13 +11,23 @@ import org.apache.commons.lang3.Validate;
  */
 public class SpriteAnimation extends Component {
 
-  private final Animation animation;
+  private Animation animation;
   private float currentTime = 0L;
 
   public SpriteAnimation(Animation animation) {
 
     Validate.notNull(animation);
-    this.animation = animation;
+    setAnimation(animation);
+  }
+
+  public Animation getAnimation() {
+
+    return animation;
+  }
+
+  public void setAnimation(Animation anim) {
+    this.animation = anim;
+    this.currentTime = 0L;
   }
 
   public TextureRegion getKeyFrame(float time) {

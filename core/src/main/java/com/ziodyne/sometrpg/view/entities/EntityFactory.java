@@ -15,15 +15,19 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import com.ziodyne.sometrpg.view.MapAnimation;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
 import com.ziodyne.sometrpg.view.components.*;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class EntityFactory {
@@ -36,27 +40,6 @@ public class EntityFactory {
     this.repository = repository;
   }
 
-  public Entity createUnit(BattleMap map, Combatant combatant, Texture texture) {
-    Entity unitEntity = world.createEntity();
-
-    Sprite sprite = new Sprite(texture, 1, 1, SpriteLayer.FOREGROUND);
-    sprite.setMagFiler(Texture.TextureFilter.Linear);
-    sprite.setMinFilter(Texture.TextureFilter.Linear);
-    unitEntity.addComponent(sprite);
-
-    GridPoint2 pos = map.getCombatantPosition(combatant);
-    if (pos == null) {
-      throw new IllegalArgumentException("Must provide a combatant that is actually on the map.");
-    }
-
-    Position position = new Position(pos.x, pos.y);
-    unitEntity.addComponent(position);
-
-    unitEntity.addComponent(new BattleUnit(combatant));
-
-    return unitEntity;
-  }
-
   public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Texture texture, AnimationSpec spec) {
     Entity result = world.createEntity();
 
@@ -67,8 +50,6 @@ public class EntityFactory {
 
     Position position = new Position(pos.x, pos.y);
     result.addComponent(position);
-
-    result.addComponent(new BattleUnit(combatant));
 
     int frameDims = 40;
     Array<TextureRegion> regions = new Array<>();
@@ -84,6 +65,11 @@ public class EntityFactory {
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     result.addComponent(sprite);
+
+    Map<MapAnimation, Animation> anims = new HashMap<>();
+    anims.put(MapAnimation.IDLE, animation);
+
+    result.addComponent(new BattleUnit(combatant, anims));
 
     return result;
   }

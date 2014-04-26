@@ -64,6 +64,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitAttackingLis
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitMoving;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
+import com.ziodyne.sometrpg.view.systems.BattleAnimationSwitchSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
 import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
@@ -154,6 +155,7 @@ public class TestBattle extends BattleScreen {
     world.setSystem(new BattleUnitMovementSystem(map));
     world.setSystem(mapSelectorUpdateSystem);
     world.setSystem(new StageUpdateSystem());
+    world.setSystem(new BattleAnimationSwitchSystem());
 
     /**
      * Render Order:
@@ -206,7 +208,7 @@ public class TestBattle extends BattleScreen {
       new UnitMoving(this),
       new AttackTargetSelectionListener(this),
       new AttackConfirmationListener(skin, menuStage, camera),
-      new UnitAttackingListener()
+      new UnitAttackingListener(this, world)
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

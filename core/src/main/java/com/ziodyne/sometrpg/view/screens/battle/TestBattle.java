@@ -289,7 +289,7 @@ public class TestBattle extends BattleScreen {
     Army playerArmy = new Army("Greil Mercenaries", ArmyType.PLAYER);
     playerArmy.addCombatant(player);
 
-    Army enemyArmy = new Army("Dawn Brigade", ArmyType.ENEMY);
+    Army enemyArmy = new Army("Fail Brigade", ArmyType.ENEMY);
     enemyArmy.addCombatant(halb);
     enemyArmy.addCombatant(swordboard);
     enemyArmy.addCombatant(strike);

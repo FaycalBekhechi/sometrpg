@@ -18,31 +18,6 @@ public class MapCombatResolverTest {
 
   @Test
   public void testComputeDamageSubtotal() throws Exception {
-    Attack missingAttack = new Attack() {
-      @Override
-      public int getRange() {
-        return Integer.MAX_VALUE;
-      }
-
-      @Override
-      public int computeDamage(Combatant attacker, Combatant defender) {
-        return 20;
-      }
-
-      @Override
-      public int computeHitChance(Combatant attacker, Combatant defender) {
-        return 0;
-      }
-
-      @Override
-      public int computeCritChance(Combatant attacker, Combatant defender) {
-        return 0;
-      }
-    };
-
-    int damage = MapCombatResolver.computeDamageSubtotal(missingAttack, attacker, defender);
-    Assert.assertEquals("An attack that misses should always do zero damage.", 0, damage);
-
     final int baseDamage = 20;
     Attack crittingAttack = new Attack() {
       @Override

@@ -247,9 +247,13 @@ public class TestBattle extends BattleScreen {
 
   private void initUnitEntities() {
     Texture attackTexture = assetManager.get("data/mc_attackfront.png");
+    SpriteSheet attackSheet = assetManager.get("data/mc_attackfront.json");
+
     Texture idleTexture = assetManager.get("data/idle_sheet.png");
     SpriteSheet idleSheet = assetManager.get("data/idle_sheet.json");
-    SpriteSheet attackSheet = assetManager.get("data/mc_attackfront.json");
+
+    Texture dodgeTexture = assetManager.get("data/mc_dodgefront.png");
+    SpriteSheet dodgeSheet = assetManager.get("data/mc_dodgefront.json");
 
     List<AnimationSpec> specs = new ArrayList<>();
     specs.addAll(idleSheet.getAnimationSpecs().values());
@@ -263,6 +267,7 @@ public class TestBattle extends BattleScreen {
 
           AnimationSpec idleSpec = specs.get(total % specs.size());
           AnimationSpec attackSpec = new ArrayList<>(attackSheet.getAnimationSpecs().values()).get(0);
+          AnimationSpec dodgeSpec = new ArrayList<>(dodgeSheet.getAnimationSpecs().values()).get(0);
 
           total++;
           Character character = combatant.getCharacter();
@@ -270,6 +275,7 @@ public class TestBattle extends BattleScreen {
           Set<UnitEntityAnimation> anims = new HashSet<>();
           anims.add(new UnitEntityAnimation(idleTexture, AnimationType.IDLE, idleSpec, idleSheet.getGridSize()));
           anims.add(new UnitEntityAnimation(attackTexture, AnimationType.ATTACK, attackSpec, attackSheet.getGridSize()));
+          anims.add(new UnitEntityAnimation(dodgeTexture, AnimationType.DODGE, dodgeSpec, dodgeSheet.getGridSize()));
 
           Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, anims);
           registerUnitEntity(character, unitEntity);

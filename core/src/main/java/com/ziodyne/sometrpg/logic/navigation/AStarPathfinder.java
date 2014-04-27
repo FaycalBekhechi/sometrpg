@@ -58,7 +58,7 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
     while (!openNodes.isEmpty()) {
       T currentCheapest = openNodes.poll();
       if (strategy.isGoal(currentCheapest, goal)) {
-        return Optional.of(constructPath(breadcrumbs, goal));
+        return Optional.of(constructPath(breadcrumbs, start, goal));
       }
 
       openNodes.remove(currentCheapest);
@@ -85,15 +85,15 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
     return Optional.absent();
   }
 
-  private Path<T> constructPath(Map<T, T> breadcrumbs, T currentNode) {
-    return constructPath(breadcrumbs, new Path.Builder<T>(), currentNode);
+  private Path<T> constructPath(Map<T, T> breadcrumbs, T startNode, T currentNode) {
+    return constructPath(breadcrumbs, new Path.Builder<T>(), startNode, currentNode);
   }
 
-  private Path<T> constructPath(Map<T, T> breadCrumbs, Path.Builder<T> pathBuilder, T currentNode) {
+  private Path<T> constructPath(Map<T, T> breadCrumbs, Path.Builder<T> pathBuilder, T startNode, T currentNode) {
     if (breadCrumbs.containsKey(currentNode)) {
-      return constructPath(breadCrumbs, pathBuilder.addPoint(currentNode), breadCrumbs.get(currentNode));
+      return constructPath(breadCrumbs, pathBuilder.addPoint(currentNode), startNode, breadCrumbs.get(currentNode));
     } else {
-      return pathBuilder.build();
+      return pathBuilder.addPoint(startNode).build();
     }
   }
 }

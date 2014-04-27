@@ -260,6 +260,9 @@ public class TestBattle extends BattleScreen {
     Texture dodgeTexture = assetManager.get("data/mc_dodgefront.png");
     SpriteSheet dodgeSheet = assetManager.get("data/mc_dodgefront.json");
 
+    Texture runTexture = assetManager.get("data/mc_run.png");
+    SpriteSheet runSheet = assetManager.get("data/mc_run.json");
+
     List<AnimationSpec> specs = new ArrayList<>();
     specs.addAll(idleSheet.getAnimationSpecs().values());
 
@@ -281,6 +284,21 @@ public class TestBattle extends BattleScreen {
           anims.add(new UnitEntityAnimation(idleTexture, AnimationType.IDLE, idleSpec, idleSheet.getGridSize()));
           anims.add(new UnitEntityAnimation(attackTexture, AnimationType.ATTACK, attackSpec, attackSheet.getGridSize()));
           anims.add(new UnitEntityAnimation(dodgeTexture, AnimationType.DODGE, dodgeSpec, dodgeSheet.getGridSize()));
+
+
+          Map<String, AnimationSpec> runSpecs = runSheet.getAnimationSpecs();
+          AnimationSpec south = runSpecs.get("run_south");
+          AnimationSpec north = runSpecs.get("run_north");
+          AnimationSpec east = runSpecs.get("run_east");
+          AnimationSpec west = runSpecs.get("run_west");
+
+          int size = runSheet.getGridSize();
+          anims.addAll(Lists.newArrayList(
+            new UnitEntityAnimation(runTexture, AnimationType.RUN_SOUTH, south, size),
+            new UnitEntityAnimation(runTexture, AnimationType.RUN_NORTH, north, size),
+            new UnitEntityAnimation(runTexture, AnimationType.RUN_WEST, west, size),
+            new UnitEntityAnimation(runTexture, AnimationType.RUN_EAST, east, size)
+          ));
 
           Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, anims);
           registerUnitEntity(character, unitEntity);

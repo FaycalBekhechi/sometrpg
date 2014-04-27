@@ -14,6 +14,8 @@ import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import com.ziodyne.sometrpg.view.AnimationType;
+import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.navigation.PathSegment;
 import com.ziodyne.sometrpg.view.navigation.PathUtils;
@@ -22,7 +24,6 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
-import com.ziodyne.sometrpg.view.tween.TweenUtils;
 
 /**
  * Logic for entering and exiting the state where a unit is moving
@@ -59,12 +60,25 @@ public class UnitMoving extends FlowListener<BattleContext> {
       Timeline movement = Timeline.createSequence();
       Optional<Path<GridPoint2>> path = pathfinder.computePath(combatantLoc, context.selectedSquare);
       if (path.isPresent()) {
-        movement = TweenUtils.moveAlongPath(path.get(), .3f, position, 1);
+        List<PathSegment> segmentedPath = PathUtils.segmentPath(path.get());
+        for (int i = 1; i < segmentedPath.size(); i++) {
+          PathSegment segment = segmentedPath.get(i);
+          PathSegment.Type segType = segment.getType();
+
+          GridPoint2 point = segment.getPoint();
+          Tween segTween = Tween
+            .to(position, 1, 0.3f)
+            .target(point.x, point.y);
+          movement = movement.push(segTween);
+        }
       }
 
+      final BattleUnit battleUnit = entity.getComponent(BattleUnit.class);
+      battleUnit.setAnimType(AnimationType.RUN_WEST);
       movement.setCallback(new TweenCallback() {
         @Override
         public void onEvent(int i, BaseTween<?> baseTween) {
+          battleUnit.setAnimType(AnimationType.IDLE);
           context.safeTrigger(BattleEvent.UNIT_MOVED);
         }
       })

@@ -48,11 +48,10 @@ public class UnitMoving extends FlowListener<BattleContext> {
   @Override
   public void onEnter(final BattleContext context) {
     GridPoint2 combatantLoc = map.getCombatantPosition(context.selectedCombatant);
-    battleScreen.moveCombatant(context.selectedCombatant, context.movementDestination);
     context.selectedSquare = context.movementDestination;
 
     com.ziodyne.sometrpg.logic.models.Character character = context.selectedCombatant.getCharacter();
-    Entity entity = battleScreen.getUnitEntity(character);
+    final Entity entity = battleScreen.getUnitEntity(character);
 
     Position position = entity.getComponent(Position.class);
     if (position != null) {
@@ -61,21 +60,31 @@ public class UnitMoving extends FlowListener<BattleContext> {
       if (path.isPresent()) {
         List<PathSegment> segmentedPath = PathUtils.segmentPath(path.get());
 
-        for (int i = 0; i < segmentedPath.size(); i++) {
+        PathSegment first = segmentedPath.get(0);
+        GridPoint2 firstPoint = first.getPoint();
+        Tween firstTween = Tween
+          .to(position, 1, 1f)
+          .target(firstPoint.x, firstPoint.y);
+        movement = movement.push(firstTween);
+
+        // Midpoints
+        for (int i = 1; i < segmentedPath.size(); i++) {
           PathSegment segment = segmentedPath.get(i);
           PathSegment.Type type = segment.getType();
-          if (type != PathSegment.Type.START &&
-              type != PathSegment.Type.END) {
-
-            PathSegment next = segmentedPath.get(i + 1);
-            GridPoint2 nextPoint = next.getPoint();
+          if (type != PathSegment.Type.END) {
+            GridPoint2 point = segment.getPoint();
             Tween segTween = Tween
-              .to(position, 1, 0.5f)
-              .target(nextPoint.x, nextPoint.y)
-              .ease(TweenEquations.easeOutCubic);
-            movement.push(segTween);
+              .to(position, 1, 1f)
+              .target(point.x, point.y);
+            movement = movement.push(segTween);
           }
         }
+
+        // Last
+        Tween lastTween = Tween
+          .to(position, 1, 1f)
+          .target(context.selectedSquare.x, context.selectedSquare.y);
+        movement = movement.push(lastTween);
       }
 
       movement.setCallback(new TweenCallback() {
@@ -86,5 +95,7 @@ public class UnitMoving extends FlowListener<BattleContext> {
       })
       .start(tweenManager);
     }
+
+    battleScreen.moveCombatant(context.selectedCombatant, context.movementDestination);
   }
 }

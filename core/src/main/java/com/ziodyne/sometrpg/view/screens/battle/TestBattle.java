@@ -55,6 +55,7 @@ import com.ziodyne.sometrpg.view.assets.GameSpec;
 import com.ziodyne.sometrpg.view.assets.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.assets.SpriteSheetAssetLoader;
+import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
@@ -70,7 +71,6 @@ import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
 import com.ziodyne.sometrpg.view.systems.BattleAnimationSwitchSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
-import com.ziodyne.sometrpg.view.systems.BattleUnitMovementSystem;
 import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.MapMovementOverlayRenderer;
@@ -84,7 +84,6 @@ import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +96,7 @@ public class TestBattle extends BattleScreen {
   private MapHoverSelectorUpdateSystem mapSelectorUpdateSystem;
   private Rectangle mapBoundingRect;
   private BattleMap map;
+  private TweenAccessor<Position> positionTweenAccessor;
   private TweenAccessor<Sprite> spriteTweenAccessor;
   private TweenAccessor<Camera> cameraTweenAccessor;
   private SpriteRenderSystem.Factory spriteRendererFactory;
@@ -110,12 +110,13 @@ public class TestBattle extends BattleScreen {
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<Sprite> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
-             PlayerTurnListener.Factory turnListenerFactory) {
+             PlayerTurnListener.Factory turnListenerFactory, TweenAccessor<Position> positionTweenAccessor) {
     super(director, new OrthographicCamera(), 32f);
 
     this.tweenManager = tweenManager;
     this.turnListenerFactory = turnListenerFactory;
     this.cameraTweenAccessor = cameraTweenAccessor;
+    this.positionTweenAccessor = positionTweenAccessor;
     this.spriteRendererFactory = spriteRendererFactory;
     this.spriteTweenAccessor = spriteTweenAccessor;
     this.mapControllerFactory = mapControllerFactory;
@@ -143,6 +144,7 @@ public class TestBattle extends BattleScreen {
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
     Tween.registerAccessor(Sprite.class, spriteTweenAccessor);
+    Tween.registerAccessor(Position.class, positionTweenAccessor);
 
     TiledMap tiledMap = assetManager.get("maps/test/test.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
@@ -159,7 +161,6 @@ public class TestBattle extends BattleScreen {
     world.setSystem(new BattleUnitDeathSystem());
     world.setSystem(new AnimationKeyFrameSystem());
     world.setSystem(new DeathFadeSystem(tweenManager));
-    world.setSystem(new BattleUnitMovementSystem(map));
     world.setSystem(mapSelectorUpdateSystem);
     world.setSystem(new StageUpdateSystem());
     world.setSystem(new BattleAnimationSwitchSystem());

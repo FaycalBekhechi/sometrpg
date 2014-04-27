@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.logic.navigation;
 
 import com.google.common.collect.Lists;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Path<T> {
@@ -16,7 +17,8 @@ public class Path<T> {
     }
 
     public Path<T> build() {
-      return new Path<T>(points);
+      Collections.reverse(points);
+      return new Path<>(points);
     }
   }
 

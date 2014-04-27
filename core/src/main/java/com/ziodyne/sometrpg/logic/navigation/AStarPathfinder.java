@@ -19,7 +19,7 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
   }
 
   public Optional<Path<T>> computePath(T start, T goal) {
-    if (!strategy.isPassable(goal) || !strategy.isPassable(start)) {
+    if (!strategy.isPassable(goal)) {
       return Optional.absent();
     }
 

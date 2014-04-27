@@ -109,13 +109,6 @@ public abstract class BattleScreen extends ScreenAdapter {
   }
 
   public void moveCombatant(Combatant combatant, GridPoint2 dest) {
-    Entity unitEntity = getUnitEntity(combatant.getCharacter());
-    Position pos = unitEntity.getComponent(Position.class);
-    pos.setX(dest.x);
-    pos.setY(dest.y);
-
-    unitEntity.changedInWorld();
-
     Tile tile = battle.getTile(dest);
     battle.moveCombatant(combatant, tile);
   }

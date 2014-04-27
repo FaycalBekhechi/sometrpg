@@ -22,6 +22,14 @@ public class AnimationSpec {
   @JsonProperty("mode")
   private PlayMode playMode = PlayMode.LOOP;
 
+  @JsonProperty("flip_y")
+  private boolean flipY = false;
+
+  public boolean isYFlipped() {
+
+    return flipY;
+  }
+
   public PlayMode getPlayMode() {
 
     return playMode;

@@ -26,7 +26,11 @@ public class AnimationUtils {
     for (Vector2 frameCoord : spec.getFrameCoords()) {
       int x = (int)frameCoord.x*frameSize;
       int y = (int)frameCoord.y*frameSize;
-      textureRegions.add(new TextureRegion(texture, x, y, frameSize, frameSize));
+
+      TextureRegion region = new TextureRegion(texture, x, y, frameSize, frameSize);
+      region.flip(false, spec.isYFlipped());
+
+      textureRegions.add(region);
     }
 
     float frameDuration = spec.getFrameDurationMs() / 1000f;

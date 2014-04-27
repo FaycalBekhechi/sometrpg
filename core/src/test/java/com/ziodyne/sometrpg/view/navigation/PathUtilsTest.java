@@ -24,7 +24,7 @@ public class PathUtilsTest {
     Assert.assertEquals("The type of the first segment should be START", PathSegment.Type.START, first.getType());
 
     PathSegment last = segmentedPath.get(segmentedPath.size() - 1);
-    Assert.assertEquals("The type of the last segment should be END", PathSegment.Type.END, last.getType());
+    Assert.assertEquals("The type of the last segment should be south", PathSegment.Type.S, last.getType());
 
     PathSegment firstCurve = segmentedPath.get(2);
     Assert.assertEquals("The fourth path segment should be a west to south turn.", PathSegment.Type.W2S, firstCurve.getType());

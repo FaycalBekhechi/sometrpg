@@ -125,7 +125,6 @@ public class UnitMoving extends FlowListener<BattleContext> {
       case W2S:
         return AnimationType.RUN_WEST;
       case START:
-      case END:
         return AnimationType.IDLE;
       default:
         return AnimationType.RUN_SOUTH;

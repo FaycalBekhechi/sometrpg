@@ -16,8 +16,7 @@ public class PathSegment {
     E2S,
     S2W,
     S2E,
-    START,
-    END
+    START;
   }
 
   private final GridPoint2 point;

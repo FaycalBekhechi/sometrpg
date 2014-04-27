@@ -59,20 +59,11 @@ public class UnitMoving extends FlowListener<BattleContext> {
       Optional<Path<GridPoint2>> path = pathfinder.computePath(combatantLoc, context.selectedSquare);
       if (path.isPresent()) {
         List<PathSegment> segmentedPath = PathUtils.segmentPath(path.get());
-
-        PathSegment first = segmentedPath.get(0);
-        GridPoint2 firstPoint = first.getPoint();
-        Tween firstTween = Tween
-          .to(position, 1, 1f)
-          .target(firstPoint.x, firstPoint.y);
-        movement = movement.push(firstTween);
-
-        // Midpoints
         for (int i = 1; i < segmentedPath.size(); i++) {
           PathSegment segment = segmentedPath.get(i);
           GridPoint2 point = segment.getPoint();
           Tween segTween = Tween
-            .to(position, 1, 1f)
+            .to(position, 1, 0.3f)
             .target(point.x, point.y);
           movement = movement.push(segTween);
         }

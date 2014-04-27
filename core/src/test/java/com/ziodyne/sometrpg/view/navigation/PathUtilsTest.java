@@ -26,10 +26,10 @@ public class PathUtilsTest {
     PathSegment last = segmentedPath.get(segmentedPath.size() - 1);
     Assert.assertEquals("The type of the last segment should be END", PathSegment.Type.END, last.getType());
 
-    PathSegment firstCurve = segmentedPath.get(3);
-    Assert.assertEquals("The fourth path segment should be a north to west turn.", PathSegment.Type.N2E, firstCurve.getType());
+    PathSegment firstCurve = segmentedPath.get(2);
+    Assert.assertEquals("The fourth path segment should be a west to south turn.", PathSegment.Type.W2S, firstCurve.getType());
 
     PathSegment postCurveStraight = segmentedPath.get(4);
-    Assert.assertEquals("The fifth path segment after the turn should continue west.", PathSegment.Type.E, postCurveStraight.getType());
+    Assert.assertEquals("The fifth path segment after the turn should continue south.", PathSegment.Type.S, postCurveStraight.getType());
   }
 }

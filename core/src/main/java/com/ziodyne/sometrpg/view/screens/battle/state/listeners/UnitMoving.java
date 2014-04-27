@@ -22,6 +22,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
+import com.ziodyne.sometrpg.view.tween.TweenUtils;
 
 /**
  * Logic for entering and exiting the state where a unit is moving
@@ -58,15 +59,7 @@ public class UnitMoving extends FlowListener<BattleContext> {
       Timeline movement = Timeline.createSequence();
       Optional<Path<GridPoint2>> path = pathfinder.computePath(combatantLoc, context.selectedSquare);
       if (path.isPresent()) {
-        List<PathSegment> segmentedPath = PathUtils.segmentPath(path.get());
-        for (int i = 0; i < segmentedPath.size(); i++) {
-          PathSegment segment = segmentedPath.get(i);
-          GridPoint2 point = segment.getPoint();
-          Tween segTween = Tween
-            .to(position, 1, 0.3f)
-            .target(point.x, point.y);
-          movement = movement.push(segTween);
-        }
+        movement = TweenUtils.moveAlongPath(path.get(), .3f, position, 1);
       }
 
       movement.setCallback(new TweenCallback() {

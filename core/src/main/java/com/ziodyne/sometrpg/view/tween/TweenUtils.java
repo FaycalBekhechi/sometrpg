@@ -2,31 +2,22 @@ package com.ziodyne.sometrpg.view.tween;
 
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenEquation;
-import aurelienribon.tweenengine.TweenEquations;
-import com.badlogic.gdx.math.GridPoint2;
-import com.ziodyne.sometrpg.view.components.Position;
-
-import java.util.List;
+import com.ziodyne.sometrpg.logic.navigation.Path;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 public class TweenUtils {
   private TweenUtils() { }
 
-  public static Timeline sequencePosition(Position position, List<GridPoint2> points, float stepDuration, TweenEquation easingEquation) {
-    Timeline seq = Timeline.createSequence();
+  public static Timeline moveAlongPath(Path<GridPoint2> path, float stepDuration, Object target, int tweenType) {
+    Timeline timeline = Timeline.createSequence();
 
-    for (GridPoint2 point : points) {
-      seq.push(
-        Tween.to(position, 0, stepDuration)
-             .ease(easingEquation)
+    for (GridPoint2 point : path.getPoints()) {
+      timeline = timeline.push(
+        Tween.to(target, tweenType, stepDuration)
              .target(point.x, point.y)
       );
     }
 
-    return seq;
-  }
-
-  public static Timeline sequencePosition(Position position, List<GridPoint2> points, float stepDuration) {
-    return sequencePosition(position, points, stepDuration, TweenEquations.easeNone);
+    return timeline;
   }
 }

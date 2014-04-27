@@ -10,14 +10,16 @@ import static com.ziodyne.sometrpg.view.navigation.PathSegment.Type;
 
 public class PathUtils {
   private PathUtils() { }
+  public static List<PathSegment> segmentPath(Path<GridPoint2> path) {
+    return segmentPath(path.getPoints());
+  }
 
   /**
-   * Compute a {@link List} of {@link PathSegment} from a {@link Path} of {@link GridPoint2}
-   * @param path the path to segment
+   * Compute a {@link List} of {@link PathSegment} from a {@link List} of {@link GridPoint2}
+   * @param points the path to segment
    * @return A list of the path segments that make up the path
    */
-  public static List<PathSegment> segmentPath(Path<GridPoint2> path) {
-    List<GridPoint2> points = path.getPoints();
+  public static List<PathSegment> segmentPath(List<GridPoint2> points) {
     if (points.isEmpty()) {
       return new ArrayList<>();
     }
@@ -34,7 +36,8 @@ public class PathUtils {
         int nextIdx = idx+1;
         if (nextIdx >= points.size()) {
           // The point is at the end
-          result.add(new PathSegment(point, Type.END));
+          GridPoint2 previousPoint = points.get(prevIdx);
+          result.add(new PathSegment(point, computeDirection(previousPoint, point)));
         } else {
           // The point is in the middle
           GridPoint2 previousPoint = points.get(prevIdx);

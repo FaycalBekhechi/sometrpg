@@ -56,25 +56,46 @@ public class UnitMoving extends FlowListener<BattleContext> {
     final Entity entity = battleScreen.getUnitEntity(character);
 
     Position position = entity.getComponent(Position.class);
+    final BattleUnit battleUnit = entity.getComponent(BattleUnit.class);
     if (position != null) {
       Timeline movement = Timeline.createSequence();
       Optional<Path<GridPoint2>> path = pathfinder.computePath(combatantLoc, context.selectedSquare);
       if (path.isPresent()) {
-        List<PathSegment> segmentedPath = PathUtils.segmentPath(path.get());
+        List<GridPoint2> points = path.get().getPoints();
+        points.add(0, combatantLoc);
+
+        List<PathSegment> segmentedPath = PathUtils.segmentPath(points);
+
+        // Set the initial running animation
+        PathSegment firstSeg = segmentedPath.get(1);
+        battleUnit.setAnimType(getAnimationTypeForSegmentType(firstSeg.getType()));
+
         for (int i = 1; i < segmentedPath.size(); i++) {
           PathSegment segment = segmentedPath.get(i);
-          PathSegment.Type segType = segment.getType();
 
           GridPoint2 point = segment.getPoint();
           Tween segTween = Tween
             .to(position, 1, 0.3f)
             .target(point.x, point.y);
+
+          int nextIdx = i+1;
+          if (nextIdx < segmentedPath.size()) {
+            PathSegment nextSeg = segmentedPath.get(nextIdx);
+            PathSegment.Type segType = nextSeg.getType();
+            final AnimationType runningAnim = getAnimationTypeForSegmentType(segType);
+
+            segTween.setCallback(new TweenCallback() {
+              @Override
+              public void onEvent(int i, BaseTween<?> baseTween) {
+                battleUnit.setAnimType(runningAnim);
+              }
+            });
+          }
+
           movement = movement.push(segTween);
         }
       }
 
-      final BattleUnit battleUnit = entity.getComponent(BattleUnit.class);
-      battleUnit.setAnimType(AnimationType.RUN_WEST);
       movement.setCallback(new TweenCallback() {
         @Override
         public void onEvent(int i, BaseTween<?> baseTween) {
@@ -86,5 +107,27 @@ public class UnitMoving extends FlowListener<BattleContext> {
     }
 
     battleScreen.moveCombatant(context.selectedCombatant, context.movementDestination);
+  }
+
+  private static AnimationType getAnimationTypeForSegmentType(PathSegment.Type segType) {
+    switch (segType) {
+      case N:
+      case N2E:
+      case N2W:
+        return AnimationType.RUN_NORTH;
+      case E:
+      case E2N:
+      case E2S:
+        return AnimationType.RUN_EAST;
+      case W:
+      case W2N:
+      case W2S:
+        return AnimationType.RUN_WEST;
+      case START:
+      case END:
+        return AnimationType.IDLE;
+      default:
+        return AnimationType.RUN_SOUTH;
+    }
   }
 }

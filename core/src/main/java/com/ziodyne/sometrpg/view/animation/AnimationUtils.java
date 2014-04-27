@@ -28,7 +28,7 @@ public class AnimationUtils {
       int y = (int)frameCoord.y*frameSize;
 
       TextureRegion region = new TextureRegion(texture, x, y, frameSize, frameSize);
-      region.flip(false, spec.isYFlipped());
+      region.flip(spec.isYFlipped(), false);
 
       textureRegions.add(region);
     }

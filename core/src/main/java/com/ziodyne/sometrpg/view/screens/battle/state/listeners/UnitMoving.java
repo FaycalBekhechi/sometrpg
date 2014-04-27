@@ -70,21 +70,12 @@ public class UnitMoving extends FlowListener<BattleContext> {
         // Midpoints
         for (int i = 1; i < segmentedPath.size(); i++) {
           PathSegment segment = segmentedPath.get(i);
-          PathSegment.Type type = segment.getType();
-          if (type != PathSegment.Type.END) {
-            GridPoint2 point = segment.getPoint();
-            Tween segTween = Tween
-              .to(position, 1, 1f)
-              .target(point.x, point.y);
-            movement = movement.push(segTween);
-          }
+          GridPoint2 point = segment.getPoint();
+          Tween segTween = Tween
+            .to(position, 1, 1f)
+            .target(point.x, point.y);
+          movement = movement.push(segTween);
         }
-
-        // Last
-        Tween lastTween = Tween
-          .to(position, 1, 1f)
-          .target(context.selectedSquare.x, context.selectedSquare.y);
-        movement = movement.push(lastTween);
       }
 
       movement.setCallback(new TweenCallback() {

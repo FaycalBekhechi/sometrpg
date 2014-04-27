@@ -76,6 +76,7 @@ public class UnitMoving extends FlowListener<BattleContext> {
           GridPoint2 point = segment.getPoint();
           Tween segTween = Tween
             .to(position, 1, 0.3f)
+            .ease(TweenEquations.easeNone)
             .target(point.x, point.y);
 
           int nextIdx = i+1;

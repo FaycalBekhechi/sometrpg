@@ -13,6 +13,14 @@
   },
   {
     "type": "texture",
+    "path": "data/enemies_fuckit.png"
+  },
+  {
+    "type": "spriteSheet",
+    "path": "data/enemies_idle.json"
+  },
+  {
+    "type": "texture",
     "path": "data/mc_dodgefront.png"
   },
   {

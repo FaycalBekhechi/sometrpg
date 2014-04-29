@@ -1,0 +1,23 @@
+{
+  "grid_size": 50,
+  "animations": {
+    "swordbow_idle": {
+      "start": [0, 0],
+      "end": [0, 2],
+      "frame_length": 300,
+      "mode": "ping_pong"
+    },
+    "guts_idle": {
+      "start": [1, 0],
+      "end": [1, 2],
+      "frame_length": 300,
+      "mode": "ping_pong"
+    },
+    "speedy_idle": {
+      "start": [2, 0],
+      "end": [2, 2],
+      "frame_length": 300,
+      "mode": "ping_pong"
+    }
+  }
+}

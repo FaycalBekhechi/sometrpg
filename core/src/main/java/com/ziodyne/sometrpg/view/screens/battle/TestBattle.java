@@ -80,6 +80,7 @@ import com.ziodyne.sometrpg.view.systems.StageRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -272,39 +273,57 @@ public class TestBattle extends BattleScreen {
         Tile tile = map.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
-
-          AnimationSpec idleSpec = specs.get(total % specs.size());
-          AnimationSpec attackSpec = new ArrayList<>(attackSheet.getAnimationSpecs().values()).get(0);
-          AnimationSpec dodgeSpec = new ArrayList<>(dodgeSheet.getAnimationSpecs().values()).get(0);
-
-          total++;
           Character character = combatant.getCharacter();
+          if (character.getName().endsWith("_enemy")) {
+            registerEnemy(combatant);
+          } else {
 
-          Set<UnitEntityAnimation> anims = new HashSet<>();
-          anims.add(new UnitEntityAnimation(idleTexture, AnimationType.IDLE, idleSpec, idleSheet.getGridSize()));
-          anims.add(new UnitEntityAnimation(attackTexture, AnimationType.ATTACK, attackSpec, attackSheet.getGridSize()));
-          anims.add(new UnitEntityAnimation(dodgeTexture, AnimationType.DODGE, dodgeSpec, dodgeSheet.getGridSize()));
+            AnimationSpec idleSpec = specs.get(total % specs.size());
+            AnimationSpec attackSpec = new ArrayList<>(attackSheet.getAnimationSpecs().values()).get(0);
+            AnimationSpec dodgeSpec = new ArrayList<>(dodgeSheet.getAnimationSpecs().values()).get(0);
+
+            total++;
+            Set<UnitEntityAnimation> anims = new HashSet<>();
+            anims.add(new UnitEntityAnimation(idleTexture, AnimationType.IDLE, idleSpec, idleSheet.getGridSize()));
+            anims.add(new UnitEntityAnimation(attackTexture, AnimationType.ATTACK, attackSpec, attackSheet.getGridSize()));
+            anims.add(new UnitEntityAnimation(dodgeTexture, AnimationType.DODGE, dodgeSpec, dodgeSheet.getGridSize()));
 
 
-          Map<String, AnimationSpec> runSpecs = runSheet.getAnimationSpecs();
-          AnimationSpec south = runSpecs.get("run_south");
-          AnimationSpec north = runSpecs.get("run_north");
-          AnimationSpec east = runSpecs.get("run_east");
-          AnimationSpec west = runSpecs.get("run_west");
+            Map<String, AnimationSpec> runSpecs = runSheet.getAnimationSpecs();
+            AnimationSpec south = runSpecs.get("run_south");
+            AnimationSpec north = runSpecs.get("run_north");
+            AnimationSpec east = runSpecs.get("run_east");
+            AnimationSpec west = runSpecs.get("run_west");
 
-          int size = runSheet.getGridSize();
-          anims.addAll(Lists.newArrayList(
-            new UnitEntityAnimation(runTexture, AnimationType.RUN_SOUTH, south, size),
-            new UnitEntityAnimation(runTexture, AnimationType.RUN_NORTH, north, size),
-            new UnitEntityAnimation(runTexture, AnimationType.RUN_WEST, west, size),
-            new UnitEntityAnimation(runTexture, AnimationType.RUN_EAST, east, size)
-          ));
+            int size = runSheet.getGridSize();
+            anims.addAll(Lists.newArrayList(
+              new UnitEntityAnimation(runTexture, AnimationType.RUN_SOUTH, south, size),
+              new UnitEntityAnimation(runTexture, AnimationType.RUN_NORTH, north, size),
+              new UnitEntityAnimation(runTexture, AnimationType.RUN_WEST, west, size),
+              new UnitEntityAnimation(runTexture, AnimationType.RUN_EAST, east, size)
+            ));
 
-          Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, anims);
-          registerUnitEntity(character, unitEntity);
+            Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, anims);
+            registerUnitEntity(character, unitEntity);
+          }
         }
       }
     }
+  }
+
+  private void registerEnemy(Combatant combatant) {
+    String name = combatant.getCharacter().getName();
+    Texture enemyTex = assetManager.get("data/enemies_fuckit.png");
+    SpriteSheet enemySheet = assetManager.get("data/enemies_idle.json");
+    Map<String, AnimationSpec> specsByName = enemySheet.getAnimationSpecs();
+    Set<UnitEntityAnimation> anims = new HashSet<>();
+    int gridSize = enemySheet.getGridSize();
+
+    AnimationSpec idleSpec = specsByName.get(StringUtils.substringBefore(name, "_") + "_idle");
+    anims.add(new UnitEntityAnimation(enemyTex, AnimationType.IDLE, idleSpec, gridSize));
+    Entity entity = entityFactory.createAnimatedUnit(map, combatant, anims);
+
+    registerUnitEntity(combatant.getCharacter(), entity);
   }
 
   private SomeTRPGBattle initBattle(TiledMap map) {
@@ -318,6 +337,10 @@ public class TestBattle extends BattleScreen {
     Combatant fire = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
     Combatant mace = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
 
+    Combatant swordbow = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "swordbow_enemy"));
+    Combatant guts = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "guts_enemy"));
+    Combatant speedy = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "speedy_enemy"));
+
     Army playerArmy = new Army("Greil Mercenaries", ArmyType.PLAYER);
     playerArmy.addCombatant(player);
 
@@ -327,6 +350,9 @@ public class TestBattle extends BattleScreen {
     enemyArmy.addCombatant(strike);
     enemyArmy.addCombatant(fire);
     enemyArmy.addCombatant(mace);
+    enemyArmy.addCombatant(swordbow);
+    enemyArmy.addCombatant(guts);
+    enemyArmy.addCombatant(speedy);
 
     Set<Tile> tiles = new HashSet<Tile>(tileLayer.getHeight());
     Map<GridPoint2, Tile> pointToTile = Maps.newHashMap();
@@ -362,6 +388,9 @@ public class TestBattle extends BattleScreen {
     battleMap.addUnit(strike, 5, 5);
     battleMap.addUnit(mace, 2, 6);
     battleMap.addUnit(fire, 7, 9);
+    battleMap.addUnit(swordbow, 0, 0);
+    battleMap.addUnit(guts, 1, 2);
+    battleMap.addUnit(speedy, 6, 6);
     this.map = battleMap;
 
     this.pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battleMap));

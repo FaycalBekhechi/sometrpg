@@ -389,7 +389,7 @@ public class TestBattle extends BattleScreen {
     battleMap.addUnit(mace, 2, 6);
     battleMap.addUnit(fire, 7, 9);
     battleMap.addUnit(swordbow, 0, 0);
-    battleMap.addUnit(guts, 1, 2);
+    battleMap.addUnit(guts, 3, 6);
     battleMap.addUnit(speedy, 6, 6);
     this.map = battleMap;
 

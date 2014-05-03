@@ -15,6 +15,8 @@ public class Sprite extends Component {
   private float alpha = 1;
   private final float width;
   private final float height;
+  private float offsetX = 0f;
+  private float offsetY = 0f;
 
   public Sprite(Texture texture, float width, float height, SpriteLayer layer) {
     Validate.notNull(texture);
@@ -34,6 +36,26 @@ public class Sprite extends Component {
     this.width = width;
     this.height = height;
     this.region = region;
+  }
+
+  public void setOffsetX(float offsetX) {
+
+    this.offsetX = offsetX;
+  }
+
+  public void setOffsetY(float offsetY) {
+
+    this.offsetY = offsetY;
+  }
+
+  public float getOffsetX() {
+
+    return offsetX;
+  }
+
+  public float getOffsetY() {
+
+    return offsetY;
   }
 
   public void setRegion(TextureRegion region) {

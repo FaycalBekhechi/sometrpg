@@ -8,6 +8,7 @@ import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
 
@@ -34,7 +35,18 @@ public class AnimationKeyFrameSystem extends EntitySystem {
       SpriteAnimation animation = animationMapper.get(entity);
       Sprite sprite = spriteMapper.get(entity);
 
-      sprite.setRegion(animation.getCurrentFrame());
+      TextureRegion region = animation.getCurrentFrame();
+      TextureRegion lastRegion = sprite.getRegion();
+
+      if (lastRegion.getRegionWidth() != region.getRegionWidth()) {
+        float xOffset = (region.getRegionWidth() - 32f) / 64f;
+        sprite.setOffsetX(-xOffset);
+      } else if (lastRegion.getRegionHeight() != region.getRegionHeight()) {
+        float yOffset = (region.getRegionHeight() - 32f) / 64f;
+        sprite.setOffsetY(-yOffset);
+      }
+
+      sprite.setRegion(region);
       animation.tick();
       entity.changedInWorld();
     }

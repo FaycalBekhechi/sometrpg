@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
+import com.ziodyne.sometrpg.view.components.Position;
 
 /**
  * Helper methods for doing animation.

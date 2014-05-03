@@ -69,9 +69,7 @@ public class EntityFactory {
     SpriteAnimation animationComponent = new SpriteAnimation(idle);
     result.addComponent(animationComponent);
 
-    float scale = combatant.getCharacter().getName().endsWith("enemy") ? 1.56f : 1.25f;
-
-    Sprite sprite = new Sprite(idle.getKeyFrame(0), scale, scale, SpriteLayer.FOREGROUND);
+    Sprite sprite = new Sprite(idle.getKeyFrame(0), 1f, 1f, SpriteLayer.FOREGROUND);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     result.addComponent(sprite);

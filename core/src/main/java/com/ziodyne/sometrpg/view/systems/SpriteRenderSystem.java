@@ -105,14 +105,15 @@ public class SpriteRenderSystem extends EntitySystem {
 
     float x = pos.getX();
     float y = pos.getY();
-    float width = sprite.getWidth();
-    float height = sprite.getHeight();
-
     Texture texture = sprite.getTexture();
+
     if (texture == null) {
       TextureRegion region = sprite.getRegion();
-      batch.draw(region, x, y, width, height);
+      batch.draw(region, x, y, region.getRegionWidth()/32f, region.getRegionHeight()/32f);
     } else {
+      float width = sprite.getWidth();
+      float height = sprite.getHeight();
+
       batch.draw(texture, x, y, width, height);
     }
   }

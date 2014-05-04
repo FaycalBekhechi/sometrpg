@@ -142,6 +142,10 @@ public abstract class BattleScreen extends ScreenAdapter {
     return locations;
   }
 
+  public GridPoint2 getCombatantPosition(Combatant combatant) {
+    return battle.getCombatantPosition(combatant);
+  }
+
   public void setSelectedSquare(GridPoint2 selectedSquare) {
     if (selectedSquare == null) {
       if (unitSelector != null) {

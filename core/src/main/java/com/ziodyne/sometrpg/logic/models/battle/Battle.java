@@ -4,6 +4,8 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 import java.util.Set;
 
@@ -21,6 +23,9 @@ public interface Battle {
    * @return the Combatants owned by the player
    */
   public Set<Combatant> getPlayerUnits();
+
+
+  public GridPoint2 getCombatantPosition(Combatant combatant);
 
   /**
    * Returns the {@link Combatant}s owned by the enemy.
@@ -79,4 +84,5 @@ public interface Battle {
    * @return The # of squares left to move this combatant has.
    */
   public int getMovementRangeRemaining(Combatant combatant);
+
 }

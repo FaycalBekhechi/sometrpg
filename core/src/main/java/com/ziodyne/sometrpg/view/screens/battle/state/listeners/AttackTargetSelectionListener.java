@@ -44,6 +44,11 @@ public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
 
     gridSelectionController = new GridSelectionController(screen.getCamera(), attackSquares, new GridSelectionController.SelectionHandler() {
       @Override
+      public void handleHover(GridPoint2 hoveredPoint) {
+
+      }
+
+      @Override
       public void handleSelection(GridPoint2 selectedPoint) {
         Optional<Combatant> defender = screen.getCombatant(selectedPoint);
         if (defender.isPresent()) {

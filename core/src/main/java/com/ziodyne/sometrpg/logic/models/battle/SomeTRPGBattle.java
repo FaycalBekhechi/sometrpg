@@ -7,6 +7,10 @@ import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
+import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
+import com.ziodyne.sometrpg.logic.navigation.CachingPathfinder;
+import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -40,6 +44,23 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     this.armies = ImmutableList.copyOf(armies);
     this.condition = condition;
     this.combatResolver = new MapCombatResolver(map);
+  }
+
+  @Override
+  public GridPoint2 getCombatantPosition(Combatant combatant) {
+    return map.getCombatantPosition(combatant);
+  }
+
+  @Override
+  public Pathfinder<GridPoint2> createPathfinder() {
+
+    return new AStarPathfinder<>(new BattleMapPathfindingStrategy(map));
+  }
+
+  @Override
+  public Pathfinder<GridPoint2> createCachedPathfinder() {
+
+    return new CachingPathfinder<>(new BattleMapPathfindingStrategy(map));
   }
 
   @Override

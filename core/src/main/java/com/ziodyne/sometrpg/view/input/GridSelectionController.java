@@ -15,9 +15,11 @@ public class GridSelectionController extends InputAdapter {
   private final SelectionHandler handler;
 
   public static interface SelectionHandler {
+    public void handleHover(GridPoint2 hoveredPoint);
     public void handleSelection(GridPoint2 selectedPoint);
     public void handleCancelation();
   }
+
 
 
   public GridSelectionController(OrthographicCamera camera, Set<GridPoint2> bounds, SelectionHandler handler) {
@@ -37,6 +39,22 @@ public class GridSelectionController extends InputAdapter {
 
     if (bounds.contains(selectedPoint)) {
       handler.handleSelection(selectedPoint);
+    }
+
+    return false;
+  }
+
+  @Override
+  public boolean mouseMoved(int screenX, int screenY) {
+
+    Vector3 hoverCoords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+    camera.unproject(hoverCoords);
+    int x = (int)Math.floor(hoverCoords.x);
+    int y = (int)Math.floor(hoverCoords.y);
+
+    GridPoint2 hoveredPoint = new GridPoint2(x, y);
+    if (bounds.contains(hoveredPoint)) {
+      handler.handleHover(hoveredPoint);
     }
 
     return false;

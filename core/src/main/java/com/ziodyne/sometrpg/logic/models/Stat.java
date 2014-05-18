@@ -4,10 +4,8 @@ public enum Stat {
   HP,
   STRENGTH,
   DEFENCE,
-  RESISTANCE,
   SPEED,
   SKILL,
-  LUCK,
   LEVEL,
   MOVEMENT
 }

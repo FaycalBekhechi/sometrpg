@@ -35,7 +35,7 @@ public class StatChartUtilsTest {
     
     // Compare the distance between two opposing points on the chart.
     Vector2 firstPoint = new Vector2(tVerts[0], tVerts[1]);
-    Vector2 opposingPoint = new Vector2(tVerts[6], tVerts[7]);
+    Vector2 opposingPoint = new Vector2(tVerts[4], tVerts[5]);
     
     Assert.assertEquals(radius*2, firstPoint.dst(opposingPoint), epsilon);
     

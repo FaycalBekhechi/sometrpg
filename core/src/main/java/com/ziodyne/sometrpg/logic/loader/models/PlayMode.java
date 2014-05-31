@@ -7,14 +7,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum PlayMode {
-  NORMAL(Animation.NORMAL),
-  REVERSED(Animation.REVERSED),
-  LOOP(Animation.LOOP),
-  LOOP_REVERSED(Animation.LOOP_REVERSED),
-  LOOP_PINGPONG(Animation.LOOP_PINGPONG),
-  LOOP_RANDOM(Animation.LOOP_RANDOM);
+  NORMAL(Animation.PlayMode.NORMAL),
+  REVERSED(Animation.PlayMode.REVERSED),
+  LOOP(Animation.PlayMode.LOOP),
+  LOOP_REVERSED(Animation.PlayMode.LOOP_REVERSED),
+  LOOP_PINGPONG(Animation.PlayMode.LOOP_PINGPONG),
+  LOOP_RANDOM(Animation.PlayMode.LOOP_RANDOM);
 
-  PlayMode(int gdxPlayMode) {
+  PlayMode(Animation.PlayMode gdxPlayMode) {
 
     this.gdxPlayMode = gdxPlayMode;
   }
@@ -34,9 +34,9 @@ public enum PlayMode {
     return MODE_MAP.get(value);
   }
 
-  private int gdxPlayMode;
+  private Animation.PlayMode gdxPlayMode;
 
-  public int getGdxPlayMode() {
+  public Animation.PlayMode getGdxPlayMode() {
 
     return gdxPlayMode;
   }

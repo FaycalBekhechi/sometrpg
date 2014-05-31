@@ -6,7 +6,7 @@ import com.artemis.Entity;
 import com.artemis.annotations.Mapper;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.ziodyne.sometrpg.logging.GdxLogger;
@@ -36,7 +36,7 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
   protected void process(Entity e) {
     MapSquareOverlay movementOverlay = mapOverlayMapper.get(e);
 
-    Gdx.gl.glEnable(GL10.GL_BLEND);
+    Gdx.gl.glEnable(GL20.GL_BLEND);
     shapeRenderer.setProjectionMatrix(camera.combined);
     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
     shapeRenderer.setColor(movementOverlay.color);
@@ -46,7 +46,7 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
     }
 
     shapeRenderer.end();
-    Gdx.gl.glDisable(GL10.GL_BLEND);
+    Gdx.gl.glDisable(GL20.GL_BLEND);
   }
 
   private void renderMovementTile(GridPoint2 point) {

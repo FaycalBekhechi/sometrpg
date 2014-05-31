@@ -6,7 +6,7 @@ import com.artemis.Entity;
 import com.artemis.annotations.Mapper;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.GridPoint2;
@@ -45,7 +45,7 @@ public class MapOverlayRenderSystem extends EntityProcessingSystem {
 
     // Blending comes at a slight performance cost, so only enable it if it's necessary.
     if (overlay.opacity < 1.0f) {
-      Gdx.gl.glEnable(GL10.GL_BLEND);
+      Gdx.gl.glEnable(GL20.GL_BLEND);
     }
 
     // Render row lines
@@ -79,7 +79,7 @@ public class MapOverlayRenderSystem extends EntityProcessingSystem {
 
     // Disable blending if we enabled it before
     if (overlay.opacity < 1.0f) {
-      Gdx.gl.glDisable(GL10.GL_BLEND);
+      Gdx.gl.glDisable(GL20.GL_BLEND);
     }
   }
 }

@@ -6,7 +6,7 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.Character;
@@ -34,13 +34,12 @@ public class ChartTestScreen implements Screen {
   
   @Override
   public void render(float delta) {
-    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     tweenManager.update(delta);
 
     camera.update();
     camera.zoom = 0.02f;
-    camera.apply(Gdx.gl10);
     chart.render(camera);
   }
 

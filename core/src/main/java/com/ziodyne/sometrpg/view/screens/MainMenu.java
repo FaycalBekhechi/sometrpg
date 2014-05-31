@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.ziodyne.sometrpg.view.Director;
@@ -40,7 +41,7 @@ public class MainMenu extends ScreenAdapter {
   public MainMenu(Director dir, TweenManager tweenManager, TweenAccessor<Actor> actorTweenAccessor, Provider<TestBattle> battleProvider) {
     this.testBattleProvider = battleProvider;
     this.director = dir;
-    this.stage = new Stage();
+    this.stage = new Stage(new ScreenViewport());
     this.skin = new Skin(Gdx.files.internal("uiskin.json"));
     this.tweenManager = tweenManager;
 
@@ -126,7 +127,7 @@ public class MainMenu extends ScreenAdapter {
 
   @Override
   public void resize(int width, int height) {
-    stage.setViewport(width, height, true);
+    stage.getViewport().update(width, height);
   }
 
   @Override

@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.ziodyne.sometrpg.view.Director;
@@ -28,7 +30,9 @@ public class Splash implements Screen {
   public Splash(Director director, Provider<MainMenu> menuProvider) {
     this.menuProvider = menuProvider;
     this.director = director;
-    this.stage = new Stage(800, 480, true);
+
+    Viewport stageViewport = new FitViewport(800, 400);
+    this.stage = new Stage(stageViewport);
   }
   
   @Override

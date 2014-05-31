@@ -1,7 +1,6 @@
 package com.ziodyne.sometrpg.view.stats.charts;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.math.Polygon;
 import com.ziodyne.sometrpg.logic.models.Character;
@@ -29,7 +28,8 @@ public abstract class RadarChart {
 
     mesh.transform(camera.view);
 
-    mesh.render(GL10.GL_TRIANGLE_FAN);
+    // TODO: Figure out how to render this with a basic shader.
+    //mesh.render(GL20.GL_TRIANGLE_FAN);
   }
 
   public float getRadius() {

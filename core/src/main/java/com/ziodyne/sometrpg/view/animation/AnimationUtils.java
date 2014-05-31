@@ -35,7 +35,7 @@ public class AnimationUtils {
     }
 
     float frameDuration = spec.getFrameDurationMs() / 1000f;
-    int playMode = spec.getPlayMode().getGdxPlayMode();
+    Animation.PlayMode playMode = spec.getPlayMode().getGdxPlayMode();
 
     return new Animation(frameDuration, textureRegions, playMode);
   }

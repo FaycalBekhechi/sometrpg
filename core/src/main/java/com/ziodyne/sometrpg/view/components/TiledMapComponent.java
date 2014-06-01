@@ -14,7 +14,7 @@ public class TiledMapComponent extends Component {
 
   public TiledMapComponent(TiledMap map, float unitScale, SpriteBatch batch) {
     this.map = map;
-    this.renderer = new OrthogonalTiledMapRenderer(map, unitScale, batch);
+    this.renderer = new OrthogonalTiledMapRenderer(map, 1f, batch);
   }
 
   public TiledMap getMap() {

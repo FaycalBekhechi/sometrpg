@@ -53,7 +53,7 @@ public class EntityFactory {
       throw new IllegalArgumentException("Must provide a combatant that is actually on the map.");
     }
 
-    Position position = new Position(pos.x, pos.y);
+    Position position = new Position(pos.x*32f, pos.y*32f);
     result.addComponent(position);
 
     Map<AnimationType, Animation> anims = new HashMap<>();
@@ -69,7 +69,7 @@ public class EntityFactory {
     SpriteAnimation animationComponent = new SpriteAnimation(idle);
     result.addComponent(animationComponent);
 
-    Sprite sprite = new Sprite(idle.getKeyFrame(0), 1f, 1f, SpriteLayer.FOREGROUND);
+    Sprite sprite = new Sprite(idle.getKeyFrame(0), 32f, 32f, SpriteLayer.FOREGROUND);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     result.addComponent(sprite);
@@ -101,7 +101,7 @@ public class EntityFactory {
     Entity mapSelectorEntity = world.createEntity();
 
     Texture texture = repository.get("grid_overlay.png");
-    Sprite sprite = new Sprite(texture, 1, 1, SpriteLayer.BACKGROUND);
+    Sprite sprite = new Sprite(texture, 32f, 32f, SpriteLayer.BACKGROUND);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
@@ -115,7 +115,7 @@ public class EntityFactory {
     Entity mapSelectorEntity = world.createEntity();
 
     Texture texture = repository.get("grid_overlay.png");
-    Sprite sprite = new Sprite(texture, 1, 1, SpriteLayer.BACKGROUND);
+    Sprite sprite = new Sprite(texture, 32f, 32f, SpriteLayer.BACKGROUND);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
@@ -157,7 +157,7 @@ public class EntityFactory {
   public Entity createTiledMap(TiledMap map, SpriteBatch batch, float gridSquareSize) {
     Entity mapEntity = world.createEntity();
 
-    TiledMapComponent tiledMapComponent = new TiledMapComponent(map, 1 / gridSquareSize, batch);
+    TiledMapComponent tiledMapComponent = new TiledMapComponent(map, 1f, batch);
     mapEntity.addComponent(tiledMapComponent);
 
     return mapEntity;

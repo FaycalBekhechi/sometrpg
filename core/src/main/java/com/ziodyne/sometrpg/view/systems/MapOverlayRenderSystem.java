@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.Matrix4;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.components.MapGridOverlay;
@@ -42,6 +43,10 @@ public class MapOverlayRenderSystem extends EntityProcessingSystem {
     shapeRenderer.setProjectionMatrix(camera.combined);
     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
     shapeRenderer.setColor(0, 0, 0, overlay.opacity);
+
+    float size = overlay.gridSquareSize;
+    Matrix4 transform = new Matrix4().scale(size, size, 1f);
+    shapeRenderer.setTransformMatrix(transform);
 
     // Blending comes at a slight performance cost, so only enable it if it's necessary.
     if (overlay.opacity < 1.0f) {

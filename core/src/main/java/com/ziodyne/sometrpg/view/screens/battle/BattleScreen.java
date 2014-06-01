@@ -56,7 +56,7 @@ public abstract class BattleScreen extends ScreenAdapter {
     this.gridSquareSize = gridSquareSize;
     this.director = director;
     this.camera = camera;
-    this.menuStage = new Stage(new ScreenViewport(), spriteBatch);
+    this.menuStage = new Stage(new FitViewport(1600, 900), spriteBatch);
 
     menuStage.addActor(unitActionMenu);
   }
@@ -201,7 +201,7 @@ public abstract class BattleScreen extends ScreenAdapter {
     Gdx.gl.glClearColor(0, 0, 0.2f, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     assetManager.update();
-    camera.update();
+    //camera.update();
     world.setDelta(delta);
     world.process();
 

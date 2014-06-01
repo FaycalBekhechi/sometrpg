@@ -141,7 +141,7 @@ public class TestBattle extends BattleScreen {
   private void initalizeBattle() {
     logger.log("Initializing battle.");
 
-    camera.setToOrtho(false, 32, 18);
+    camera.setToOrtho(false, 1600, 900);
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
     Tween.registerAccessor(Sprite.class, spriteTweenAccessor);
@@ -149,7 +149,7 @@ public class TestBattle extends BattleScreen {
 
     TiledMap tiledMap = assetManager.get("maps/test/test.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
-    mapBoundingRect = new Rectangle(0, 0, tileLayer.getWidth()-1, tileLayer.getHeight()-1);
+    mapBoundingRect = new Rectangle(0, 0, (tileLayer.getWidth()-1) * gridSquareSize, (tileLayer.getHeight()-1) * gridSquareSize);
 
     SpriteRenderSystem spriteRenderSystem = spriteRendererFactory.create(camera);
 
@@ -195,7 +195,7 @@ public class TestBattle extends BattleScreen {
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch, gridSquareSize));
     initializeMapObjects(tiledMap);
 
-    Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32, new GridPoint2());
+    Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32f, new GridPoint2());
     world.addEntity(mapGridOverlay);
 
     Entity stage = entityFactory.createStage(menuStage);
@@ -243,7 +243,7 @@ public class TestBattle extends BattleScreen {
         for (MapObject object : layer.getObjects()) {
           TextureRegion region = TiledMapUtils.getTextureRegion(object.getProperties(), tiledMap);
           if (region != null) {
-            Entity entity = entityFactory.createMapObject((RectangleMapObject)object, region, 1/gridSquareSize);
+            Entity entity = entityFactory.createMapObject((RectangleMapObject)object, region, 1f);
             world.addEntity(entity);
           }
         }

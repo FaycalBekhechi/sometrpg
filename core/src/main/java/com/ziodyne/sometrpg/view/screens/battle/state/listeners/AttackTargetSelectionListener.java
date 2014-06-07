@@ -20,11 +20,13 @@ import java.util.Set;
  */
 public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
   private final BattleScreen screen;
+  private final float gridSize;
   private GridSelectionController gridSelectionController;
 
-  public AttackTargetSelectionListener(BattleScreen battleScreen) {
+  public AttackTargetSelectionListener(BattleScreen battleScreen, float gridSize) {
     super(BattleState.SELECTING_ATTACK_TARGET);
     this.screen = battleScreen;
+    this.gridSize = gridSize;
   }
 
   @Override
@@ -42,7 +44,7 @@ public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
 
     Set<GridPoint2> attackSquares = screen.showAttackRange(context.selectedCombatant, attack);
 
-    gridSelectionController = new GridSelectionController(screen.getCamera(), attackSquares, new GridSelectionController.SelectionHandler() {
+    gridSelectionController = new GridSelectionController(screen.getCamera(), attackSquares, gridSize, new GridSelectionController.SelectionHandler() {
       @Override
       public void handleHover(GridPoint2 hoveredPoint) {
 

@@ -212,9 +212,9 @@ public class TestBattle extends BattleScreen {
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       turnListenerFactory.create(camera, this, pathfinder, gridSquareSize),
       new UnitActionSelectListener(skin, viewport, menuStage, gridSquareSize),
-      new SelectingMoveLocation(this),
+      new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, tweenManager),
-      new AttackTargetSelectionListener(this),
+      new AttackTargetSelectionListener(this, gridSquareSize),
       new AttackConfirmationListener(skin, menuStage, camera),
       new UnitAttackingListener(this, world)
     );

@@ -13,6 +13,7 @@ public class GridSelectionController extends InputAdapter {
   private final Set<GridPoint2> bounds;
   private final OrthographicCamera camera;
   private final SelectionHandler handler;
+  private final float gridSize;
 
   public static interface SelectionHandler {
     public void handleHover(GridPoint2 hoveredPoint);
@@ -22,9 +23,11 @@ public class GridSelectionController extends InputAdapter {
 
 
 
-  public GridSelectionController(OrthographicCamera camera, Set<GridPoint2> bounds, SelectionHandler handler) {
+  public GridSelectionController(OrthographicCamera camera, Set<GridPoint2> bounds, float gridSize,
+                                 SelectionHandler handler) {
     this.camera = camera;
     this.bounds = bounds;
+    this.gridSize = gridSize;
     this.handler = handler;
   }
 
@@ -33,8 +36,8 @@ public class GridSelectionController extends InputAdapter {
 
     Vector3 clickCoordinates = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     camera.unproject(clickCoordinates);
-    int x = (int)Math.floor(clickCoordinates.x);
-    int y = (int)Math.floor(clickCoordinates.y);
+    int x = (int)Math.floor(clickCoordinates.x/gridSize);
+    int y = (int)Math.floor(clickCoordinates.y/gridSize);
     GridPoint2 selectedPoint = new GridPoint2(x, y);
 
     if (bounds.contains(selectedPoint)) {
@@ -49,8 +52,8 @@ public class GridSelectionController extends InputAdapter {
 
     Vector3 hoverCoords = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     camera.unproject(hoverCoords);
-    int x = (int)Math.floor(hoverCoords.x);
-    int y = (int)Math.floor(hoverCoords.y);
+    int x = (int)Math.floor(hoverCoords.x/gridSize);
+    int y = (int)Math.floor(hoverCoords.y/gridSize);
 
     GridPoint2 hoveredPoint = new GridPoint2(x, y);
     if (bounds.contains(hoveredPoint)) {

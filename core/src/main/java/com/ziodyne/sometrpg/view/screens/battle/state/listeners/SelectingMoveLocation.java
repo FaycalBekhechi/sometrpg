@@ -20,11 +20,13 @@ import java.util.Set;
  */
 public class SelectingMoveLocation extends FlowListener<BattleContext> {
   private final BattleScreen battle;
+  private final float gridSize;
   private GridSelectionController movementController;
 
-  public SelectingMoveLocation(BattleScreen screen) {
+  public SelectingMoveLocation(BattleScreen screen, float gridSize) {
     super(BattleState.SELECTING_MOVE_LOCATION);
     this.battle = screen;
+    this.gridSize = gridSize;
   }
 
   @Override
@@ -39,7 +41,7 @@ public class SelectingMoveLocation extends FlowListener<BattleContext> {
     context.mapController.disable();
     Set<GridPoint2> bounds = battle.showMoveRange(context.selectedCombatant);
     final Pathfinder<GridPoint2> pathfinder = context.battle.createCachedPathfinder();
-    movementController = new GridSelectionController(battle.getCamera(), bounds, new GridSelectionController.SelectionHandler() {
+    movementController = new GridSelectionController(battle.getCamera(), bounds, gridSize, new GridSelectionController.SelectionHandler() {
       @Override
       public void handleHover(GridPoint2 hoveredPoint) {
         GridPoint2 start = context.battle.getCombatantPosition(context.selectedCombatant);

@@ -2,9 +2,11 @@ package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -25,18 +27,20 @@ import java.util.Set;
 public class UnitActionSelectListener extends InputStealingFlowListener<BattleContext> {
   private static final Logger LOG = new GdxLogger(UnitActionSelectListener.class);
   private Skin skin;
-  private OrthographicCamera camera;
   private Stage stage;
+  private Viewport viewport;
+  private float gridSize;
 
   @Nullable
   private ActionMenu actionMenu;
 
-  public UnitActionSelectListener(Skin skin, OrthographicCamera camera, Stage stage) {
+  public UnitActionSelectListener(Skin skin, Viewport viewport, Stage stage, float gridSize) {
     super(BattleState.SELECTING_UNIT_ACTION);
 
     this.skin = skin;
-    this.camera = camera;
+    this.viewport = viewport;
     this.stage = stage;
+    this.gridSize = gridSize;
   }
 
   @Override
@@ -62,12 +66,8 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
     } else {
 
       actionMenu = new ActionMenu(allowedActions, skin);
-
-      Vector3 screenSpaceSelectionCoords = new Vector3(context.selectedSquare.x, context.selectedSquare.y, 0);
-      camera.project(screenSpaceSelectionCoords);
-
-      actionMenu.setX(screenSpaceSelectionCoords.x);
-      actionMenu.setY(screenSpaceSelectionCoords.y);
+      actionMenu.setX(context.selectedSquare.x * gridSize);
+      actionMenu.setY(context.selectedSquare.y * gridSize);
 
       actionMenu.addSelectedListener(new ActionSelectedHandler() {
         @Override

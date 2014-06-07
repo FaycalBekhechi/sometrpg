@@ -211,7 +211,7 @@ public class TestBattle extends BattleScreen {
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       turnListenerFactory.create(camera, this, pathfinder, gridSquareSize),
-      new UnitActionSelectListener(skin, camera, menuStage),
+      new UnitActionSelectListener(skin, viewport, menuStage, gridSquareSize),
       new SelectingMoveLocation(this),
       new UnitMoving(this, pathfinder, map, tweenManager),
       new AttackTargetSelectionListener(this),

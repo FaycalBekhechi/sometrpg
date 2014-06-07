@@ -213,9 +213,9 @@ public class TestBattle extends BattleScreen {
       turnListenerFactory.create(camera, this, pathfinder, gridSquareSize),
       new UnitActionSelectListener(skin, viewport, menuStage, gridSquareSize),
       new SelectingMoveLocation(this, gridSquareSize),
-      new UnitMoving(this, pathfinder, map, tweenManager),
+      new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager),
       new AttackTargetSelectionListener(this, gridSquareSize),
-      new AttackConfirmationListener(skin, menuStage, camera),
+      new AttackConfirmationListener(skin, menuStage, camera, gridSquareSize),
       new UnitAttackingListener(this, world)
     );
 

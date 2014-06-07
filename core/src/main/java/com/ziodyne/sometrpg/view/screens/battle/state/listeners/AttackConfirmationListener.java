@@ -1,9 +1,7 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import au.com.ds.ef.err.LogicViolationError;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.google.common.base.Optional;
@@ -22,13 +20,15 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
   private final Skin skin;
   private final Stage stage;
   private final OrthographicCamera camera;
+  private final float gridSize;
   private AttackPreviewConfirmationDialog confirmationDialog;
 
-  public AttackConfirmationListener(Skin skin, Stage stage, OrthographicCamera camera) {
+  public AttackConfirmationListener(Skin skin, Stage stage, OrthographicCamera camera, float gridSize) {
     super(BattleState.AWAITING_ATTACK_CONFIRMATION);
     this.skin = skin;
     this.stage = stage;
     this.camera = camera;
+    this.gridSize = gridSize;
   }
 
   @Override
@@ -47,13 +47,8 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
     Preconditions.checkState(action.isPresent(), "Attack confirmation requested with no attack to perform.");
 
     confirmationDialog = new AttackPreviewConfirmationDialog(action.get(), skin);
-
-    Vector3 screenSpaceSelectionCoords = new Vector3(context.selectedSquare.x+1, context.selectedSquare.y, 0);
-    camera.project(screenSpaceSelectionCoords);
-
-    confirmationDialog.setX(screenSpaceSelectionCoords.x);
-    confirmationDialog.setY(screenSpaceSelectionCoords.y);
-
+    confirmationDialog.setX((context.selectedSquare.x+1) * gridSize);
+    confirmationDialog.setY(context.selectedSquare.y * gridSize);
     confirmationDialog.setConfirmedHandler(new AttackPreviewConfirmationDialog.ConfirmedHandler() {
       @Override
       public void onConfirmed() {

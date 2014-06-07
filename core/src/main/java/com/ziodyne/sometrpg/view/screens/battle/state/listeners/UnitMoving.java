@@ -33,13 +33,15 @@ public class UnitMoving extends FlowListener<BattleContext> {
   private final Pathfinder<GridPoint2> pathfinder;
   private final BattleMap map;
   private final TweenManager tweenManager;
+  private final float gridSize;
 
-  public UnitMoving(BattleScreen screen, Pathfinder<GridPoint2> pathfinder, BattleMap map, TweenManager tweenManager) {
+  public UnitMoving(BattleScreen screen, Pathfinder<GridPoint2> pathfinder, BattleMap map, float gridSize, TweenManager tweenManager) {
     super(BattleState.UNIT_MOVING);
     this.battleScreen = screen;
     this.pathfinder = pathfinder;
     this.tweenManager = tweenManager;
     this.map = map;
+    this.gridSize = gridSize;
   }
 
   @Override
@@ -77,7 +79,7 @@ public class UnitMoving extends FlowListener<BattleContext> {
           Tween segTween = Tween
             .to(position, 1, 0.3f)
             .ease(TweenEquations.easeNone)
-            .target(point.x, point.y);
+            .target(point.x*gridSize, point.y*gridSize);
 
           int nextIdx = i+1;
           if (nextIdx < segmentedPath.size()) {

@@ -27,9 +27,12 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
 
   private final OrthographicCamera camera;
 
-  public MapMovementOverlayRenderer(OrthographicCamera camera) {
+  private final float gridSize;
+
+  public MapMovementOverlayRenderer(OrthographicCamera camera, float gridSize) {
     super(Aspect.getAspectForAll(MapSquareOverlay.class));
     this.camera = camera;
+    this.gridSize = gridSize;
   }
 
   @Override
@@ -37,7 +40,8 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
     MapSquareOverlay movementOverlay = mapOverlayMapper.get(e);
 
     Gdx.gl.glEnable(GL20.GL_BLEND);
-    shapeRenderer.setProjectionMatrix(camera.combined);
+    shapeRenderer.setProjectionMatrix(camera.projection);
+    shapeRenderer.setTransformMatrix(camera.view);
     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
     shapeRenderer.setColor(movementOverlay.color);
 
@@ -50,9 +54,9 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
   }
 
   private void renderMovementTile(GridPoint2 point) {
-    float leftEdge = point.x;
-    float bottomEdge = point.y;
+    float leftEdge = point.x * gridSize;
+    float bottomEdge = point.y * gridSize;
 
-    shapeRenderer.rect(leftEdge, bottomEdge, 1, 1);
+    shapeRenderer.rect(leftEdge, bottomEdge, gridSize, gridSize);
   }
 }

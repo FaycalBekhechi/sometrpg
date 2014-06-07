@@ -42,7 +42,7 @@ public class MapOverlayRenderSystem extends EntityProcessingSystem {
 
     shapeRenderer.setProjectionMatrix(camera.projection);
     shapeRenderer.setTransformMatrix(camera.view);
-    
+
     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
     shapeRenderer.setColor(0, 0, 0, overlay.opacity);
 

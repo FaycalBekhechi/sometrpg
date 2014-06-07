@@ -175,7 +175,7 @@ public class TestBattle extends BattleScreen {
      *   - Menu/HUD
      */
     world.setSystem(mapRenderSystem);
-    world.setSystem(new MapMovementOverlayRenderer(camera));
+    world.setSystem(new MapMovementOverlayRenderer(camera, gridSquareSize));
     world.setSystem(new MapOverlayRenderSystem(camera));
     world.setSystem(spriteRenderSystem);
     world.setSystem(new StageRenderSystem());

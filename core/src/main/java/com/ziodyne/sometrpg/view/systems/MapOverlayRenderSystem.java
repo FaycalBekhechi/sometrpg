@@ -40,28 +40,28 @@ public class MapOverlayRenderSystem extends EntityProcessingSystem {
     Position position = positionComponentMapper.get(entity);
     MapGridOverlay overlay = mapOverlayComponentMapper.get(entity);
 
-    shapeRenderer.setProjectionMatrix(camera.combined);
+    shapeRenderer.setProjectionMatrix(camera.projection);
+    shapeRenderer.setTransformMatrix(camera.view);
+    
     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
     shapeRenderer.setColor(0, 0, 0, overlay.opacity);
-
-    float size = overlay.gridSquareSize;
-    Matrix4 transform = new Matrix4().scale(size, size, 1f);
-    shapeRenderer.setTransformMatrix(transform);
 
     // Blending comes at a slight performance cost, so only enable it if it's necessary.
     if (overlay.opacity < 1.0f) {
       Gdx.gl.glEnable(GL20.GL_BLEND);
     }
 
+    float size = overlay.gridSquareSize;
+
     // Render row lines
     GridPoint2 currentStartPoint = new GridPoint2(Math.round(position.getX()), Math.round(position.getY()));
     for (int row = 0; row <= overlay.rows; row++) {
 
-      float x1 = currentStartPoint.x;
-      float y1 = currentStartPoint.y;
+      float x1 = currentStartPoint.x * size;
+      float y1 = currentStartPoint.y * size;
 
-      float x2 = currentStartPoint.x + overlay.rows;
-      float y2 = currentStartPoint.y;
+      float x2 = (currentStartPoint.x + overlay.rows) * size;
+      float y2 = currentStartPoint.y * size;
 
       shapeRenderer.line(x1, y1, x2, y2);
       currentStartPoint.set(currentStartPoint.x, currentStartPoint.y+1);
@@ -70,11 +70,11 @@ public class MapOverlayRenderSystem extends EntityProcessingSystem {
     // Render column lines
     GridPoint2 colStartPoint = new GridPoint2(Math.round(position.getX()), Math.round(position.getY()));
     for (int col = 0; col <= overlay.columns; col++) {
-      float x1 = colStartPoint.x;
-      float y1 = colStartPoint.y;
+      float x1 = colStartPoint.x * size;
+      float y1 = colStartPoint.y * size;
 
-      float x2 = colStartPoint.x;
-      float y2 = colStartPoint.y + overlay.columns;
+      float x2 = colStartPoint.x * size;
+      float y2 = (colStartPoint.y + overlay.columns) * size;
 
       shapeRenderer.line(x1, y1, x2, y2);
       colStartPoint.set(colStartPoint.x+1, colStartPoint.y);

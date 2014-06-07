@@ -114,6 +114,7 @@ public class TestBattle extends BattleScreen {
              PlayerTurnListener.Factory turnListenerFactory, TweenAccessor<Position> positionTweenAccessor) {
     super(director, new OrthographicCamera(), 32f);
 
+    camera.zoom = 0.7f;
     this.tweenManager = tweenManager;
     this.turnListenerFactory = turnListenerFactory;
     this.cameraTweenAccessor = cameraTweenAccessor;

@@ -59,6 +59,9 @@ public abstract class BattleScreen extends ScreenAdapter {
     this.director = director;
     this.camera = camera;
     this.viewport = new FitViewport(1600, 900, camera);
+
+    camera.translate(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2);
+
     this.menuStage = new Stage(viewport, spriteBatch);
 
     menuStage.addActor(unitActionMenu);
@@ -196,7 +199,7 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   @Override
   public void resize(int width, int height) {
-    viewport.update(width, height, true);
+    viewport.update(width, height);
   }
 
   @Override

@@ -154,7 +154,7 @@ public class TestBattle extends BattleScreen {
     SpriteRenderSystem spriteRenderSystem = spriteRendererFactory.create(camera);
 
     mapRenderSystem = new TiledMapRenderSystem(camera);
-    mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, camera, mapBoundingRect);
+    mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, camera, mapBoundingRect, 32);
 
     battle = initBattle(tiledMap);
     initUnitEntities();
@@ -195,7 +195,7 @@ public class TestBattle extends BattleScreen {
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch, gridSquareSize));
     initializeMapObjects(tiledMap);
 
-    Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32f, new GridPoint2());
+    Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32, new GridPoint2());
     world.addEntity(mapGridOverlay);
 
     Entity stage = entityFactory.createStage(menuStage);

@@ -44,6 +44,11 @@ public class MathUtils {
 
     return samples;
   }
+
+  public static float nearestMultipleOf(float multiple, float number) {
+    return multiple*((float)Math.floor(number/multiple));
+  }
+
   public static Set<GridPoint2> getNeighbors(GridPoint2 start) {
     return Sets.newHashSet(
             MathUtils.getEastNeighbor(start),

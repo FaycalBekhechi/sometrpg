@@ -7,7 +7,9 @@ import com.artemis.systems.VoidEntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
 import com.ziodyne.sometrpg.view.components.Position;
 
@@ -15,15 +17,15 @@ import static com.ziodyne.sometrpg.logic.util.MathUtils.nearestMultipleOf;
 
 public class MapHoverSelectorUpdateSystem extends VoidEntitySystem {
   private final World world;
-  private final Camera camera;
   private final Rectangle activeRegion;
   private final float gridSize;
+  private final Viewport viewport;
 
-  public MapHoverSelectorUpdateSystem(World world, Camera camera, Rectangle activeRegion, float gridSize) {
+  public MapHoverSelectorUpdateSystem(World world, Viewport viewport, Rectangle activeRegion, float gridSize) {
     this.world = world;
-    this.camera = camera;
     this.activeRegion = activeRegion;
     this.gridSize = gridSize;
+    this.viewport = viewport;
   }
 
   @Override
@@ -32,8 +34,8 @@ public class MapHoverSelectorUpdateSystem extends VoidEntitySystem {
     Entity mapSelector = tagManager.getEntity("map_hover_selector");
 
     if (mapSelector != null) {
-      Vector3 mousePosition = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-      camera.unproject(mousePosition);
+      Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+      viewport.unproject(mousePosition);
 
       float unprojectedX = mousePosition.x;
       float unprojectedY = mousePosition.y;

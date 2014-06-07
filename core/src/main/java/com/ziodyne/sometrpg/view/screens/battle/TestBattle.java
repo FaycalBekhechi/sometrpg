@@ -141,8 +141,6 @@ public class TestBattle extends BattleScreen {
   private void initalizeBattle() {
     logger.log("Initializing battle.");
 
-    camera.setToOrtho(false, 1600, 900);
-
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
     Tween.registerAccessor(Sprite.class, spriteTweenAccessor);
     Tween.registerAccessor(Position.class, positionTweenAccessor);
@@ -154,7 +152,7 @@ public class TestBattle extends BattleScreen {
     SpriteRenderSystem spriteRenderSystem = spriteRendererFactory.create(camera);
 
     mapRenderSystem = new TiledMapRenderSystem(camera);
-    mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, camera, mapBoundingRect, 32);
+    mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, viewport, mapBoundingRect, 32);
 
     battle = initBattle(tiledMap);
     initUnitEntities();
@@ -212,7 +210,7 @@ public class TestBattle extends BattleScreen {
 
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
-      turnListenerFactory.create(camera, this, pathfinder),
+      turnListenerFactory.create(camera, this, pathfinder, gridSquareSize),
       new UnitActionSelectListener(skin, camera, menuStage),
       new SelectingMoveLocation(this),
       new UnitMoving(this, pathfinder, map, tweenManager),

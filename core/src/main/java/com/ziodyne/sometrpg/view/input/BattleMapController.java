@@ -31,21 +31,24 @@ public class BattleMapController extends InputAdapter implements Toggleable {
   private final BattleScreen battleScreen;
   private final BattleContext context;
   private final Pathfinder<GridPoint2> pathfinder;
+  private final float gridSize;
   private boolean ignoreNextTouchUp = false;
   private boolean enabled = true;
 
   public interface Factory {
     public BattleMapController create(OrthographicCamera camera, BattleScreen battleScreen, BattleContext context,
-                                      Pathfinder<GridPoint2> pathfinder);
+                                      Pathfinder<GridPoint2> pathfinder, float gridSize);
   }
 
   @AssistedInject
   BattleMapController(@Assisted OrthographicCamera camera, @Assisted BattleScreen battleScreen,
-                      @Assisted BattleContext context, @Assisted Pathfinder<GridPoint2> pathfinder, TweenManager tweenManager) {
+                      @Assisted BattleContext context, @Assisted Pathfinder<GridPoint2> pathfinder,
+                      @Assisted float gridSize, TweenManager tweenManager) {
     this.context = context;
     this.camera = camera;
     this.tweenManager = tweenManager;
     this.battleScreen = battleScreen;
+    this.gridSize = gridSize;
     this.pathfinder = pathfinder;
   }
 
@@ -73,8 +76,8 @@ public class BattleMapController extends InputAdapter implements Toggleable {
 
     Vector3 clickCoordinates = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     camera.unproject(clickCoordinates);
-    int x = (int)Math.floor(clickCoordinates.x);
-    int y = (int)Math.floor(clickCoordinates.y);
+    int x = (int)Math.floor(clickCoordinates.x/gridSize);
+    int y = (int)Math.floor(clickCoordinates.y/gridSize);
     GridPoint2 selectedPoint = new GridPoint2(x, y);
 
     Optional<Path<GridPoint2>> path = pathfinder.computePath(selectedPoint, new GridPoint2(0, 1));

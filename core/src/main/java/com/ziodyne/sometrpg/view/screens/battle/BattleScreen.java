@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
@@ -40,6 +41,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected final EntityFactory entityFactory = new EntityFactory(world, new AssetManagerRepository(assetManager));
   protected final OrthographicCamera camera;
   protected final Director director;
+  protected final Viewport viewport;
   protected TiledMap map;
   protected SomeTRPGBattle battle;
   protected Map<Character, Entity> entityIndex = new HashMap<Character, Entity>();
@@ -56,7 +58,8 @@ public abstract class BattleScreen extends ScreenAdapter {
     this.gridSquareSize = gridSquareSize;
     this.director = director;
     this.camera = camera;
-    this.menuStage = new Stage(new FitViewport(1600, 900), spriteBatch);
+    this.viewport = new FitViewport(1600, 900, camera);
+    this.menuStage = new Stage(viewport, spriteBatch);
 
     menuStage.addActor(unitActionMenu);
   }
@@ -193,7 +196,7 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   @Override
   public void resize(int width, int height) {
-    menuStage.getViewport().update(width, height);
+    viewport.update(width, height, true);
   }
 
   @Override
@@ -201,7 +204,6 @@ public abstract class BattleScreen extends ScreenAdapter {
     Gdx.gl.glClearColor(0, 0, 0.2f, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     assetManager.update();
-    //camera.update();
     world.setDelta(delta);
     world.process();
 

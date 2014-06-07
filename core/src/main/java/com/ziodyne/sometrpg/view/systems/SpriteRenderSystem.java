@@ -58,7 +58,8 @@ public class SpriteRenderSystem extends EntitySystem {
 
   @Override
   protected void begin() {
-    batch.setProjectionMatrix(camera.combined);
+    batch.setProjectionMatrix(camera.projection);
+    batch.setTransformMatrix(camera.view);
     batch.begin();
   }
 

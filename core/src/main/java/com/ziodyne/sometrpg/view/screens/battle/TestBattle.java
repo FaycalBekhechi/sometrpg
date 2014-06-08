@@ -81,6 +81,7 @@ import com.ziodyne.sometrpg.view.systems.StageRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
+import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -103,6 +104,7 @@ public class TestBattle extends BattleScreen {
   private TweenAccessor<Camera> cameraTweenAccessor;
   private SpriteRenderSystem.Factory spriteRendererFactory;
   private BattleMapController.Factory mapControllerFactory;
+  private VoidSpriteRenderSystem.Factory voidRenderSystemFactory;
   private PlayerTurnListener.Factory turnListenerFactory;
   private AssetBundleLoader bundleLoader;
   private boolean initialized;
@@ -112,7 +114,8 @@ public class TestBattle extends BattleScreen {
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<Sprite> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
-             PlayerTurnListener.Factory turnListenerFactory, TweenAccessor<Position> positionTweenAccessor) {
+             PlayerTurnListener.Factory turnListenerFactory, TweenAccessor<Position> positionTweenAccessor,
+             VoidSpriteRenderSystem.Factory voidRenderSystemFactory) {
     super(director, new OrthographicCamera(), 32f);
 
     camera.zoom = 0.9f;
@@ -123,6 +126,7 @@ public class TestBattle extends BattleScreen {
     this.spriteRendererFactory = spriteRendererFactory;
     this.spriteTweenAccessor = spriteTweenAccessor;
     this.mapControllerFactory = mapControllerFactory;
+    this.voidRenderSystemFactory = voidRenderSystemFactory;
     this.bundleLoader = bundleLoaderFactory.create(assetManager, "data/test.bundle");
 
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
@@ -169,6 +173,7 @@ public class TestBattle extends BattleScreen {
 
     /**
      * Render Order:
+     *   - Void
      *   - Map Tiles
      *   - Map Movement Ranges
      *   - Grid Overlay
@@ -176,6 +181,7 @@ public class TestBattle extends BattleScreen {
      *   - Foreground Sprites
      *   - Menu/HUD
      */
+    world.setSystem(voidRenderSystemFactory.create(camera));
     world.setSystem(mapRenderSystem);
     world.setSystem(new MapMovementOverlayRenderer(camera, gridSquareSize));
     world.setSystem(new MapOverlayRenderSystem(camera));

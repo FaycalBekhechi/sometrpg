@@ -19,6 +19,7 @@ import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.components.VoidSprite;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 
 import java.util.Set;
@@ -43,7 +44,7 @@ public class SpriteRenderSystem extends EntitySystem {
   @AssistedInject
   @SuppressWarnings("unchecked")
   SpriteRenderSystem(@Assisted OrthographicCamera camera, SpriteBatch spriteBatch) {
-    super(Aspect.getAspectForAll(Position.class, Sprite.class));
+    super(Aspect.getAspectForAll(Position.class, Sprite.class).exclude(VoidSprite.class));
     spriteBatchRenderer = new SpriteBatchRenderer(camera, spriteBatch);
   }
 
@@ -63,14 +64,17 @@ public class SpriteRenderSystem extends EntitySystem {
 
   @Override
   protected void processEntities(ImmutableBag<Entity> entites) {
-    // Group eneities by their layer
+    // Group entities by their layer
     SetMultimap<SpriteLayer, Entity> entitiesByLayer = HashMultimap.create();
     for (int i = 0; i < entites.size(); i++) {
       Entity entity = entites.get(i);
       Sprite spriteComponent = spriteMapper.get(entity);
 
-      Set<Entity> entitiesForLayer = entitiesByLayer.get(spriteComponent.getLayer());
-      entitiesForLayer.add(entity);
+      SpriteLayer layer = spriteComponent.getLayer();
+      if (layer != null) {
+        Set<Entity> entitiesForLayer = entitiesByLayer.get(layer);
+        entitiesForLayer.add(entity);
+      }
     }
 
     // Render each layer in declaration order

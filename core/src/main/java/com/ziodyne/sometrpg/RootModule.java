@@ -11,6 +11,7 @@ import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
+import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
 import com.ziodyne.sometrpg.view.tween.TweenAccessorModule;
 
 public class RootModule extends AbstractModule {
@@ -34,6 +35,9 @@ public class RootModule extends AbstractModule {
 
     install(new FactoryModuleBuilder()
             .build(SpriteRenderSystem.Factory.class));
+
+    install(new FactoryModuleBuilder()
+            .build(VoidSpriteRenderSystem.Factory.class));
 
     install(new FactoryModuleBuilder()
             .build(AssetBundleLoader.Factory.class));

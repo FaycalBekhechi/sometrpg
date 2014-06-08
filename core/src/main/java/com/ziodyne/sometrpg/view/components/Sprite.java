@@ -1,5 +1,7 @@
 package com.ziodyne.sometrpg.view.components;
 
+import javax.annotation.Nullable;
+
 import com.artemis.Component;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,7 +22,6 @@ public class Sprite extends Component {
 
   public Sprite(Texture texture, float width, float height, SpriteLayer layer) {
     Validate.notNull(texture);
-    Validate.notNull(layer);
 
     this.layer = layer;
     this.texture = texture;
@@ -30,7 +31,6 @@ public class Sprite extends Component {
 
   public Sprite(TextureRegion region, float width, float height, SpriteLayer layer) {
     Validate.notNull(region);
-    Validate.notNull(layer);
 
     this.layer = layer;
     this.width = width;
@@ -63,6 +63,7 @@ public class Sprite extends Component {
     this.region = region;
   }
 
+  @Nullable
   public SpriteLayer getLayer() {
     return layer;
   }

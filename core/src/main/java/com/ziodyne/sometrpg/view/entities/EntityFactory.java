@@ -31,6 +31,7 @@ import com.ziodyne.sometrpg.view.components.Sprite;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
 import com.ziodyne.sometrpg.view.components.UnitSelector;
+import com.ziodyne.sometrpg.view.components.VoidSprite;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 
 import java.util.HashMap;
@@ -146,10 +147,11 @@ public class EntityFactory {
     pixmap.fill();
 
     Texture fuglyBlue = new Texture(pixmap);
-    Sprite sprite = new Sprite(fuglyBlue, viewport.getViewportWidth(), viewport.getViewportHeight(), SpriteLayer.VOID);
+    Sprite sprite = new Sprite(fuglyBlue, viewport.getViewportWidth(), viewport.getViewportHeight(), null);
+    VoidSprite voidTag = new VoidSprite();
     Position position = new Position(0, 0);
 
-    return createEntity(sprite, position);
+    return createEntity(sprite, voidTag, position);
   }
 
   private Entity createEntity(Component... components) {

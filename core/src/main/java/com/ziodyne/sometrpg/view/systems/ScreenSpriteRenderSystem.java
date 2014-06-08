@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.view.components.ScreenPosition;
-import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.components.SpriteComponent;
 
 /**
  * A system to render sprites in screen space, based on z-index order.
@@ -35,7 +35,7 @@ public class ScreenSpriteRenderSystem extends EntitySystem {
 
   @AssistedInject
   ScreenSpriteRenderSystem(@Assisted OrthographicCamera camera, SpriteBatch batch) {
-    super(Aspect.getAspectForAll(Sprite.class, ScreenPosition.class));
+    super(Aspect.getAspectForAll(SpriteComponent.class, ScreenPosition.class));
     this.camera = camera;
     this.batch = batch;
   }

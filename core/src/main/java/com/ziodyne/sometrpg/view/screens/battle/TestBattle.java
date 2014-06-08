@@ -25,7 +25,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
@@ -57,7 +56,7 @@ import com.ziodyne.sometrpg.view.assets.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.MapLoader;
 import com.ziodyne.sometrpg.view.assets.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.view.components.Position;
-import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
@@ -100,7 +99,7 @@ public class TestBattle extends BattleScreen {
   private Rectangle mapBoundingRect;
   private BattleMap map;
   private TweenAccessor<Position> positionTweenAccessor;
-  private TweenAccessor<Sprite> spriteTweenAccessor;
+  private TweenAccessor<SpriteComponent> spriteTweenAccessor;
   private TweenAccessor<Camera> cameraTweenAccessor;
   private SpriteRenderSystem.Factory spriteRendererFactory;
   private BattleMapController.Factory mapControllerFactory;
@@ -113,7 +112,7 @@ public class TestBattle extends BattleScreen {
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
-             TweenAccessor<Sprite> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
+             TweenAccessor<SpriteComponent> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
              PlayerTurnListener.Factory turnListenerFactory, TweenAccessor<Position> positionTweenAccessor,
              VoidSpriteRenderSystem.Factory voidRenderSystemFactory) {
     super(director, new OrthographicCamera(), 32f);
@@ -148,7 +147,7 @@ public class TestBattle extends BattleScreen {
     logger.log("Initializing battle.");
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
-    Tween.registerAccessor(Sprite.class, spriteTweenAccessor);
+    Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
     Tween.registerAccessor(Position.class, positionTweenAccessor);
 
     TiledMap tiledMap = assetManager.get("maps/test/test.tmx");

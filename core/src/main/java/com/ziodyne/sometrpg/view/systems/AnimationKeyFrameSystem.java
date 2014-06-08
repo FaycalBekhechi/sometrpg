@@ -6,11 +6,10 @@ import com.artemis.Entity;
 import com.artemis.EntitySystem;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.ziodyne.sometrpg.view.components.Position;
-import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
+import com.ziodyne.sometrpg.view.rendering.Sprite;
 
 /**
  * This class is an entity system that updates {@link SpriteAnimation}s each frame to give their sprites that frame's
@@ -21,11 +20,11 @@ public class AnimationKeyFrameSystem extends EntitySystem {
   private ComponentMapper<SpriteAnimation> animationMapper;
 
   @Mapper
-  private ComponentMapper<Sprite> spriteMapper;
+  private ComponentMapper<SpriteComponent> spriteMapper;
 
   public AnimationKeyFrameSystem() {
 
-    super(Aspect.getAspectForAll(SpriteAnimation.class, Sprite.class));
+    super(Aspect.getAspectForAll(SpriteAnimation.class, SpriteComponent.class));
   }
 
   @Override
@@ -33,9 +32,11 @@ public class AnimationKeyFrameSystem extends EntitySystem {
     for (int i = 0; i < entityImmutableBag.size(); i++) {
       Entity entity = entityImmutableBag.get(i);
       SpriteAnimation animation = animationMapper.get(entity);
-      Sprite sprite = spriteMapper.get(entity);
+      SpriteComponent spriteComponent = spriteMapper.get(entity);
 
       TextureRegion region = animation.getCurrentFrame();
+
+      Sprite sprite = spriteComponent.getSprite();
       TextureRegion lastRegion = sprite.getRegion();
 
       if (lastRegion.getRegionWidth() != region.getRegionWidth()) {

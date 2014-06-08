@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.view.systems;
+package com.ziodyne.sometrpg.view.rendering;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -6,9 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.ziodyne.sometrpg.view.components.Position;
-import com.ziodyne.sometrpg.view.components.Shader;
-import com.ziodyne.sometrpg.view.components.Sprite;
+import com.badlogic.gdx.math.Vector2;
 
 public class SpriteBatchRenderer {
   private final Camera camera;
@@ -21,13 +19,13 @@ public class SpriteBatchRenderer {
     this.spriteBatch = spriteBatch;
   }
 
-  public void render(Sprite sprite, Position position) {
+  public void render(Sprite sprite, Vector2 position) {
 
     Color color = Color.WHITE;
     spriteBatch.setColor(color.r, color.g, color.b, sprite.getAlpha());
 
-    float x = position.getX();
-    float y = position.getY();
+    float x = position.x;
+    float y = position.y;
     Texture texture = sprite.getTexture();
 
     if (texture == null) {
@@ -41,9 +39,8 @@ public class SpriteBatchRenderer {
     }
   }
 
-  public void render(Sprite sprite, Position position, Shader shader, float delta) {
-    shader.update(delta);
-    spriteBatch.setShader(shader.getShader());
+  public void render(Sprite sprite, Vector2 position, ShaderProgram shader) {
+    spriteBatch.setShader(shader);
     render(sprite, position);
   }
 

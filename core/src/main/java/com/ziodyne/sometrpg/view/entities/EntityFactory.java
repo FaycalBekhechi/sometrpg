@@ -27,12 +27,13 @@ import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.MapGridOverlay;
 import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
 import com.ziodyne.sometrpg.view.components.Position;
-import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
 import com.ziodyne.sometrpg.view.components.UnitSelector;
 import com.ziodyne.sometrpg.view.components.VoidSprite;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
+import com.ziodyne.sometrpg.view.rendering.Sprite;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,10 +73,10 @@ public class EntityFactory {
     SpriteAnimation animationComponent = new SpriteAnimation(idle);
     result.addComponent(animationComponent);
 
-    Sprite sprite = new Sprite(idle.getKeyFrame(0), 32f, 32f, SpriteLayer.FOREGROUND);
+    Sprite sprite = new Sprite(idle.getKeyFrame(0), 32f, 32f);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
-    result.addComponent(sprite);
+    result.addComponent(new SpriteComponent(sprite, SpriteLayer.FOREGROUND));
 
     result.addComponent(new BattleUnit(combatant, anims));
 
@@ -104,11 +105,11 @@ public class EntityFactory {
     Entity mapSelectorEntity = world.createEntity();
 
     Texture texture = repository.get("grid_overlay.png");
-    Sprite sprite = new Sprite(texture, 32f, 32f, SpriteLayer.BACKGROUND);
+    Sprite sprite = new Sprite(texture, 32f, 32f);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
-    mapSelectorEntity.addComponent(sprite);
+    mapSelectorEntity.addComponent(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
     mapSelectorEntity.addComponent(new Position());
 
     return mapSelectorEntity;
@@ -118,11 +119,11 @@ public class EntityFactory {
     Entity mapSelectorEntity = world.createEntity();
 
     Texture texture = repository.get("grid_overlay.png");
-    Sprite sprite = new Sprite(texture, 32f, 32f, SpriteLayer.BACKGROUND);
+    Sprite sprite = new Sprite(texture, 32f, 32f);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
-    mapSelectorEntity.addComponent(sprite);
+    mapSelectorEntity.addComponent(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
     mapSelectorEntity.addComponent(new Position(point.x, point.y));
     mapSelectorEntity.addComponent(new UnitSelector());
 
@@ -147,11 +148,11 @@ public class EntityFactory {
     pixmap.fill();
 
     Texture fuglyBlue = new Texture(pixmap);
-    Sprite sprite = new Sprite(fuglyBlue, viewport.getViewportWidth(), viewport.getViewportHeight(), null);
-    VoidSprite voidTag = new VoidSprite();
+    Sprite sprite = new Sprite(fuglyBlue, viewport.getViewportWidth(), viewport.getViewportHeight());
+    VoidSprite voidTag = new VoidSprite(sprite);
     Position position = new Position(0, 0);
 
-    return createEntity(sprite, voidTag, position);
+    return createEntity(voidTag, position);
   }
 
   private Entity createEntity(Component... components) {
@@ -172,10 +173,12 @@ public class EntityFactory {
 
     float width = region.getRegionWidth()*scale;
     float height = region.getRegionHeight()*scale;
-    Sprite sprite = new Sprite(region, width, height, SpriteLayer.FOREGROUND);
+
+    Sprite sprite = new Sprite(region, width, height);
+    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.FOREGROUND);
 
     mapObj.addComponent(pos);
-    mapObj.addComponent(sprite);
+    mapObj.addComponent(spriteComponent);
 
     return mapObj;
   }
@@ -193,13 +196,15 @@ public class EntityFactory {
     pixmap.fill();
 
     Texture tex = new Texture(pixmap);
-    Sprite sprite = new Sprite(tex, width, height, SpriteLayer.MENU);
+    Sprite sprite = new Sprite(tex, width, height);
     sprite.setAlpha(0.5f);
+
+    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.MENU);
 
     Position positionComponent = new Position(position.x, position.y);
 
     Entity entity = world.createEntity();
-    entity.addComponent(sprite);
+    entity.addComponent(spriteComponent);
     entity.addComponent(positionComponent);
 
     return entity;

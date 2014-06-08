@@ -8,11 +8,13 @@ import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.view.components.Position;
-import com.ziodyne.sometrpg.view.components.Sprite;
+import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.components.VoidSprite;
+import com.ziodyne.sometrpg.view.rendering.SpriteBatchRenderer;
 
 public class VoidSpriteRenderSystem extends EntitySystem {
   private final SpriteBatchRenderer renderer;
@@ -21,7 +23,7 @@ public class VoidSpriteRenderSystem extends EntitySystem {
   private ComponentMapper<Position> positionMapper;
 
   @Mapper
-  private ComponentMapper<Sprite> spriteMapper;
+  private ComponentMapper<VoidSprite> spriteMapper;
 
   public interface Factory {
     public VoidSpriteRenderSystem create(OrthographicCamera  camera);
@@ -43,7 +45,7 @@ public class VoidSpriteRenderSystem extends EntitySystem {
   @SuppressWarnings("unchecked")
   public VoidSpriteRenderSystem(@Assisted OrthographicCamera camera, SpriteBatch batch) {
 
-    super(Aspect.getAspectForAll(Sprite.class, Position.class, VoidSprite.class));
+    super(Aspect.getAspectForAll(Position.class, VoidSprite.class));
 
     renderer = new SpriteBatchRenderer(camera, batch);
   }
@@ -53,10 +55,10 @@ public class VoidSpriteRenderSystem extends EntitySystem {
     for (int i = 0; i < entityImmutableBag.size(); i++) {
       Entity ent = entityImmutableBag.get(i);
 
-      Sprite sprite = spriteMapper.get(ent);
+      VoidSprite spriteComponent = spriteMapper.get(ent);
       Position pos = positionMapper.get(ent);
 
-      renderer.render(sprite, pos);
+      renderer.render(spriteComponent.getSprite(), new Vector2(pos.getX(), pos.getY()));
     }
   }
 

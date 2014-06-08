@@ -8,5 +8,6 @@ package com.ziodyne.sometrpg.view.graphics;
  */
 public enum SpriteLayer {
   BACKGROUND,
-  FOREGROUND
+  FOREGROUND,
+  MENU
 }

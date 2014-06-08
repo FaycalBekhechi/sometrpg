@@ -3,6 +3,7 @@ package com.ziodyne.sometrpg.view.entities;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -152,6 +153,31 @@ public class EntityFactory {
     mapObj.addComponent(sprite);
 
     return mapObj;
+  }
+
+  /**
+   * Create an entity that renders the default menu background image
+   * @param position The position in viewport coordinates (bottom-left)
+   * @param width The width of the background
+   * @param height The height of the background
+   * @return The entity
+   */
+  public Entity createMenuBg(Vector2 position, float width, float height) {
+    Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+    pixmap.setColor(0,0,0,1);
+    pixmap.fill();
+
+    Texture tex = new Texture(pixmap);
+    Sprite sprite = new Sprite(tex, width, height, SpriteLayer.MENU);
+    sprite.setAlpha(0.5f);
+
+    Position positionComponent = new Position(position.x, position.y);
+
+    Entity entity = world.createEntity();
+    entity.addComponent(sprite);
+    entity.addComponent(positionComponent);
+
+    return entity;
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch, float gridSquareSize) {

@@ -25,6 +25,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
@@ -200,6 +201,7 @@ public class TestBattle extends BattleScreen {
     Entity stage = entityFactory.createStage(menuStage);
     world.addEntity(stage);
 
+    world.addEntity(entityFactory.createMenuBg(new Vector2(0, 0), 800, 450));
 
     final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);

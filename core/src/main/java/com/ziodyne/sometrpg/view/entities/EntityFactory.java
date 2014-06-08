@@ -13,7 +13,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
@@ -180,10 +179,10 @@ public class EntityFactory {
     return entity;
   }
 
-  public Entity createTiledMap(TiledMap map, SpriteBatch batch, float gridSquareSize) {
+  public Entity createTiledMap(TiledMap map, SpriteBatch batch) {
     Entity mapEntity = world.createEntity();
 
-    TiledMapComponent tiledMapComponent = new TiledMapComponent(map, 1f, batch);
+    TiledMapComponent tiledMapComponent = new TiledMapComponent(map, batch);
     mapEntity.addComponent(tiledMapComponent);
 
     return mapEntity;

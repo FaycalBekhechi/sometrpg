@@ -192,7 +192,7 @@ public class TestBattle extends BattleScreen {
     world.getManager(TagManager.class).register("map_hover_selector", tileSelectorOverlay);
 
 
-    world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch, gridSquareSize));
+    world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
     initializeMapObjects(tiledMap);
 
     Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32, new GridPoint2());
@@ -200,8 +200,6 @@ public class TestBattle extends BattleScreen {
 
     Entity stage = entityFactory.createStage(menuStage);
     world.addEntity(stage);
-
-    world.addEntity(entityFactory.createMenuBg(new Vector2(0, 0), 800, 450));
 
     final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);

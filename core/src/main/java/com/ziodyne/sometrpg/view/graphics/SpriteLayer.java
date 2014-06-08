@@ -7,6 +7,7 @@ package com.ziodyne.sometrpg.view.graphics;
  * rearranges the order in which they are drawn.
  */
 public enum SpriteLayer {
+  VOID,
   BACKGROUND,
   FOREGROUND,
   MENU

@@ -115,7 +115,7 @@ public class TestBattle extends BattleScreen {
              PlayerTurnListener.Factory turnListenerFactory, TweenAccessor<Position> positionTweenAccessor) {
     super(director, new OrthographicCamera(), 32f);
 
-    camera.zoom = 0.7f;
+    camera.zoom = 0.9f;
     this.tweenManager = tweenManager;
     this.turnListenerFactory = turnListenerFactory;
     this.cameraTweenAccessor = cameraTweenAccessor;
@@ -200,6 +200,8 @@ public class TestBattle extends BattleScreen {
 
     Entity stage = entityFactory.createStage(menuStage);
     world.addEntity(stage);
+
+    world.addEntity(entityFactory.createVoid(viewport));
 
     final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);

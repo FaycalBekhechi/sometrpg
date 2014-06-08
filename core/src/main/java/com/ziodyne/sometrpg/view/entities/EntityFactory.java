@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.entities;
 
+import com.artemis.Component;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
@@ -136,6 +138,28 @@ public class EntityFactory {
     overlayEntity.addComponent(positionComponent);
 
     return overlayEntity;
+  }
+
+  public Entity createVoid(Viewport viewport) {
+    Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+    pixmap.setColor(0, 0, 0.2f, 1);
+    pixmap.fill();
+
+    Texture fuglyBlue = new Texture(pixmap);
+    Sprite sprite = new Sprite(fuglyBlue, viewport.getViewportWidth(), viewport.getViewportHeight(), SpriteLayer.VOID);
+    Position position = new Position(0, 0);
+
+    return createEntity(sprite, position);
+  }
+
+  private Entity createEntity(Component... components) {
+    Entity result = world.createEntity();
+
+    for (Component comp : components) {
+      result.addComponent(comp);
+    }
+
+    return result;
   }
 
   public Entity createMapObject(RectangleMapObject object, TextureRegion region, float scale) {

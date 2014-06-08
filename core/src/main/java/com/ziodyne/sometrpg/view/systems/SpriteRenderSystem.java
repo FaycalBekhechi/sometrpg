@@ -25,9 +25,6 @@ import java.util.Set;
 
 public class SpriteRenderSystem extends EntitySystem {
 
-  private final OrthographicCamera camera;
-  private final SpriteBatch batch;
-
   @Mapper
   private ComponentMapper<Position> positionMapper;
 
@@ -37,7 +34,7 @@ public class SpriteRenderSystem extends EntitySystem {
   @Mapper
   private ComponentMapper<Shader> shaderMapper;
 
-  private ShaderProgram defaultShader;
+  private final SpriteBatchRenderer spriteBatchRenderer;
 
   public interface Factory {
     public SpriteRenderSystem create(OrthographicCamera camera);
@@ -47,9 +44,7 @@ public class SpriteRenderSystem extends EntitySystem {
   @SuppressWarnings("unchecked")
   SpriteRenderSystem(@Assisted OrthographicCamera camera, SpriteBatch spriteBatch) {
     super(Aspect.getAspectForAll(Position.class, Sprite.class));
-    this.camera = camera;
-    this.batch = spriteBatch;
-    this.defaultShader = SpriteBatch.createDefaultShader();
+    spriteBatchRenderer = new SpriteBatchRenderer(camera, spriteBatch);
   }
 
   @Override
@@ -58,14 +53,12 @@ public class SpriteRenderSystem extends EntitySystem {
 
   @Override
   protected void begin() {
-    batch.setProjectionMatrix(camera.projection);
-    batch.setTransformMatrix(camera.view);
-    batch.begin();
+    spriteBatchRenderer.begin();
   }
 
   @Override
   protected void end() {
-    batch.end();
+    spriteBatchRenderer.end();
   }
 
   @Override
@@ -93,29 +86,10 @@ public class SpriteRenderSystem extends EntitySystem {
     Sprite sprite = spriteMapper.get(entity);
 
     Shader shaderComponent = shaderMapper.getSafe(entity);
-    ShaderProgram program = defaultShader;
     if (shaderComponent != null) {
-      shaderComponent.update(world.getDelta());
-      program = shaderComponent.getShader();
-    }
-
-    batch.setShader(program);
-
-    Color color = Color.WHITE;
-    batch.setColor(color.r, color.g, color.b, sprite.getAlpha());
-
-    float x = pos.getX();
-    float y = pos.getY();
-    Texture texture = sprite.getTexture();
-
-    if (texture == null) {
-      TextureRegion region = sprite.getRegion();
-      batch.draw(region, x + sprite.getOffsetX(), y + sprite.getOffsetY(), region.getRegionWidth(), region.getRegionHeight());
+      spriteBatchRenderer.render(sprite, pos, shaderComponent, world.getDelta());
     } else {
-      float width = sprite.getWidth();
-      float height = sprite.getHeight();
-
-      batch.draw(texture, x, y, width, height);
+      spriteBatchRenderer.render(sprite, pos);
     }
   }
 

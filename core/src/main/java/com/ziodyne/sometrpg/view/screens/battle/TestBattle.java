@@ -211,8 +211,6 @@ public class TestBattle extends BattleScreen {
 
     world.addEntity(entityFactory.createVoid(viewport));
 
-    world.addEntity(entityFactory.createMenuBg(new Vector2(), 200, 200));
-
     final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);
 

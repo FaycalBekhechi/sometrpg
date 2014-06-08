@@ -31,6 +31,7 @@ import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
 import com.ziodyne.sometrpg.view.components.UnitSelector;
+import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.components.VoidSprite;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
@@ -199,15 +200,10 @@ public class EntityFactory {
     Sprite sprite = new Sprite(tex, width, height);
     sprite.setAlpha(0.5f);
 
-    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.MENU);
-
+    ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
     Position positionComponent = new Position(position.x, position.y);
 
-    Entity entity = world.createEntity();
-    entity.addComponent(spriteComponent);
-    entity.addComponent(positionComponent);
-
-    return entity;
+    return createEntity(spriteComponent, positionComponent);
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch) {

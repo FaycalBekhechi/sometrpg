@@ -25,6 +25,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
@@ -80,6 +81,7 @@ import com.ziodyne.sometrpg.view.systems.StageRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
+import com.ziodyne.sometrpg.view.systems.ViewportSpaceSpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
 import org.apache.commons.lang3.StringUtils;
 
@@ -117,7 +119,7 @@ public class TestBattle extends BattleScreen {
              VoidSpriteRenderSystem.Factory voidRenderSystemFactory) {
     super(director, new OrthographicCamera(), 32f);
 
-    camera.zoom = 0.9f;
+    camera.zoom = 0.5f;
     this.tweenManager = tweenManager;
     this.turnListenerFactory = turnListenerFactory;
     this.cameraTweenAccessor = cameraTweenAccessor;
@@ -186,6 +188,7 @@ public class TestBattle extends BattleScreen {
     world.setSystem(new MapOverlayRenderSystem(camera));
     world.setSystem(spriteRenderSystem);
     world.setSystem(new StageRenderSystem());
+    world.setSystem(new ViewportSpaceSpriteRenderSystem(viewport));
 
     world.setManager(new TagManager());
 
@@ -207,6 +210,8 @@ public class TestBattle extends BattleScreen {
     world.addEntity(stage);
 
     world.addEntity(entityFactory.createVoid(viewport));
+
+    world.addEntity(entityFactory.createMenuBg(new Vector2(), 200, 200));
 
     final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);

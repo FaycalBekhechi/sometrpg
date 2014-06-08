@@ -6,12 +6,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 public class SpriteBatchRenderer {
   private final Camera camera;
   private final SpriteBatch spriteBatch;
   private final ShaderProgram defaultShader = SpriteBatch.createDefaultShader();
+
+  private Matrix4 originalTransform;
+  private Matrix4 originalProjection;
 
   public SpriteBatchRenderer(Camera camera, SpriteBatch spriteBatch) {
 
@@ -32,8 +36,9 @@ public class SpriteBatchRenderer {
       TextureRegion region = sprite.getRegion();
       spriteBatch.draw(region, x + sprite.getOffsetX(), y + sprite.getOffsetY(), region.getRegionWidth(), region.getRegionHeight());
     } else {
-      float width = sprite.getWidth();
-      float height = sprite.getHeight();
+      float scale = sprite.getScale();
+      float width = sprite.getWidth() * scale;
+      float height = sprite.getHeight() * scale;
 
       spriteBatch.draw(texture, x, y, width, height);
     }
@@ -46,6 +51,9 @@ public class SpriteBatchRenderer {
 
 
   public void begin() {
+    originalProjection = spriteBatch.getProjectionMatrix();
+    originalTransform = spriteBatch.getTransformMatrix();
+
     spriteBatch.setTransformMatrix(camera.view);
     spriteBatch.setProjectionMatrix(camera.projection);
     spriteBatch.begin();
@@ -54,5 +62,7 @@ public class SpriteBatchRenderer {
   public void end() {
     spriteBatch.end();
     spriteBatch.setShader(defaultShader);
+    spriteBatch.setTransformMatrix(originalTransform);
+    spriteBatch.setProjectionMatrix(originalProjection);
   }
 }

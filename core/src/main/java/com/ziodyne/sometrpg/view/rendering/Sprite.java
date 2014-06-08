@@ -9,6 +9,7 @@ public class Sprite {
   private Texture texture;
   private Texture.TextureFilter minFilter;
   private Texture.TextureFilter magFiler;
+  private float scale = 1;
   private float alpha = 1;
   private final float width;
   private final float height;
@@ -31,6 +32,15 @@ public class Sprite {
     this.region = region;
   }
 
+  public float getScale() {
+
+    return scale;
+  }
+
+  public void setScale(float scale) {
+
+    this.scale = scale;
+  }
 
   public void setRegion(TextureRegion region) {
 

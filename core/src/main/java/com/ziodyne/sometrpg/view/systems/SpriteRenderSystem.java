@@ -43,7 +43,7 @@ public class SpriteRenderSystem extends EntitySystem {
   @AssistedInject
   @SuppressWarnings("unchecked")
   SpriteRenderSystem(@Assisted OrthographicCamera camera, SpriteBatch spriteBatch) {
-    super(Aspect.getAspectForAll(Position.class, SpriteComponent.class).exclude(VoidSprite.class));
+    super(Aspect.getAspectForAll(Position.class, SpriteComponent.class));
     spriteBatchRenderer = new SpriteBatchRenderer(camera, spriteBatch);
   }
 

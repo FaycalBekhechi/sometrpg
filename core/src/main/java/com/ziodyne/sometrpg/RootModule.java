@@ -8,9 +8,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
+import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
+import com.ziodyne.sometrpg.view.systems.ViewportSpaceSpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
 import com.ziodyne.sometrpg.view.tween.TweenAccessorModule;
 

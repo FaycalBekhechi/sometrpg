@@ -44,6 +44,16 @@ public class EntityFactory {
   private final World world;
   private final AssetRepository repository;
 
+  private static final Texture BLACK_BOX;
+
+  static {
+    Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+    pixmap.setColor(0,0,0,1);
+    pixmap.fill();
+
+    BLACK_BOX = new Texture(pixmap);
+  }
+
   @Inject
   public EntityFactory(World world, AssetRepository repository) {
     this.world = world;
@@ -192,12 +202,7 @@ public class EntityFactory {
    * @return The entity
    */
   public Entity createMenuBg(Vector2 position, float width, float height) {
-    Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-    pixmap.setColor(0,0,0,1);
-    pixmap.fill();
-
-    Texture tex = new Texture(pixmap);
-    Sprite sprite = new Sprite(tex, width, height);
+    Sprite sprite = new Sprite(BLACK_BOX, width, height);
     sprite.setAlpha(0.5f);
 
     ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);

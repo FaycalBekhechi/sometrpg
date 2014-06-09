@@ -79,6 +79,9 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
             case MOVE:
               context.safeTrigger(BattleEvent.MOVE_ACTION_SELECTED);
               break;
+            case INFO:
+              context.safeTrigger(BattleEvent.INFO_ACTION_SELECTED);
+              break;
             default:
               throw new IllegalArgumentException("Combatant action " + selectedAction + " not mapped to event.");
           }

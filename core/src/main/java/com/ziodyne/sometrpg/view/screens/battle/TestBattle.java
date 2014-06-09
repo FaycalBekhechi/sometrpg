@@ -68,6 +68,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.listeners.SelectingMoveLoc
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelectListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitAttackingListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitMoving;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.ViewingUnitInfo;
 import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
 import com.ziodyne.sometrpg.view.systems.BattleAnimationSwitchSystem;
@@ -223,6 +224,7 @@ public class TestBattle extends BattleScreen {
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       turnListenerFactory.create(camera, this, pathfinder, gridSquareSize),
       new UnitActionSelectListener(skin, viewport, menuStage, gridSquareSize),
+      new ViewingUnitInfo(world, entityFactory),
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager),
       new AttackTargetSelectionListener(this, gridSquareSize),

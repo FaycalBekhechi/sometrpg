@@ -26,18 +26,25 @@ public class ViewportSpaceSpriteRenderSystem extends EntitySystem {
 
   private final SpriteBatchRenderer batchRenderer;
 
+  private final SpriteBatch batch;
+
+  private final Viewport viewport;
+
   public ViewportSpaceSpriteRenderSystem(Viewport viewport) {
     super(Aspect.getAspectForAll(Position.class, ViewportSpaceSprite.class));
 
     OrthographicCamera specialCam = new OrthographicCamera();
     specialCam.setToOrtho(false, viewport.getViewportWidth(), viewport.getViewportHeight());
 
+    this.viewport = viewport;
     Camera cam = viewport.getCamera();
     if (cam instanceof OrthographicCamera) {
       OrthographicCamera orthoCam = (OrthographicCamera)cam;
       specialCam.zoom = orthoCam.zoom;
     }
-    this.batchRenderer = new SpriteBatchRenderer(specialCam, new SpriteBatch());
+
+    batch = new SpriteBatch();
+    batchRenderer = new SpriteBatchRenderer(specialCam, batch);
   }
 
   @Override
@@ -62,7 +69,7 @@ public class ViewportSpaceSpriteRenderSystem extends EntitySystem {
       Vector2 posVec = new Vector2(pos.getX(), pos.getY());
       Sprite sprite = spriteComponent.getSprite();
 
-     batchRenderer.render(sprite, posVec);
+      batchRenderer.render(sprite, posVec);
     }
   }
 

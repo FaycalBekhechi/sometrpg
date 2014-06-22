@@ -4,6 +4,7 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
@@ -28,6 +29,7 @@ public class RootModule extends AbstractModule {
     bind(Game.class).toInstance(game);
     bind(SpriteBatch.class).toInstance(new SpriteBatch());
     bind(TweenManager.class).toInstance(new TweenManager());
+    bind(EventBus.class).toInstance(new EventBus());
 
     install(new TweenAccessorModule());
     install(new FactoryModuleBuilder()

@@ -3,6 +3,7 @@ package com.ziodyne.sometrpg.logic.models.battle;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.eventbus.EventBus;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
@@ -32,6 +33,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private final BattleMap map;
   private final ImmutableList<Army> armies;
   private final WinCondition condition;
+  private final EventBus eventBus;
   private MapCombatResolver combatResolver;
   private Set<Combatant> actedThisTurn = Sets.newHashSet();
   private Set<Combatant> movedThisTurn = Sets.newHashSet();
@@ -39,10 +41,11 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
   private int turnNumber;
 
-  public SomeTRPGBattle(BattleMap map, List<Army> armies, WinCondition condition) {
+  public SomeTRPGBattle(BattleMap map, List<Army> armies, WinCondition condition, EventBus eventBus) {
     this.map = map;
     this.armies = ImmutableList.copyOf(armies);
     this.condition = condition;
+    this.eventBus = eventBus;
     this.combatResolver = new MapCombatResolver(map);
   }
 

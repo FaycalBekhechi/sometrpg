@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
+import com.google.common.eventbus.EventBus;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
@@ -42,6 +43,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected final OrthographicCamera camera;
   protected final Director director;
   protected final Viewport viewport;
+  protected final EventBus eventBus;
   protected TiledMap map;
   protected SomeTRPGBattle battle;
   protected Map<Character, Entity> entityIndex = new HashMap<Character, Entity>();
@@ -54,10 +56,11 @@ public abstract class BattleScreen extends ScreenAdapter {
   private Entity currentMovementOverlay;
   private Entity currentAttackOverlay;
 
-  public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize) {
+  public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize, EventBus eventBus) {
     this.gridSquareSize = gridSquareSize;
     this.director = director;
     this.camera = camera;
+    this.eventBus = eventBus;
     this.viewport = new FitViewport(1600, 900, camera);
 
     camera.translate(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2);

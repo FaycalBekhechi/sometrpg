@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
@@ -117,8 +118,8 @@ public class TestBattle extends BattleScreen {
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<SpriteComponent> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
              PlayerTurnListener.Factory turnListenerFactory, TweenAccessor<Position> positionTweenAccessor,
-             VoidSpriteRenderSystem.Factory voidRenderSystemFactory) {
-    super(director, new OrthographicCamera(), 32f);
+             VoidSpriteRenderSystem.Factory voidRenderSystemFactory, EventBus eventBus) {
+    super(director, new OrthographicCamera(), 32f, eventBus);
 
     camera.zoom = 0.5f;
     this.tweenManager = tweenManager;
@@ -409,7 +410,7 @@ public class TestBattle extends BattleScreen {
     List<Army> armies = Lists.newArrayList(playerArmy, enemyArmy);
     WinCondition winCondition = new Rout();
 
-    return new SomeTRPGBattle(battleMap, armies, winCondition);
+    return new SomeTRPGBattle(battleMap, armies, winCondition, eventBus);
   }
 
   protected void update(float delta) {

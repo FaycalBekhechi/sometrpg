@@ -73,26 +73,20 @@ public class UnitMover {
         PathSegment.Type segType = nextSeg.getType();
         final AnimationType runningAnim = getAnimationTypeForSegmentType(segType);
 
-        segTween.setCallback(new TweenCallback() {
-          @Override
-          public void onEvent(int i, BaseTween<?> baseTween) {
+        segTween.setCallback((i1, baseTween) -> {
 
-            battleUnit.setAnimType(runningAnim);
-          }
+          battleUnit.setAnimType(runningAnim);
         });
       }
 
       movement = movement.push(segTween);
     }
 
-    movement.setCallback(new TweenCallback() {
-      @Override
-      public void onEvent(int i, BaseTween<?> baseTween) {
+    movement.setCallback((i, baseTween) -> {
 
-        battleUnit.setAnimType(AnimationType.IDLE);
-        if (callback != null) {
-          callback.call();
-        }
+      battleUnit.setAnimType(AnimationType.IDLE);
+      if (callback != null) {
+        callback.call();
       }
     }).start(tweenManager);
   }

@@ -46,13 +46,10 @@ public class UnitMoving extends FlowListener<BattleContext> {
 
     final Optional<Path<GridPoint2>> path = pathfinder.computePath(start, context.movementDestination);
 
-    mover.moveCombatant(context.selectedCombatant, path.get(), new UnitMover.MovedCallback() {
-      @Override
-      public void call() {
+    mover.moveCombatant(context.selectedCombatant, path.get(), () -> {
 
-        battleScreen.moveCombatant(context.selectedCombatant, context.movementDestination, path.get());
-        context.safeTrigger(BattleEvent.UNIT_MOVED);
-      }
+      battleScreen.moveCombatant(context.selectedCombatant, context.movementDestination, path.get());
+      context.safeTrigger(BattleEvent.UNIT_MOVED);
     });
   }
 

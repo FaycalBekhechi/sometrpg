@@ -83,7 +83,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   }
 
   @Override
-  public void moveCombatant(Combatant combatant, Tile destination) {
+  public void moveCombatant(Combatant combatant, Tile destination, Path<GridPoint2> path) {
     validateCombatantStatus(combatant);
     validateCombatantTurn(combatant);
 
@@ -94,15 +94,16 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
     GridPoint2 destPos = destination.getPosition();
 
-    Optional<Path<GridPoint2>> path = pathfinder.computePath(currentPos, destPos);
-    if (!path.isPresent()) {
+    if (!isPathValid(path)) {
       throw new GameLogicException("No path from " + currentPos + " to " + destPos);
     } else {
       map.moveUnit(currentPos.x, currentPos.y, destPos.x, destPos.y);
       recordMovement(combatant);
-
-      eventBus.post(new UnitMoved(combatant, path.get()));
     }
+  }
+
+  private static boolean isPathValid(Path<GridPoint2> path) {
+    return true;
   }
 
   @Override

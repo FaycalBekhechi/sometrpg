@@ -10,12 +10,19 @@ import com.ziodyne.sometrpg.logic.util.GridPoint2;
 public class UnitMoved {
 
   private final Combatant combatant;
+  private final GridPoint2 start;
   private final Path<GridPoint2> path;
 
-  public UnitMoved(Combatant combatant, Path<GridPoint2> path) {
+  public UnitMoved(Combatant combatant, GridPoint2 start, Path<GridPoint2> path) {
 
     this.combatant = combatant;
+    this.start = start;
     this.path = path;
+  }
+
+  public GridPoint2 getStart() {
+
+    return start;
   }
 
   public Combatant getCombatant() {

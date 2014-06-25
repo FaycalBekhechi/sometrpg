@@ -4,6 +4,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
@@ -43,11 +44,11 @@ public interface Battle {
 
   /**
    * Move a {@link Combatant} to another {@link Tile}.
-   *
-   * @param combatant The Combatant being moved
+   *  @param combatant The Combatant being moved
    * @param destination The Tile to which to move them
+   * @param path
    */
-  public void moveCombatant(Combatant combatant, Tile destination);
+  public void moveCombatant(Combatant combatant, Tile destination, Path<GridPoint2> path);
 
   /**
    * Have one {@link Combatant} attack another.

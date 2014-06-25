@@ -61,6 +61,7 @@ import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
+import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackConfirmationListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackTargetSelectionListener;
@@ -221,13 +222,15 @@ public class TestBattle extends BattleScreen {
 
     initialized = true;
 
+    UnitMover unitMover = new UnitMover(this, tweenManager, gridSquareSize);
+
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       turnListenerFactory.create(camera, this, pathfinder, gridSquareSize),
       new UnitActionSelectListener(skin, viewport, menuStage, gridSquareSize),
       new ViewingUnitInfo(world, entityFactory),
       new SelectingMoveLocation(this, gridSquareSize),
-      new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager),
+      new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
       new AttackTargetSelectionListener(this, gridSquareSize),
       new AttackConfirmationListener(skin, menuStage, camera, gridSquareSize),
       new UnitAttackingListener(this, world)
@@ -246,7 +249,7 @@ public class TestBattle extends BattleScreen {
 
     flow.start(new BattleContext(battle));
 
-    logger.log("Battle intialized.");
+    eventBus.register(new UnitMoveHandler(unitMover));
   }
 
   private void initializeMapObjects(TiledMap tiledMap) {

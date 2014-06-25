@@ -26,6 +26,7 @@ import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.WeaponAttack;
+import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
@@ -118,9 +119,9 @@ public abstract class BattleScreen extends ScreenAdapter {
     }
   }
 
-  public void moveCombatant(Combatant combatant, GridPoint2 dest) {
+  public void moveCombatant(Combatant combatant, GridPoint2 dest, Path<GridPoint2> path) {
     Tile tile = battle.getTile(dest);
-    battle.moveCombatant(combatant, tile);
+    battle.moveCombatant(combatant, tile, path);
   }
 
   public void attackCombatant(Combatant attacker, Combatant defender) {

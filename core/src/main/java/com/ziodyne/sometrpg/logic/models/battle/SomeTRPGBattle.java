@@ -1,9 +1,11 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
+import com.ziodyne.sometrpg.events.UnitMoved;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
@@ -11,6 +13,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
 import com.ziodyne.sometrpg.logic.navigation.CachingPathfinder;
+import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -34,6 +37,8 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private final ImmutableList<Army> armies;
   private final WinCondition condition;
   private final EventBus eventBus;
+  private final Pathfinder<GridPoint2> pathfinder;
+
   private MapCombatResolver combatResolver;
   private Set<Combatant> actedThisTurn = Sets.newHashSet();
   private Set<Combatant> movedThisTurn = Sets.newHashSet();
@@ -47,6 +52,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     this.condition = condition;
     this.eventBus = eventBus;
     this.combatResolver = new MapCombatResolver(map);
+    this.pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(map));
   }
 
   @Override
@@ -87,9 +93,16 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     }
 
     GridPoint2 destPos = destination.getPosition();
-    map.moveUnit(currentPos.x, currentPos.y, destPos.x, destPos.y);
 
-    recordMovement(combatant);
+    Optional<Path<GridPoint2>> path = pathfinder.computePath(currentPos, destPos);
+    if (!path.isPresent()) {
+      throw new GameLogicException("No path from " + currentPos + " to " + destPos);
+    } else {
+      map.moveUnit(currentPos.x, currentPos.y, destPos.x, destPos.y);
+      recordMovement(combatant);
+
+      eventBus.post(new UnitMoved(combatant, path.get()));
+    }
   }
 
   @Override

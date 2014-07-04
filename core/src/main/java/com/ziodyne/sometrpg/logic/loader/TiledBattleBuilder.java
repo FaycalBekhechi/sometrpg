@@ -5,8 +5,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -16,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Range;
 import com.google.common.eventbus.EventBus;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.CharacterDatabase;
@@ -74,7 +79,6 @@ public class TiledBattleBuilder {
   }
 
   public SomeTRPGBattle build(EventBus todoFixThis) {
-
 
     WinCondition winCondition = buildWinCondition();
 
@@ -151,23 +155,26 @@ public class TiledBattleBuilder {
       }
     }
 
-    // Block off any tiles covered by a blocking object
     TiledMapTileLayer blockingLayer = getLayer(BLOCKING_LAYER_NAME);
-    for (MapObject object : blockingLayer.getObjects()) {
-      if (object instanceof RectangleMapObject) {
-        RectangleMapObject rect = (RectangleMapObject) object;
+
+    // Stupid libgdx doesn't use real collections here.
+    StreamSupport.stream(blockingLayer.getObjects().spliterator(), false)
+      .filter(object -> object instanceof RectangleMapObject)
+      // Figure out what grid points the rects cover
+      .map(mapObject -> {
+
+        RectangleMapObject rect = (RectangleMapObject) mapObject;
         Rectangle bounds = rect.getRectangle();
 
         // TODO: This isn't going to go super well if the rects aren't snapped to the grid
         int tileX = Math.round(bounds.x / tileSize);
         int tileY = Math.round(bounds.y / tileSize);
+        return tilesByLocation.get(new GridPoint2(tileX, tileY));
+      })
+      .filter(Objects::nonNull)
 
-        Tile tile = tilesByLocation.get(new GridPoint2(tileX, tileY));
-        if (tile != null) {
-          tile.setPassable(false);
-        }
-      }
-    }
+        // Block off any tiles covered by a blocking object
+      .forEach(tile -> tile.setPassable(false));
 
     return tiles;
   }

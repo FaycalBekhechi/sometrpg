@@ -43,6 +43,10 @@ public class Character {
     validateStats();
   }
 
+  public String getArmyName() {
+    return null;
+  }
+
   public int getMovementRange() {
     return statSheet.get(Stat.MOVEMENT);
   }

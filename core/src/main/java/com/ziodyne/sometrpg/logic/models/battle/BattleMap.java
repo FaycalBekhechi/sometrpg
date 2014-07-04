@@ -173,6 +173,9 @@ public class BattleMap {
 
     moveUnit(src, dest);
   }
+  public void addUnit(Combatant unit, GridPoint2 point) {
+    addUnit(unit, point.x, point.y);
+  }
 
   /** Add a unit to the map. Blows up if it already exists. */
   public void addUnit(Combatant unit, int x, int y) {

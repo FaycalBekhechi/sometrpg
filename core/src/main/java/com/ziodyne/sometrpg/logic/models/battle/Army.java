@@ -16,9 +16,15 @@ public class Army {
     this.type = type;
   }
 
+
   public void addCombatant(Combatant combatant) {
     combatant.setArmy(this);
     units.add(combatant);
+  }
+
+  public String getName() {
+
+    return name;
   }
 
   public ArmyType getType() {
@@ -42,5 +48,24 @@ public class Army {
     }
 
     return living;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Army army = (Army) o;
+
+    if (!name.equals(army.name)) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+
+    return name.hashCode();
   }
 }

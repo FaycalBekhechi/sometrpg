@@ -29,7 +29,7 @@ public class BattleLoader extends SynchronousAssetLoader<SomeTRPGBattle, BattleL
   @Override
   public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, BattleParameter parameter) {
     Array<AssetDescriptor> deps = new Array<AssetDescriptor>();
-    deps.add(new AssetDescriptor<BattleMap>(getTmxFilepath(fileName), BattleMap.class));
+    deps.add(new AssetDescriptor<>(getTmxFilepath(fileName), BattleMap.class));
 
     return deps;
   }

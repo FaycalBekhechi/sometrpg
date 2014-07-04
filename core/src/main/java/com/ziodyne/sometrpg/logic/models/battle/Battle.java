@@ -1,11 +1,11 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.navigation.Path;
-import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 
 import java.util.Set;
@@ -27,6 +27,8 @@ public interface Battle {
 
 
   public GridPoint2 getCombatantPosition(Combatant combatant);
+
+  public Combatant getCombatantForCharacter(Character character);
 
   /**
    * Returns the {@link Combatant}s owned by the enemy.

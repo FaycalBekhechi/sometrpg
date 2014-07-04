@@ -1,11 +1,9 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
-import com.ziodyne.sometrpg.events.UnitMoved;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
@@ -53,6 +51,20 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     this.eventBus = eventBus;
     this.combatResolver = new MapCombatResolver(map);
     this.pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(map));
+  }
+
+  @Override
+  public Combatant getCombatantForCharacter(Character character) {
+
+    for (Army army : armies) {
+      for (Combatant combatant : army.getCombatants()) {
+        if (combatant.getCharacter().equals(character)) {
+          return combatant;
+        }
+      }
+    }
+
+    return null;
   }
 
   @Override

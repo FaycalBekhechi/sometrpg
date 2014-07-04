@@ -1,18 +1,17 @@
 package com.ziodyne.sometrpg.logic.loader;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -20,7 +19,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Range;
 import com.google.common.eventbus.EventBus;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.CharacterDatabase;
@@ -37,6 +35,7 @@ import com.ziodyne.sometrpg.logic.models.battle.conditions.Sieze;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Survive;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Creates battle models from Tiled maps.
@@ -50,6 +49,8 @@ public class TiledBattleBuilder {
   private static final String PROTECT_CONDITION = "protect";
   private static final String SIEZE_CONDITION = "seize";
   private static final String SURVIVE_CONDITION = "survive";
+
+  private static final String PROTECT_TARGETS_NAME = "targets";
 
   private final TiledMap map;
   private final CharacterDatabase characterDB;
@@ -116,8 +117,21 @@ public class TiledBattleBuilder {
   }
 
   private ProtectUnits buildProtectCondition() {
+    MapProperties props = map.getProperties();
+    String protectTargets = props.get(PROTECT_TARGETS_NAME, String.class);
 
-    return null;
+    Set<Character> charactersToProtect = Arrays.asList(StringUtils.split(protectTargets, ",")).stream()
+      // Pull every given character from the database
+      .map(id -> characterDB.getById(StringUtils.trim(id)))
+      .filter(Optional::isPresent)
+      .map(Optional::get)
+      .collect(Collectors.toSet());
+
+    if (charactersToProtect.isEmpty()) {
+      throw new IllegalArgumentException("Protect condition specified with no characters to protect.");
+    }
+
+    return new ProtectUnits(charactersToProtect);
   }
 
   private Sieze buildSeizeCondition() {

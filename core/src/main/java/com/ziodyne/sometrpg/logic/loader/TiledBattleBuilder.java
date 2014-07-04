@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import com.artemis.annotations.Mapper;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -44,6 +46,7 @@ public class TiledBattleBuilder {
   private static final String BASE_LAYER_NAME = "Ground";
   private static final String BLOCKING_LAYER_NAME = "Blocking";
   private static final String UNIT_LAYER_NAME = "Units";
+  private static final String GOAL_LAYER_NAME = "Goals";
 
   private static final String ROUT_CONDITION = "rout";
   private static final String PROTECT_CONDITION = "protect";
@@ -51,6 +54,7 @@ public class TiledBattleBuilder {
   private static final String SURVIVE_CONDITION = "survive";
 
   private static final String PROTECT_TARGETS_NAME = "targets";
+  private static final String SURVIVE_TURNS_NAME = "turns";
 
   private final TiledMap map;
   private final CharacterDatabase characterDB;
@@ -136,12 +140,35 @@ public class TiledBattleBuilder {
 
   private Sieze buildSeizeCondition() {
 
-    return null;
+    TiledMapTileLayer goalLayer = getLayer(GOAL_LAYER_NAME);
+    MapObjects objects = goalLayer.getObjects();
+
+    for (MapObject object : objects) {
+      if (object instanceof RectangleMapObject) {
+        RectangleMapObject rect = (RectangleMapObject)object;
+
+        MapProperties rectProps = rect.getProperties();
+        if (rectProps.containsKey("goal")) {
+          GridPoint2 tilePosition = getTilePosition(rect.getRectangle(), goalLayer);
+
+          return new Sieze(tilePosition.x, tilePosition.y);
+        }
+      }
+    }
+
+    throw new IllegalArgumentException("Seize condition requires a rectangle object on the Goals layer with the 'goal' " +
+      "property set.");
   }
 
   private Survive buildSurviveCondition() {
 
-    return null;
+    MapProperties props = map.getProperties();
+    Integer turns = props.get(SURVIVE_TURNS_NAME, Integer.class);
+    if (turns == null) {
+      throw new IllegalArgumentException("Survive condition requires a 'turns' property.");
+    }
+
+    return new Survive(turns);
   }
 
   private Set<Tile> buildTiles() {
@@ -180,10 +207,7 @@ public class TiledBattleBuilder {
         RectangleMapObject rect = (RectangleMapObject) mapObject;
         Rectangle bounds = rect.getRectangle();
 
-        // TODO: This isn't going to go super well if the rects aren't snapped to the grid
-        int tileX = Math.round(bounds.x / tileSize);
-        int tileY = Math.round(bounds.y / tileSize);
-        return tilesByLocation.get(new GridPoint2(tileX, tileY));
+        return tilesByLocation.get(getTilePosition(bounds, blockingLayer));
       })
       .filter(Objects::nonNull)
 
@@ -191,6 +215,16 @@ public class TiledBattleBuilder {
       .forEach(tile -> tile.setPassable(false));
 
     return tiles;
+  }
+
+  private GridPoint2 getTilePosition(Rectangle rectangle, TiledMapTileLayer layer) {
+    float tileRatio = 1.0f / layer.getTileHeight();
+
+    // TODO: This isn't going to go super well if the rects aren't snapped to the grid
+    return new GridPoint2(
+      Math.round(rectangle.x * tileRatio),
+      Math.round(rectangle.y * tileRatio)
+    );
   }
 
   private WinCondition buildWinCondition() {

@@ -54,6 +54,12 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   }
 
   @Override
+  public BattleMap getMap() {
+
+    return map;
+  }
+
+  @Override
   public Combatant getCombatantForCharacter(Character character) {
 
     for (Army army : armies) {

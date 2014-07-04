@@ -11,6 +11,9 @@ import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import java.util.Set;
 
 public interface Battle {
+
+  public BattleMap getMap();
+
   /**
    * Returns the {@link Army} active for the current turn.
    *

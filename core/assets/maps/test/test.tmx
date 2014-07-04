@@ -114,4 +114,5 @@
   <object gid="103" x="448" y="320"/>
   <object gid="122" x="512" y="32"/>
  </objectgroup>
+ <objectgroup name="Units" width="20" height="20"/>
 </map>

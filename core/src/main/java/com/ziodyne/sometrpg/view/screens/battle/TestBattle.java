@@ -32,8 +32,10 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
+import com.ziodyne.sometrpg.logic.models.DummyCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
@@ -164,8 +166,10 @@ public class TestBattle extends BattleScreen {
     mapRenderSystem = new TiledMapRenderSystem(camera);
     mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, viewport, mapBoundingRect, 32);
 
-    battle = initBattle(tiledMap);
-    initUnitEntities();
+    //battle = initBattle(tiledMap);
+    //initUnitEntities();
+    battle = new TiledBattleBuilder(tiledMap, new DummyCharacterDatabase()).build(eventBus);
+    pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
 
     world.setSystem(new BattleUnitDeathSystem());
     world.setSystem(new AnimationKeyFrameSystem());

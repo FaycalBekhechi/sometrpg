@@ -1,0 +1,48 @@
+{
+  "characters": [
+    {
+      "id": "liat",
+      "name": "Liat",
+      "stats": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+      "growths": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+    },
+    {
+      "id": "groober",
+      "name": "Groober",
+      "stats": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+      "growths": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      }
+    }
+  ]
+}

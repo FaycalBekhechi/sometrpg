@@ -25,7 +25,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.eventbus.EventBus;
@@ -54,11 +53,13 @@ import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
-import com.ziodyne.sometrpg.view.assets.BattleLoader;
+import com.ziodyne.sometrpg.view.assets.loaders.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.GameSpec;
-import com.ziodyne.sometrpg.view.assets.GameSpecLoader;
-import com.ziodyne.sometrpg.view.assets.MapLoader;
-import com.ziodyne.sometrpg.view.assets.SpriteSheetAssetLoader;
+import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
+import com.ziodyne.sometrpg.view.assets.loaders.GameSpecLoader;
+import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
+import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
+import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
@@ -142,6 +143,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(SomeTRPGBattle.class, new BattleLoader(resolver));
     assetManager.setLoader(GameSpec.class, new GameSpecLoader(resolver));
     assetManager.setLoader(SpriteSheet.class, new SpriteSheetAssetLoader(resolver));
+    assetManager.setLoader(CharacterSprites.class, new CharacterSpritesLoader(resolver));
 
     try {
       bundleLoader.load();

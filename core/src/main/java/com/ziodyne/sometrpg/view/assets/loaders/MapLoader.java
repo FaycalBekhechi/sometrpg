@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.view.assets;
+package com.ziodyne.sometrpg.view.assets.loaders;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.view.assets.Conversion;
 
 public class MapLoader extends SynchronousAssetLoader<BattleMap, MapLoader.MapParameter> {
   public MapLoader(FileHandleResolver resolver) {

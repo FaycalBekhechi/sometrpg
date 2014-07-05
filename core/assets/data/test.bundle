@@ -1,5 +1,9 @@
 [
   {
+    "type": "characterSprites",
+    "path": "data/character_sprites.json"
+  },
+  {
     "type": "texture",
     "path": "data/idle_sheet.png"
   },

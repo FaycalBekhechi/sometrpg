@@ -3,6 +3,7 @@ package com.ziodyne.sometrpg.view.assets;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
+import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -17,7 +18,8 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
         @Type(value = TextureAsset.class, name = "texture"),
         @Type(value = TiledMapAsset.class, name = "map"),
         @Type(value = GameSpecAsset.class, name = "gameSpec"),
-        @Type(value = SpriteSheetAsset.class, name = "spriteSheet")
+        @Type(value = SpriteSheetAsset.class, name = "spriteSheet"),
+        @Type(value = CharacterSpritesAsset.class, name = "characterSprites")
 })
 public abstract class Asset<T> {
   private String type;

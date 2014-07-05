@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.view.assets;
+package com.ziodyne.sometrpg.view.assets.loaders;
 
 import java.io.IOException;
 

@@ -1,19 +1,19 @@
 package com.ziodyne.sometrpg.logic.loader.models;
 
 public class CharacterSpec {
+  private String id;
   private String name;
-  private CharacterAssets assets;
   private CharacterStats stats;
   private CharacterGrowths growths;
+
+  public String getId() {
+
+    return id;
+  }
 
   public String getName() {
 
     return name;
-  }
-
-  public CharacterAssets getAssets() {
-
-    return assets;
   }
 
   public CharacterStats getStats() {

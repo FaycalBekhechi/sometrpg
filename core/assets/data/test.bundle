@@ -13,7 +13,7 @@
   },
   {
     "type": "texture",
-    "path": "data/enemies_fuckit.png"
+    "path": "data/enemies_idle.png"
   },
   {
     "type": "spriteSheet",

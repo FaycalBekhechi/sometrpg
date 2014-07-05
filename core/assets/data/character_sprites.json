@@ -30,6 +30,13 @@
         "name": "mc_dodge",
         "sheet": "data/mc_dodgefront.json"
       }
+    },
+    {
+      "character_id": "crossbow_enemy",
+      "idle": {
+        "name": "swordbow_idle",
+        "sheet": "data/enemies_idle.json"
+      }
     }
   ]
 }

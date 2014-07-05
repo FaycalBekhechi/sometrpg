@@ -104,9 +104,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 
 public class TestBattle extends BattleScreen {
   private final Logger logger = new GdxLogger(TestBattle.class);
@@ -302,7 +304,7 @@ public class TestBattle extends BattleScreen {
             buildAnimation(spriteBook.getRunSouth(), AnimationType.RUN_SOUTH, assets),
             buildAnimation(spriteBook.getRunEast(), AnimationType.RUN_EAST, assets),
             buildAnimation(spriteBook.getRunWest(), AnimationType.RUN_WEST, assets)
-          );
+          ).stream().filter(Objects::nonNull).collect(Collectors.toSet());
 
           Entity entity = entityFactory.createAnimatedUnit(battleMap, combatant, animations);
           registerUnitEntity(character, entity);
@@ -311,7 +313,13 @@ public class TestBattle extends BattleScreen {
     }
   }
 
+  @Nullable
   private UnitEntityAnimation buildAnimation(SpriteReference reference, AnimationType type, AssetRepository asset) {
+
+    if (reference == null ) {
+      logger.error("Combatant missing animation: " + type);
+      return null;
+    }
 
     SpriteSheet sheet = asset.get(reference.getSheetPath());
     Texture texture = asset.get(StringUtils.replace(reference.getSheetPath(), ".json", ".png"));
@@ -327,7 +335,7 @@ public class TestBattle extends BattleScreen {
 
   private void registerEnemy(Combatant combatant) {
     String name = combatant.getCharacter().getName();
-    Texture enemyTex = assetManager.get("data/enemies_fuckit.png");
+    Texture enemyTex = assetManager.get("data/enemies_idle.png");
     SpriteSheet enemySheet = assetManager.get("data/enemies_idle.json");
     Map<String, AnimationSpec> specsByName = enemySheet.getAnimationSpecs();
     Set<UnitEntityAnimation> anims = new HashSet<>();

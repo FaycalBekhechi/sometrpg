@@ -102,9 +102,16 @@ public class TiledBattleBuilder {
 
     // Add all characters to the map
     Map<Army, Set<PositionedCharacter>> charactersByArmy = buildCombatants();
-    for (Set<PositionedCharacter> army : charactersByArmy.values()) {
-      for (PositionedCharacter character : army) {
-        battleMap.addUnit(new Combatant(character.character), character.pos);
+    for (Map.Entry<Army, Set<PositionedCharacter>> armyEntry : charactersByArmy.entrySet()) {
+      Set<PositionedCharacter> characters = armyEntry.getValue();
+      for (PositionedCharacter character : characters) {
+        Combatant combatant = new Combatant(character.character);
+
+        // Add the unit to the map on its tile
+        battleMap.addUnit(combatant, character.pos);
+
+        // Add the unit to the Army too
+        armyEntry.getKey().addCombatant(combatant);
       }
     }
 

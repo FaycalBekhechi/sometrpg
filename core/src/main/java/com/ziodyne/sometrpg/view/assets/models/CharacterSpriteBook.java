@@ -25,6 +25,10 @@ public class CharacterSpriteBook {
 
   private SpriteReference dodge;
 
+  public String getCharacterId() {
+
+    return characterId;
+  }
 
   public SpriteReference getIdle() {
 

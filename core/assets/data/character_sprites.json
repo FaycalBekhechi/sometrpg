@@ -4,31 +4,31 @@
       "character_id": "liat",
       "idle": {
         "name": "mc_idle",
-        "sheet": "idle_sheet.json"
+        "sheet": "data/idle_sheet.json"
       },
       "run_north": {
         "name": "run_north",
-        "sheet": "mc_run.json"
+        "sheet": "data/mc_run.json"
       },
       "run_south": {
         "name": "run_south",
-        "sheet": "mc_run.json"
+        "sheet": "data/mc_run.json"
       },
       "run_east": {
         "name": "run_east",
-        "sheet": "mc_run.json"
+        "sheet": "data/mc_run.json"
       },
       "run_west": {
         "name": "run_west",
-        "sheet": "mc_run.json"
+        "sheet": "data/mc_run.json"
       },
       "attack": {
         "name": "mc_attack",
-        "sheet": "mc_attackback.json"
+        "sheet": "data/mc_attackback.json"
       },
       "dodge": {
-        "name": "mc_dodgefront",
-        "sheet": "mc_dodgefront.json"
+        "name": "mc_dodge",
+        "sheet": "data/mc_dodgefront.json"
       }
     }
   ]

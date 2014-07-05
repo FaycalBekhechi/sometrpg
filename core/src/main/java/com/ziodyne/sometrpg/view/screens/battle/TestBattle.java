@@ -27,6 +27,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
@@ -35,7 +36,6 @@ import com.ziodyne.sometrpg.logic.loader.AssetUtils;
 import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
-import com.ziodyne.sometrpg.logic.models.DummyCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
@@ -55,15 +55,20 @@ import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
+import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
+import com.ziodyne.sometrpg.view.assets.AssetRepository;
 import com.ziodyne.sometrpg.view.assets.loaders.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.GameSpec;
 import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
+import com.ziodyne.sometrpg.view.assets.models.CharacterSpriteBook;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
+import com.ziodyne.sometrpg.view.assets.models.SpriteReference;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
+import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
@@ -94,13 +99,14 @@ import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class TestBattle extends BattleScreen {
   private final Logger logger = new GdxLogger(TestBattle.class);
@@ -171,15 +177,14 @@ public class TestBattle extends BattleScreen {
     mapRenderSystem = new TiledMapRenderSystem(camera);
     mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, viewport, mapBoundingRect, 32);
 
-    //battle = initBattle(tiledMap);
-
     GameSpec gameSpec = assetManager.get("data/game.json");
     Collection<Character> characters = AssetUtils.reifyCharacterSpecs(gameSpec.getCharacters());
 
     battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters)).build(eventBus);
+    populateWorld(entityFactory, battle.getMap(), new AssetManagerRepository(assetManager));
+
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
 
-    initUnitEntities();
     world.setSystem(new BattleUnitDeathSystem());
     world.setSystem(new AnimationKeyFrameSystem());
     world.setSystem(new DeathFadeSystem(tweenManager));
@@ -253,12 +258,7 @@ public class TestBattle extends BattleScreen {
       listener.bind(flow);
     }
 
-    flow.whenError(new ExecutionErrorHandler<StatefulContext>() {
-      @Override
-      public void call(ExecutionError error, StatefulContext context) {
-        logger.error(error.getMessage(), error.getCause());
-      }
-    });
+    flow.whenError((error, context) -> logger.error(error.getMessage(), error.getCause()));
 
     flow.start(new BattleContext(battle));
 
@@ -279,66 +279,51 @@ public class TestBattle extends BattleScreen {
     }
   }
 
-  private void initUnitEntities() {
-    Texture attackTexture = assetManager.get("data/mc_attackback.png");
-    SpriteSheet attackSheet = assetManager.get("data/mc_attackback.json");
+  private void populateWorld(EntityFactory entityFactory, BattleMap battleMap, AssetRepository assets) {
 
-    Texture idleTexture = assetManager.get("data/idle_sheet.png");
-    SpriteSheet idleSheet = assetManager.get("data/idle_sheet.json");
+    CharacterSprites sprites = assets.get("data/character_sprites.json");
+    Map<String, CharacterSpriteBook> booksById = sprites.getSprites().stream()
+      .collect(Collectors.toMap(CharacterSpriteBook::getCharacterId, Function.identity()));
 
-    Texture dodgeTexture = assetManager.get("data/mc_dodgefront.png");
-    SpriteSheet dodgeSheet = assetManager.get("data/mc_dodgefront.json");
-
-    Texture runTexture = assetManager.get("data/mc_run.png");
-    SpriteSheet runSheet = assetManager.get("data/mc_run.json");
-
-    List<AnimationSpec> specs = new ArrayList<>();
-    specs.addAll(idleSheet.getAnimationSpecs().values());
-
-    int total = 0;
-    BattleMap map = battle.getMap();
-    for (int i = 0; i < map.getWidth(); i++) {
-      for (int j = 0; j < map.getHeight(); j++) {
-        Tile tile = map.getTile(i, j);
+    for (int i = 0; i < battleMap.getWidth(); i++) {
+      for (int j = 0; j < battleMap.getHeight(); j++) {
+        Tile tile = battleMap.getTile(i, j);
         Combatant combatant = tile.getCombatant();
         if (combatant != null) {
+
           Character character = combatant.getCharacter();
-          if (character.getName().endsWith("_enemy")) {
-            registerEnemy(combatant);
-          } else {
+          CharacterSpriteBook spriteBook = booksById.get(character.getId());
 
-            AnimationSpec idleSpec = specs.get(total % specs.size());
-            AnimationSpec attackSpec = new ArrayList<>(attackSheet.getAnimationSpecs().values()).get(0);
-            AnimationSpec dodgeSpec = new ArrayList<>(dodgeSheet.getAnimationSpecs().values()).get(0);
+          Set<UnitEntityAnimation> animations = Sets.newHashSet(
+            buildAnimation(spriteBook.getIdle(), AnimationType.IDLE, assets),
+            buildAnimation(spriteBook.getDodge(), AnimationType.DODGE, assets),
+            buildAnimation(spriteBook.getAttack(), AnimationType.ATTACK, assets),
+            buildAnimation(spriteBook.getRunNorth(), AnimationType.RUN_NORTH, assets),
+            buildAnimation(spriteBook.getRunSouth(), AnimationType.RUN_SOUTH, assets),
+            buildAnimation(spriteBook.getRunEast(), AnimationType.RUN_EAST, assets),
+            buildAnimation(spriteBook.getRunWest(), AnimationType.RUN_WEST, assets)
+          );
 
-            total++;
-            Set<UnitEntityAnimation> anims = new HashSet<>();
-            anims.add(new UnitEntityAnimation(idleTexture, AnimationType.IDLE, idleSpec, idleSheet.getGridSize()));
-            anims.add(new UnitEntityAnimation(attackTexture, AnimationType.ATTACK, attackSpec, attackSheet.getGridSize()));
-            anims.add(new UnitEntityAnimation(dodgeTexture, AnimationType.DODGE, dodgeSpec, dodgeSheet.getGridSize()));
-
-
-            Map<String, AnimationSpec> runSpecs = runSheet.getAnimationSpecs();
-            AnimationSpec south = runSpecs.get("run_south");
-            AnimationSpec north = runSpecs.get("run_north");
-            AnimationSpec east = runSpecs.get("run_east");
-            AnimationSpec west = runSpecs.get("run_west");
-
-            int size = runSheet.getGridSize();
-            anims.addAll(Lists.newArrayList(
-              new UnitEntityAnimation(runTexture, AnimationType.RUN_SOUTH, south, size),
-              new UnitEntityAnimation(runTexture, AnimationType.RUN_NORTH, north, size),
-              new UnitEntityAnimation(runTexture, AnimationType.RUN_WEST, west, size),
-              new UnitEntityAnimation(runTexture, AnimationType.RUN_EAST, east, size)
-            ));
-
-            Entity unitEntity = entityFactory.createAnimatedUnit(map, combatant, anims);
-            registerUnitEntity(character, unitEntity);
-          }
+          Entity entity = entityFactory.createAnimatedUnit(battleMap, combatant, animations);
+          registerUnitEntity(character, entity);
         }
       }
     }
   }
+
+  private UnitEntityAnimation buildAnimation(SpriteReference reference, AnimationType type, AssetRepository asset) {
+
+    SpriteSheet sheet = asset.get(reference.getSheetPath());
+    Texture texture = asset.get(StringUtils.replace(reference.getSheetPath(), ".json", ".png"));
+
+    AnimationSpec spec = sheet.getAnimationSpecs().get(reference.getName());
+    if (spec == null) {
+      throw new IllegalArgumentException("Could not find animation spec by name: " + reference.getName());
+    }
+
+    return new UnitEntityAnimation(texture, type, spec, sheet.getGridSize());
+  }
+
 
   private void registerEnemy(Combatant combatant) {
     String name = combatant.getCharacter().getName();
@@ -353,81 +338,6 @@ public class TestBattle extends BattleScreen {
     Entity entity = entityFactory.createAnimatedUnit(map, combatant, anims);
 
     registerUnitEntity(combatant.getCharacter(), entity);
-  }
-
-  private SomeTRPGBattle initBattle(TiledMap map) {
-
-    TiledMapTileLayer tileLayer = (TiledMapTileLayer)map.getLayers().get(0);
-
-    Combatant player = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test3x"));
-    Combatant halb = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
-    Combatant swordboard = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
-    Combatant strike = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
-    Combatant fire = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
-    Combatant mace = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "Test"));
-
-    Combatant swordbow = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "swordbow_enemy"));
-    Combatant guts = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "guts_enemy"));
-    Combatant speedy = new Combatant(new Character(ModelTestUtils.homogeneousStats(40), ModelTestUtils.createGrowth(), ModelTestUtils.homogeneousStats(20), "speedy_enemy"));
-
-    Army playerArmy = new Army("Greil Mercenaries", ArmyType.PLAYER);
-    playerArmy.addCombatant(player);
-
-    Army enemyArmy = new Army("Fail Brigade", ArmyType.ENEMY);
-    enemyArmy.addCombatant(halb);
-    enemyArmy.addCombatant(swordboard);
-    enemyArmy.addCombatant(strike);
-    enemyArmy.addCombatant(fire);
-    enemyArmy.addCombatant(mace);
-    enemyArmy.addCombatant(swordbow);
-    enemyArmy.addCombatant(guts);
-    enemyArmy.addCombatant(speedy);
-
-    Set<Tile> tiles = new HashSet<Tile>(tileLayer.getHeight());
-    Map<GridPoint2, Tile> pointToTile = Maps.newHashMap();
-    for (int i = 0; i < tileLayer.getWidth(); i++) {
-      for (int j = 0; j < tileLayer.getHeight(); j++) {
-        // TODO: Read the tile from the tile layer and get the attribute
-        Tile tile = new Tile(TerrainType.GRASS, i, j);
-        tiles.add(tile);
-        pointToTile.put(new GridPoint2(i, j), tile);
-      }
-    }
-
-
-    MapLayer blockingLayer = map.getLayers().get("Blocking");
-    for (MapObject object : blockingLayer.getObjects()) {
-      RectangleMapObject rect = (RectangleMapObject)object;
-      Rectangle locationRect = rect.getRectangle();
-      int x = Math.round(locationRect.x / gridSquareSize);
-      int y = Math.round(locationRect.y / gridSquareSize);
-
-      Tile tile = pointToTile.get(new GridPoint2(x, y));
-      if (tile != null) {
-        MapProperties props = object.getProperties();
-        if (Boolean.valueOf((String)props.get("blocked"))) {
-          tile.setPassable(false);
-        }
-      }
-    }
-
-    BattleMap battleMap = new BattleMap(tiles);
-    battleMap.addUnit(player, 7, 8);
-    battleMap.addUnit(halb, 10, 10);
-    battleMap.addUnit(strike, 5, 5);
-    battleMap.addUnit(mace, 2, 6);
-    battleMap.addUnit(fire, 7, 9);
-    battleMap.addUnit(swordbow, 0, 0);
-    battleMap.addUnit(guts, 3, 6);
-    battleMap.addUnit(speedy, 6, 6);
-    this.map = battleMap;
-
-    this.pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battleMap));
-
-    List<Army> armies = Lists.newArrayList(playerArmy, enemyArmy);
-    WinCondition winCondition = new Rout();
-
-    return new SomeTRPGBattle(battleMap, armies, winCondition, eventBus);
   }
 
   protected void update(float delta) {

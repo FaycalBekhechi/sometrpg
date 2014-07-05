@@ -10,7 +10,6 @@ import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import org.apache.commons.lang3.StringUtils;
 
-import com.ziodyne.sometrpg.logic.util.UnitUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -22,18 +21,18 @@ public class Character {
   
   private final long id;
   private final Map<Stat, Integer> maxStatSheet;
-  private final UnitGrowth growths;
+  private final CharacterGrowth growths;
   private String name;
   private Map<Stat, Integer> statSheet;
   private Set<CombatantAction> attackActions = EnumSet.of(CombatantAction.ATTACK);
 
-  public Character(Map<Stat, Integer> maxStatSheet, UnitGrowth growths, String name, Map<Stat, Integer> statSheet,
+  public Character(Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, String name, Map<Stat, Integer> statSheet,
                    Set<CombatantAction> attackActions) {
     this(maxStatSheet, growths, statSheet, name);
     this.attackActions = Sets.union(this.attackActions, attackActions);
   }
 
-  public Character(Map<Stat, Integer> maxStatSheet, UnitGrowth growths, Map<Stat, Integer> statSheet, String name) {
+  public Character(Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, Map<Stat, Integer> statSheet, String name) {
     this.id = lastIdentifier.incrementAndGet();
     this.maxStatSheet = Objects.requireNonNull(maxStatSheet);
     this.growths = Objects.requireNonNull(growths);
@@ -79,7 +78,7 @@ public class Character {
     this.attackActions = attackActions;
   }
 
-  public UnitGrowth getGrowths() {
+  public CharacterGrowth getGrowths() {
     return growths;
   }
 

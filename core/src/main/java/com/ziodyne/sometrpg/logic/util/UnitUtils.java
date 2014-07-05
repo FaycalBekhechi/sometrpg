@@ -2,13 +2,11 @@ package com.ziodyne.sometrpg.logic.util;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
+import com.ziodyne.sometrpg.logic.models.CharacterGrowth;
 import com.ziodyne.sometrpg.logic.models.Stat;
 import com.ziodyne.sometrpg.logic.models.Character;
-import com.ziodyne.sometrpg.logic.models.UnitGrowth;
 import com.ziodyne.sometrpg.logic.models.UnitStat;
 
 public class UnitUtils {
@@ -17,7 +15,7 @@ public class UnitUtils {
   public static final int DEFAULT_MOVEMENT_RANGE = 5;
 
   public static void levelUp(Character character) {
-    UnitGrowth growths = character.getGrowths();
+    CharacterGrowth growths = character.getGrowths();
     
     Map<Stat, Integer> newStatSheet = new HashMap<Stat, Integer>(Stat.values().length);
     for (Map.Entry<Stat, Integer> stat : character.getStatSheet().entrySet()) {
@@ -31,7 +29,7 @@ public class UnitUtils {
     character.setStatSheet(newStatSheet);
   }
   
-  private static boolean willGrow(UnitGrowth growths, Stat stat, Integer value) {
+  private static boolean willGrow(CharacterGrowth growths, Stat stat, Integer value) {
     return Math.random() < growths.getGrowthChance(stat);
   }
   

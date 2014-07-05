@@ -5,16 +5,13 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.ziodyne.sometrpg.logic.models.CharacterGrowth;
 import com.ziodyne.sometrpg.logic.models.Constants;
 import com.ziodyne.sometrpg.logic.models.Stat;
 import com.ziodyne.sometrpg.logic.models.Character;
-import com.ziodyne.sometrpg.logic.models.UnitGrowth;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
-import com.ziodyne.sometrpg.logic.util.UnitUtils;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -66,7 +63,7 @@ public class StatChartUtils {
    * @return A {@link Polygon} representing a radar chart of the growths of a unit.
    */
   public static Polygon getGrowthRadarChart(Character character, EnumSet<Stat> chartedStats, float radius) {
-    UnitGrowth growths = character.getGrowths();
+    CharacterGrowth growths = character.getGrowths();
 
     // Convert growths stored as percentages to values in the interval [0,1]
     List<Float> unitGrowthRatios = new ArrayList<Float>(chartedStats.size());

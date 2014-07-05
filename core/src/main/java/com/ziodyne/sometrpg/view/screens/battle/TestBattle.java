@@ -31,10 +31,12 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.logic.loader.AssetUtils;
 import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.logic.models.DummyCharacterDatabase;
+import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
@@ -94,6 +96,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -170,7 +173,11 @@ public class TestBattle extends BattleScreen {
 
     //battle = initBattle(tiledMap);
     //initUnitEntities();
-    battle = new TiledBattleBuilder(tiledMap, new DummyCharacterDatabase()).build(eventBus);
+
+    GameSpec gameSpec = assetManager.get("data/game.json");
+    Collection<Character> characters = AssetUtils.reifyCharacterSpecs(gameSpec.getCharacters());
+
+    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters)).build(eventBus);
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
 
     world.setSystem(new BattleUnitDeathSystem());

@@ -17,9 +17,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * This is the representation of a character that is not related to a specific unit on the battlefield.
  */
 public class Character {
-  private static final AtomicLong lastIdentifier = new AtomicLong(0L);
-  
-  private final long id;
+
+  private final String id;
   private final Map<Stat, Integer> maxStatSheet;
   private final CharacterGrowth growths;
   private String name;
@@ -32,8 +31,19 @@ public class Character {
     this.attackActions = Sets.union(this.attackActions, attackActions);
   }
 
+  public Character(String id, Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, Map<Stat, Integer> statSheet, String name) {
+
+    this.id = id;
+    this.maxStatSheet = Objects.requireNonNull(maxStatSheet);
+    this.growths = Objects.requireNonNull(growths);
+    this.statSheet = Objects.requireNonNull(statSheet);
+    this.name = Objects.requireNonNull(StringUtils.trimToNull(name));
+
+    validateStats();
+  }
+
   public Character(Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, Map<Stat, Integer> statSheet, String name) {
-    this.id = lastIdentifier.incrementAndGet();
+    this.id = "";
     this.maxStatSheet = Objects.requireNonNull(maxStatSheet);
     this.growths = Objects.requireNonNull(growths);
     this.statSheet = Objects.requireNonNull(statSheet);    
@@ -82,7 +92,7 @@ public class Character {
     return growths;
   }
 
-  public long getId() {
+  public String getId() {
     return id;
   }
 

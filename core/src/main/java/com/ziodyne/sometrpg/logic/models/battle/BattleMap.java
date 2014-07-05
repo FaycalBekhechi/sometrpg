@@ -3,7 +3,6 @@ package com.ziodyne.sometrpg.logic.models.battle;
 import com.google.common.collect.Maps;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
-import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
@@ -185,7 +184,7 @@ public class BattleMap {
     }
 
     validateDestinationTile(destination);
-    Long unitId = unit.getUnitId();
+    Long unitId = unit.getId();
     Tile existingOccupancy = occupyingUnits.get(unitId);
     if (existingOccupancy != null) {
       throw new GameLogicException("Unit with id: " + unitId + " is already present on this map.");
@@ -197,7 +196,7 @@ public class BattleMap {
 
   /** Remove a unit from the map. Blows up if it does not exist. */
   public void removeCombatant(Combatant combatant) {
-    Long unitId = combatant.getUnitId();
+    Long unitId = combatant.getId();
     Tile occupancy = occupyingUnits.get(unitId);
     if (occupancy == null) {
       throw  new GameLogicException("Unit with id: " + unitId + " does not exist on this map.");
@@ -209,11 +208,11 @@ public class BattleMap {
 
   @Nullable
   public GridPoint2 getCombatantPosition(Combatant combatant) {
-    long combatantId = combatant.getUnitId();
+    long combatantId = combatant.getId();
 
     for (Tile tile : tilesByPosition.values()) {
       Combatant combatantOnTile = tile.getCombatant();
-      if (combatantOnTile != null && combatantOnTile.getUnitId() == combatantId) {
+      if (combatantOnTile != null && combatantOnTile.getId() == combatantId) {
         return tile.getPosition();
       }
     }
@@ -221,12 +220,8 @@ public class BattleMap {
     return null;
   }
 
-  public boolean hasUnit(Character character) {
-    return occupyingUnits.get(character.getId()) != null;
-  }
-
   public boolean hasUnit(Combatant combatant) {
-    return occupyingUnits.get(combatant.getUnitId()) != null;
+    return occupyingUnits.get(combatant.getId()) != null;
   }
 
   private void moveUnit(Tile src, Tile dest) {
@@ -237,7 +232,7 @@ public class BattleMap {
     src.setCombatant(null);
     dest.setCombatant(movingUnit);
 
-    Long unitId = movingUnit.getUnitId();
+    Long unitId = movingUnit.getId();
     occupyingUnits.remove(unitId);
     occupyingUnits.put(unitId, dest);
   }

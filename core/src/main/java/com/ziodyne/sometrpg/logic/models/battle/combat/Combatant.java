@@ -1,5 +1,7 @@
 package com.ziodyne.sometrpg.logic.models.battle.combat;
 
+import java.util.Random;
+
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.Army;
 import com.ziodyne.sometrpg.logic.util.UnitUtils;
@@ -13,8 +15,10 @@ public class Combatant {
   private Army army;
   private final Character character;
   private int health;
+  private long id;
 
   public Combatant(Character character) {
+    this.id = (long)(new Random().nextDouble() * Long.MAX_VALUE);
     this.character = character;
     this.health = UnitUtils.getMaxHealth(character);
   }
@@ -32,8 +36,8 @@ public class Combatant {
     health = Math.max(health - amount, 0);
   }
 
-  public long getUnitId() {
-    return character.getId();
+  public long getId() {
+    return id;
   }
 
   public boolean isAlive() {

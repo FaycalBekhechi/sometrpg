@@ -172,7 +172,6 @@ public class TestBattle extends BattleScreen {
     mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, viewport, mapBoundingRect, 32);
 
     //battle = initBattle(tiledMap);
-    //initUnitEntities();
 
     GameSpec gameSpec = assetManager.get("data/game.json");
     Collection<Character> characters = AssetUtils.reifyCharacterSpecs(gameSpec.getCharacters());
@@ -180,6 +179,7 @@ public class TestBattle extends BattleScreen {
     battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters)).build(eventBus);
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
 
+    initUnitEntities();
     world.setSystem(new BattleUnitDeathSystem());
     world.setSystem(new AnimationKeyFrameSystem());
     world.setSystem(new DeathFadeSystem(tweenManager));
@@ -296,6 +296,7 @@ public class TestBattle extends BattleScreen {
     specs.addAll(idleSheet.getAnimationSpecs().values());
 
     int total = 0;
+    BattleMap map = battle.getMap();
     for (int i = 0; i < map.getWidth(); i++) {
       for (int j = 0; j < map.getHeight(); j++) {
         Tile tile = map.getTile(i, j);

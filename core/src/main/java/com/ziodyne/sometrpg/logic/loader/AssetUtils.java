@@ -29,7 +29,8 @@ public class AssetUtils {
       mapStats(spec.getMaxStats()),
       mapGrowths(spec.getGrowths()),
       mapStats(spec.getStats()),
-      spec.getName()
+      spec.getName(),
+      spec.getArmyName()
     );
   }
 

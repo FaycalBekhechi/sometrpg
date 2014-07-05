@@ -3,6 +3,7 @@
     {
       "id": "liat",
       "name": "Liat",
+      "armyName": "The Hard Corps",
       "maxStats": {
         "hp": 10,
         "str": 10,
@@ -34,6 +35,7 @@
     {
       "id": "groober",
       "name": "Groober",
+      "armyName": "Groob's Groobs",
       "stats": {
         "hp": 10,
         "str": 10,

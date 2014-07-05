@@ -1,0 +1,100 @@
+{
+  "characters": [
+    {
+      "id": "liat",
+      "name": "Liat",
+      "armyName": "The Hard Corps",
+      "maxStats": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+      "stats": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+      "growths": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      }
+    },
+    {
+      "id": "rhodry",
+      "name": "Rhodry",
+      "armyName": "The Hard Corps",
+      "stats": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+      "growths": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+      "maxStats": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      }
+    },
+    {
+      "id": "crossbow_enemy",
+      "name": "Crossbowman",
+      "armyName": "The Enemies",
+      "stats": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+      "growths": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      },
+      "maxStats": {
+        "hp": 10,
+        "str": 10,
+        "def": 10,
+        "skl": 10,
+        "spd": 10,
+        "lvl": 1,
+        "mov": 4
+      }
+    }
+  ]
+}

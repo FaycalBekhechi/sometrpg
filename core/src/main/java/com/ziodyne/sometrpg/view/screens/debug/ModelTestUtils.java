@@ -2,16 +2,13 @@ package com.ziodyne.sometrpg.view.screens.debug;
 
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import com.ziodyne.sometrpg.logic.models.CharacterGrowth;
 import com.ziodyne.sometrpg.logic.models.Constants;
 import com.ziodyne.sometrpg.logic.models.Stat;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.StatSheetBuilder;
-import com.ziodyne.sometrpg.logic.models.UnitGrowth;
-import com.ziodyne.sometrpg.logic.models.UnitStat;
 
 public class ModelTestUtils {
   private ModelTestUtils() { }
@@ -46,14 +43,14 @@ public class ModelTestUtils {
     return homogeneousStats(40);
   }
   
-  public static UnitGrowth createGrowth() {
+  public static CharacterGrowth createGrowth() {
     Map<Stat, Float> rawGrowths = Maps.newHashMap();
     
     for (Stat stat : EnumSet.allOf(Stat.class)) {
       rawGrowths.put(stat, 40f);
     }
     
-    return new UnitGrowth(rawGrowths);
+    return new CharacterGrowth(rawGrowths);
   }
   
   public static Character createUnit() {

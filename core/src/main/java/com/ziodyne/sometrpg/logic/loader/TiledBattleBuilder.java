@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.artemis.annotations.Mapper;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
@@ -56,6 +56,7 @@ public class TiledBattleBuilder {
   private static final String PROTECT_TARGETS_NAME = "targets";
   private static final String SURVIVE_TURNS_NAME = "turns";
 
+  private final float tileSize;
   private final TiledMap map;
   private final CharacterDatabase characterDB;
 
@@ -63,6 +64,16 @@ public class TiledBattleBuilder {
 
     this.map = map;
     this.characterDB = characterDB;
+
+    TiledMapTileLayer baseLayer = (TiledMapTileLayer)getLayer(BASE_LAYER_NAME);
+    float tileWidth = baseLayer.getTileWidth();
+    float tileHeight = baseLayer.getTileHeight();
+
+    if (tileWidth != tileHeight) {
+      throw new IllegalArgumentException("Non-square tiles in tiled map.");
+    }
+
+    this.tileSize = tileWidth;
   }
 
   private static Map<Army, Set<PositionedCharacter>> buildArmyIndex(Collection<PositionedCharacter> allCharacters) {
@@ -91,9 +102,16 @@ public class TiledBattleBuilder {
 
     // Add all characters to the map
     Map<Army, Set<PositionedCharacter>> charactersByArmy = buildCombatants();
-    for (Set<PositionedCharacter> army : charactersByArmy.values()) {
-      for (PositionedCharacter character : army) {
-        battleMap.addUnit(new Combatant(character.character), character.pos);
+    for (Map.Entry<Army, Set<PositionedCharacter>> armyEntry : charactersByArmy.entrySet()) {
+      Set<PositionedCharacter> characters = armyEntry.getValue();
+      for (PositionedCharacter character : characters) {
+        Combatant combatant = new Combatant(character.character);
+
+        // Add the unit to the map on its tile
+        battleMap.addUnit(combatant, character.pos);
+
+        // Add the unit to the Army too
+        armyEntry.getKey().addCombatant(combatant);
       }
     }
 
@@ -102,17 +120,15 @@ public class TiledBattleBuilder {
 
   private Map<Army, Set<PositionedCharacter>> buildCombatants() {
 
-    TiledMapTileLayer unitLayer = getLayer(UNIT_LAYER_NAME);
+    MapLayer unitLayer = getLayer(UNIT_LAYER_NAME);
     MapObjects units = unitLayer.getObjects();
-    float tileRatio = 1.0f / unitLayer.getTileHeight();
-
     List<PositionedCharacter> allCharacters = Lists.newArrayList(units).stream()
 
       // Exclude any malformed objects (non-rects, or objects without pointers to units)
       .filter(mapObject -> mapObject instanceof RectangleMapObject && mapObject.getProperties().containsKey("unitId"))
 
         // Turn them into characters
-      .map(object -> getCharacterFromObject((RectangleMapObject) object, tileRatio))
+      .map(object -> getCharacterFromObject((RectangleMapObject) object))
       .collect(Collectors.toList());
 
 
@@ -140,7 +156,7 @@ public class TiledBattleBuilder {
 
   private Sieze buildSeizeCondition() {
 
-    TiledMapTileLayer goalLayer = getLayer(GOAL_LAYER_NAME);
+    MapLayer goalLayer = getLayer(GOAL_LAYER_NAME);
     MapObjects objects = goalLayer.getObjects();
 
     for (MapObject object : objects) {
@@ -149,7 +165,7 @@ public class TiledBattleBuilder {
 
         MapProperties rectProps = rect.getProperties();
         if (rectProps.containsKey("goal")) {
-          GridPoint2 tilePosition = getTilePosition(rect.getRectangle(), goalLayer);
+          GridPoint2 tilePosition = getTilePosition(rect.getRectangle());
 
           return new Sieze(tilePosition.x, tilePosition.y);
         }
@@ -173,7 +189,7 @@ public class TiledBattleBuilder {
 
   private Set<Tile> buildTiles() {
 
-    TiledMapTileLayer baseLayer = getLayer(BASE_LAYER_NAME);
+    TiledMapTileLayer baseLayer = (TiledMapTileLayer)getLayer(BASE_LAYER_NAME);
     float tileWidth = baseLayer.getTileWidth();
     float tileHeight = baseLayer.getTileHeight();
 
@@ -196,7 +212,7 @@ public class TiledBattleBuilder {
       }
     }
 
-    TiledMapTileLayer blockingLayer = getLayer(BLOCKING_LAYER_NAME);
+    MapLayer blockingLayer = getLayer(BLOCKING_LAYER_NAME);
 
     // Stupid libgdx doesn't use real collections here.
     StreamSupport.stream(blockingLayer.getObjects().spliterator(), false)
@@ -207,7 +223,7 @@ public class TiledBattleBuilder {
         RectangleMapObject rect = (RectangleMapObject) mapObject;
         Rectangle bounds = rect.getRectangle();
 
-        return tilesByLocation.get(getTilePosition(bounds, blockingLayer));
+        return tilesByLocation.get(getTilePosition(bounds));
       })
       .filter(Objects::nonNull)
 
@@ -217,8 +233,8 @@ public class TiledBattleBuilder {
     return tiles;
   }
 
-  private GridPoint2 getTilePosition(Rectangle rectangle, TiledMapTileLayer layer) {
-    float tileRatio = 1.0f / layer.getTileHeight();
+  private GridPoint2 getTilePosition(Rectangle rectangle) {
+    float tileRatio = 1.0f / tileSize;
 
     // TODO: This isn't going to go super well if the rects aren't snapped to the grid
     return new GridPoint2(
@@ -245,8 +261,9 @@ public class TiledBattleBuilder {
     }
   }
 
-  private PositionedCharacter getCharacterFromObject(RectangleMapObject unit, float tileRatio) {
+  private PositionedCharacter getCharacterFromObject(RectangleMapObject unit) {
 
+    float tileRatio = 1.0f / tileSize;
     Rectangle bounds = unit.getRectangle();
     MapProperties props = unit.getProperties();
     String id = props.get("unitId", String.class);
@@ -258,9 +275,9 @@ public class TiledBattleBuilder {
       .orElseThrow(() -> new IllegalArgumentException("Could not find character by id: " + id));
   }
 
-  private TiledMapTileLayer getLayer(String name) {
+  private com.badlogic.gdx.maps.MapLayer getLayer(String name) {
 
-    return (TiledMapTileLayer) map.getLayers().get(name);
+    return map.getLayers().get(name);
   }
 
   private static class PositionedCharacter {

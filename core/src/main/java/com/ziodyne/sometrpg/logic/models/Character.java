@@ -10,7 +10,6 @@ import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import org.apache.commons.lang3.StringUtils;
 
-import com.ziodyne.sometrpg.logic.util.UnitUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -18,23 +17,35 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * This is the representation of a character that is not related to a specific unit on the battlefield.
  */
 public class Character {
-  private static final AtomicLong lastIdentifier = new AtomicLong(0L);
-  
-  private final long id;
+
+  private final String id;
   private final Map<Stat, Integer> maxStatSheet;
-  private final UnitGrowth growths;
+  private final CharacterGrowth growths;
   private String name;
+  private String armyName;
   private Map<Stat, Integer> statSheet;
   private Set<CombatantAction> attackActions = EnumSet.of(CombatantAction.ATTACK);
 
-  public Character(Map<Stat, Integer> maxStatSheet, UnitGrowth growths, String name, Map<Stat, Integer> statSheet,
+  public Character(Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, String name, Map<Stat, Integer> statSheet,
                    Set<CombatantAction> attackActions) {
     this(maxStatSheet, growths, statSheet, name);
     this.attackActions = Sets.union(this.attackActions, attackActions);
   }
 
-  public Character(Map<Stat, Integer> maxStatSheet, UnitGrowth growths, Map<Stat, Integer> statSheet, String name) {
-    this.id = lastIdentifier.incrementAndGet();
+  public Character(String id, Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, Map<Stat, Integer> statSheet, String name, String armyName) {
+
+    this.id = Objects.requireNonNull(StringUtils.trimToNull(id));
+    this.maxStatSheet = Objects.requireNonNull(maxStatSheet);
+    this.growths = Objects.requireNonNull(growths);
+    this.statSheet = Objects.requireNonNull(statSheet);
+    this.name = Objects.requireNonNull(StringUtils.trimToNull(name));
+    this.armyName = Objects.requireNonNull(StringUtils.trimToNull(armyName));
+
+    validateStats();
+  }
+
+  public Character(Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, Map<Stat, Integer> statSheet, String name) {
+    this.id = "";
     this.maxStatSheet = Objects.requireNonNull(maxStatSheet);
     this.growths = Objects.requireNonNull(growths);
     this.statSheet = Objects.requireNonNull(statSheet);    
@@ -44,7 +55,7 @@ public class Character {
   }
 
   public String getArmyName() {
-    return null;
+    return armyName;
   }
 
   public int getMovementRange() {
@@ -79,11 +90,11 @@ public class Character {
     this.attackActions = attackActions;
   }
 
-  public UnitGrowth getGrowths() {
+  public CharacterGrowth getGrowths() {
     return growths;
   }
 
-  public long getId() {
+  public String getId() {
     return id;
   }
 

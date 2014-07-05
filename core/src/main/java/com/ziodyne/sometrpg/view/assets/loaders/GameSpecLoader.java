@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.view.assets;
+package com.ziodyne.sometrpg.view.assets.loaders;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
@@ -7,12 +7,10 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ziodyne.sometrpg.logic.loader.models.CharacterSpec;
 import com.ziodyne.sometrpg.logic.loader.models.Characters;
 import com.ziodyne.sometrpg.util.JsonUtils;
+import com.ziodyne.sometrpg.view.assets.GameSpec;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;

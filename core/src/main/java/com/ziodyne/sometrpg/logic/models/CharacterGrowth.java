@@ -1,16 +1,13 @@
 package com.ziodyne.sometrpg.logic.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class UnitGrowth {
-  @JsonProperty("rates")
+public class CharacterGrowth {
   private Map<Stat, Float> growthRates = new HashMap<Stat, Float>();
   
-  public UnitGrowth(Map<Stat, Float> rates) {
+  public CharacterGrowth(Map<Stat, Float> rates) {
     this.growthRates = Objects.requireNonNull(rates);
   }
   

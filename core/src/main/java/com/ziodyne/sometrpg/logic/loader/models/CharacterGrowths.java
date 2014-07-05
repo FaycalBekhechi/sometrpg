@@ -1,12 +1,61 @@
 package com.ziodyne.sometrpg.logic.loader.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CharacterGrowths {
-  private float hp;
-  private float str;
-  private float def;
-  private float spd;
+  @JsonProperty("hp")
+  private float health;
+
+  @JsonProperty("str")
+  private float strength;
+
+  @JsonProperty("spd")
+  private float speed;
+
+  @JsonProperty("skl")
   private float skill;
-  private float luck;
-  private float res;
-  private float mov;
+
+  @JsonProperty("def")
+  private float defense;
+
+  @JsonProperty("mov")
+  private float movement;
+
+  @JsonProperty("lvl")
+  private float level;
+
+  public float getHealth() {
+
+    return health;
+  }
+
+  public float getStrength() {
+
+    return strength;
+  }
+
+  public float getSpeed() {
+
+    return speed;
+  }
+
+  public float getSkill() {
+
+    return skill;
+  }
+
+  public float getDefense() {
+
+    return defense;
+  }
+
+  public float getMovement() {
+
+    return movement;
+  }
+
+  public float getLevel() {
+
+    return level;
+  }
 }

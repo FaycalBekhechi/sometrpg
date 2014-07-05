@@ -47,7 +47,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected final EventBus eventBus;
   protected TiledMap map;
   protected SomeTRPGBattle battle;
-  protected Map<Character, Entity> entityIndex = new HashMap<Character, Entity>();
+  protected Map<Character, Entity> entityIndex = new HashMap<>();
   protected Entity unitSelector;
   protected Stage menuStage;
   protected Group unitActionMenu = new Group();

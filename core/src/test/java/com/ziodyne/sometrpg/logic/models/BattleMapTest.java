@@ -35,7 +35,7 @@ public class BattleMapTest {
 
   @Test(expected = GameLogicException.class)
   public void testMoveFromNonexistantTile() {
-    BattleMap emptyMap = ModelTestUtils.createEmptyMap();
+    BattleMap emptyMap = ModelTestUtils.createMap(5);
     emptyMap.moveUnit(20, 20, 20, 20);
   }
 

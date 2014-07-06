@@ -23,6 +23,7 @@ import com.ziodyne.sometrpg.view.rendering.Sprite;
 import com.ziodyne.sometrpg.view.rendering.SpriteBatchRenderer;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -77,13 +78,14 @@ public class SpriteRenderSystem extends EntitySystem {
       entityList.add(entity);
     }
 
-    // Group entities by their layer
-    Map<SpriteLayer, List<Entity>> entitiesByLayer = groupBy(entityList, (entity) -> spriteMapper.get(entity).getLayer());
+    // Render each entity sorted by zIndex
+    entityList.stream()
+      .sorted(byZIndex(spriteMapper))
+      .forEach(this::render);
+  }
 
-    // Render each layer in declaration order
-    for (SpriteLayer layer : SpriteLayer.values()) {
-      entitiesByLayer.get(layer).forEach(this::render);
-    }
+  private static Comparator<Entity> byZIndex(ComponentMapper<SpriteComponent> spriteMapper) {
+    return (o1, o2) -> spriteMapper.get(o1).getzIndex() - spriteMapper.get(o2).getzIndex();
   }
 
   private void render(Entity entity) {

@@ -21,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
@@ -62,6 +63,7 @@ import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
+import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
@@ -97,8 +99,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.annotation.Nullable;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 public class TestBattle extends BattleScreen {
   private final Logger logger = new GdxLogger(TestBattle.class);
@@ -261,15 +267,22 @@ public class TestBattle extends BattleScreen {
   }
 
   private void initializeMapObjects(TiledMap tiledMap) {
-    for (MapLayer layer : tiledMap.getLayers()) {
-      if (!(layer instanceof TiledMapTileLayer)) {
-        for (MapObject object : layer.getObjects()) {
-          TextureRegion region = TiledMapUtils.getTextureRegion(object.getProperties(), tiledMap);
-          if (region != null) {
-            Entity entity = entityFactory.createMapObject((RectangleMapObject)object, region, 1f);
-            world.addEntity(entity);
-          }
-        }
+
+    List<MapLayer> layers = newArrayList(tiledMap.getLayers());
+
+    // Increment the z-index for each layer counting up from
+    int firstZIndex = SpriteLayer.FOREGROUND.getZIndex();
+    IntStream.iterate(firstZIndex, n -> n+1)
+      .forEach((i) -> populateMapObjects(tiledMap, layers.get(i), i));
+  }
+
+  private void populateMapObjects(TiledMap map, MapLayer layer, int zIndex) {
+
+    for (MapObject object : layer.getObjects()) {
+      TextureRegion region = TiledMapUtils.getTextureRegion(object.getProperties(), map);
+      if (region != null) {
+        Entity entity = entityFactory.createMapObject((RectangleMapObject)object, region,zIndex);
+        world.addEntity(entity);
       }
     }
   }

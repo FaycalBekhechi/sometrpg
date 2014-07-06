@@ -31,10 +31,10 @@ import com.ziodyne.sometrpg.logic.loader.loaders.CharactersLoader;
 import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.loader.models.Characters;
+import com.ziodyne.sometrpg.logic.loader.models.Roster;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
-import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -49,7 +49,7 @@ import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
-import com.ziodyne.sometrpg.view.assets.loaders.ArmiesLoader;
+import com.ziodyne.sometrpg.logic.loader.loaders.ArmiesLoader;
 import com.ziodyne.sometrpg.logic.loader.models.GameSpec;
 import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
 import com.ziodyne.sometrpg.logic.loader.loaders.GameSpecLoader;
@@ -176,10 +176,10 @@ public class TestBattle extends BattleScreen {
 
     GameSpec gameSpec = assetManager.get("data/game.json");
     Collection<Character> characters = AssetUtils.reifyCharacterSpecs(gameSpec.getCharacters());
-    Armies armies = assetManager.get("data/armies.json");
+    List<Roster> rosters = gameSpec.getRosters();
 
     long start = System.currentTimeMillis();
-    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, armies.getArmies())).build(eventBus);
+    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, rosters)).build(eventBus);
     long end = System.currentTimeMillis();
 
     logger.debug("Map init took: " + (end - start) + "ms");

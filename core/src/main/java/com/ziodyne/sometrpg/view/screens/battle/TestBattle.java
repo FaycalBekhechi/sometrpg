@@ -273,8 +273,8 @@ public class TestBattle extends BattleScreen {
 
     // Increment the z-index for each layer counting up from
     int firstZIndex = SpriteLayer.FOREGROUND.getZIndex();
-    StreamUtils.iterateUpFrom(firstZIndex)
-      .forEach((i) -> populateMapObjects(tiledMap, layers.get(i), i));
+    IntStream.range(firstZIndex, firstZIndex + layers.size())
+      .forEach((i) -> populateMapObjects(tiledMap, layers.get(i - firstZIndex), i));
   }
 
   private void populateMapObjects(TiledMap map, MapLayer layer, int zIndex) {

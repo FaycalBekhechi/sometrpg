@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.logic.loader;
+package com.ziodyne.sometrpg.logic.loader.loaders;
 
 import java.io.IOException;
 

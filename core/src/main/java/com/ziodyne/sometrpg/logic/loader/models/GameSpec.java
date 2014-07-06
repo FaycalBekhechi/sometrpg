@@ -1,4 +1,4 @@
-package com.ziodyne.sometrpg.view.assets;
+package com.ziodyne.sometrpg.logic.loader.models;
 
 import com.ziodyne.sometrpg.logic.loader.models.CharacterSpec;
 

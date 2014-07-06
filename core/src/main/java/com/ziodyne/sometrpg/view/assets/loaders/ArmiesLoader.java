@@ -10,7 +10,7 @@ import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.ziodyne.sometrpg.util.JsonUtils;
-import com.ziodyne.sometrpg.view.assets.models.Armies;
+import com.ziodyne.sometrpg.logic.loader.models.Armies;
 
 public class ArmiesLoader extends SynchronousAssetLoader<Armies, ArmiesLoader.ArmiesLoaderParams> {
 

@@ -3,7 +3,6 @@
     {
       "id": "liat",
       "name": "Liat",
-      "armyName": "The Hard Corps",
       "maxStats": {
         "hp": 10,
         "str": 10,
@@ -35,7 +34,6 @@
     {
       "id": "rhodry",
       "name": "Rhodry",
-      "armyName": "The Hard Corps",
       "stats": {
         "hp": 10,
         "str": 10,
@@ -67,7 +65,6 @@
     {
       "id": "crossbow_enemy",
       "name": "Crossbowman",
-      "armyName": "The Enemies",
       "stats": {
         "hp": 10,
         "str": 10,

@@ -22,7 +22,6 @@ public class Character {
   private final Map<Stat, Integer> maxStatSheet;
   private final CharacterGrowth growths;
   private String name;
-  private String armyName;
   private Map<Stat, Integer> statSheet;
   private Set<CombatantAction> attackActions = EnumSet.of(CombatantAction.ATTACK);
 
@@ -32,14 +31,13 @@ public class Character {
     this.attackActions = Sets.union(this.attackActions, attackActions);
   }
 
-  public Character(String id, Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, Map<Stat, Integer> statSheet, String name, String armyName) {
+  public Character(String id, Map<Stat, Integer> maxStatSheet, CharacterGrowth growths, Map<Stat, Integer> statSheet, String name) {
 
     this.id = Objects.requireNonNull(StringUtils.trimToNull(id));
     this.maxStatSheet = Objects.requireNonNull(maxStatSheet);
     this.growths = Objects.requireNonNull(growths);
     this.statSheet = Objects.requireNonNull(statSheet);
     this.name = Objects.requireNonNull(StringUtils.trimToNull(name));
-    this.armyName = Objects.requireNonNull(StringUtils.trimToNull(armyName));
 
     validateStats();
   }
@@ -52,10 +50,6 @@ public class Character {
     this.name = Objects.requireNonNull(StringUtils.trimToNull(name));
     
     validateStats();
-  }
-
-  public String getArmyName() {
-    return armyName;
   }
 
   public int getMovementRange() {

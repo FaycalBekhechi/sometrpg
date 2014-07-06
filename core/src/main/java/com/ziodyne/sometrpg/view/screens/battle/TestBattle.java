@@ -1,9 +1,6 @@
 package com.ziodyne.sometrpg.view.screens.battle;
 
 import au.com.ds.ef.EasyFlow;
-import au.com.ds.ef.StatefulContext;
-import au.com.ds.ef.call.ExecutionErrorHandler;
-import au.com.ds.ef.err.ExecutionError;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenManager;
@@ -19,14 +16,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
@@ -39,14 +33,9 @@ import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
-import com.ziodyne.sometrpg.logic.models.battle.TerrainType;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Character;
-import com.ziodyne.sometrpg.logic.models.battle.Army;
-import com.ziodyne.sometrpg.logic.models.battle.ArmyType;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
-import com.ziodyne.sometrpg.logic.models.battle.conditions.Rout;
-import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
@@ -65,7 +54,7 @@ import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
-import com.ziodyne.sometrpg.view.assets.models.Armies;
+import com.ziodyne.sometrpg.logic.loader.models.Armies;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSpriteBook;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
 import com.ziodyne.sometrpg.view.assets.models.SpriteReference;
@@ -84,7 +73,6 @@ import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelect
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitAttackingListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitMoving;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.ViewingUnitInfo;
-import com.ziodyne.sometrpg.view.screens.debug.ModelTestUtils;
 import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
 import com.ziodyne.sometrpg.view.systems.BattleAnimationSwitchSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
@@ -109,7 +97,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
@@ -185,8 +172,9 @@ public class TestBattle extends BattleScreen {
 
     GameSpec gameSpec = assetManager.get("data/game.json");
     Collection<Character> characters = AssetUtils.reifyCharacterSpecs(gameSpec.getCharacters());
+    Armies armies = assetManager.get("data/armies.json");
 
-    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters)).build(eventBus);
+    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, armies.getArmies())).build(eventBus);
     populateWorld(entityFactory, battle.getMap(), new AssetManagerRepository(assetManager));
 
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
@@ -288,7 +276,7 @@ public class TestBattle extends BattleScreen {
   private void populateWorld(EntityFactory entityFactory, BattleMap battleMap, AssetRepository assets) {
 
     CharacterSprites sprites = assets.get("data/character_sprites.json");
-    
+
     Map<String, CharacterSpriteBook> booksById = CollectionUtils.indexBy(sprites.getSprites(),
       CharacterSpriteBook::getCharacterId);
 

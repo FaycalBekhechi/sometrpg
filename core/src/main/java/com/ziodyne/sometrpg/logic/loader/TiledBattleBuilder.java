@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -76,22 +77,14 @@ public class TiledBattleBuilder {
     this.tileSize = tileWidth;
   }
 
-  private static Map<Army, Set<PositionedCharacter>> buildArmyIndex(Collection<PositionedCharacter> allCharacters) {
+  private Map<Army, Set<PositionedCharacter>> buildArmyIndex(Collection<PositionedCharacter> allCharacters) {
 
-    Map<Army, Set<PositionedCharacter>> result = new HashMap<>();
+    return allCharacters.stream()
+      .collect(Collectors.groupingBy(character -> {
+        Character realCharacter = character.character;
+        return characterDB.getArmyForCharacterId(realCharacter.getId());
+      }, Collectors.toSet()));
 
-    // Index characters by army name
-    Map<String, Set<PositionedCharacter>> charsByArmyName = allCharacters.stream()
-      .collect(Collectors.groupingBy(PositionedCharacter::getArmyName, Collectors.toSet()));
-
-    // Build armies into the result map
-    allCharacters.stream()
-      // For now, everything is a player army...whoops. #TODO
-      .map((character) -> new Army(character.getArmyName(), ArmyType.PLAYER))
-      .distinct()
-      .forEach(army -> result.put(army, charsByArmyName.get(army.getName())));
-
-    return result;
   }
 
   public SomeTRPGBattle build(EventBus todoFixThis) {
@@ -290,10 +283,6 @@ public class TiledBattleBuilder {
       this.character = character;
     }
 
-    public String getArmyName() {
-
-      return character.getArmyName();
-    }
   }
 
 }

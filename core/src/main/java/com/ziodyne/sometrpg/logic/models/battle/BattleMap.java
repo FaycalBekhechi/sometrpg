@@ -10,17 +10,21 @@ import com.ziodyne.sometrpg.logic.util.MathUtils;
 import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.alg.FloydWarshallShortestPaths;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
 import org.jgrapht.graph.ListenableUndirectedGraph;
+import org.jgrapht.traverse.ClosestFirstIterator;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.Set;
 
 public class BattleMap {
   private static final Logger logger = new GdxLogger(BattleMap.class);
@@ -36,7 +40,7 @@ public class BattleMap {
   private final ListenableUndirectedGraph<GridPoint2, DefaultEdge> graph =
           new ListenableUndirectedGraph<GridPoint2, DefaultEdge>(DefaultEdge.class);
 
-  private Collection<GraphPath<GridPoint2, DefaultEdge>> allShortestPaths;
+  private ConnectivityInspector<GridPoint2, DefaultEdge> connectivityInspector;
 
   public BattleMap(Collection<Tile> tiles) {
     if (tiles.isEmpty()) {
@@ -59,7 +63,12 @@ public class BattleMap {
 
 
     populateTileIndex(tiles);
+
+    long start = System.currentTimeMillis();
     populateGraph(tiles);
+    long end = System.currentTimeMillis();
+
+    logger.debug("Graph population took " + (end - start) + "ms.");
   }
 
   private void populateGraph(Collection<Tile> tiles) {
@@ -84,38 +93,42 @@ public class BattleMap {
         }
       }
     }
+    connectivityInspector = new ConnectivityInspector<>(graph);
 
     graph.addGraphListener(new GraphListener<GridPoint2, DefaultEdge>() {
       @Override
       public void edgeAdded(GraphEdgeChangeEvent<GridPoint2, DefaultEdge> e) {
-        updateShortestPaths();
+        connectivityInspector.edgeAdded(e);
       }
 
       @Override
       public void edgeRemoved(GraphEdgeChangeEvent<GridPoint2, DefaultEdge> e) {
-        updateShortestPaths();
+        connectivityInspector.edgeRemoved(e);
       }
 
       @Override
       public void vertexAdded(GraphVertexChangeEvent<GridPoint2> e) {
-
+        connectivityInspector.vertexAdded(e);
       }
 
       @Override
       public void vertexRemoved(GraphVertexChangeEvent<GridPoint2> e) {
-
+        connectivityInspector.vertexRemoved(e);
       }
     });
-
-    updateShortestPaths();
   }
 
-  private void updateShortestPaths() {
-    allShortestPaths = new FloydWarshallShortestPaths<GridPoint2, DefaultEdge>(graph).getShortestPaths();
+  public Set<GridPoint2> getNeighborsInRadius(GridPoint2 start, int radius) {
+    Set<GridPoint2> neighbors = new HashSet<>();
+    new ClosestFirstIterator<>(graph, start, radius).forEachRemaining(neighbors::add);
+
+    neighbors.remove(start);
+
+    return neighbors;
   }
 
-  public Collection<GraphPath<GridPoint2, DefaultEdge>> getAllShortestPaths() {
-    return allShortestPaths;
+  public boolean pathExists(GridPoint2 start, GridPoint2 end) {
+    return connectivityInspector.pathExists(start, end);
   }
 
   private void populateTileIndex(Collection<Tile> tiles) {
@@ -127,10 +140,6 @@ public class BattleMap {
 
       tilesByPosition.put(pos, tile);
     }
-  }
-
-  public Graph<GridPoint2, DefaultEdge> getGraph() {
-    return graph;
   }
 
   public int getWidth() {

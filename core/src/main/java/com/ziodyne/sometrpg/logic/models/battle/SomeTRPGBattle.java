@@ -11,6 +11,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
 import com.ziodyne.sometrpg.logic.navigation.CachingPathfinder;
+import com.ziodyne.sometrpg.logic.navigation.NeighborRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
@@ -19,7 +20,6 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.MapCombatResolver;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
-import com.ziodyne.sometrpg.logic.navigation.FloydWarshallRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.RangeFinder;
 
 import javax.annotation.Nullable;
@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
-  private final RangeFinder movementRangeFinder = new FloydWarshallRangeFinder();
+  private final RangeFinder movementRangeFinder = new NeighborRangeFinder();
   private final BattleMap map;
   private final ImmutableList<Army> armies;
   private final WinCondition condition;

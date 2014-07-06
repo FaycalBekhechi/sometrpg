@@ -182,7 +182,12 @@ public class TestBattle extends BattleScreen {
     Collection<Character> characters = AssetUtils.reifyCharacterSpecs(gameSpec.getCharacters());
     Armies armies = assetManager.get("data/armies.json");
 
+    long start = System.currentTimeMillis();
     battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, armies.getArmies())).build(eventBus);
+    long end = System.currentTimeMillis();
+
+    logger.debug("Map init took: " + (end - start) + "ms");
+
     populateWorld(entityFactory, battle.getMap(), new AssetManagerRepository(assetManager));
 
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));

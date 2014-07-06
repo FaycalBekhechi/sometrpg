@@ -272,7 +272,7 @@ public class TestBattle extends BattleScreen {
 
     // Increment the z-index for each layer counting up from
     int firstZIndex = SpriteLayer.FOREGROUND.getZIndex();
-    IntStream.iterate(firstZIndex, n -> n+1)
+    IntStream.iterate(firstZIndex, n -> n + 1)
       .forEach((i) -> populateMapObjects(tiledMap, layers.get(i), i));
   }
 
@@ -339,21 +339,6 @@ public class TestBattle extends BattleScreen {
     return new UnitEntityAnimation(texture, type, spec, sheet.getGridSize());
   }
 
-
-  private void registerEnemy(Combatant combatant) {
-    String name = combatant.getCharacter().getName();
-    Texture enemyTex = assetManager.get("data/enemies_idle.png");
-    SpriteSheet enemySheet = assetManager.get("data/enemies_idle.json");
-    Map<String, AnimationSpec> specsByName = enemySheet.getAnimationSpecs();
-    Set<UnitEntityAnimation> anims = new HashSet<>();
-    int gridSize = enemySheet.getGridSize();
-
-    AnimationSpec idleSpec = specsByName.get(StringUtils.substringBefore(name, "_") + "_idle");
-    anims.add(new UnitEntityAnimation(enemyTex, AnimationType.IDLE, idleSpec, gridSize));
-    Entity entity = entityFactory.createAnimatedUnit(map, combatant, anims);
-
-    registerUnitEntity(combatant.getCharacter(), entity);
-  }
 
   protected void update(float delta) {
     if (initialized) {

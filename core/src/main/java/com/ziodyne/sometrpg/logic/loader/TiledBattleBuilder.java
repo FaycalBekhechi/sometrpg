@@ -199,9 +199,9 @@ public class TiledBattleBuilder {
 
     for (int row = 0; row < height; row++) {
       for (int column = 0; column < width; column++) {
-        Tile tile = new Tile(TerrainType.GRASS, row, column);
+        Tile tile = new Tile(TerrainType.GRASS, column, row);
         tiles.add(tile);
-        tilesByLocation.put(new GridPoint2(row, column), tile);
+        tilesByLocation.put(new GridPoint2(column, row), tile);
       }
     }
 

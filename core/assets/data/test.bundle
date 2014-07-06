@@ -61,7 +61,7 @@
   },
   {
     "type": "map",
-    "path": "maps/test/test.tmx"
+    "path": "maps/chapter1.tmx"
   },
   {
     "type": "gameSpec",

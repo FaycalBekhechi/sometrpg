@@ -19,6 +19,8 @@ import org.jgrapht.graph.ListenableUndirectedGraph;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 public class BattleMap {
   private static final Logger logger = new GdxLogger(BattleMap.class);
@@ -37,11 +39,24 @@ public class BattleMap {
   private Collection<GraphPath<GridPoint2, DefaultEdge>> allShortestPaths;
 
   public BattleMap(Collection<Tile> tiles) {
-    validateSquareness(tiles);
+    if (tiles.isEmpty()) {
+      throw new IllegalArgumentException("Cannot make a map from no tiles.");
+    }
 
-    double sqrt = Math.sqrt(tiles.size());
-    int size = (int)sqrt;
-    this.width = this.height = size;
+    // Get the largest tile in the X direction
+    OptionalInt westmostPosition = tiles.stream()
+      .mapToInt(tile -> tile.getPosition().x)
+      .sorted()
+      .max();
+    this.width = westmostPosition.getAsInt();
+
+    // Get the largest tile in the Y direction
+    OptionalInt southmostPosition = tiles.stream()
+      .mapToInt(tile -> tile.getPosition().y)
+      .sorted()
+      .max();
+    this.height = southmostPosition.getAsInt();
+
 
     populateTileIndex(tiles);
     populateGraph(tiles);
@@ -254,14 +269,6 @@ public class BattleMap {
 
     if (!dest.isPassable()) {
       throw new GameLogicException("Invalid move: cannot move to impassable tile.");
-    }
-  }
-
-  private static void validateSquareness(Collection<Tile> tiles) {
-    double sqrt = Math.sqrt(tiles.size());
-    int size = (int)sqrt;
-    if (size != sqrt) {
-      throw new GameLogicException("Non-square grid!");
     }
   }
 

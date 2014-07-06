@@ -161,7 +161,7 @@ public class TestBattle extends BattleScreen {
     Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
     Tween.registerAccessor(Position.class, positionTweenAccessor);
 
-    TiledMap tiledMap = assetManager.get("maps/test/test.tmx");
+    TiledMap tiledMap = assetManager.get("maps/chapter1.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, (tileLayer.getWidth()-1) * gridSquareSize, (tileLayer.getHeight()-1) * gridSquareSize);
 

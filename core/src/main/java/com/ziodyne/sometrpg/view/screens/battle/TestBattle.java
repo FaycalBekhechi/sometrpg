@@ -218,7 +218,8 @@ public class TestBattle extends BattleScreen {
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
     initializeMapObjects(tiledMap);
 
-    Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32, new GridPoint2());
+    BattleMap map = battle.getMap();
+    Entity mapGridOverlay = entityFactory.createMapGridOverlay(map.getHeight()+1, map.getWidth()+1, 32, new GridPoint2());
     world.addEntity(mapGridOverlay);
 
     Entity stage = entityFactory.createStage(menuStage);

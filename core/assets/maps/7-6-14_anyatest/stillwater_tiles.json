@@ -1,0 +1,11 @@
+{
+  "grid_size": 32,
+  "animations": {
+    "stillwater": {
+      "start": [0, 0],
+      "end": [0, 7],
+      "frame_length": 100,
+      "mode": "normal"
+    }
+  }
+}

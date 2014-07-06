@@ -57,12 +57,14 @@ import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
+import com.ziodyne.sometrpg.view.assets.loaders.ArmiesLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.BattleLoader;
 import com.ziodyne.sometrpg.view.assets.GameSpec;
 import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
+import com.ziodyne.sometrpg.view.assets.models.Armies;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSpriteBook;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
 import com.ziodyne.sometrpg.view.assets.models.SpriteReference;
@@ -155,6 +157,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(GameSpec.class, new GameSpecLoader(resolver));
     assetManager.setLoader(SpriteSheet.class, new SpriteSheetAssetLoader(resolver));
     assetManager.setLoader(CharacterSprites.class, new CharacterSpritesLoader(resolver));
+    assetManager.setLoader(Armies.class, new ArmiesLoader(resolver));
 
     try {
       bundleLoader.load();

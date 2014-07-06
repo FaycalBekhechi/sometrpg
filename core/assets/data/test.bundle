@@ -1,5 +1,9 @@
 [
   {
+    "type": "armies",
+    "path": "data/armies.json"
+  },
+  {
     "type": "characterSprites",
     "path": "data/character_sprites.json"
   },

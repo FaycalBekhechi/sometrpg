@@ -1,0 +1,18 @@
+{
+  "armies": [
+    {
+      "name": "The Hard Corps",
+      "members": [
+        "liat"
+      ],
+      "type": "player"
+    },
+    {
+      "name": "Da Enemies",
+      "members": [
+        "crossbow_enemy"
+      ],
+      "type": "enemy"
+    }
+  ]
+}

@@ -10,16 +10,17 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 @JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type"
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
 )
 @JsonSubTypes({
-        @Type(value = TextureAsset.class, name = "texture"),
-        @Type(value = TiledMapAsset.class, name = "map"),
-        @Type(value = GameSpecAsset.class, name = "gameSpec"),
-        @Type(value = SpriteSheetAsset.class, name = "spriteSheet"),
-        @Type(value = CharacterSpritesAsset.class, name = "characterSprites")
+    @Type(value = TextureAsset.class, name = "texture"),
+    @Type(value = TiledMapAsset.class, name = "map"),
+    @Type(value = GameSpecAsset.class, name = "gameSpec"),
+    @Type(value = SpriteSheetAsset.class, name = "spriteSheet"),
+    @Type(value = CharacterSpritesAsset.class, name = "characterSprites"),
+    @Type(value = ArmiesAsset.class, name = "armies")
 })
 public abstract class Asset<T> {
   private String type;

@@ -24,7 +24,6 @@ public class GameSpecLoader extends SynchronousAssetLoader<GameSpec, GameSpecLoa
     super(resolver);
   }
 
-  private JsonNode gameSpecJson;
   private String fullCharactersPath;
 
   @Override
@@ -38,6 +37,8 @@ public class GameSpecLoader extends SynchronousAssetLoader<GameSpec, GameSpecLoa
 
   @Override
   public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, GameParameters parameter) {
+
+    JsonNode gameSpecJson;
     try {
       gameSpecJson = JsonUtils.readTree(file.read());
     } catch (IOException e) {

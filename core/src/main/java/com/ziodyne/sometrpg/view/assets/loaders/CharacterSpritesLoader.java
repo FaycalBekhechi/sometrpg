@@ -20,10 +20,8 @@ import com.badlogic.gdx.utils.Array;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Lists;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
-import com.ziodyne.sometrpg.util.CollectionUtils;
 import com.ziodyne.sometrpg.util.JsonUtils;
 import com.ziodyne.sometrpg.view.AnimationType;
-import com.ziodyne.sometrpg.view.assets.models.CharacterSpriteBook;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import org.apache.commons.io.FilenameUtils;
@@ -37,10 +35,11 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
     super(resolver);
   }
 
-  private Map<String, Set<String>> animationNames = new HashMap<>();
-  private Map<String, String> pathsByName = new HashMap<>();
-  private Set<String> spriteSheetPaths = new HashSet<>();
-  private Map<String, AnimationType> types = new HashMap<>();
+  // TODO: Pull these into a 'sprite animation data' class
+  private Map<String, Set<String>> animNamesByCharacterId = new HashMap<>();
+  private Map<String, String> pathsByAnimationName = new HashMap<>();
+  private Set<String> uniquePaths = new HashSet<>();
+  private Map<String, AnimationType> typesByPath = new HashMap<>();
 
   @Override
   public CharacterSprites load(AssetManager assetManager, String fileName, FileHandle fileHandle,
@@ -48,13 +47,15 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
 
     CharacterSprites sprites = new CharacterSprites();
 
-    Map<String, Texture> texturesByPath = spriteSheetPaths.stream()
+    // Pull all necessary textures and index them by their sprite sheet's path
+    Map<String, Texture> texturesByPath = uniquePaths.stream()
       .collect(Collectors.toMap(
         Function.identity(),
         path -> assetManager.get(path.replace(".json", ".png"), Texture.class)
       ));
 
-    Map<String, SpriteSheet> sheetsByFilename = spriteSheetPaths.stream()
+    // Pull all necessary sprite sheets and index them by their path
+    Map<String, SpriteSheet> sheetsByFilename = uniquePaths.stream()
       .collect(Collectors.toMap(
         Function.identity(),
         path -> assetManager.get(path, SpriteSheet.class)
@@ -62,14 +63,18 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
 
 
     Map<String, Set<UnitEntityAnimation>> result = new HashMap<>();
-    animationNames.keySet().stream()
-      .forEach((charName) -> {
-        result.put(charName, animationNames.get(charName).stream().map((name) -> {
 
-          String path = pathsByName.get(name);
+    // Iterate over each character name
+    animNamesByCharacterId.keySet().stream()
+      .forEach((charName) -> {
+        // Convert each animation name to a UnitEntityAnimation
+        result.put(charName, animNamesByCharacterId.get(charName).stream().map((name) -> {
+
+          // Map together all the dumb pieces of data starting with the animation name
+          String path = pathsByAnimationName.get(name);
           Texture tex = texturesByPath.get(path);
           SpriteSheet sheet = sheetsByFilename.get(path);
-          AnimationType type = types.get(path);
+          AnimationType type = typesByPath.get(path);
           int gridSize = sheet.getGridSize();
 
           return new UnitEntityAnimation(tex, type, sheet.getAnimationSpecs().get(name), gridSize);
@@ -94,22 +99,29 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
 
     String basePath = FilenameUtils.getFullPath(s);
 
+    // For each sprite...
     List<JsonNode> sprite = Lists.newArrayList(json.get("sprites"));
     sprite.stream().forEach((node) -> {
+
       String charId = node.get("character_id").asText();
       Set<String> animNames = new HashSet<>();
+
+      // Iterate over every field except the "character_id"
       Lists.newArrayList(node.fieldNames()).stream()
         .filter(field -> !field.equals("character_id"))
         .forEach((animFieldName) -> {
           JsonNode anim = node.get(animFieldName);
           String animName = anim.get("name").asText();
           String sheetPath = basePath + anim.get("sheet").asText();
-          types.put(
+
+          // Infer the animation type from the name
+          typesByPath.put(
             sheetPath,
             AnimationType.fromString(animFieldName)
           );
 
-          pathsByName.put(
+          // Keep the path to the sprite sheet and texture indexed by the animation name
+          pathsByAnimationName.put(
             animName,
             sheetPath
           );
@@ -117,21 +129,23 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
           animNames.add(animName);
         });
 
-      animationNames.put(charId, animNames);
+      // Collect all the animation names for a single character
+      animNamesByCharacterId.put(charId, animNames);
     });
 
+    // Collect each unique path
     sprite.stream()
       .forEach((spec) -> {
          Lists.newArrayList(spec).stream()
            .filter(node -> node.has("sheet"))
            .map(node -> basePath + node.get("sheet").asText())
-           .forEach(spriteSheetPaths::add);
+           .forEach(uniquePaths::add);
       });
 
 
     Array<AssetDescriptor> result = new Array<>();
 
-    spriteSheetPaths.forEach(path -> result.add(new AssetDescriptor<>(path, SpriteSheet.class)));
+    uniquePaths.forEach(path -> result.add(new AssetDescriptor<>(path, SpriteSheet.class)));
 
     return result;
   }

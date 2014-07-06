@@ -176,17 +176,17 @@ public class EntityFactory {
     return result;
   }
 
-  public Entity createMapObject(RectangleMapObject object, TextureRegion region, float scale) {
+  public Entity createMapObject(RectangleMapObject object, TextureRegion region, int zIndex) {
     Entity mapObj = world.createEntity();
 
     Rectangle rect = object.getRectangle();
-    Position pos = new Position(rect.x*scale, rect.y*scale);
+    Position pos = new Position(rect.x, rect.y);
 
-    float width = region.getRegionWidth()*scale;
-    float height = region.getRegionHeight()*scale;
+    float width = region.getRegionWidth();
+    float height = region.getRegionHeight();
 
     Sprite sprite = new Sprite(region, width, height);
-    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.FOREGROUND);
+    SpriteComponent spriteComponent = new SpriteComponent(sprite, zIndex);
 
     mapObj.addComponent(pos);
     mapObj.addComponent(spriteComponent);

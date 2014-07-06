@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SynchronousAssetLoader;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.util.JsonUtils;
@@ -34,6 +35,8 @@ public class SpriteSheetAssetLoader extends SynchronousAssetLoader<SpriteSheet, 
   @Override
   public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, SpriteSheetParams parameter) {
 
-    return null;
+    Array<AssetDescriptor> deps = new Array<>();
+    deps.add(new AssetDescriptor<>(fileName.replace(".json", ".png"), Texture.class));
+    return deps;
   }
 }

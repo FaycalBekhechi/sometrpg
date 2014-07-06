@@ -4,38 +4,38 @@
       "character_id": "liat",
       "idle": {
         "name": "mc_idle",
-        "sheet": "data/idle_sheet.json"
+        "sheet": "idle_sheet.json"
       },
       "run_north": {
         "name": "run_north",
-        "sheet": "data/mc_run.json"
+        "sheet": "mc_run.json"
       },
       "run_south": {
         "name": "run_south",
-        "sheet": "data/mc_run.json"
+        "sheet": "mc_run.json"
       },
       "run_east": {
         "name": "run_east",
-        "sheet": "data/mc_run.json"
+        "sheet": "mc_run.json"
       },
       "run_west": {
         "name": "run_west",
-        "sheet": "data/mc_run.json"
+        "sheet": "mc_run.json"
       },
       "attack": {
         "name": "mc_attack",
-        "sheet": "data/mc_attackback.json"
+        "sheet": "mc_attackback.json"
       },
       "dodge": {
         "name": "mc_dodge",
-        "sheet": "data/mc_dodgefront.json"
+        "sheet": "mc_dodgefront.json"
       }
     },
     {
       "character_id": "crossbow_enemy",
       "idle": {
         "name": "swordbow_idle",
-        "sheet": "data/enemies_idle.json"
+        "sheet": "enemies_idle.json"
       }
     }
   ]

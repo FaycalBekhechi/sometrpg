@@ -27,12 +27,14 @@ import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.loader.AssetUtils;
+import com.ziodyne.sometrpg.logic.loader.loaders.CharactersLoader;
 import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
+import com.ziodyne.sometrpg.logic.loader.models.Characters;
+import com.ziodyne.sometrpg.logic.loader.models.Roster;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
-import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -47,11 +49,10 @@ import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
-import com.ziodyne.sometrpg.view.assets.loaders.ArmiesLoader;
-import com.ziodyne.sometrpg.view.assets.loaders.BattleLoader;
-import com.ziodyne.sometrpg.view.assets.GameSpec;
+import com.ziodyne.sometrpg.logic.loader.loaders.ArmiesLoader;
+import com.ziodyne.sometrpg.logic.loader.models.GameSpec;
 import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
-import com.ziodyne.sometrpg.view.assets.loaders.GameSpecLoader;
+import com.ziodyne.sometrpg.logic.loader.loaders.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.logic.loader.models.Armies;
@@ -62,6 +63,7 @@ import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
+import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
@@ -92,13 +94,15 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.annotation.Nullable;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 public class TestBattle extends BattleScreen {
   private final Logger logger = new GdxLogger(TestBattle.class);
@@ -141,11 +145,11 @@ public class TestBattle extends BattleScreen {
 
     FileHandleResolver resolver = new InternalFileHandleResolver();
     assetManager.setLoader(BattleMap.class, new MapLoader(resolver));
-    assetManager.setLoader(SomeTRPGBattle.class, new BattleLoader(resolver));
     assetManager.setLoader(GameSpec.class, new GameSpecLoader(resolver));
     assetManager.setLoader(SpriteSheet.class, new SpriteSheetAssetLoader(resolver));
     assetManager.setLoader(CharacterSprites.class, new CharacterSpritesLoader(resolver));
     assetManager.setLoader(Armies.class, new ArmiesLoader(resolver));
+    assetManager.setLoader(Characters.class, new CharactersLoader(resolver));
 
     try {
       bundleLoader.load();
@@ -161,7 +165,7 @@ public class TestBattle extends BattleScreen {
     Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
     Tween.registerAccessor(Position.class, positionTweenAccessor);
 
-    TiledMap tiledMap = assetManager.get("maps/test/test.tmx");
+    TiledMap tiledMap = assetManager.get("maps/chapter1.tmx");
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, (tileLayer.getWidth()-1) * gridSquareSize, (tileLayer.getHeight()-1) * gridSquareSize);
 
@@ -172,9 +176,14 @@ public class TestBattle extends BattleScreen {
 
     GameSpec gameSpec = assetManager.get("data/game.json");
     Collection<Character> characters = AssetUtils.reifyCharacterSpecs(gameSpec.getCharacters());
-    Armies armies = assetManager.get("data/armies.json");
+    List<Roster> rosters = gameSpec.getRosters();
 
-    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, armies.getArmies())).build(eventBus);
+    long start = System.currentTimeMillis();
+    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, rosters)).build(eventBus);
+    long end = System.currentTimeMillis();
+
+    logger.debug("Map init took: " + (end - start) + "ms");
+
     populateWorld(entityFactory, battle.getMap(), new AssetManagerRepository(assetManager));
 
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
@@ -218,7 +227,8 @@ public class TestBattle extends BattleScreen {
     world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
     initializeMapObjects(tiledMap);
 
-    Entity mapGridOverlay = entityFactory.createMapGridOverlay(20, 20, 32, new GridPoint2());
+    BattleMap map = battle.getMap();
+    Entity mapGridOverlay = entityFactory.createMapGridOverlay(map.getHeight()+1, map.getWidth()+1, 32, new GridPoint2());
     world.addEntity(mapGridOverlay);
 
     Entity stage = entityFactory.createStage(menuStage);
@@ -260,15 +270,22 @@ public class TestBattle extends BattleScreen {
   }
 
   private void initializeMapObjects(TiledMap tiledMap) {
-    for (MapLayer layer : tiledMap.getLayers()) {
-      if (!(layer instanceof TiledMapTileLayer)) {
-        for (MapObject object : layer.getObjects()) {
-          TextureRegion region = TiledMapUtils.getTextureRegion(object.getProperties(), tiledMap);
-          if (region != null) {
-            Entity entity = entityFactory.createMapObject((RectangleMapObject)object, region, 1f);
-            world.addEntity(entity);
-          }
-        }
+
+    List<MapLayer> layers = newArrayList(tiledMap.getLayers());
+
+    // Increment the z-index for each layer counting up from
+    int firstZIndex = SpriteLayer.FOREGROUND.getZIndex();
+    IntStream.range(firstZIndex, firstZIndex + layers.size())
+      .forEach((i) -> populateMapObjects(tiledMap, layers.get(i - firstZIndex), i));
+  }
+
+  private void populateMapObjects(TiledMap map, MapLayer layer, int zIndex) {
+
+    for (MapObject object : layer.getObjects()) {
+      TextureRegion region = TiledMapUtils.getTextureRegion(object.getProperties(), map);
+      if (region != null) {
+        Entity entity = entityFactory.createMapObject((RectangleMapObject)object, region,zIndex);
+        world.addEntity(entity);
       }
     }
   }
@@ -276,10 +293,6 @@ public class TestBattle extends BattleScreen {
   private void populateWorld(EntityFactory entityFactory, BattleMap battleMap, AssetRepository assets) {
 
     CharacterSprites sprites = assets.get("data/character_sprites.json");
-
-    Map<String, CharacterSpriteBook> booksById = CollectionUtils.indexBy(sprites.getSprites(),
-      CharacterSpriteBook::getCharacterId);
-
     for (int i = 0; i < battleMap.getWidth(); i++) {
       for (int j = 0; j < battleMap.getHeight(); j++) {
         Tile tile = battleMap.getTile(i, j);
@@ -287,59 +300,15 @@ public class TestBattle extends BattleScreen {
         if (combatant != null) {
 
           Character character = combatant.getCharacter();
-          CharacterSpriteBook spriteBook = booksById.get(character.getId());
-
-          Set<UnitEntityAnimation> animations = Sets.newHashSet(
-            buildAnimation(spriteBook.getIdle(), AnimationType.IDLE, assets),
-            buildAnimation(spriteBook.getDodge(), AnimationType.DODGE, assets),
-            buildAnimation(spriteBook.getAttack(), AnimationType.ATTACK, assets),
-            buildAnimation(spriteBook.getRunNorth(), AnimationType.RUN_NORTH, assets),
-            buildAnimation(spriteBook.getRunSouth(), AnimationType.RUN_SOUTH, assets),
-            buildAnimation(spriteBook.getRunEast(), AnimationType.RUN_EAST, assets),
-            buildAnimation(spriteBook.getRunWest(), AnimationType.RUN_WEST, assets)
-          ).stream().filter(Objects::nonNull).collect(Collectors.toSet());
-
+          Set<UnitEntityAnimation> animations = sprites.getAnimations(character.getId());
           Entity entity = entityFactory.createAnimatedUnit(battleMap, combatant, animations);
+
           registerUnitEntity(character, entity);
         }
       }
     }
   }
 
-  @Nullable
-  private UnitEntityAnimation buildAnimation(SpriteReference reference, AnimationType type, AssetRepository asset) {
-
-    if (reference == null ) {
-      logger.error("Combatant missing animation: " + type);
-      return null;
-    }
-
-    SpriteSheet sheet = asset.get(reference.getSheetPath());
-    Texture texture = asset.get(StringUtils.replace(reference.getSheetPath(), ".json", ".png"));
-
-    AnimationSpec spec = sheet.getAnimationSpecs().get(reference.getName());
-    if (spec == null) {
-      throw new IllegalArgumentException("Could not find animation spec by name: " + reference.getName());
-    }
-
-    return new UnitEntityAnimation(texture, type, spec, sheet.getGridSize());
-  }
-
-
-  private void registerEnemy(Combatant combatant) {
-    String name = combatant.getCharacter().getName();
-    Texture enemyTex = assetManager.get("data/enemies_idle.png");
-    SpriteSheet enemySheet = assetManager.get("data/enemies_idle.json");
-    Map<String, AnimationSpec> specsByName = enemySheet.getAnimationSpecs();
-    Set<UnitEntityAnimation> anims = new HashSet<>();
-    int gridSize = enemySheet.getGridSize();
-
-    AnimationSpec idleSpec = specsByName.get(StringUtils.substringBefore(name, "_") + "_idle");
-    anims.add(new UnitEntityAnimation(enemyTex, AnimationType.IDLE, idleSpec, gridSize));
-    Entity entity = entityFactory.createAnimatedUnit(map, combatant, anims);
-
-    registerUnitEntity(combatant.getCharacter(), entity);
-  }
 
   protected void update(float delta) {
     if (initialized) {

@@ -1,3 +1,4 @@
 {
-  "charactersPath": "characters_base.json"
+  "charactersPath": "characters_base.json",
+  "armiesPath": "armies.json"
 }

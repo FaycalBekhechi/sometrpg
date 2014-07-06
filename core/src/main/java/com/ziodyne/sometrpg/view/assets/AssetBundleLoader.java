@@ -12,6 +12,7 @@ import com.ziodyne.sometrpg.logging.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -40,6 +41,8 @@ public class AssetBundleLoader {
 
   private int totalNumAssets;
 
+  private Date startTime;
+
   @AssistedInject
   AssetBundleLoader(ObjectMapper mapper, @Assisted AssetManager assetManager, @Assisted String bundlePath) {
     this.objectMapper = mapper;
@@ -64,6 +67,7 @@ public class AssetBundleLoader {
     Set<Asset<?>> assets = objectMapper.readValue(fileStream, new TypeReference<Set<Asset<?>>>() { });
     totalNumAssets = assets.size();
     logger.log("Loading asset bundle with " + totalNumAssets + " assets.");
+    startTime = new Date();
 
     for (Asset<?> asset : assets) {
       remainingAssets.add(asset);
@@ -81,6 +85,11 @@ public class AssetBundleLoader {
 
     removeLoadedAssets();
     this.isLoading = doneLoading;
+
+    if (doneLoading) {
+      Date endTime = new Date();
+      logger.debug("Bundle loaded in " + (endTime.getTime() - startTime.getTime()) + "ms.");
+    }
 
     return doneLoading;
   }

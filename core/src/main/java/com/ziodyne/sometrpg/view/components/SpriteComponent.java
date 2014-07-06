@@ -5,18 +5,26 @@ import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
 
 public class SpriteComponent extends Component {
-  private final SpriteLayer layer;
   private final Sprite sprite;
+
+  // The lower the z-index, the earlier it will be drawn.
+  private int zIndex;
+
+  public SpriteComponent(Sprite sprite, int zIndex) {
+
+    this.sprite = sprite;
+    this.zIndex = zIndex;
+  }
 
   public SpriteComponent(Sprite sprite, SpriteLayer layer) {
 
     this.sprite = sprite;
-    this.layer = layer;
+    this.zIndex = layer.getZIndex();
   }
 
-  public SpriteLayer getLayer() {
+  public int getzIndex() {
 
-    return layer;
+    return zIndex;
   }
 
   public Sprite getSprite() {

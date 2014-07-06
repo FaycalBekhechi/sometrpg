@@ -8,11 +8,12 @@ import com.ziodyne.sometrpg.view.AnimationType;
  * A bundle class for a single unit entity's animation.
  */
 public class UnitEntityAnimation {
-  private final Texture texture;
-  private final AnimationType type;
-  private final AnimationSpec spec;
-  private final int gridSize;
+  private Texture texture;
+  private AnimationType type;
+  private AnimationSpec spec;
+  private int gridSize;
 
+  public UnitEntityAnimation() { }
   public UnitEntityAnimation(Texture texture, AnimationType type, AnimationSpec spec, int gridSize) {
 
     this.texture = texture;

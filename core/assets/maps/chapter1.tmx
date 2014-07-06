@@ -627,4 +627,26 @@
    </properties>
   </object>
  </objectgroup>
+<<<<<<< HEAD
+=======
+ <objectgroup name="Blocking" width="35" height="20">
+  <object x="576" y="224" width="32" height="32"/>
+  <object x="608" y="224" width="32" height="32"/>
+  <object x="640" y="224" width="32" height="32"/>
+  <object x="672" y="224" width="32" height="32"/>
+  <object x="704" y="224" width="32" height="32"/>
+  <object x="608" y="352" width="32" height="32"/>
+  <object x="640" y="352" width="32" height="32"/>
+  <object x="576" y="352" width="32" height="32"/>
+  <object x="672" y="352" width="32" height="32"/>
+  <object x="704" y="352" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup name="Units" width="35" height="20">
+  <object name="Liat" x="640" y="288" width="32" height="32">
+   <properties>
+    <property name="unitId" value="liat"/>
+   </properties>
+  </object>
+ </objectgroup>
+>>>>>>> FETCH_HEAD
 </map>

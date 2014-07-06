@@ -11,22 +11,30 @@ public class GdxLogger implements Logger {
 
   @Override
   public void log(String msg) {
-    Gdx.app.log(getTag(), msg);
+    if (Gdx.app != null) {
+      Gdx.app.log(getTag(), msg);
+    }
   }
 
   @Override
   public void error(String msg) {
-    Gdx.app.error(getTag(), msg);
+    if (Gdx.app != null) {
+      Gdx.app.error(getTag(), msg);
+    }
   }
 
   @Override
   public void error(String msg, Throwable throwable) {
-    Gdx.app.error(getTag(), msg, throwable);
+    if (Gdx.app != null) {
+      Gdx.app.error(getTag(), msg, throwable);
+    }
   }
 
   @Override
   public void debug(String msg) {
-    Gdx.app.debug(getTag(), msg);
+    if (Gdx.app != null) {
+      Gdx.app.debug(getTag(), msg);
+    }
   }
 
   private String getTag() {

@@ -4,18 +4,15 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.Sets;
+import com.ziodyne.sometrpg.util.CollectionUtils;
 
 public class SaveGameCharacterDatabase implements CharacterDatabase {
   private Map<String, Character> characterMap;
 
   public SaveGameCharacterDatabase(Collection<Character> characters) {
-    this.characterMap = characters
-      .stream()
-      .collect(Collectors.toMap(Character::getId, Function.identity()));
+    this.characterMap = CollectionUtils.indexBy(characters, Character::getId);
   }
 
   @Override

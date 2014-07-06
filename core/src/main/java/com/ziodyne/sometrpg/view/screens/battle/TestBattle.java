@@ -51,6 +51,7 @@ import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import com.ziodyne.sometrpg.util.CollectionUtils;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
@@ -287,8 +288,9 @@ public class TestBattle extends BattleScreen {
   private void populateWorld(EntityFactory entityFactory, BattleMap battleMap, AssetRepository assets) {
 
     CharacterSprites sprites = assets.get("data/character_sprites.json");
-    Map<String, CharacterSpriteBook> booksById = sprites.getSprites().stream()
-      .collect(Collectors.toMap(CharacterSpriteBook::getCharacterId, Function.identity()));
+    
+    Map<String, CharacterSpriteBook> booksById = CollectionUtils.indexBy(sprites.getSprites(),
+      CharacterSpriteBook::getCharacterId);
 
     for (int i = 0; i < battleMap.getWidth(); i++) {
       for (int j = 0; j < battleMap.getHeight(); j++) {

@@ -42,6 +42,7 @@ import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.util.CollectionUtils;
+import com.ziodyne.sometrpg.util.StreamUtils;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
@@ -272,7 +273,7 @@ public class TestBattle extends BattleScreen {
 
     // Increment the z-index for each layer counting up from
     int firstZIndex = SpriteLayer.FOREGROUND.getZIndex();
-    IntStream.iterate(firstZIndex, n -> n + 1)
+    StreamUtils.iterateUpFrom(firstZIndex)
       .forEach((i) -> populateMapObjects(tiledMap, layers.get(i), i));
   }
 

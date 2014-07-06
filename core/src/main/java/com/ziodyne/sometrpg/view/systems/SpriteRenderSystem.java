@@ -13,6 +13,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.util.CollectionUtils;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
@@ -21,7 +22,13 @@ import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
 import com.ziodyne.sometrpg.view.rendering.SpriteBatchRenderer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.ziodyne.sometrpg.util.CollectionUtils.groupBy;
 
 public class SpriteRenderSystem extends EntitySystem {
 
@@ -63,24 +70,19 @@ public class SpriteRenderSystem extends EntitySystem {
 
   @Override
   protected void processEntities(ImmutableBag<Entity> entites) {
-    // Group entities by their layer
-    SetMultimap<SpriteLayer, Entity> entitiesByLayer = HashMultimap.create();
+    // why oh why doesn't this implement Collection? fuck.
+    List<Entity> entityList = new ArrayList<>(entites.size());
     for (int i = 0; i < entites.size(); i++) {
       Entity entity = entites.get(i);
-      SpriteComponent spriteComponentComponent = spriteMapper.get(entity);
-
-      SpriteLayer layer = spriteComponentComponent.getLayer();
-      if (layer != null) {
-        Set<Entity> entitiesForLayer = entitiesByLayer.get(layer);
-        entitiesForLayer.add(entity);
-      }
+      entityList.add(entity);
     }
+
+    // Group entities by their layer
+    Map<SpriteLayer, List<Entity>> entitiesByLayer = groupBy(entityList, (entity) -> spriteMapper.get(entity).getLayer());
 
     // Render each layer in declaration order
     for (SpriteLayer layer : SpriteLayer.values()) {
-      for (Entity entity : entitiesByLayer.get(layer)) {
-        render(entity);
-      }
+      entitiesByLayer.get(layer).forEach(this::render);
     }
   }
 

@@ -5,54 +5,6 @@
   },
   {
     "type": "texture",
-    "path": "data/idle_sheet.png"
-  },
-  {
-    "type": "spriteSheet",
-    "path": "data/idle_sheet.json"
-  },
-  {
-    "type": "texture",
-    "path": "data/enemies_idle.png"
-  },
-  {
-    "type": "spriteSheet",
-    "path": "data/enemies_idle.json"
-  },
-  {
-    "type": "texture",
-    "path": "data/mc_dodgefront.png"
-  },
-  {
-    "type": "spriteSheet",
-    "path": "data/mc_dodgefront.json"
-  },
-  {
-    "type": "texture",
-    "path": "data/mc_attackfront.png"
-  },
-  {
-    "type": "spriteSheet",
-    "path": "data/mc_attackfront.json"
-  },
-  {
-    "type": "texture",
-    "path": "data/mc_attackback.png"
-  },
-  {
-    "type": "spriteSheet",
-    "path": "data/mc_attackback.json"
-  },
-  {
-    "type": "texture",
-    "path": "data/mc_run.png"
-  },
-  {
-    "type": "spriteSheet",
-    "path": "data/mc_run.json"
-  },
-  {
-    "type": "texture",
     "path": "grid_overlay.png"
   },
   {

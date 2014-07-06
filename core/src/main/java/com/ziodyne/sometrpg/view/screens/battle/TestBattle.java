@@ -293,10 +293,6 @@ public class TestBattle extends BattleScreen {
   private void populateWorld(EntityFactory entityFactory, BattleMap battleMap, AssetRepository assets) {
 
     CharacterSprites sprites = assets.get("data/character_sprites.json");
-
-    Map<String, CharacterSpriteBook> booksById = CollectionUtils.indexBy(sprites.getSprites(),
-      CharacterSpriteBook::getCharacterId);
-
     for (int i = 0; i < battleMap.getWidth(); i++) {
       for (int j = 0; j < battleMap.getHeight(); j++) {
         Tile tile = battleMap.getTile(i, j);
@@ -304,42 +300,13 @@ public class TestBattle extends BattleScreen {
         if (combatant != null) {
 
           Character character = combatant.getCharacter();
-          CharacterSpriteBook spriteBook = booksById.get(character.getId());
-
-          Set<UnitEntityAnimation> animations = Sets.newHashSet(
-            buildAnimation(spriteBook.getIdle(), AnimationType.IDLE, assets),
-            buildAnimation(spriteBook.getDodge(), AnimationType.DODGE, assets),
-            buildAnimation(spriteBook.getAttack(), AnimationType.ATTACK, assets),
-            buildAnimation(spriteBook.getRunNorth(), AnimationType.RUN_NORTH, assets),
-            buildAnimation(spriteBook.getRunSouth(), AnimationType.RUN_SOUTH, assets),
-            buildAnimation(spriteBook.getRunEast(), AnimationType.RUN_EAST, assets),
-            buildAnimation(spriteBook.getRunWest(), AnimationType.RUN_WEST, assets)
-          ).stream().filter(Objects::nonNull).collect(Collectors.toSet());
-
+          Set<UnitEntityAnimation> animations = sprites.getAnimations(character.getId());
           Entity entity = entityFactory.createAnimatedUnit(battleMap, combatant, animations);
+
           registerUnitEntity(character, entity);
         }
       }
     }
-  }
-
-  @Nullable
-  private UnitEntityAnimation buildAnimation(SpriteReference reference, AnimationType type, AssetRepository asset) {
-
-    if (reference == null ) {
-      logger.error("Combatant missing animation: " + type);
-      return null;
-    }
-
-    SpriteSheet sheet = asset.get(reference.getSheetPath());
-    Texture texture = asset.get(StringUtils.replace(reference.getSheetPath(), ".json", ".png"));
-
-    AnimationSpec spec = sheet.getAnimationSpecs().get(reference.getName());
-    if (spec == null) {
-      throw new IllegalArgumentException("Could not find animation spec by name: " + reference.getName());
-    }
-
-    return new UnitEntityAnimation(texture, type, spec, sheet.getGridSize());
   }
 
 

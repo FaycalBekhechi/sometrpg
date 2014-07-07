@@ -4,7 +4,7 @@
   <property name="win_condition" value="rout"/>
  </properties>
  <tileset firstgid="1" name="chapter1" tilewidth="32" tileheight="32">
-  <image source="chapter1.png" width="640" height="640"/>
+  <image source="../../../../sometrpg/core/assets/maps/chapter1.png" width="640" height="640"/>
  </tileset>
  <layer name="water" width="35" height="20">
   <properties>
@@ -12,6 +12,11 @@
   </properties>
   <data encoding="base64" compression="zlib">
    eJxjYEAFzljwQABs7hipbnFGYw8Gt+Byx0DE0ahbSHPHYHALA8PAx89AuQHdHQNZto26hXi3DCQYdcuoW0bdQjkAAOJZHAI=
+  </data>
+ </layer>
+ <layer name="Ground" width="35" height="20">
+  <data encoding="base64" compression="zlib">
+   eJzN1ckyHVEcx/HudgfTElVmTxASniAITxAJnkBCUmXYEJbIIgN2wYIkshQLJCzFQkxLySLGJVmYl75d1V2Of51zXZyFf9WnTvW/z73nd08P13Gur1Zka3hwkWtJMtV7j7J8MmRxA56SSz029U3HyZQ/L4p4MIZSFJFAikZEkPPdYEymPCWHmke3V7fhBmMy5d+7MZEnbjGLd4MsvUGWWJAlzGUrS26CLJ3owht0o8e5vC7hnti8RqYs7/AeH/ARAxjEkMgS7pN6/8QMfXkuqnxHOOqyjGEcn/EFXzGBbyKHuoZcVxXXfE7N4TPdL9OYwSx+4CfmMK/53er1kufkHLkPaj98TmUt4TeWsYJVrGHd0b8f2tCODufqO0XtRxLMV/uy/mETW9jGDnaxhxyNPvTjrYW+rEMc4RgnOMUZzg1ZhjGCUQt9WTFegnGkIg3pyECmq88yie+YstCXlcea+ShAIYpQjBJDlgX8wqKFvqwHrFmKMjzEI5SjwpBlA3/w10Jf1mPWrEQVqvEENag1ZNnHAf5b6Mt6ypp1eIbnqEcDGg1Z/D9ZF557976sJnov8BLNaMErvDZkyaKf7Z9z796/AN9Wd/Q=
   </data>
  </layer>
  <objectgroup name="land" width="35" height="20">
@@ -60,6 +65,12 @@
   <object gid="45" x="0" y="64"/>
   <object gid="45" x="0" y="32"/>
   <object gid="45" x="32" y="32"/>
+  <object gid="88" x="-9" y="88"/>
+  <object gid="88" x="-11" y="90"/>
+  <object gid="88" x="0" y="96"/>
+  <object gid="68" x="0" y="64"/>
+  <object gid="48" x="0" y="32"/>
+  <object gid="49" x="32" y="32"/>
  </objectgroup>
  <objectgroup name="bridge shadows" width="35" height="20">
   <object gid="61" x="0" y="192"/>
@@ -73,7 +84,6 @@
   <object gid="82" x="256" y="192"/>
  </objectgroup>
  <objectgroup name="bridge" width="35" height="20">
-  <object gid="400" x="288" y="192"/>
   <object gid="319" x="256" y="64"/>
   <object gid="318" x="224" y="64"/>
   <object gid="317" x="192" y="64"/>
@@ -117,16 +127,10 @@
   <object gid="351" x="0" y="128"/>
   <object gid="371" x="0" y="160"/>
   <object gid="391" x="0" y="192"/>
-  <object gid="380" x="288" y="160"/>
   <object gid="360" x="288" y="128"/>
   <object gid="340" x="288" y="96"/>
   <object gid="320" x="288" y="64"/>
  </objectgroup>
- <layer name="Ground" width="35" height="20">
-  <data encoding="base64" compression="zlib">
-   eJzN1ckyHVEcx/HudgfTElVmTxASniAITxAJnkBCUmXYEJbIIgN2wYIkshQLJCzFQkxLySLGJVmYl75d1V2Of51zXZyFf9WnTvW/z73nd08P13Gur1Zka3hwkWtJMtV7j7J8MmRxA56SSz029U3HyZQ/L4p4MIZSFJFAikZEkPPdYEymPCWHmke3V7fhBmMy5d+7MZEnbjGLd4MsvUGWWJAlzGUrS26CLJ3owht0o8e5vC7hnti8RqYs7/AeH/ARAxjEkMgS7pN6/8QMfXkuqnxHOOqyjGEcn/EFXzGBbyKHuoZcVxXXfE7N4TPdL9OYwSx+4CfmMK/53er1kufkHLkPaj98TmUt4TeWsYJVrGHd0b8f2tCODufqO0XtRxLMV/uy/mETW9jGDnaxhxyNPvTjrYW+rEMc4RgnOMUZzg1ZhjGCUQt9WTFegnGkIg3pyECmq88yie+YstCXlcea+ShAIYpQjBJDlgX8wqKFvqwHrFmKMjzEI5SjwpBlA3/w10Jf1mPWrEQVqvEENag1ZNnHAf5b6Mt6ypp1eIbnqEcDGg1Z/D9ZF557976sJnov8BLNaMErvDZkyaKf7Z9z796/AN9Wd/Q=
-  </data>
- </layer>
  <objectgroup name="doors" width="35" height="20">
   <object gid="79" x="960" y="224"/>
   <object gid="100" x="992" y="256"/>

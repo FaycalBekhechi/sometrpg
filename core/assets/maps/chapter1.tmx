@@ -4,10 +4,7 @@
   <property name="win_condition" value="rout"/>
  </properties>
  <tileset firstgid="1" name="chapter1" tilewidth="32" tileheight="32">
-  <image source="../../../../Documents/Art/THE GAME/tiles/chapter1.png" width="640" height="640"/>
- </tileset>
- <tileset firstgid="401" name="units_fuckit" tilewidth="40" tileheight="40">
-  <image source="../../../../Documents/Art/THE GAME/field_sprites/32x32/units_fuckit.png" width="280" height="160"/>
+  <image source="chapter1.png" width="640" height="640"/>
  </tileset>
  <layer name="water" width="35" height="20">
   <properties>
@@ -125,7 +122,7 @@
   <object gid="340" x="288" y="96"/>
   <object gid="320" x="288" y="64"/>
  </objectgroup>
- <layer name="ground" width="35" height="20">
+ <layer name="Ground" width="35" height="20">
   <data encoding="base64" compression="zlib">
    eJzN1ckyHVEcx/HudgfTElVmTxASniAITxAJnkBCUmXYEJbIIgN2wYIkshQLJCzFQkxLySLGJVmYl75d1V2Of51zXZyFf9WnTvW/z73nd08P13Gur1Zka3hwkWtJMtV7j7J8MmRxA56SSz029U3HyZQ/L4p4MIZSFJFAikZEkPPdYEymPCWHmke3V7fhBmMy5d+7MZEnbjGLd4MsvUGWWJAlzGUrS26CLJ3owht0o8e5vC7hnti8RqYs7/AeH/ARAxjEkMgS7pN6/8QMfXkuqnxHOOqyjGEcn/EFXzGBbyKHuoZcVxXXfE7N4TPdL9OYwSx+4CfmMK/53er1kufkHLkPaj98TmUt4TeWsYJVrGHd0b8f2tCODufqO0XtRxLMV/uy/mETW9jGDnaxhxyNPvTjrYW+rEMc4RgnOMUZzg1ZhjGCUQt9WTFegnGkIg3pyECmq88yie+YstCXlcea+ShAIYpQjBJDlgX8wqKFvqwHrFmKMjzEI5SjwpBlA3/w10Jf1mPWrEQVqvEENag1ZNnHAf5b6Mt6ypp1eIbnqEcDGg1Z/D9ZF557976sJnov8BLNaMErvDZkyaKf7Z9z796/AN9Wd/Q=
   </data>
@@ -538,34 +535,34 @@
   <object gid="212" x="913" y="269"/>
  </objectgroup>
  <objectgroup name="chars" width="35" height="20">
-  <object name="MC" gid="401" x="864" y="320">
+  <object name="MC" x="864" y="320">
    <properties>
     <property name="MC_START" value=""/>
    </properties>
   </object>
-  <object gid="413" x="992" y="320">
+  <object x="992" y="320">
    <properties>
     <property name="ENEMY_START" value=""/>
    </properties>
   </object>
-  <object gid="405" x="960" y="352">
+  <object x="960" y="352">
    <properties>
     <property name="ENEMY_START" value=""/>
    </properties>
   </object>
-  <object gid="402" x="352" y="128"/>
-  <object gid="403" x="384" y="128"/>
-  <object gid="404" x="608" y="320">
+  <object x="352" y="128"/>
+  <object x="384" y="128"/>
+  <object x="608" y="320">
    <properties>
     <property name="ENEMY_START" value=""/>
    </properties>
   </object>
-  <object gid="404" x="576" y="352">
+  <object x="576" y="352">
    <properties>
     <property name="ENEMY_START" value=""/>
    </properties>
   </object>
-  <object gid="404" x="576" y="288">
+  <object x="576" y="288">
    <properties>
     <property name="ENEMY_START" value=""/>
    </properties>
@@ -586,67 +583,45 @@
   <object x="0" y="0" width="320" height="640"/>
  </objectgroup>
  <objectgroup name="Units" width="35" height="20">
-  <object name="Liat" x="864" y="288" width="32" height="32">
-   <properties>
-    <property name="unitId" value="Liat"/>
-   </properties>
-  </object>
-  <object name="Sword" x="960" y="320" width="32" height="32">
-   <properties>
-    <property name="unitId" value="sword_enemy"/>
-   </properties>
-  </object>
-  <object name="Sword" x="992" y="288" width="32" height="32">
-   <properties>
-    <property name="unitId" value="sword_enemy"/>
-   </properties>
-  </object>
-  <object name="Claymore" x="576" y="320" width="32" height="32">
-   <properties>
-    <property name="unitId" value="claymore_enemy"/>
-   </properties>
-  </object>
-  <object name="Claymore" x="576" y="256" width="32" height="32">
-   <properties>
-    <property name="unitId" value="claymore_enemy"/>
-   </properties>
-  </object>
-  <object name="Claymore" x="621" y="287" width="32" height="32">
-   <properties>
-    <property name="unitId" value="claymore_enemy"/>
-   </properties>
-  </object>
-  <object name="Claymore" x="352" y="96" width="32" height="32">
-   <properties>
-    <property name="unitId" value="claymore_enemy"/>
-   </properties>
-  </object>
-  <object name="Sword" x="384" y="96" width="32" height="32">
-   <properties>
-    <property name="unitId" value="sword_enemy"/>
-   </properties>
-  </object>
- </objectgroup>
-<<<<<<< HEAD
-=======
- <objectgroup name="Blocking" width="35" height="20">
-  <object x="576" y="224" width="32" height="32"/>
-  <object x="608" y="224" width="32" height="32"/>
-  <object x="640" y="224" width="32" height="32"/>
-  <object x="672" y="224" width="32" height="32"/>
-  <object x="704" y="224" width="32" height="32"/>
-  <object x="608" y="352" width="32" height="32"/>
-  <object x="640" y="352" width="32" height="32"/>
-  <object x="576" y="352" width="32" height="32"/>
-  <object x="672" y="352" width="32" height="32"/>
-  <object x="704" y="352" width="32" height="32"/>
- </objectgroup>
- <objectgroup name="Units" width="35" height="20">
-  <object name="Liat" x="640" y="288" width="32" height="32">
+  <object name="liat" x="864" y="288" width="32" height="32">
    <properties>
     <property name="unitId" value="liat"/>
    </properties>
   </object>
+  <object name="Sword" x="960" y="320" width="32" height="32">
+   <properties>
+    <property name="unitId" value="crossbow_enemy"/>
+   </properties>
+  </object>
+  <object name="Sword" x="992" y="288" width="32" height="32">
+   <properties>
+    <property name="unitId" value="crossbow_enemy"/>
+   </properties>
+  </object>
+  <object name="Claymore" x="576" y="320" width="32" height="32">
+   <properties>
+    <property name="unitId" value="crossbow_enemy"/>
+   </properties>
+  </object>
+  <object name="Claymore" x="576" y="256" width="32" height="32">
+   <properties>
+    <property name="unitId" value="crossbow_enemy"/>
+   </properties>
+  </object>
+  <object name="Claymore" x="621" y="287" width="32" height="32">
+   <properties>
+    <property name="unitId" value="crossbow_enemy"/>
+   </properties>
+  </object>
+  <object name="Claymore" x="352" y="96" width="32" height="32">
+   <properties>
+    <property name="unitId" value="crossbow_enemy"/>
+   </properties>
+  </object>
+  <object name="Sword" x="384" y="96" width="32" height="32">
+   <properties>
+    <property name="unitId" value="crossbow_enemy"/>
+   </properties>
+  </object>
  </objectgroup>
->>>>>>> FETCH_HEAD
 </map>

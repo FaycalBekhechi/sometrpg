@@ -23,6 +23,7 @@ All layers must use exactly the following names to be detected by the engine.
 - Blocking
   - An object layer that describes what tiles are impassable.
   - Each object in this layer should be a rectangle with no properties.
+  - The rectangle can cover any number of tiles, BUT it must be grid-aligned
 
 - Units
   - An object layer that describes which units start where

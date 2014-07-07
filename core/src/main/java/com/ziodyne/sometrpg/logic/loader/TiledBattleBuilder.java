@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
 import com.badlogic.gdx.maps.MapLayer;
@@ -176,6 +177,15 @@ public class TiledBattleBuilder {
       "property set.");
   }
 
+  private GridPoint2 getTilePosition(Rectangle rect) {
+    float tileRatio = 1.0f / tileSize;
+
+    return new GridPoint2(
+      Math.round(rect.x * tileRatio),
+      Math.round(rect.y * tileRatio)
+    );
+  }
+
   private Survive buildSurviveCondition() {
 
     MapProperties props = map.getProperties();
@@ -218,12 +228,12 @@ public class TiledBattleBuilder {
     StreamSupport.stream(blockingLayer.getObjects().spliterator(), false)
       .filter(object -> object instanceof RectangleMapObject)
       // Figure out what grid points the rects cover
-      .map(mapObject -> {
+      .flatMap(mapObject -> {
 
         RectangleMapObject rect = (RectangleMapObject) mapObject;
         Rectangle bounds = rect.getRectangle();
 
-        return tilesByLocation.get(getTilePosition(bounds));
+        return getCoveredTiles(bounds).stream().map(tilesByLocation::get);
       })
       .filter(Objects::nonNull)
 
@@ -233,14 +243,23 @@ public class TiledBattleBuilder {
     return tiles;
   }
 
-  private GridPoint2 getTilePosition(Rectangle rectangle) {
+  private Set<GridPoint2> getCoveredTiles(Rectangle rectangle) {
     float tileRatio = 1.0f / tileSize;
+    float absWidth = rectangle.getWidth();
+    float absHeight = rectangle.getHeight();
 
-    // TODO: This isn't going to go super well if the rects aren't snapped to the grid
-    return new GridPoint2(
-      Math.round(rectangle.x * tileRatio),
-      Math.round(rectangle.y * tileRatio)
-    );
+    int tilesWide = Math.round(absWidth * tileRatio);
+    int tilesHigh = Math.round(absHeight * tileRatio);
+    int startingTileX = Math.round(rectangle.x * tileRatio);
+    int startingTileY = Math.round(rectangle.y * tileRatio);
+
+
+    return IntStream.range(startingTileX, startingTileX + tilesWide).boxed().flatMap((x) -> {
+      return IntStream.range(startingTileY, startingTileY + tilesHigh).boxed().map((y) -> {
+        return new GridPoint2(x, y);
+      });
+    })
+    .collect(Collectors.toSet());
   }
 
   private WinCondition buildWinCondition() {

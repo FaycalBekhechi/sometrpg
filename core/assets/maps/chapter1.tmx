@@ -4,7 +4,7 @@
   <property name="win_condition" value="rout"/>
  </properties>
  <tileset firstgid="1" name="chapter1" tilewidth="32" tileheight="32">
-  <image source="../../../../sometrpg/core/assets/maps/chapter1.png" width="640" height="640"/>
+  <image source="chapter1.png" width="640" height="640"/>
  </tileset>
  <layer name="water" width="35" height="20">
   <properties>

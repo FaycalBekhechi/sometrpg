@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import com.badlogic.gdx.maps.MapLayer;
@@ -254,13 +253,13 @@ public class TiledBattleBuilder {
     int startingTileX = Math.round(rectangle.x * tileRatio);
     int startingTileY = Math.round(rectangle.y * tileRatio);
 
-    IntStream columns = IntStream.range(startingTileX, startingTileX + tilesWide);
-    IntStream rows = IntStream.range(startingTileY, startingTileY + tilesHigh);
-    
-    Stream<GridPoint2> points = columns.boxed()
-      .flatMap((x) -> rows.mapToObj((y) -> new GridPoint2(x, y)));
 
-    return points.collect(Collectors.toSet());
+    return IntStream.range(startingTileX, startingTileX + tilesWide).boxed().flatMap((x) -> {
+      return IntStream.range(startingTileY, startingTileY + tilesHigh).boxed().map((y) -> {
+        return new GridPoint2(x, y);
+      });
+    })
+    .collect(Collectors.toSet());
   }
 
   private WinCondition buildWinCondition() {

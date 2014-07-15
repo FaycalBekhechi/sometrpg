@@ -6,10 +6,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class Path<T> {
-  private List<T> points;
+  private final List<T> points;
+  private final T start;
 
   public static class Builder<T> {
-    private List<T> points = Lists.newArrayList();
+    private final List<T> points = Lists.newArrayList();
+
+    private final T start;
+
+    public Builder(T start) {
+
+      this.start = start;
+    }
 
     public Builder<T> addPoint(T point) {
       points.add(point);
@@ -18,11 +26,18 @@ public class Path<T> {
 
     public Path<T> build() {
       Collections.reverse(points);
-      return new Path<>(points);
+      return new Path<>(start, points);
     }
   }
 
-  public Path(List<T> points) {
+  public T getStart() {
+
+    return start;
+  }
+
+  public Path(T start, List<T> points) {
+
+    this.start = start;
     this.points = points;
   }
 

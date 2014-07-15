@@ -11,7 +11,7 @@ import static com.ziodyne.sometrpg.view.navigation.PathSegment.Type;
 public class PathUtils {
   private PathUtils() { }
   public static List<PathSegment> segmentPath(Path<GridPoint2> path) {
-    return segmentPath(path.getPoints());
+    return segmentPath(path.getStart(), path.getPoints());
   }
 
   /**
@@ -19,14 +19,27 @@ public class PathUtils {
    * @param points the path to segment
    * @return A list of the path segments that make up the path
    */
-  public static List<PathSegment> segmentPath(List<GridPoint2> points) {
+  public static List<PathSegment> segmentPath(GridPoint2 start, List<GridPoint2> points) {
     if (points.isEmpty()) {
       return new ArrayList<>();
     }
 
     List<PathSegment> result = new ArrayList<PathSegment>();
-    int idx = 0;
-    for (GridPoint2 point : points) {
+    GridPoint2 firstPoint = points.get(0);
+    Type firstDir = computeDirection(start, firstPoint);
+
+    if (points.size() > 1) {
+      GridPoint2 secondPoint = points.get(1);
+
+      Type secondDir = computeDirection(firstPoint, secondPoint);
+      result.add(new PathSegment(firstPoint,
+        firstDir == secondDir ? firstDir : computeCornerDirection(firstDir, secondDir)));
+    } else {
+      result.add(new PathSegment(firstPoint, firstDir));
+    }
+
+    for (int idx = 1; idx < points.size(); idx++) {
+      GridPoint2 point = points.get(idx);
       int prevIdx = idx-1;
       if (prevIdx < 0) {
         // The point is at the beginning
@@ -58,7 +71,6 @@ public class PathUtils {
           result.add(nextSegment);
         }
       }
-      idx++;
     }
 
     return result;

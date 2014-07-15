@@ -39,17 +39,39 @@ import com.ziodyne.sometrpg.view.navigation.PathSegment;
 import com.ziodyne.sometrpg.view.navigation.PathUtils;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class EntityFactory {
   private final World world;
   private final AssetRepository repository;
 
   private static final Texture BLACK_BOX;
+  private static final Map<PathSegment.Type, Vector2> PATH_GUIDE_REGIONS = new HashMap<PathSegment.Type, Vector2>(){{
+    put(PathSegment.Type.N2E, new Vector2(0, 0));
+    put(PathSegment.Type.E, new Vector2(3, 0));
+    put(PathSegment.Type.S, new Vector2(0, 1));
+    put(PathSegment.Type.E2N, new Vector2(1, 2));
+    put(PathSegment.Type.S2W, new Vector2(1, 2));
+    put(PathSegment.Type.E2S, new Vector2(3, 3));
+    put(PathSegment.Type.W2N, new Vector2(0, 2));
+    put(PathSegment.Type.S2E, new Vector2(0, 2));
+    put(PathSegment.Type.W, new Vector2(3, 0));
+    put(PathSegment.Type.E2S, new Vector2(2, 2));
+    put(PathSegment.Type.N2W, new Vector2(2, 2));
+  }};
+
+  private static final Map<PathSegment.Type, Vector2> PATH_CAP_REGIONS = new HashMap<PathSegment.Type, Vector2>() {{
+    put(PathSegment.Type.N, new Vector2(1, 1));
+    put(PathSegment.Type.S, new Vector2(2, 1));
+    put(PathSegment.Type.W, new Vector2(2, 0));
+    put(PathSegment.Type.E, new Vector2(1, 0));
+  }};
 
   static {
     Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -57,6 +79,7 @@ public class EntityFactory {
     pixmap.fill();
 
     BLACK_BOX = new Texture(pixmap);
+
   }
 
   @Inject
@@ -111,19 +134,28 @@ public class EntityFactory {
   public Set<Entity> createPathGuides(Path<GridPoint2> path) {
 
     List<PathSegment> segments = PathUtils.segmentPath(path);
-
     Texture texture = repository.get("data/arrow_sheet.png");
-    TextureRegion region = new TextureRegion(texture, 0, 0, 32, 32);
-
-    return segments.stream()
-      .map((seg) -> {
+    return IntStream.range(0, segments.size())
+      .mapToObj((idx) -> {
+        PathSegment seg = segments.get(idx);
         Entity ent = world.createEntity();
+        Vector2 segRegionPos;
+        if (idx+1 == segments.size()) {
+          segRegionPos = PATH_CAP_REGIONS.get(seg.getType());
+        } else {
+          segRegionPos = PATH_GUIDE_REGIONS.get(seg.getType());
+        }
 
+        if (segRegionPos == null) {
+          segRegionPos = new Vector2();
+        }
+
+        TextureRegion region = new TextureRegion(texture, (int) segRegionPos.x * 32, (int) segRegionPos.y * 32, 32, 32);
         Sprite sprite = new Sprite(region, 32, 32);
         ent.addComponent(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
 
         GridPoint2 point = seg.getPoint();
-        ent.addComponent(new Position(point.x*32f, point.y*32f));
+        ent.addComponent(new Position(point.x * 32f, point.y * 32f));
 
         return ent;
       })

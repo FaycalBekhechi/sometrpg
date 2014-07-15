@@ -45,12 +45,9 @@ public class UnitMover {
     Character character = combatant.getCharacter();
 
     Entity entity = battleScreen.getUnitEntity(character);
-    List<GridPoint2> points = path.getPoints();
     Timeline movement = Timeline.createSequence();
-    GridPoint2 startPos = battleScreen.getCombatantPosition(combatant);
-    points.add(0, startPos);
 
-    List<PathSegment> segmentedPath = PathUtils.segmentPath(points);
+    List<PathSegment> segmentedPath = PathUtils.segmentPath(path);
     Position position = entity.getComponent(Position.class);
     final BattleUnit battleUnit = entity.getComponent(BattleUnit.class);
 

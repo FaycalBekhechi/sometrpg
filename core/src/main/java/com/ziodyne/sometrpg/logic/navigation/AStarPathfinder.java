@@ -48,7 +48,7 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
       }
     };
 
-    Queue<T> openNodes = new PriorityQueue<T>(1, nodeComparator);
+    Queue<T> openNodes = new PriorityQueue<>(1, nodeComparator);
     openNodes.add(start);
 
     exactCosts.put(start, 0d);
@@ -58,7 +58,7 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
     while (!openNodes.isEmpty()) {
       T currentCheapest = openNodes.poll();
       if (strategy.isGoal(currentCheapest, goal)) {
-        return Optional.of(constructPath(breadcrumbs, goal));
+        return Optional.of(constructPath(start, breadcrumbs, goal));
       }
 
       openNodes.remove(currentCheapest);
@@ -85,8 +85,8 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
     return Optional.empty();
   }
 
-  private Path<T> constructPath(Map<T, T> breadcrumbs, T currentNode) {
-    return constructPath(breadcrumbs, new Path.Builder<T>(), currentNode);
+  private Path<T> constructPath(T start, Map<T, T> breadcrumbs, T currentNode) {
+    return constructPath(breadcrumbs, new Path.Builder<>(start), currentNode);
   }
 
   private Path<T> constructPath(Map<T, T> breadCrumbs, Path.Builder<T> pathBuilder, T currentNode) {

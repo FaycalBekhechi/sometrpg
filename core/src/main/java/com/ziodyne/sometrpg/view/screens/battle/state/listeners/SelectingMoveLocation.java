@@ -1,6 +1,7 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import com.badlogic.gdx.Gdx;
+import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.input.GridSelectionController;
@@ -10,6 +11,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -31,6 +33,7 @@ public class SelectingMoveLocation extends FlowListener<BattleContext> {
   public void onLeave(BattleContext context) {
     context.mapController.enable();
     battle.hideMoveRange();
+    battle.hidePathGuide();
     Gdx.input.setInputProcessor(null);
   }
 
@@ -43,8 +46,11 @@ public class SelectingMoveLocation extends FlowListener<BattleContext> {
       @Override
       public void handleHover(GridPoint2 hoveredPoint) {
         GridPoint2 start = context.battle.getCombatantPosition(context.selectedCombatant);
-        java.util.Optional path = pathfinder.computePath(start, hoveredPoint);
+        Optional<Path<GridPoint2>> path = pathfinder.computePath(start, hoveredPoint);
         if (path.isPresent()) {
+          battle.showPathGuide(path.get());
+        } else {
+          battle.hidePathGuide();
         }
       }
 

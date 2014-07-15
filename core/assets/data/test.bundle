@@ -5,6 +5,10 @@
   },
   {
     "type": "texture",
+    "path": "data/arrow_sheet.png"
+  },
+  {
+    "type": "texture",
     "path": "grid_overlay.png"
   },
   {

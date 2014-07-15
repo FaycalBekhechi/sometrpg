@@ -29,4 +29,9 @@ public class Path<T> {
   public List<T> getPoints() {
     return points;
   }
+
+  @Override
+  public String toString() {
+    return points.toString();
+  }
 }

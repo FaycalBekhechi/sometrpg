@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
@@ -56,6 +55,7 @@ public abstract class BattleScreen extends ScreenAdapter {
   protected float gridSquareSize = 32;
   private Entity currentMovementOverlay;
   private Entity currentAttackOverlay;
+  private Set<Entity> currentPathGuides;
 
   public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize, EventBus eventBus) {
     this.gridSquareSize = gridSquareSize;
@@ -151,6 +151,19 @@ public abstract class BattleScreen extends ScreenAdapter {
     setMovementOverlay(movementOverlay);
 
     return locations;
+  }
+
+  public void showPathGuide(Path<GridPoint2> path) {
+    hidePathGuide();
+    currentPathGuides = entityFactory.createPathGuides(path);
+    currentPathGuides.stream().forEach(world::addEntity);
+  }
+
+  public void hidePathGuide() {
+    if (currentPathGuides != null) {
+      currentPathGuides.forEach(Entity::deleteFromWorld);
+      currentPathGuides = null;
+    }
   }
 
   public GridPoint2 getCombatantPosition(Combatant combatant) {

@@ -19,6 +19,7 @@ import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.animation.AnimationUtils;
@@ -34,11 +35,15 @@ import com.ziodyne.sometrpg.view.components.UnitSelector;
 import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.components.VoidSprite;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
+import com.ziodyne.sometrpg.view.navigation.PathSegment;
+import com.ziodyne.sometrpg.view.navigation.PathUtils;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EntityFactory {
   private final World world;
@@ -101,6 +106,28 @@ public class EntityFactory {
     movementOverlay.addComponent(movementOverlayComponent);
 
     return movementOverlay;
+  }
+
+  public Set<Entity> createPathGuides(Path<GridPoint2> path) {
+
+    List<PathSegment> segments = PathUtils.segmentPath(path);
+
+    Texture texture = repository.get("data/arrow_sheet.png");
+    TextureRegion region = new TextureRegion(texture, 0, 0, 32, 32);
+
+    return segments.stream()
+      .map((seg) -> {
+        Entity ent = world.createEntity();
+
+        Sprite sprite = new Sprite(region, 32, 32);
+        ent.addComponent(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
+
+        GridPoint2 point = seg.getPoint();
+        ent.addComponent(new Position(point.x*32f, point.y*32f));
+
+        return ent;
+      })
+      .collect(Collectors.toSet());
   }
 
   public Entity createMapMovementOverlay(Set<GridPoint2> locations) {

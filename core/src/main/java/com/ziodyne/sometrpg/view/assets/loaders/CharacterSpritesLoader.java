@@ -39,7 +39,7 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
   private Map<String, Set<String>> animNamesByCharacterId = new HashMap<>();
   private Map<String, String> pathsByAnimationName = new HashMap<>();
   private Set<String> uniquePaths = new HashSet<>();
-  private Map<String, AnimationType> typesByPath = new HashMap<>();
+  private Map<String, AnimationType> typesByAnimName = new HashMap<>();
 
   @Override
   public CharacterSprites load(AssetManager assetManager, String fileName, FileHandle fileHandle,
@@ -74,7 +74,7 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
           String path = pathsByAnimationName.get(name);
           Texture tex = texturesByPath.get(path);
           SpriteSheet sheet = sheetsByFilename.get(path);
-          AnimationType type = typesByPath.get(path);
+          AnimationType type = typesByAnimName.get(name);
           int gridSize = sheet.getGridSize();
 
           return new UnitEntityAnimation(tex, type, sheet.getAnimationSpecs().get(name), gridSize);
@@ -115,8 +115,8 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
           String sheetPath = basePath + anim.get("sheet").asText();
 
           // Infer the animation type from the name
-          typesByPath.put(
-            sheetPath,
+          typesByAnimName.put(
+            animName,
             AnimationType.fromString(animFieldName)
           );
 

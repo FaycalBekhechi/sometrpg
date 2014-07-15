@@ -15,6 +15,7 @@ import org.jgrapht.alg.FloydWarshallShortestPaths;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.graph.ListenableDirectedGraph;
 import org.jgrapht.graph.ListenableUndirectedGraph;
 import org.jgrapht.traverse.ClosestFirstIterator;
 
@@ -37,8 +38,8 @@ public class BattleMap {
 
   private final Map<GridPoint2, Tile> tilesByPosition = Maps.newHashMap();
 
-  private final ListenableUndirectedGraph<GridPoint2, DefaultEdge> graph =
-          new ListenableUndirectedGraph<GridPoint2, DefaultEdge>(DefaultEdge.class);
+  private final ListenableDirectedGraph<GridPoint2, DefaultEdge> graph =
+          new ListenableDirectedGraph<>(DefaultEdge.class);
 
   private ConnectivityInspector<GridPoint2, DefaultEdge> connectivityInspector;
 
@@ -93,6 +94,7 @@ public class BattleMap {
         }
       }
     }
+
     connectivityInspector = new ConnectivityInspector<>(graph);
 
     graph.addGraphListener(new GraphListener<GridPoint2, DefaultEdge>() {
@@ -216,6 +218,7 @@ public class BattleMap {
 
     occupyingUnits.put(unitId, destination);
     destination.setCombatant(unit);
+    setPassable(x, y, false);
   }
 
   /** Remove a unit from the map. Blows up if it does not exist. */

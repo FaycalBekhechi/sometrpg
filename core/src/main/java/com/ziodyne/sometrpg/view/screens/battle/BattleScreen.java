@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
@@ -34,6 +33,7 @@ import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public abstract class BattleScreen extends ScreenAdapter {
@@ -190,10 +190,10 @@ public abstract class BattleScreen extends ScreenAdapter {
   public Optional<Combatant> getCombatant(GridPoint2 square) {
     Tile tile = battle.getTile(square);
     if (tile == null) {
-      return Optional.absent();
+      return Optional.empty();
     }
 
-    return Optional.fromNullable(tile.getCombatant());
+    return Optional.ofNullable(tile.getCombatant());
   }
 
   protected void registerUnitEntity(Character character, Entity entity) {

@@ -1,7 +1,6 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import com.badlogic.gdx.Gdx;
-import com.google.common.base.Optional;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.WeaponAttack;
@@ -13,6 +12,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
+import java.util.Optional;
 import java.util.Set;
 
 /**

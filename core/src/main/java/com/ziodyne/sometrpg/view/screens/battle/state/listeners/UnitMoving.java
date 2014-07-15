@@ -1,7 +1,8 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
+import java.util.Optional;
+
 import aurelienribon.tweenengine.TweenManager;
-import com.google.common.base.Optional;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;

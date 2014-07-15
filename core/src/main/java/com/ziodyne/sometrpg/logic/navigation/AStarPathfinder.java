@@ -1,11 +1,11 @@
 package com.ziodyne.sometrpg.logic.navigation;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -20,7 +20,7 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
 
   public Optional<Path<T>> computePath(T start, T goal) {
     if (!strategy.isPassable(goal)) {
-      return Optional.absent();
+      return Optional.empty();
     }
 
     final Map<T, Double> exactCosts = Maps.newHashMap();
@@ -82,7 +82,7 @@ public class AStarPathfinder<T> implements Pathfinder<T> {
       }
     }
 
-    return Optional.absent();
+    return Optional.empty();
   }
 
   private Path<T> constructPath(Map<T, T> breadcrumbs, T currentNode) {

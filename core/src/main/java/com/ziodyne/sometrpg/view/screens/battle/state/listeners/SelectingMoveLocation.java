@@ -1,8 +1,6 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import com.badlogic.gdx.Gdx;
-import com.google.common.base.Optional;
-import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.input.GridSelectionController;
@@ -45,9 +43,8 @@ public class SelectingMoveLocation extends FlowListener<BattleContext> {
       @Override
       public void handleHover(GridPoint2 hoveredPoint) {
         GridPoint2 start = context.battle.getCombatantPosition(context.selectedCombatant);
-        Optional<Path<GridPoint2>> path = pathfinder.computePath(start, hoveredPoint);
+        java.util.Optional path = pathfinder.computePath(start, hoveredPoint);
         if (path.isPresent()) {
-          // TODO: draw path guides.
         }
       }
 

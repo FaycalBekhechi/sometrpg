@@ -1,11 +1,11 @@
 package com.ziodyne.sometrpg.logic.navigation;
 
-import com.google.common.base.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public class CachingPathfinder<T> implements Pathfinder<T> {
@@ -24,11 +24,11 @@ public class CachingPathfinder<T> implements Pathfinder<T> {
     });
 
   @Override
-  public Optional<Path<T>> computePath(T start, T goal) {
+  public java.util.Optional computePath(T start, T goal) {
     try {
       return resultCache.get(Pair.of(start, goal));
     } catch (ExecutionException e) {
-      return Optional.absent();
+      return Optional.empty();
     }
   }
 }

@@ -35,6 +35,7 @@ import com.ziodyne.sometrpg.logic.loader.models.Roster;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -45,6 +46,7 @@ import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.util.CollectionUtils;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.Director;
+import com.ziodyne.sometrpg.view.SomeTRPG;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
@@ -69,6 +71,7 @@ import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
 import com.ziodyne.sometrpg.view.screens.battle.state.*;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackConfirmationListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackTargetSelectionListener;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.EnemyTurnListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.SelectingMoveLocation;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelectListener;
@@ -117,7 +120,6 @@ public class TestBattle extends BattleScreen {
   private SpriteRenderSystem.Factory spriteRendererFactory;
   private BattleMapController.Factory mapControllerFactory;
   private VoidSpriteRenderSystem.Factory voidRenderSystemFactory;
-  private PlayerTurnListener.Factory turnListenerFactory;
   private AssetBundleLoader bundleLoader;
   private boolean initialized;
   private Pathfinder<GridPoint2> pathfinder;
@@ -126,13 +128,13 @@ public class TestBattle extends BattleScreen {
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<SpriteComponent> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
-             PlayerTurnListener.Factory turnListenerFactory, TweenAccessor<Position> positionTweenAccessor,
-             VoidSpriteRenderSystem.Factory voidRenderSystemFactory, EventBus eventBus) {
+             TweenAccessor<Position> positionTweenAccessor, VoidSpriteRenderSystem.Factory voidRenderSystemFactory,
+             EventBus eventBus) {
     super(director, new OrthographicCamera(), 32f, eventBus);
 
     camera.zoom = 0.5f;
     this.tweenManager = tweenManager;
-    this.turnListenerFactory = turnListenerFactory;
+    this.mapControllerFactory = mapControllerFactory;
     this.cameraTweenAccessor = cameraTweenAccessor;
     this.positionTweenAccessor = positionTweenAccessor;
     this.spriteRendererFactory = spriteRendererFactory;
@@ -248,14 +250,15 @@ public class TestBattle extends BattleScreen {
 
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
-      turnListenerFactory.create(camera, this, pathfinder, gridSquareSize),
+      new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory),
       new UnitActionSelectListener(skin, viewport, menuStage, gridSquareSize),
       new ViewingUnitInfo(world, entityFactory),
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
       new AttackTargetSelectionListener(this, gridSquareSize),
       new AttackConfirmationListener(skin, menuStage, camera, gridSquareSize),
-      new UnitAttackingListener(this, world)
+      new UnitAttackingListener(this, world),
+      new EnemyTurnListener(battle)
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

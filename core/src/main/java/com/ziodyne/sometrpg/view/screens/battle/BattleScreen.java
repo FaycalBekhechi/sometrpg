@@ -19,6 +19,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.ziodyne.sometrpg.logic.models.Character;
+import com.ziodyne.sometrpg.logic.models.battle.Army;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -190,6 +191,14 @@ public abstract class BattleScreen extends ScreenAdapter {
   public boolean isOccupied(GridPoint2 square) {
     Tile tile = battle.getTile(square);
     return tile != null && tile.isOccupied();
+  }
+
+  public boolean isTurnComplete() {
+    return battle.isTurnComplete();
+  }
+
+  public void endTurn() {
+    battle.endTurn();
   }
 
   public boolean isUnitTurn(Combatant combatant) {

@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
@@ -32,8 +34,7 @@ public class RootModule extends AbstractModule {
     bind(EventBus.class).toInstance(new EventBus());
 
     install(new TweenAccessorModule());
-    install(new FactoryModuleBuilder()
-             .build(PlayerTurnListener.Factory.class));
+
     install(new FactoryModuleBuilder()
             .build(BattleMapController.Factory.class));
 

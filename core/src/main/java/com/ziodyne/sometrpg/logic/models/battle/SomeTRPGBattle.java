@@ -268,7 +268,8 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     movementSquaresRemaining.put(combatant, remainingSquares - numSquares);
   }
 
-  private boolean isTurnComplete() {
+  @Override
+  public boolean isTurnComplete() {
     Army currentArmy = getCurrentTurnArmy();
     return actedThisTurn.containsAll(currentArmy.units);
   }

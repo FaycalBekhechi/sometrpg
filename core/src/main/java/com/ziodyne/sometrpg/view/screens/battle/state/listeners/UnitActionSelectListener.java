@@ -60,7 +60,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
 
     Combatant selectedCombatant = context.selectedCombatant;
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
-    if (allowedActions.isEmpty()) {
+    if (allowedActions.size() == 1 && allowedActions.contains(CombatantAction.INFO)) {
       LOG.log("Unit actions exhausted.");
       context.safeTrigger(BattleEvent.ACTIONS_EXHAUSTED);
     } else {

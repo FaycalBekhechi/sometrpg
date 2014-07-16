@@ -4,18 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.logic.models.battle.Army;
+import com.ziodyne.sometrpg.logic.models.battle.Battle;
+import com.ziodyne.sometrpg.logic.models.battle.TurnBased;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
 /**
  * Logic for entering and exiting the initial player turn state
  */
-public class PlayerTurnListener extends FlowListener<BattleContext> {
+public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListener<BattleContext> {
   private final OrthographicCamera camera;
 
   private final BattleScreen screen;
@@ -26,31 +30,40 @@ public class PlayerTurnListener extends FlowListener<BattleContext> {
 
   private final float gridSize;
 
+  private final T battle;
+
   private BattleMapController controller;
 
-  public interface Factory {
-    public PlayerTurnListener create(OrthographicCamera camera, BattleScreen screen, Pathfinder<GridPoint2> pathfinder,
-                                     float gridSize);
-  }
-
   @AssistedInject
-  public PlayerTurnListener(@Assisted OrthographicCamera camera, @Assisted BattleScreen screen,
-                            @Assisted Pathfinder<GridPoint2> pathfinder, @Assisted float gridSize,
-                            BattleMapController.Factory controllerFactory) {
+  public PlayerTurnListener(OrthographicCamera camera, BattleScreen screen, T battle, Pathfinder<GridPoint2> pathfinder,
+                              float gridSize, BattleMapController.Factory controllerFactory) {
+
     super(BattleState.PLAYER_TURN);
     this.camera = camera;
     this.screen = screen;
     this.controllerFactory = controllerFactory;
     this.pathfinder = pathfinder;
     this.gridSize = gridSize;
+    this.battle = battle;
   }
 
   @Override
   public void onEnter(BattleContext context) {
     // Check if it still should be the player's turn.
     // If not, trigger friendly_actions_exhausted
-    context.mapController = controllerFactory.create(camera, screen, context, pathfinder, gridSize);
-    Gdx.input.setInputProcessor(context.mapController);
+
+    if (battle.isWon()) {
+      context.safeTrigger(BattleEvent.BATTLE_WON);
+    } else if (battle.isLost()) {
+      context.safeTrigger(BattleEvent.BATTLE_LOST);
+    } else if (battle.isTurnComplete()) {
+      battle.endTurn();
+      context.safeTrigger(BattleEvent.FRIENDLY_ACTIONS_EXHAUSTED);
+    } else {
+
+      context.mapController = controllerFactory.create(camera, screen, context, pathfinder, gridSize);
+      Gdx.input.setInputProcessor(context.mapController);
+    }
   }
 
   @Override

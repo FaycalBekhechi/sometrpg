@@ -10,7 +10,7 @@ public class NeighborRangeFinder implements RangeFinder {
 
   @Override
   public Set<GridPoint2> computeRange(BattleMap map, final GridPoint2 start, final int maxDistance) {
-    return map.getNeighborsInRadius(start, maxDistance).stream()
+    return map.getPassableNeighborsInRadius(start, maxDistance).stream()
       .filter((point) -> map.pathExists(start, point))
       .collect(Collectors.toSet());
   }

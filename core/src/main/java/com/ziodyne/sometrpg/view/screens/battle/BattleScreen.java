@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class BattleScreen extends ScreenAdapter {
   protected final World world = new World();
@@ -129,10 +130,9 @@ public abstract class BattleScreen extends ScreenAdapter {
   }
 
   public Set<GridPoint2> showAttackRange(Combatant combatant, Attack attack) {
-    Set<GridPoint2> locations = Sets.newHashSet();
-    for (Tile tile : battle.getAttackableTiles(combatant, attack)) {
-      locations.add(tile.getPosition());
-    }
+    Set<GridPoint2> locations = battle.getAttackableTiles(combatant, attack).stream()
+      .map(Tile::getPosition)
+      .collect(Collectors.toSet());
 
     Entity attackOverlay = entityFactory.createMapAttackOverlay(locations);
     setAttackOverlay(attackOverlay);
@@ -142,10 +142,9 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   public Set<GridPoint2> showMoveRange(Combatant combatant) {
 
-    Set<GridPoint2> locations = Sets.newHashSet();
-    for (Tile tile : battle.getMovableTiles(combatant)) {
-      locations.add(tile.getPosition());
-    }
+    Set<GridPoint2> locations = battle.getMovableTiles(combatant).stream()
+      .map(Tile::getPosition)
+      .collect(Collectors.toSet());
 
     Entity movementOverlay = entityFactory.createMapMovementOverlay(locations);
     setMovementOverlay(movementOverlay);

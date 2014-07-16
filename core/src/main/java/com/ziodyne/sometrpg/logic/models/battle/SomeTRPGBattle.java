@@ -9,6 +9,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
+import com.ziodyne.sometrpg.logic.navigation.AttackRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
 import com.ziodyne.sometrpg.logic.navigation.CachingPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.NeighborRangeFinder;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
+  private final RangeFinder attackRangeFinder = new AttackRangeFinder();
   private final RangeFinder movementRangeFinder = new NeighborRangeFinder();
   private final BattleMap map;
   private final ImmutableList<Army> armies;
@@ -147,7 +149,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
       throw new GameLogicException("Cannot get attack range for combatant that is not on the map.");
     }
 
-    Set<GridPoint2> attackablePoints = movementRangeFinder.computeRange(map, position, attack.getRange()+1);
+    Set<GridPoint2> attackablePoints = attackRangeFinder.computeRange(map, position, attack.getRange()+1);
 
     Set<Tile> attackableTiles = Sets.newHashSet();
     for (GridPoint2 point : attackablePoints) {

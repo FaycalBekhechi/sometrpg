@@ -8,22 +8,19 @@ import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
 import org.jgraph.graph.DefaultEdge;
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.alg.ConnectivityInspector;
-import org.jgrapht.alg.FloydWarshallShortestPaths;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.ListenableDirectedGraph;
-import org.jgrapht.graph.ListenableUndirectedGraph;
 import org.jgrapht.traverse.ClosestFirstIterator;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 
@@ -38,7 +35,12 @@ public class BattleMap {
 
   private final Map<GridPoint2, Tile> tilesByPosition = Maps.newHashMap();
 
-  private final ListenableDirectedGraph<GridPoint2, DefaultEdge> graph =
+  // This graph has edges that do not respect units standing on tiles
+  private final DirectedGraph<GridPoint2, DefaultEdge> adjacencyGraph =
+    new DefaultDirectedGraph<>(DefaultEdge.class);
+
+  // This graph does not have edges between tiles with units on them
+  private final ListenableDirectedGraph<GridPoint2, DefaultEdge> blockingGraph =
           new ListenableDirectedGraph<>(DefaultEdge.class);
 
   private ConnectivityInspector<GridPoint2, DefaultEdge> connectivityInspector;
@@ -75,7 +77,8 @@ public class BattleMap {
   private void populateGraph(Collection<Tile> tiles) {
     for (Tile tile : tiles) {
       GridPoint2 pos = tile.getPosition();
-      graph.addVertex(pos);
+      blockingGraph.addVertex(pos);
+      adjacencyGraph.addVertex(pos);
 
       // Only add edges out of passable tiles
       if (tile.isPassable()) {
@@ -85,36 +88,45 @@ public class BattleMap {
           if (tileExists(neighbor.x, neighbor.y) &&
               isPassable(neighbor.x, neighbor.y)) {
 
-            if (!graph.containsVertex(neighbor)) {
-              graph.addVertex(neighbor);
+            if (!blockingGraph.containsVertex(neighbor)) {
+              blockingGraph.addVertex(neighbor);
             }
 
-            graph.addEdge(pos, neighbor);
+            if (!adjacencyGraph.containsVertex(neighbor)) {
+              adjacencyGraph.addVertex(neighbor);
+            }
+
+            blockingGraph.addEdge(pos, neighbor);
+            adjacencyGraph.addEdge(pos, neighbor);
           }
         }
       }
     }
 
-    connectivityInspector = new ConnectivityInspector<>(graph);
+    connectivityInspector = new ConnectivityInspector<>(blockingGraph);
 
-    graph.addGraphListener(new GraphListener<GridPoint2, DefaultEdge>() {
+    blockingGraph.addGraphListener(new GraphListener<GridPoint2, DefaultEdge>() {
       @Override
       public void edgeAdded(GraphEdgeChangeEvent<GridPoint2, DefaultEdge> e) {
+
         connectivityInspector.edgeAdded(e);
       }
 
       @Override
       public void edgeRemoved(GraphEdgeChangeEvent<GridPoint2, DefaultEdge> e) {
+
         connectivityInspector.edgeRemoved(e);
       }
 
       @Override
       public void vertexAdded(GraphVertexChangeEvent<GridPoint2> e) {
+
         connectivityInspector.vertexAdded(e);
       }
 
       @Override
       public void vertexRemoved(GraphVertexChangeEvent<GridPoint2> e) {
+
         connectivityInspector.vertexRemoved(e);
       }
     });
@@ -122,7 +134,16 @@ public class BattleMap {
 
   public Set<GridPoint2> getNeighborsInRadius(GridPoint2 start, int radius) {
     Set<GridPoint2> neighbors = new HashSet<>();
-    new ClosestFirstIterator<>(graph, start, radius).forEachRemaining(neighbors::add);
+    new ClosestFirstIterator<>(adjacencyGraph, start, radius).forEachRemaining(neighbors::add);
+
+    neighbors.remove(start);
+
+    return neighbors;
+  }
+
+  public Set<GridPoint2> getPassableNeighborsInRadius(GridPoint2 start, int radius) {
+    Set<GridPoint2> neighbors = new HashSet<>();
+    new ClosestFirstIterator<>(blockingGraph, start, radius).forEachRemaining(neighbors::add);
 
     neighbors.remove(start);
 
@@ -168,11 +189,11 @@ public class BattleMap {
       GridPoint2 point = new GridPoint2(x, y);
       if (passable) {
         for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
-          graph.addEdge(neighbor, point);
+          blockingGraph.addEdge(neighbor, point);
         }
       } else {
         for (GridPoint2 neighbor : MathUtils.getNeighbors(point)) {
-          graph.removeEdge(neighbor, point);
+          blockingGraph.removeEdge(neighbor, point);
         }
       }
     }

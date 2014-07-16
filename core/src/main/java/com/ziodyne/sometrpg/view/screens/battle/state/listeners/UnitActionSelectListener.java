@@ -69,22 +69,19 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
       actionMenu.setX(context.selectedSquare.x * gridSize);
       actionMenu.setY(context.selectedSquare.y * gridSize);
 
-      actionMenu.addSelectedListener(new ActionSelectedHandler() {
-        @Override
-        public void handle(CombatantAction selectedAction) throws Exception {
-          switch (selectedAction) {
-            case ATTACK:
-              context.safeTrigger(BattleEvent.ATTACK_ACTION_SELECTED);
-              break;
-            case MOVE:
-              context.safeTrigger(BattleEvent.MOVE_ACTION_SELECTED);
-              break;
-            case INFO:
-              context.safeTrigger(BattleEvent.INFO_ACTION_SELECTED);
-              break;
-            default:
-              throw new IllegalArgumentException("Combatant action " + selectedAction + " not mapped to event.");
-          }
+      actionMenu.addSelectedListener(selectedAction -> {
+        switch (selectedAction) {
+          case ATTACK:
+            context.safeTrigger(BattleEvent.ATTACK_ACTION_SELECTED);
+            break;
+          case MOVE:
+            context.safeTrigger(BattleEvent.MOVE_ACTION_SELECTED);
+            break;
+          case INFO:
+            context.safeTrigger(BattleEvent.INFO_ACTION_SELECTED);
+            break;
+          default:
+            throw new IllegalArgumentException("Combatant action " + selectedAction + " not mapped to event.");
         }
       });
 

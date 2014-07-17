@@ -12,6 +12,7 @@ import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.view.assets.Conversion;
 
 public class MapLoader extends SynchronousAssetLoader<BattleMap, MapLoader.MapParameter> {
+
   public MapLoader(FileHandleResolver resolver) {
     super(resolver);
   }

@@ -4,8 +4,8 @@
     "path": "data/character_sprites.json"
   },
   {
-    "type": "texture",
-    "path": "data/arrow_sheet.png"
+    "type": "atlas",
+    "path": "data/movement_guide.atlas"
   },
   {
     "type": "texture",

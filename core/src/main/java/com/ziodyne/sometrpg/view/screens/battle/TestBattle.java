@@ -13,6 +13,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -58,6 +59,7 @@ import com.ziodyne.sometrpg.logic.loader.loaders.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.logic.loader.models.Armies;
+import com.ziodyne.sometrpg.view.assets.loaders.TextureAtlasLoader;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSpriteBook;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
 import com.ziodyne.sometrpg.view.assets.models.SpriteReference;
@@ -152,6 +154,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(CharacterSprites.class, new CharacterSpritesLoader(resolver));
     assetManager.setLoader(Armies.class, new ArmiesLoader(resolver));
     assetManager.setLoader(Characters.class, new CharactersLoader(resolver));
+    assetManager.setLoader(TextureAtlas.class, new TextureAtlasLoader(resolver));
 
     try {
       bundleLoader.load();

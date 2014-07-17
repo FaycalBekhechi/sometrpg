@@ -20,7 +20,8 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
     @Type(value = GameSpecAsset.class, name = "gameSpec"),
     @Type(value = SpriteSheetAsset.class, name = "spriteSheet"),
     @Type(value = CharacterSpritesAsset.class, name = "characterSprites"),
-    @Type(value = ArmiesAsset.class, name = "armies")
+    @Type(value = ArmiesAsset.class, name = "armies"),
+    @Type(value = TextureAtlasAsset.class, name = "atlas")
 })
 public abstract class Asset<T> {
   private String type;
@@ -34,10 +35,6 @@ public abstract class Asset<T> {
 
   public Class<T> getClazz() {
     return clazz;
-  }
-
-  public void setClazz(Class<T> clazz) {
-    this.clazz = clazz;
   }
 
   public String getType() {

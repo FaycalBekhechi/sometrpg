@@ -1,0 +1,57 @@
+{
+  "filename": "arrow_sheet.png",
+  "region_width": 32,
+  "region_height": 32,
+  "regions": [
+    {
+      "name": "horizontal_line",
+      "x": 3,
+      "y": 0
+    },
+    {
+      "name": "vertical_line",
+      "x": 0,
+      "y": 1
+    },
+    {
+      "name": "northwest_corner",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "name": "northeast_corner",
+      "x": 3,
+      "y": 3
+    },
+    {
+      "name": "southwest_corner",
+      "x": 0,
+      "y": 2
+    },
+    {
+      "name": "southeast_corner",
+      "x": 1,
+      "y": 2
+    },
+    {
+      "name": "north_cap",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "name": "south_cap",
+      "x": 2,
+      "y": 1
+    },
+    {
+      "name": "east_cap",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "name": "west_cap",
+      "x": 2,
+      "y": 0
+    }
+  ]
+}

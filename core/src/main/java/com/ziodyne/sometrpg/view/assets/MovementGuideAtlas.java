@@ -13,6 +13,22 @@ public class MovementGuideAtlas {
     this.atlas = atlas;
   }
 
+  public TextureRegion getCapRegion(PathSegment.Type segType) {
+
+    switch (segType) {
+      case N:
+        return getRegion("north_cap");
+      case S:
+        return getRegion("south_cap");
+      case E:
+        return getRegion("east_cap");
+      case W:
+        return getRegion("west_cap");
+      default:
+        return null;
+    }
+  }
+
   public TextureRegion getLineRegion(PathSegment.Type segType) {
 
     switch (segType) {

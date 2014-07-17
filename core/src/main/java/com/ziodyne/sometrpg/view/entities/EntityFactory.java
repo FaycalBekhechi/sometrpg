@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -24,6 +25,7 @@ import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.animation.AnimationUtils;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
+import com.ziodyne.sometrpg.view.assets.MovementGuideAtlas;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.MapGridOverlay;
 import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
@@ -52,26 +54,6 @@ public class EntityFactory {
   private final AssetRepository repository;
 
   private static final Texture BLACK_BOX;
-  private static final Map<PathSegment.Type, Vector2> PATH_GUIDE_REGIONS = new HashMap<PathSegment.Type, Vector2>(){{
-    put(PathSegment.Type.N2E, new Vector2(0, 0));
-    put(PathSegment.Type.E, new Vector2(3, 0));
-    put(PathSegment.Type.S, new Vector2(0, 1));
-    put(PathSegment.Type.E2N, new Vector2(1, 2));
-    put(PathSegment.Type.S2W, new Vector2(1, 2));
-    put(PathSegment.Type.E2S, new Vector2(3, 3));
-    put(PathSegment.Type.W2N, new Vector2(0, 2));
-    put(PathSegment.Type.S2E, new Vector2(0, 2));
-    put(PathSegment.Type.W, new Vector2(3, 0));
-    put(PathSegment.Type.E2S, new Vector2(2, 2));
-    put(PathSegment.Type.N2W, new Vector2(2, 2));
-  }};
-
-  private static final Map<PathSegment.Type, Vector2> PATH_CAP_REGIONS = new HashMap<PathSegment.Type, Vector2>() {{
-    put(PathSegment.Type.N, new Vector2(1, 1));
-    put(PathSegment.Type.S, new Vector2(2, 1));
-    put(PathSegment.Type.W, new Vector2(2, 0));
-    put(PathSegment.Type.E, new Vector2(1, 0));
-  }};
 
   static {
     Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -134,24 +116,22 @@ public class EntityFactory {
   public Set<Entity> createPathGuides(Path<GridPoint2> path) {
 
     List<PathSegment> segments = PathUtils.segmentPath(path);
-    Texture texture = repository.get("data/arrow_sheet.png");
+    TextureAtlas atlas = repository.get("data/movement_guide.atlas");
+    MovementGuideAtlas movementGuideAtlas = new MovementGuideAtlas(atlas);
+
     return IntStream.range(0, segments.size())
       .mapToObj((idx) -> {
         PathSegment seg = segments.get(idx);
         Entity ent = world.createEntity();
-        Vector2 segRegionPos;
+
+        TextureRegion region;
         if (idx+1 == segments.size()) {
-          segRegionPos = PATH_CAP_REGIONS.get(seg.getType());
+          region = movementGuideAtlas.getCapRegion(seg.getType());
         } else {
-          segRegionPos = PATH_GUIDE_REGIONS.get(seg.getType());
+          region = movementGuideAtlas.getLineRegion(seg.getType());
         }
 
-        if (segRegionPos == null) {
-          segRegionPos = new Vector2();
-        }
-
-        TextureRegion region = new TextureRegion(texture, (int) segRegionPos.x * 32, (int) segRegionPos.y * 32, 32, 32);
-        Sprite sprite = new Sprite(region, 32, 32);
+        Sprite sprite = new Sprite(region, region.getRegionWidth(), region.getRegionHeight());
         ent.addComponent(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
 
         GridPoint2 point = seg.getPoint();

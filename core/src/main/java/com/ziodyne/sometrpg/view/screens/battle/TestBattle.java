@@ -54,12 +54,14 @@ import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
 import com.ziodyne.sometrpg.logic.loader.loaders.ArmiesLoader;
 import com.ziodyne.sometrpg.logic.loader.models.GameSpec;
+import com.ziodyne.sometrpg.view.assets.loaders.ChapterLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
 import com.ziodyne.sometrpg.logic.loader.loaders.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.logic.loader.models.Armies;
 import com.ziodyne.sometrpg.view.assets.loaders.TextureAtlasLoader;
+import com.ziodyne.sometrpg.view.assets.models.Chapter;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSpriteBook;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
 import com.ziodyne.sometrpg.view.assets.models.SpriteReference;
@@ -155,6 +157,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(Armies.class, new ArmiesLoader(resolver));
     assetManager.setLoader(Characters.class, new CharactersLoader(resolver));
     assetManager.setLoader(TextureAtlas.class, new TextureAtlasLoader(resolver));
+    assetManager.setLoader(Chapter.class, new ChapterLoader(resolver));
 
     try {
       bundleLoader.load();
@@ -170,7 +173,8 @@ public class TestBattle extends BattleScreen {
     Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
     Tween.registerAccessor(Position.class, positionTweenAccessor);
 
-    TiledMap tiledMap = assetManager.get("maps/chapter1.tmx");
+    Chapter chapter = assetManager.get("data/chapters/chapter1.json");
+    TiledMap tiledMap = chapter.getMap();
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, (tileLayer.getWidth()-1) * gridSquareSize, (tileLayer.getHeight()-1) * gridSquareSize);
 
@@ -298,7 +302,8 @@ public class TestBattle extends BattleScreen {
 
   private void populateWorld(EntityFactory entityFactory, BattleMap battleMap, AssetRepository assets) {
 
-    CharacterSprites sprites = assets.get("data/character_sprites.json");
+    Chapter chapter = assets.get("data/chapters/chapter1.json", Chapter.class);
+    CharacterSprites sprites = chapter.getSprites();
     for (int i = 0; i < battleMap.getWidth(); i++) {
       for (int j = 0; j < battleMap.getHeight(); j++) {
         Tile tile = battleMap.getTile(i, j);

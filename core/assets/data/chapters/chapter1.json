@@ -1,0 +1,4 @@
+{
+  "sprites": "data/character_sprites.json",
+  "map": "maps/chapter1.tmx"
+}

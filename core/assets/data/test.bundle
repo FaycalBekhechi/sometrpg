@@ -1,7 +1,7 @@
 [
   {
-    "type": "characterSprites",
-    "path": "data/character_sprites.json"
+    "type": "chapter",
+    "path": "data/chapters/chapter1.json"
   },
   {
     "type": "atlas",
@@ -10,10 +10,6 @@
   {
     "type": "texture",
     "path": "grid_overlay.png"
-  },
-  {
-    "type": "map",
-    "path": "maps/chapter1.tmx"
   },
   {
     "type": "gameSpec",

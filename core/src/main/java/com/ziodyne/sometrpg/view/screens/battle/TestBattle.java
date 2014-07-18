@@ -25,6 +25,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.loader.AssetUtils;
@@ -127,16 +128,22 @@ public class TestBattle extends BattleScreen {
   private AssetBundleLoader bundleLoader;
   private boolean initialized;
   private Pathfinder<GridPoint2> pathfinder;
+  private final String chapterPath;
+
+  public interface Factory {
+    TestBattle create(String chapterPath);
+  }
 
   @Inject
   TestBattle(Director director, TweenManager tweenManager, TweenAccessor<Camera> cameraTweenAccessor,
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<SpriteComponent> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
              TweenAccessor<Position> positionTweenAccessor, VoidSpriteRenderSystem.Factory voidRenderSystemFactory,
-             EventBus eventBus) {
+             EventBus eventBus, @Assisted String chapterPath) {
     super(director, new OrthographicCamera(), 32f, eventBus);
 
     camera.zoom = 0.5f;
+    this.chapterPath = chapterPath;
     this.tweenManager = tweenManager;
     this.mapControllerFactory = mapControllerFactory;
     this.cameraTweenAccessor = cameraTweenAccessor;
@@ -173,7 +180,7 @@ public class TestBattle extends BattleScreen {
     Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
     Tween.registerAccessor(Position.class, positionTweenAccessor);
 
-    Chapter chapter = assetManager.get("data/chapters/chapter1.json");
+    Chapter chapter = assetManager.get(chapterPath, Chapter.class);
     TiledMap tiledMap = chapter.getMap();
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, (tileLayer.getWidth()-1) * gridSquareSize, (tileLayer.getHeight()-1) * gridSquareSize);
@@ -302,7 +309,7 @@ public class TestBattle extends BattleScreen {
 
   private void populateWorld(EntityFactory entityFactory, BattleMap battleMap, AssetRepository assets) {
 
-    Chapter chapter = assets.get("data/chapters/chapter1.json", Chapter.class);
+    Chapter chapter = assets.get(chapterPath, Chapter.class);
     CharacterSprites sprites = chapter.getSprites();
     for (int i = 0; i < battleMap.getWidth(); i++) {
       for (int j = 0; j < battleMap.getHeight(); j++) {

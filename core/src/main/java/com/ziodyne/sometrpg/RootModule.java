@@ -13,6 +13,7 @@ import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
+import com.ziodyne.sometrpg.view.screens.battle.TestBattle;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.ViewportSpaceSpriteRenderSystem;
@@ -34,6 +35,9 @@ public class RootModule extends AbstractModule {
     bind(EventBus.class).toInstance(new EventBus());
 
     install(new TweenAccessorModule());
+
+    install(new FactoryModuleBuilder()
+            .build(TestBattle.Factory.class));
 
     install(new FactoryModuleBuilder()
             .build(BattleMapController.Factory.class));

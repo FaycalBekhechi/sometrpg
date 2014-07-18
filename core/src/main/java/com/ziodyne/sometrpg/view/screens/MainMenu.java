@@ -32,14 +32,15 @@ public class MainMenu extends ScreenAdapter {
   private final Label title;
   private final Button startGameButton;
   private final Button quitButton;
-  private final Provider<TestBattle> testBattleProvider;
+  private final TestBattle.Factory battleFactory;
 
   private boolean menuInitialized = false;
   private boolean initializing = false;
 
   @Inject
-  public MainMenu(Director dir, TweenManager tweenManager, TweenAccessor<Actor> actorTweenAccessor, Provider<TestBattle> battleProvider) {
-    this.testBattleProvider = battleProvider;
+  public MainMenu(Director dir, TweenManager tweenManager, TweenAccessor<Actor> actorTweenAccessor,
+                  TestBattle.Factory battleFactory) {
+    this.battleFactory = battleFactory;
     this.director = dir;
     this.stage = new Stage(new ScreenViewport());
     this.skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -63,7 +64,8 @@ public class MainMenu extends ScreenAdapter {
     startGameButton.addListener(new ChangeListener() {
       @Override
       public void changed(ChangeEvent event, Actor actor) {
-        director.addScreen(testBattleProvider.get());
+
+        director.addScreen(battleFactory.create("data/chapters/chapter1.json"));
       }
     });
 

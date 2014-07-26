@@ -53,6 +53,10 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     this.eventBus = eventBus;
     this.combatResolver = new MapCombatResolver(map);
     this.pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(map));
+
+    Army firstArmy = armies.get(0);
+    firstArmy.getLivingCombatants().stream()
+      .forEach((combatant) -> movementSquaresRemaining.put(combatant, combatant.getMovementRange()));
   }
 
   @Override
@@ -118,7 +122,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
       throw new GameLogicException("No path from " + currentPos + " to " + destPos);
     } else {
       map.moveUnit(currentPos.x, currentPos.y, destPos.x, destPos.y);
-      recordMovement(combatant);
+      recordMovement(combatant, path.getPoints().size());
     }
   }
 
@@ -167,7 +171,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
       throw new GameLogicException("Cannot get movement range for combatant that is not on the map.");
     }
 
-    Set<GridPoint2> movablePoints = movementRangeFinder.computeRange(map, position, combatant.getMovementRange());
+    Set<GridPoint2> movablePoints = movementRangeFinder.computeRange(map, position, getMovementRangeRemaining(combatant));
 
     Set<Tile> movableTiles = Sets.newHashSet();
     for (GridPoint2 point : movablePoints) {
@@ -259,13 +263,14 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     actedThisTurn.add(combatant);
   }
 
-  private void recordMovement(Combatant combatant) {
-    movedThisTurn.add(combatant);
-  }
-
   private void recordMovement(Combatant combatant, int numSquares) {
-    Integer remainingSquares = movementSquaresRemaining.get(combatant);
-    movementSquaresRemaining.put(combatant, remainingSquares - numSquares);
+    Integer remainingSquares = movementSquaresRemaining.get(combatant) - numSquares;
+    movementSquaresRemaining.put(combatant, remainingSquares);
+
+    // Only record their actual movement as completed when they use all their squars.
+    if (remainingSquares <= 0) {
+      movedThisTurn.add(combatant);
+    }
   }
 
   @Override

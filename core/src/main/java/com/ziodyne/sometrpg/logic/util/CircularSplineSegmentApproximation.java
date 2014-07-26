@@ -14,15 +14,13 @@ public class CircularSplineSegmentApproximation implements BezierSpline {
   private final Vector2 firstControlPoint;
   private final Vector2 secondControlPoint;
 
-  public CircularSplineSegmentApproximation(float radius, float arcAngle) {
-
-    if (arcAngle > 90f) {
-      throw new IllegalArgumentException("Cannot approximate spline segment for arc greater than 90 degrees.");
-    }
-
+  public CircularSplineSegmentApproximation(float radius, float startAngle, float endAngle) {
     // Technique from "Approximation of a Cubic Bezier Curve by Circular Arcs and Vice Versa"
     // by Aleksas Riskus
     float x1, y1, x2, y2, cx1, cy1, cx2, cy2;
+
+
+    float arcAngle = (endAngle - startAngle) / 2.0f;
 
     float halfAngle = arcAngle / 2f;
 
@@ -32,8 +30,9 @@ public class CircularSplineSegmentApproximation implements BezierSpline {
     x1 = x2;
     y1 = -y2;
 
-    cx1 = (float)(x1 + MAGIC_NUMBER * Math.tan(halfAngle) * y2);
-    cy1 = (float)(y1 + MAGIC_NUMBER * Math.tan(halfAngle) * x2);
+    float halfTan = (float)Math.tan(halfAngle);
+    cx1 = x1 + MAGIC_NUMBER * halfTan * y2;
+    cy1 = y1 + MAGIC_NUMBER * halfTan * x2;
 
     cx2 = cx1;
     cy2 = -cy1;

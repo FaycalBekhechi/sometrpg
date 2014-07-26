@@ -562,7 +562,7 @@
   <object x="480" y="96" width="576" height="160"/>
   <object x="0" y="0" width="320" height="640"/>
  </objectgroup>
- <objectgroup name="Units" width="35" height="20" visible="0">
+ <objectgroup name="Units" width="35" height="20">
   <object name="liat" x="864" y="288" width="32" height="32">
    <properties>
     <property name="unitId" value="liat"/>
@@ -578,7 +578,7 @@
     <property name="unitId" value="crossbow_enemy"/>
    </properties>
   </object>
-  <object name="Claymore" x="576" y="320" width="32" height="32">
+  <object name="Claymore" x="544" y="288" width="32" height="32">
    <properties>
     <property name="unitId" value="crossbow_enemy"/>
    </properties>

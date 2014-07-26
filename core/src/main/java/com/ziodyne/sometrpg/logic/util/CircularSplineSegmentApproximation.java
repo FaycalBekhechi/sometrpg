@@ -20,9 +20,7 @@ public class CircularSplineSegmentApproximation implements BezierSpline {
     float x1, y1, x2, y2, cx1, cy1, cx2, cy2;
 
 
-    float arcAngle = (endAngle - startAngle) / 2.0f;
-
-    float halfAngle = arcAngle / 2f;
+    float halfAngle = (degToRad(endAngle) - degToRad(startAngle)) / 2.0f;
 
     x2 = (float)(radius * Math.cos(halfAngle));
     y2 = (float)(radius * Math.sin(halfAngle));
@@ -30,9 +28,9 @@ public class CircularSplineSegmentApproximation implements BezierSpline {
     x1 = x2;
     y1 = -y2;
 
-    float halfTan = (float)Math.tan(halfAngle);
-    cx1 = x1 + MAGIC_NUMBER * halfTan * y2;
-    cy1 = y1 + MAGIC_NUMBER * halfTan * x2;
+    float halfTan = MAGIC_NUMBER *  (float)Math.tan(halfAngle);
+    cx1 = x1 + halfTan * y2;
+    cy1 = y1 + halfTan * x2;
 
     cx2 = cx1;
     cy2 = -cy1;
@@ -41,6 +39,10 @@ public class CircularSplineSegmentApproximation implements BezierSpline {
     end = new Vector2(x2, y2);
     firstControlPoint = new Vector2(cx1, cy1);
     secondControlPoint = new Vector2(cx2, cy2);
+  }
+
+  private static float degToRad(float deg) {
+    return (float)(deg * (Math.PI / 180f));
   }
 
   @Override

@@ -62,16 +62,23 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
 
     Gdx.gl.glDisable(GL20.GL_BLEND);
 
-    drawArc(0, 90);
-    drawArc(90, 180);
-    drawArc(180, 270);
-    drawArc(270, 360);
+    drawCircle(150);
+    drawCircle(100);
 
   }
 
-  private void drawArc(float startAngle, float endAngle) {
+  private void drawCircle(float radius) {
 
-    BezierSpline spline = new CircularSplineSegmentApproximation(150, startAngle, endAngle);
+    drawArc(radius, 0, 90);
+    drawArc(radius, 90, 180);
+    drawArc(radius, 180, 270);
+    drawArc(radius, 270, 360);
+
+  }
+
+  private void drawArc(float radius, float startAngle, float endAngle) {
+
+    BezierSpline spline = new CircularSplineSegmentApproximation(radius, startAngle, endAngle);
     Bezier<Vector2> bezier = new Bezier<Vector2>(spline.start(), spline.firstControlPoint(), spline.secondControlPoint(), spline.end());
     drawBezier(bezier, startAngle);
   }
@@ -88,8 +95,8 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
       bezier.valueAt(segStart, i/(float)segsize);
       bezier.valueAt(segEnd, (i+1)/(float)segsize);
 
-      segStart.rotate(rotDegrees).add(400, 400);
-      segEnd.rotate(rotDegrees).add(400, 400);
+      segStart.rotate(rotDegrees).add(500, 400);
+      segEnd.rotate(rotDegrees).add(500, 400);
 
       logger.debug("Drawing from: " + segStart + " to " + segEnd);
       shapeRenderer.line(segStart, segEnd);

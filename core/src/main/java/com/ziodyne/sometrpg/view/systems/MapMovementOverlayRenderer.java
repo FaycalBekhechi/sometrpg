@@ -98,7 +98,6 @@ public class MapMovementOverlayRenderer extends EntityProcessingSystem {
       segStart.rotate(rotDegrees).add(500, 400);
       segEnd.rotate(rotDegrees).add(500, 400);
 
-      logger.debug("Drawing from: " + segStart + " to " + segEnd);
       shapeRenderer.line(segStart, segEnd);
     }
     shapeRenderer.end();

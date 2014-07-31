@@ -113,17 +113,23 @@ public class EntityFactory {
     return movementOverlay;
   }
 
+  /**
+   * Create entities for the arrow that shows the player the path their unit will take when they confirm the move.
+   * @param path The {@link com.ziodyne.sometrpg.logic.navigation.Path} to render
+   * @return A {@link java.util.Set} of {@link com.artemis.Entity} representing each tile in the path.
+   */
   public Set<Entity> createPathGuides(Path<GridPoint2> path) {
 
     List<PathSegment> segments = PathUtils.segmentPath(path);
     TextureAtlas atlas = repository.get("data/movement_guide.atlas");
     MovementGuideAtlas movementGuideAtlas = new MovementGuideAtlas(atlas);
 
-    return IntStream.range(0, segments.size())
+    return IntStream.range(0, segments.size()) // For each segment, but we also need the index.
       .mapToObj((idx) -> {
         PathSegment seg = segments.get(idx);
         Entity ent = world.createEntity();
 
+        // If we're approaching the end of the segments, draw an arrow head instead of a line to indicate the destination
         TextureRegion region;
         if (idx+1 == segments.size()) {
           region = movementGuideAtlas.getCapRegion(seg.getType());

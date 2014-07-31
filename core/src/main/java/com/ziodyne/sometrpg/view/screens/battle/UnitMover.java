@@ -45,7 +45,6 @@ public class UnitMover {
     Character character = combatant.getCharacter();
 
     Entity entity = battleScreen.getUnitEntity(character);
-    Timeline movement = Timeline.createSequence();
 
     List<PathSegment> segmentedPath = PathUtils.segmentPath(path);
     Position position = entity.getComponent(Position.class);
@@ -55,6 +54,7 @@ public class UnitMover {
     PathSegment firstSeg = segmentedPath.get(1);
     battleUnit.setAnimType(getAnimationTypeForSegmentType(firstSeg.getType()));
 
+    Timeline movement = Timeline.createSequence();
     for (int i = 1; i < segmentedPath.size(); i++) {
       PathSegment segment = segmentedPath.get(i);
 

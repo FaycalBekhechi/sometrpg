@@ -49,13 +49,7 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
     confirmationDialog = new AttackPreviewConfirmationDialog(action.get(), skin);
     confirmationDialog.setX((context.selectedSquare.x+1) * gridSize);
     confirmationDialog.setY(context.selectedSquare.y * gridSize);
-    confirmationDialog.setConfirmedHandler(new AttackPreviewConfirmationDialog.ConfirmedHandler() {
-      @Override
-      public void onConfirmed() {
-
-        context.safeTrigger(BattleEvent.ATTACK_CONFIRMED);
-      }
-    });
+    confirmationDialog.setConfirmedHandler(() -> context.safeTrigger(BattleEvent.ATTACK_CONFIRMED));
 
     stage.addActor(confirmationDialog);
     Gdx.input.setInputProcessor(stage);

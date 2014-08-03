@@ -59,13 +59,10 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
         defendingBattleUnit.setAnimType(AnimationType.BE_HIT);
       }
 
-      Runnable resetAnimations = new Runnable() {
-        @Override
-        public void run() {
-          attackingBattleUnit.setAnimType(AnimationType.IDLE);
-          defendingBattleUnit.setAnimType(AnimationType.IDLE);
-          context.safeTrigger(BattleEvent.UNIT_ATTACKED);
-        }
+      Runnable resetAnimations = () -> {
+        attackingBattleUnit.setAnimType(AnimationType.IDLE);
+        defendingBattleUnit.setAnimType(AnimationType.IDLE);
+        context.safeTrigger(BattleEvent.UNIT_ATTACKED);
       };
 
       Entity process = world.createEntity();

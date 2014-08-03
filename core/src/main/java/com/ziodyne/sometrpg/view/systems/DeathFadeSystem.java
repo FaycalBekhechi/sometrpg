@@ -10,6 +10,8 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.annotations.Mapper;
 import com.artemis.systems.EntityProcessingSystem;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.components.DeathFade;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.tween.SpriteComponentAccessor;
@@ -18,6 +20,8 @@ import com.ziodyne.sometrpg.view.tween.SpriteComponentAccessor;
  * Fades {@link com.ziodyne.sometrpg.view.components.SpriteComponent} entities with the {@link DeathFade} component to invisible then removes them from the world.
  */
 public class DeathFadeSystem extends EntityProcessingSystem {
+  private static final Logger LOG = new GdxLogger(DeathFadeSystem.class);
+
   @Mapper
   private ComponentMapper<SpriteComponent> spriteComponentMapper;
 
@@ -34,11 +38,8 @@ public class DeathFadeSystem extends EntityProcessingSystem {
     Tween.to(spriteComponentComponent, SpriteComponentAccessor.ALPHA, 0.5f)
             .target(0f)
             .ease(TweenEquations.easeOutCubic)
-            .setCallback(new TweenCallback() {
-              @Override
-              public void onEvent(int type, BaseTween<?> source) {
-                entity.deleteFromWorld();
-              }
+            .setCallback((type, source) -> {
+              entity.deleteFromWorld();
             })
             .start(tweenManager);
   }

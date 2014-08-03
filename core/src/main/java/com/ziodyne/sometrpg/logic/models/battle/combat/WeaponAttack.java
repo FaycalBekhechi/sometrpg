@@ -8,7 +8,7 @@ public class WeaponAttack implements Attack {
 
   @Override
   public int computeHitChance(Combatant attacker, Combatant defender) {
-    return 0;
+    return 100;
   }
 
   @Override
@@ -18,6 +18,6 @@ public class WeaponAttack implements Attack {
 
   @Override
   public int computeDamage(Combatant attacker, Combatant defender) {
-    return 10;
+    return 100;
   }
 }

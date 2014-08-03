@@ -232,8 +232,6 @@ public class TestBattle extends BattleScreen {
 
     world.setManager(new TagManager());
 
-    world.initialize();
-
 
     Entity tileSelectorOverlay = entityFactory.createMapSelector();
     world.addEntity(tileSelectorOverlay);

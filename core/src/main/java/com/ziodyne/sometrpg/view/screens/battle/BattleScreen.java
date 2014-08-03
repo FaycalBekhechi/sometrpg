@@ -67,6 +67,7 @@ public abstract class BattleScreen extends ScreenAdapter {
     this.eventBus = eventBus;
     this.viewport = new FitViewport(1600, 900, camera);
 
+    world.initialize();
     camera.translate(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2);
 
     this.menuStage = new Stage(viewport, spriteBatch);

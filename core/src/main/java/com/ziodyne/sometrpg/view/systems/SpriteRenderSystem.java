@@ -4,15 +4,19 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
+import com.artemis.World;
 import com.artemis.annotations.Mapper;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.util.CollectionUtils;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
@@ -32,6 +36,7 @@ import java.util.stream.Collectors;
 import static com.ziodyne.sometrpg.util.CollectionUtils.groupBy;
 
 public class SpriteRenderSystem extends EntitySystem {
+  private static final Logger LOG = new GdxLogger(SpriteRenderSystem.class);
 
   @Mapper
   private ComponentMapper<Position> positionMapper;

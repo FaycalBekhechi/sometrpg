@@ -19,7 +19,7 @@
    eJzN1ckyHVEcx/HudgfTElVmTxASniAITxAJnkBCUmXYEJbIIgN2wYIkshQLJCzFQkxLySLGJVmYl75d1V2Of51zXZyFf9WnTvW/z73nd08P13Gur1Zka3hwkWtJMtV7j7J8MmRxA56SSz029U3HyZQ/L4p4MIZSFJFAikZEkPPdYEymPCWHmke3V7fhBmMy5d+7MZEnbjGLd4MsvUGWWJAlzGUrS26CLJ3owht0o8e5vC7hnti8RqYs7/AeH/ARAxjEkMgS7pN6/8QMfXkuqnxHOOqyjGEcn/EFXzGBbyKHuoZcVxXXfE7N4TPdL9OYwSx+4CfmMK/53er1kufkHLkPaj98TmUt4TeWsYJVrGHd0b8f2tCODufqO0XtRxLMV/uy/mETW9jGDnaxhxyNPvTjrYW+rEMc4RgnOMUZzg1ZhjGCUQt9WTFegnGkIg3pyECmq88yie+YstCXlcea+ShAIYpQjBJDlgX8wqKFvqwHrFmKMjzEI5SjwpBlA3/w10Jf1mPWrEQVqvEENag1ZNnHAf5b6Mt6ypp1eIbnqEcDGg1Z/D9ZF557976sJnov8BLNaMErvDZkyaKf7Z9z796/AN9Wd/Q=
   </data>
  </layer>
- <objectgroup name="land" width="35" height="20">
+ <objectgroup name="land" width="35" height="20" visible="0">
   <object gid="27" x="96" y="192"/>
   <object gid="47" x="96" y="224"/>
   <object gid="66" x="64" y="256"/>
@@ -72,7 +72,7 @@
   <object gid="48" x="0" y="32"/>
   <object gid="49" x="32" y="32"/>
  </objectgroup>
- <objectgroup name="bridge shadows" width="35" height="20">
+ <objectgroup name="bridge shadows" width="35" height="20" visible="0">
   <object gid="61" x="0" y="192"/>
   <object gid="82" x="32" y="192"/>
   <object gid="82" x="64" y="192"/>
@@ -83,7 +83,7 @@
   <object gid="82" x="224" y="192"/>
   <object gid="82" x="256" y="192"/>
  </objectgroup>
- <objectgroup name="bridge" width="35" height="20">
+ <objectgroup name="bridge" width="35" height="20" visible="0">
   <object gid="319" x="256" y="64"/>
   <object gid="318" x="224" y="64"/>
   <object gid="317" x="192" y="64"/>
@@ -131,7 +131,7 @@
   <object gid="340" x="288" y="96"/>
   <object gid="320" x="288" y="64"/>
  </objectgroup>
- <objectgroup name="doors" width="35" height="20">
+ <objectgroup name="doors" width="35" height="20" visible="0">
   <object gid="79" x="960" y="224"/>
   <object gid="100" x="992" y="256"/>
   <object gid="79" x="608" y="224"/>
@@ -152,7 +152,7 @@
   <object gid="20" x="413" y="49"/>
   <object gid="40" x="413" y="81"/>
  </objectgroup>
- <objectgroup name="shadows" width="35" height="20">
+ <objectgroup name="shadows" width="35" height="20" visible="0">
   <object gid="42" x="1088" y="288"/>
   <object gid="42" x="1088" y="320"/>
   <object gid="41" x="992" y="256"/>
@@ -268,12 +268,12 @@
   <object gid="82" x="1056" y="96"/>
   <object gid="82" x="1088" y="96"/>
  </objectgroup>
- <objectgroup name="stairs" width="35" height="20">
+ <objectgroup name="stairs" width="35" height="20" visible="0">
   <object gid="24" x="1088" y="288"/>
   <object gid="44" x="1088" y="320"/>
   <object gid="44" x="1088" y="352"/>
  </objectgroup>
- <objectgroup name="banners windows candles" width="35" height="20">
+ <objectgroup name="banners windows candles" width="35" height="20" visible="0">
   <object gid="15" x="512" y="128"/>
   <object gid="16" x="544" y="128"/>
   <object gid="35" x="512" y="160"/>
@@ -424,7 +424,7 @@
   <object gid="107" x="288" y="224"/>
   <object gid="108" x="320" y="224"/>
  </objectgroup>
- <objectgroup name="garg" width="35" height="20">
+ <objectgroup name="garg" width="35" height="20" visible="0">
   <object gid="14" x="128" y="480"/>
   <object gid="34" x="128" y="512"/>
   <object gid="54" x="128" y="544"/>
@@ -456,7 +456,7 @@
   <object gid="91" x="32" y="608"/>
   <object gid="134" x="128" y="672"/>
  </objectgroup>
- <objectgroup name="glows" width="35" height="20">
+ <objectgroup name="glows" width="35" height="20" visible="0">
   <object gid="171" x="528" y="204"/>
   <object gid="172" x="560" y="204"/>
   <object gid="173" x="592" y="204"/>
@@ -538,7 +538,7 @@
   <object gid="213" x="945" y="269"/>
   <object gid="212" x="913" y="269"/>
  </objectgroup>
- <objectgroup name="above glows" width="35" height="20">
+ <objectgroup name="above glows" width="35" height="20" visible="0">
   <object gid="1" x="480" y="64"/>
   <object gid="1" x="480" y="32"/>
   <object gid="2" x="480" y="96"/>
@@ -548,21 +548,23 @@
   <object gid="155" x="288" y="96"/>
   <object gid="1" x="288" y="128"/>
  </objectgroup>
- <objectgroup name="deco" width="35" height="20">
+ <objectgroup name="deco" width="35" height="20" visible="0">
   <object gid="28" x="801" y="205"/>
   <object gid="8" x="608" y="185"/>
   <object gid="9" x="640" y="185"/>
   <object gid="10" x="960" y="187"/>
   <object gid="11" x="992" y="187"/>
  </objectgroup>
- <objectgroup name="Blocking" width="35" height="20" visible="0">
+ <objectgroup name="Blocking" width="35" height="20">
   <object x="320" y="352" width="800" height="288"/>
   <object x="1056" y="0" width="64" height="352"/>
   <object x="320" y="0" width="736" height="96"/>
   <object x="480" y="96" width="576" height="160"/>
   <object x="0" y="0" width="320" height="640"/>
+  <object x="320" y="224" width="32" height="128"/>
+  <object x="352" y="256" width="32" height="96"/>
  </objectgroup>
- <objectgroup name="Units" width="35" height="20">
+ <objectgroup name="Units" width="35" height="20" visible="0">
   <object name="liat" x="864" y="288" width="32" height="32">
    <properties>
     <property name="unitId" value="liat"/>

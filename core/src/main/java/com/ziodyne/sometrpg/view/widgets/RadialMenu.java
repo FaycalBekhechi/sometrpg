@@ -94,9 +94,14 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
   @Override
   public void render() {
 
-    Entity testWedge = entityFactory.createRadialMenuWedge(position);
-    entities.add(testWedge);
-    engine.addEntity(testWedge);
+    if (items.size() == 3) {
+      Vector2 outerRingPosition = new Vector2(position.x, position.y + 20);
+      for (int i = 0; i < 3; i++) {
+        Entity testWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition.cpy().rotate(i*2f), i*120f);
+        entities.add(testWedge);
+        engine.addEntity(testWedge);
+      }
+    }
   }
 
   @Override
@@ -119,6 +124,7 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
     if (angleBetween < 0) {
       angleBetween += 360f;
     }
+
     LOG.log("Detected click at angle: " + angleBetween);
     String clickedItemName = radiusRangeToItemName.get(angleBetween);
 

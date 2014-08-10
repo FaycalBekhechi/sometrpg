@@ -257,12 +257,13 @@ public class EntityFactory {
     return createEntity(spriteComponent, positionComponent);
   }
 
-  public Entity createRadialMenuWedge(Vector2 position) {
+  public Entity createRadialMenuThirdWedge(Vector2 position, float rotation) {
 
     TextureAtlas wedgeAtlas = repository.get("data/menu_wedges.atlas");
-    Sprite sprite = new Sprite(wedgeAtlas.findRegion("half_wedge"), 300, 200);
-    sprite.setOffsetX(-150);
-    sprite.setOffsetY(-100);
+    Sprite sprite = new Sprite(wedgeAtlas.findRegion("third_wedge"), 300, 200);
+    sprite.setOffsetX(150f);
+    sprite.setOffsetY(100f);
+    sprite.setRotation(rotation);
     SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.MENU);
 
     Position pos = new Position(position.x, position.y);

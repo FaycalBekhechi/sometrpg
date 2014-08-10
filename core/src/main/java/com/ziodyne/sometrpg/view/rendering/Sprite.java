@@ -9,12 +9,13 @@ public class Sprite {
   private Texture texture;
   private Texture.TextureFilter minFilter;
   private Texture.TextureFilter magFiler;
-  private float scale = 1;
-  private float alpha = 1;
+  private float scale = 1f;
+  private float alpha = 1f;
   private final float width;
   private final float height;
   private float offsetX = 0f;
   private float offsetY = 0f;
+  private float rotation = 0f;
 
   public Sprite(Texture texture, float width, float height) {
     Validate.notNull(texture);
@@ -30,6 +31,16 @@ public class Sprite {
     this.width = width;
     this.height = height;
     this.region = region;
+  }
+
+  public float getRotation() {
+
+    return rotation;
+  }
+
+  public void setRotation(float rotation) {
+
+    this.rotation = rotation;
   }
 
   public float getScale() {

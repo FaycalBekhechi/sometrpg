@@ -260,7 +260,7 @@ public class TestBattle extends BattleScreen {
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory),
-      new UnitActionSelectListener(engine, entityFactory, gridSquareSize),
+      new UnitActionSelectListener(engine, entityFactory, camera, gridSquareSize),
       new ViewingUnitInfo(engine, entityFactory),
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),

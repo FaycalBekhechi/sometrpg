@@ -28,16 +28,18 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
   private float gridSize;
   private Engine engine;
   private EntityFactory entityFactory;
+  private OrthographicCamera camera;
 
   @Nullable
   private ActionMenu actionMenu;
 
-  public UnitActionSelectListener(Engine engine, EntityFactory entityFactory, float gridSize) {
+  public UnitActionSelectListener(Engine engine, EntityFactory entityFactory, OrthographicCamera camera, float gridSize) {
     super(BattleState.SELECTING_UNIT_ACTION);
 
     this.engine = engine;
     this.entityFactory = entityFactory;
     this.gridSize = gridSize;
+    this.camera = camera;
   }
 
   @Override
@@ -62,7 +64,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
       context.safeTrigger(BattleEvent.ACTIONS_EXHAUSTED);
     } else {
 
-      actionMenu = new ActionMenu(allowedActions, new Vector2(context.selectedSquare.x * gridSize, context.selectedSquare.y * gridSize), engine, entityFactory);
+      actionMenu = new ActionMenu(allowedActions, new Vector2(context.selectedSquare.x * gridSize, context.selectedSquare.y * gridSize), camera, engine, entityFactory);
       actionMenu.addSelectedListener(selectedAction -> {
         switch (selectedAction) {
           case ATTACK:
@@ -79,7 +81,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
         }
       });
 
-      //Gdx.input.setInputProcessor(stage);
+      Gdx.input.setInputProcessor(actionMenu);
       context.mapController.disable();
     }
   }

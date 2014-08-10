@@ -1,48 +1,45 @@
 package com.ziodyne.sometrpg.view.widgets;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
+public class ActionMenu extends InputAdapter implements Disposable, Logged {
+  private final RadialMenu radialMenu;
 
-/**
- * A widget that renders the action menu as a LibGDX {@link Actor}
- */
-public class ActionMenu implements Disposable, Logged {
-  private static final int RADIUS = 100;
+  public ActionMenu(Set<CombatantAction> availableActions, Vector2 position, OrthographicCamera camera, Engine engine, EntityFactory entityFactory) {
+    radialMenu = new RadialMenu(engine, entityFactory, position, camera, availableActions.stream().map(this::toMenuItem).collect(
+      Collectors.toSet()));
+    radialMenu.render();
+  }
 
-  private ActionSelectedHandler selectedHandler;
-  private final Set<CombatantAction> availableActions;
-  private final Vector2 position;
-  private final Entity menuWedge;
-  private final Engine engine;
-
-  public ActionMenu(Set<CombatantAction> availableActions, Vector2 position, Engine engine, EntityFactory entityFactory) {
-    this.availableActions = availableActions;
-    this.position = position;
-    this.menuWedge = entityFactory.createRadialMenuWedge(position);
-    this.engine = engine;
-
-    initialize();
+  private RadialMenu.Item toMenuItem(CombatantAction action) {
+    return new RadialMenu.Item(action.name(), action.name());
   }
 
   public void addSelectedListener(ActionSelectedHandler handler) {
-    selectedHandler = handler;
+    radialMenu.setClickHandler((name) -> {
+
+      handler.handle(CombatantAction.valueOf(name));
+    });
   }
 
-  private void initialize() {
-    engine.addEntity(menuWedge);
+  @Override
+  public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+    return radialMenu.touchDown(screenX, screenY, pointer, button);
   }
 
   @Override
   public void dispose() {
-    engine.removeEntity(menuWedge);
+    radialMenu.dispose();
   }
 }

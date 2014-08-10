@@ -1,6 +1,6 @@
 package com.ziodyne.sometrpg.view.components;
 
-import com.artemis.Component;
+import com.badlogic.ashley.core.Component;
 
 public class MapGridOverlay extends Component {
   public final int rows;

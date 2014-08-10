@@ -1,6 +1,6 @@
 package com.ziodyne.sometrpg.view.components;
 
-import com.artemis.Component;
+import com.badlogic.ashley.core.Component;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
 
 /**

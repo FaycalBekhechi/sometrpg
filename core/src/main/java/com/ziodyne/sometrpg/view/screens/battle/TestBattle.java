@@ -1,18 +1,23 @@
 package com.ziodyne.sometrpg.view.screens.battle;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.IntStream;
+
 import au.com.ds.ef.EasyFlow;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenManager;
-import com.artemis.Entity;
-import com.artemis.managers.TagManager;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
@@ -22,50 +27,42 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
-import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.loader.AssetUtils;
-import com.ziodyne.sometrpg.logic.loader.loaders.CharactersLoader;
 import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
-import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
+import com.ziodyne.sometrpg.logic.loader.loaders.ArmiesLoader;
+import com.ziodyne.sometrpg.logic.loader.loaders.CharactersLoader;
+import com.ziodyne.sometrpg.logic.loader.loaders.GameSpecLoader;
+import com.ziodyne.sometrpg.logic.loader.models.Armies;
 import com.ziodyne.sometrpg.logic.loader.models.Characters;
+import com.ziodyne.sometrpg.logic.loader.models.GameSpec;
 import com.ziodyne.sometrpg.logic.loader.models.Roster;
 import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
-import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
-import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
-import com.ziodyne.sometrpg.util.CollectionUtils;
-import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.Director;
-import com.ziodyne.sometrpg.view.SomeTRPG;
 import com.ziodyne.sometrpg.view.TiledMapUtils;
 import com.ziodyne.sometrpg.view.assets.AssetBundleLoader;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
-import com.ziodyne.sometrpg.logic.loader.loaders.ArmiesLoader;
-import com.ziodyne.sometrpg.logic.loader.models.GameSpec;
 import com.ziodyne.sometrpg.view.assets.loaders.ChapterLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
-import com.ziodyne.sometrpg.logic.loader.loaders.GameSpecLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
-import com.ziodyne.sometrpg.logic.loader.models.Armies;
 import com.ziodyne.sometrpg.view.assets.loaders.TextureAtlasLoader;
 import com.ziodyne.sometrpg.view.assets.models.Chapter;
-import com.ziodyne.sometrpg.view.assets.models.CharacterSpriteBook;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
-import com.ziodyne.sometrpg.view.assets.models.SpriteReference;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
@@ -73,7 +70,9 @@ import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
-import com.ziodyne.sometrpg.view.screens.battle.state.*;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleFlow;
+import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackConfirmationListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackTargetSelectionListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.EnemyTurnListener;
@@ -97,18 +96,6 @@ import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
 import com.ziodyne.sometrpg.view.systems.ViewportSpaceSpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import javax.annotation.Nullable;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -185,10 +172,10 @@ public class TestBattle extends BattleScreen {
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, (tileLayer.getWidth()-1) * gridSquareSize, (tileLayer.getHeight()-1) * gridSquareSize);
 
-    SpriteRenderSystem spriteRenderSystem = spriteRendererFactory.create(camera);
+    SpriteRenderSystem spriteRenderSystem = spriteRendererFactory.create(camera, engine);
 
     mapRenderSystem = new TiledMapRenderSystem(camera);
-    mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(world, viewport, mapBoundingRect, 32);
+    mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(viewport, mapBoundingRect, 32);
 
     GameSpec gameSpec = assetManager.get("data/game.json");
     Collection<Character> characters = AssetUtils.reifyCharacterSpecs(gameSpec.getCharacters());
@@ -204,13 +191,13 @@ public class TestBattle extends BattleScreen {
 
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
 
-    world.setSystem(new BattleUnitDeathSystem());
-    world.setSystem(new AnimationKeyFrameSystem());
-    world.setSystem(new DeathFadeSystem(tweenManager));
-    world.setSystem(mapSelectorUpdateSystem);
-    world.setSystem(new StageUpdateSystem());
-    world.setSystem(new BattleAnimationSwitchSystem());
-    world.setSystem(new TimedProcessRunnerSystem());
+    engine.addSystem(new BattleUnitDeathSystem());
+    engine.addSystem(new AnimationKeyFrameSystem());
+    engine.addSystem(new DeathFadeSystem(tweenManager, engine));
+    engine.addSystem(mapSelectorUpdateSystem);
+    engine.addSystem(new StageUpdateSystem());
+    engine.addSystem(new BattleAnimationSwitchSystem());
+    engine.addSystem(new TimedProcessRunnerSystem(engine));
 
     /**
      * Render Order:
@@ -222,33 +209,29 @@ public class TestBattle extends BattleScreen {
      *   - Foreground Sprites
      *   - Menu/HUD
      */
-    world.setSystem(voidRenderSystemFactory.create(camera));
-    world.setSystem(mapRenderSystem);
-    world.setSystem(new MapMovementOverlayRenderer(camera, gridSquareSize));
-    world.setSystem(new MapOverlayRenderSystem(camera));
-    world.setSystem(spriteRenderSystem);
-    world.setSystem(new StageRenderSystem());
-    world.setSystem(new ViewportSpaceSpriteRenderSystem(viewport));
-
-    world.setManager(new TagManager());
+    engine.addSystem(voidRenderSystemFactory.create(camera));
+    engine.addSystem(mapRenderSystem);
+    engine.addSystem(new MapMovementOverlayRenderer(camera, gridSquareSize));
+    engine.addSystem(new MapOverlayRenderSystem(camera));
+    engine.addSystem(spriteRenderSystem);
+    engine.addSystem(new StageRenderSystem());
+    engine.addSystem(new ViewportSpaceSpriteRenderSystem(viewport));
 
 
     Entity tileSelectorOverlay = entityFactory.createMapSelector();
-    world.addEntity(tileSelectorOverlay);
-    world.getManager(TagManager.class).register("map_hover_selector", tileSelectorOverlay);
+    engine.addEntity(tileSelectorOverlay);
 
-
-    world.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
+    engine.addEntity(entityFactory.createTiledMap(tiledMap, spriteBatch));
     initializeMapObjects(tiledMap);
 
     BattleMap map = battle.getMap();
     Entity mapGridOverlay = entityFactory.createMapGridOverlay(map.getHeight()+1, map.getWidth()+1, 32, new GridPoint2());
-    world.addEntity(mapGridOverlay);
+    engine.addEntity(mapGridOverlay);
 
     Entity stage = entityFactory.createStage(menuStage);
-    world.addEntity(stage);
+    engine.addEntity(stage);
 
-    world.addEntity(entityFactory.createVoid(viewport));
+    engine.addEntity(entityFactory.createVoid(viewport));
 
     final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);
@@ -264,12 +247,12 @@ public class TestBattle extends BattleScreen {
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory),
       new UnitActionSelectListener(skin, viewport, menuStage, gridSquareSize),
-      new ViewingUnitInfo(world, entityFactory),
+      new ViewingUnitInfo(engine, entityFactory),
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
       new AttackTargetSelectionListener(this, gridSquareSize),
       new AttackConfirmationListener(skin, menuStage, camera, gridSquareSize),
-      new UnitAttackingListener(this, world),
+      new UnitAttackingListener(this, engine),
       new EnemyTurnListener(battle)
     );
 
@@ -300,7 +283,7 @@ public class TestBattle extends BattleScreen {
       TextureRegion region = TiledMapUtils.getTextureRegion(object.getProperties(), map);
       if (region != null) {
         Entity entity = entityFactory.createMapObject((RectangleMapObject)object, region,zIndex);
-        world.addEntity(entity);
+        engine.addEntity(entity);
       }
     }
   }

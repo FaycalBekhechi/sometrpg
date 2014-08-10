@@ -1,11 +1,8 @@
 package com.ziodyne.sometrpg.view.systems;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.EntitySystem;
-import com.artemis.annotations.Mapper;
-import com.artemis.utils.ImmutableBag;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,13 +13,7 @@ import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
 import com.ziodyne.sometrpg.view.rendering.SpriteBatchRenderer;
 
-public class ViewportSpaceSpriteRenderSystem extends EntitySystem {
-
-  @Mapper
-  private ComponentMapper<Position> positionMapper;
-
-  @Mapper
-  private ComponentMapper<ViewportSpaceSprite> spriteMapper;
+public class ViewportSpaceSpriteRenderSystem extends IteratingSystem {
 
   private final SpriteBatchRenderer batchRenderer;
 
@@ -31,7 +22,7 @@ public class ViewportSpaceSpriteRenderSystem extends EntitySystem {
   private final Viewport viewport;
 
   public ViewportSpaceSpriteRenderSystem(Viewport viewport) {
-    super(Aspect.getAspectForAll(Position.class, ViewportSpaceSprite.class));
+    super(Family.getFamilyFor(Position.class, ViewportSpaceSprite.class));
 
     OrthographicCamera specialCam = new OrthographicCamera();
     specialCam.setToOrtho(false, viewport.getViewportWidth(), viewport.getViewportHeight());
@@ -48,34 +39,22 @@ public class ViewportSpaceSpriteRenderSystem extends EntitySystem {
   }
 
   @Override
-  protected void begin() {
+  public void update(float deltaTime) {
 
     batchRenderer.begin();
-  }
-
-  @Override
-  protected void end() {
-
+    super.update(deltaTime);
     batchRenderer.end();
   }
 
   @Override
-  protected void processEntities(ImmutableBag<Entity> entityImmutableBag) {
-    for (int i = 0; i < entityImmutableBag.size(); i++) {
-      Entity ent = entityImmutableBag.get(i);
-      Position pos = positionMapper.get(ent);
-      ViewportSpaceSprite spriteComponent = spriteMapper.get(ent);
+  public void processEntity(Entity entity, float deltaTime) {
 
-      Vector2 posVec = new Vector2(pos.getX(), pos.getY());
-      Sprite sprite = spriteComponent.getSprite();
+    Position pos = entity.getComponent(Position.class);
+    ViewportSpaceSprite spriteComponent = entity.getComponent(ViewportSpaceSprite.class);
 
-      batchRenderer.render(sprite, posVec);
-    }
-  }
+    Vector2 posVec = new Vector2(pos.getX(), pos.getY());
+    Sprite sprite = spriteComponent.getSprite();
 
-  @Override
-  protected boolean checkProcessing() {
-
-    return true;
+    batchRenderer.render(sprite, posVec);
   }
 }

@@ -1,6 +1,6 @@
 package com.ziodyne.sometrpg.view.components;
 
-import com.artemis.Component;
+import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public abstract class Shader extends Component {

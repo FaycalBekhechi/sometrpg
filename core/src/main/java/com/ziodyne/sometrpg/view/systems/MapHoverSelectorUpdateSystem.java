@@ -1,56 +1,47 @@
 package com.ziodyne.sometrpg.view.systems;
 
-import com.artemis.Entity;
-import com.artemis.World;
-import com.artemis.managers.TagManager;
-import com.artemis.systems.VoidEntitySystem;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.ziodyne.sometrpg.logic.util.MathUtils;
 import com.ziodyne.sometrpg.view.components.Position;
+import com.ziodyne.sometrpg.view.components.TileCursor;
 
 import static com.ziodyne.sometrpg.logic.util.MathUtils.nearestMultipleOf;
 
-public class MapHoverSelectorUpdateSystem extends VoidEntitySystem {
-  private final World world;
+public class MapHoverSelectorUpdateSystem extends IteratingSystem {
   private final Rectangle activeRegion;
   private final float gridSize;
   private final Viewport viewport;
 
-  public MapHoverSelectorUpdateSystem(World world, Viewport viewport, Rectangle activeRegion, float gridSize) {
-    this.world = world;
+  public MapHoverSelectorUpdateSystem(Viewport viewport, Rectangle activeRegion, float gridSize) {
+    super(Family.getFamilyFor(TileCursor.class));
     this.activeRegion = activeRegion;
     this.gridSize = gridSize;
     this.viewport = viewport;
   }
 
   @Override
-  protected void processSystem() {
-    TagManager tagManager = world.getManager(TagManager.class);
-    Entity mapSelector = tagManager.getEntity("map_hover_selector");
+  public void processEntity(Entity mapSelector, float deltaTime) {
 
-    if (mapSelector != null) {
-      Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-      viewport.unproject(mousePosition);
+    Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+    viewport.unproject(mousePosition);
 
-      float unprojectedX = mousePosition.x;
-      float unprojectedY = mousePosition.y;
+    float unprojectedX = mousePosition.x;
+    float unprojectedY = mousePosition.y;
 
-      Position pos = world.getMapper(Position.class).get(mapSelector);
+    TileCursor cursorComponent = mapSelector.getComponent(TileCursor.class);
+    if (cursorComponent.isActive() && mapSelector.hasComponent(Position.class)){
+      Position pos = mapSelector.getComponent(Position.class);
       pos.setX(unprojectedX);
       pos.setY(unprojectedY);
 
       snapToGrid(pos);
 
-      if (!activeRegion.contains(pos.getX(), pos.getY())) {
-        mapSelector.disable();
-      } else {
-        mapSelector.enable();
-      }
+      cursorComponent.setActive(activeRegion.contains(pos.getX(), pos.getY()));
     }
   }
 

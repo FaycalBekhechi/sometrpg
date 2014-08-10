@@ -1,44 +1,36 @@
 package com.ziodyne.sometrpg.view.systems;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.annotations.Mapper;
-import com.artemis.systems.EntityProcessingSystem;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Matrix4;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.components.MapGridOverlay;
 import com.ziodyne.sometrpg.view.components.Position;
 
-public class MapOverlayRenderSystem extends EntityProcessingSystem {
+public class MapOverlayRenderSystem extends IteratingSystem {
   private final Logger logger = new GdxLogger(MapOverlayRenderSystem.class);
 
   private final ShapeRenderer shapeRenderer = new ShapeRenderer();
-
-  @Mapper
-  private ComponentMapper<MapGridOverlay> mapOverlayComponentMapper;
-
-  @Mapper
-  private ComponentMapper<Position> positionComponentMapper;
 
   private OrthographicCamera camera;
 
 
   public MapOverlayRenderSystem(OrthographicCamera camera) {
-    super(Aspect.getAspectForAll(MapGridOverlay.class, Position.class));
+    super(Family.getFamilyFor(MapGridOverlay.class, Position.class));
     this.camera = camera;
   }
 
   @Override
-  protected void process(Entity entity) {
-    Position position = positionComponentMapper.get(entity);
-    MapGridOverlay overlay = mapOverlayComponentMapper.get(entity);
+  public void processEntity(Entity entity, float deltaTime) {
+
+    Position position = entity.getComponent(Position.class);
+    MapGridOverlay overlay = entity.getComponent(MapGridOverlay.class);
 
     shapeRenderer.setProjectionMatrix(camera.projection);
     shapeRenderer.setTransformMatrix(camera.view);

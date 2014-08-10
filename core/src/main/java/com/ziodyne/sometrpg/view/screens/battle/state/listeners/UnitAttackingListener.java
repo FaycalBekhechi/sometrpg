@@ -1,7 +1,9 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import com.artemis.Entity;
-import com.artemis.World;
+import java.util.Set;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
@@ -14,20 +16,18 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 
-import java.util.Set;
-
 /**
  * A handle for the state where an attack is being executed.
  */
 public class UnitAttackingListener extends FlowListener<BattleContext> {
   private final BattleScreen screen;
-  private final World world;
+  private final Engine engine;
 
-  public UnitAttackingListener(BattleScreen screen, World world) {
+  public UnitAttackingListener(BattleScreen screen, Engine engine) {
 
     super(BattleState.UNIT_ATTACKING);
     this.screen = screen;
-    this.world = world;
+    this.engine = engine;
   }
 
   @Override
@@ -65,10 +65,10 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
         context.safeTrigger(BattleEvent.UNIT_ATTACKED);
       };
 
-      Entity process = world.createEntity();
-      process.addComponent(new TimedProcess(resetAnimations, 1300));
+      Entity process = new Entity();
+      process.add(new TimedProcess(resetAnimations, 1300));
 
-      world.addEntity(process);
+      engine.addEntity(process);
     }
   }
 

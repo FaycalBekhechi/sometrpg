@@ -1,43 +1,35 @@
 package com.ziodyne.sometrpg.view.systems;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.EntitySystem;
-import com.artemis.annotations.Mapper;
-import com.artemis.utils.ImmutableBag;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.ziodyne.sometrpg.view.components.TimedProcess;
 
 /**
  * Tick and execute {@link com.ziodyne.sometrpg.view.components.TimedProcess} on Artemis' time.
  */
-public class TimedProcessRunnerSystem extends EntitySystem {
-  @Mapper
-  private ComponentMapper<TimedProcess> processMapper;
+public class TimedProcessRunnerSystem extends IteratingSystem {
 
-  public TimedProcessRunnerSystem() {
+  private final Engine engine;
 
-    super(Aspect.getAspectForAll(TimedProcess.class));
+  public TimedProcessRunnerSystem(Engine engine) {
+
+    super(Family.getFamilyFor(TimedProcess.class));
+    this.engine = engine;
   }
 
   @Override
-  protected void processEntities(ImmutableBag<Entity> entityImmutableBag) {
-    for (int i = 0; i < entityImmutableBag.size(); i++) {
-      Entity entity = entityImmutableBag.get(i);
-      TimedProcess process = processMapper.get(entity);
+  public void processEntity(Entity entity, float deltaTime) {
 
-      if (process.isReady()) {
-        process.run();
-        entity.deleteFromWorld();
-      } else {
-        process.tick();
-      }
+    TimedProcess process = entity.getComponent(TimedProcess.class);
+
+    if (process.isReady()) {
+      process.run();
+      engine.removeEntity(entity);
+    } else {
+      process.tick();
     }
   }
 
-  @Override
-  protected boolean checkProcessing() {
-
-    return true;
-  }
 }

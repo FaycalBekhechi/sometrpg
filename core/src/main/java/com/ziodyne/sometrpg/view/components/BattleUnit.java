@@ -2,7 +2,7 @@ package com.ziodyne.sometrpg.view.components;
 
 import java.util.Map;
 
-import com.artemis.Component;
+import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.AnimationType;

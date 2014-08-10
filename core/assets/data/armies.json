@@ -10,7 +10,8 @@
     {
       "name": "Da Enemies",
       "members": [
-        "crossbow_enemy"
+        "crossbow_enemy",
+        "gatsu"
       ],
       "type": "enemy"
     }

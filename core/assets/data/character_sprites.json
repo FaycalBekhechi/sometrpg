@@ -37,6 +37,13 @@
         "name": "swordbow_idle",
         "sheet": "enemies_idle.json"
       }
+    },
+    {
+      "character_id": "gatsu",
+      "idle": {
+        "name": "guts_idle",
+        "sheet": "enemies_idle.json"
+      }
     }
   ]
 }

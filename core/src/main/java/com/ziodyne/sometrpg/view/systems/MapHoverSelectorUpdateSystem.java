@@ -41,7 +41,7 @@ public class MapHoverSelectorUpdateSystem extends IteratingSystem {
 
       snapToGrid(pos);
 
-      cursorComponent.setActive(!activeRegion.contains(pos.getX(), pos.getY()));
+      cursorComponent.setActive(activeRegion.contains(pos.getX(), pos.getY()));
     }
   }
 

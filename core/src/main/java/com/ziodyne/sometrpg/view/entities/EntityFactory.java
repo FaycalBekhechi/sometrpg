@@ -166,6 +166,7 @@ public class EntityFactory {
 
     mapSelectorEntity.add(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
     mapSelectorEntity.add(new Position());
+    mapSelectorEntity.add(new TileCursor());
 
     return mapSelectorEntity;
   }

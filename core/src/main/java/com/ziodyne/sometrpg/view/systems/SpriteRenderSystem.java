@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.systems;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,10 +56,14 @@ public class SpriteRenderSystem extends IteratingSystem {
 
     super.addedToEngine(engine);
 
-    ImmutableIntMap<Entity> familyEntities = engine.getEntitiesFor(
-      Family.getFamilyFor(Position.class, SpriteComponent.class));
-    zSortedEntities = Lists.newArrayList(familyEntities).stream()
-      .map(entry -> entry.value)
+    ImmutableIntMap<Entity> familyEntities = engine.getEntitiesFor(Family.getFamilyFor(Position.class,
+      SpriteComponent.class));
+    List<Entity> famEntitiesList = new ArrayList<>();
+    for (Entity entity : familyEntities.values()) {
+      famEntitiesList.add(entity);
+    }
+
+    zSortedEntities = famEntitiesList.stream()
       .sorted(byZIndex())
       .collect(Collectors.toList());
 

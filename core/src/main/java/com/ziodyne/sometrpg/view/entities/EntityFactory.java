@@ -32,6 +32,7 @@ import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
+import com.ziodyne.sometrpg.view.components.TileCursor;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
 import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.components.VoidSprite;
@@ -179,6 +180,7 @@ public class EntityFactory {
 
     mapSelectorEntity.add(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
     mapSelectorEntity.add(new Position(point.x, point.y));
+    mapSelectorEntity.add(new TileCursor());
 
     return mapSelectorEntity;
   }

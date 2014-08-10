@@ -1,33 +1,19 @@
 package com.ziodyne.sometrpg.view.systems;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.EntitySystem;
-import com.artemis.annotations.Mapper;
-import com.artemis.utils.ImmutableBag;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.ziodyne.sometrpg.view.components.Stage;
 
-public class StageRenderSystem extends EntitySystem {
-  @Mapper
-  private ComponentMapper<Stage> stageMapper;
+public class StageRenderSystem extends IteratingSystem {
 
   public StageRenderSystem() {
-    super(Aspect.getAspectForAll(Stage.class));
+    super(Family.getFamilyFor(Stage.class));
   }
 
   @Override
-  protected void processEntities(ImmutableBag<Entity> entityImmutableBag) {
-    for (int i = 0; i < entityImmutableBag.size(); i++) {
-      Entity entity = entityImmutableBag.get(i);
-      com.badlogic.gdx.scenes.scene2d.Stage stage = stageMapper.get(entity).getGdxStage();
-
-      stage.draw();
-    }
-  }
-
-  @Override
-  protected boolean checkProcessing() {
-    return true;
+  public void processEntity(Entity entity, float deltaTime) {
+    com.badlogic.gdx.scenes.scene2d.Stage gdxStage = entity.getComponent(Stage.class).getGdxStage();
+    gdxStage.draw();
   }
 }

@@ -1,8 +1,8 @@
 package com.ziodyne.sometrpg.view.entities;
 
-import com.artemis.Component;
-import com.artemis.Entity;
-import com.artemis.World;
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,7 +33,6 @@ import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
-import com.ziodyne.sometrpg.view.components.UnitSelector;
 import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.components.VoidSprite;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
@@ -41,7 +40,6 @@ import com.ziodyne.sometrpg.view.navigation.PathSegment;
 import com.ziodyne.sometrpg.view.navigation.PathUtils;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +48,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class EntityFactory {
-  private final World world;
+  private final Engine engine;
   private final AssetRepository repository;
 
   private static final Texture BLACK_BOX;
@@ -65,13 +63,13 @@ public class EntityFactory {
   }
 
   @Inject
-  public EntityFactory(World world, AssetRepository repository) {
-    this.world = world;
+  public EntityFactory(Engine engine, AssetRepository repository) {
+    this.engine = engine;
     this.repository = repository;
   }
 
   public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Set<UnitEntityAnimation> animations) {
-    Entity result = world.createEntity();
+    Entity result = new Entity();
 
     GridPoint2 pos = map.getCombatantPosition(combatant);
     if (pos == null) {
@@ -79,7 +77,7 @@ public class EntityFactory {
     }
 
     Position position = new Position(pos.x*32f, pos.y*32f);
-    result.addComponent(position);
+    result.add(position);
 
     Map<AnimationType, Animation> anims = new HashMap<>();
     for (UnitEntityAnimation entityAnimation : animations) {
@@ -92,23 +90,23 @@ public class EntityFactory {
 
     Animation idle = anims.get(AnimationType.IDLE);
     SpriteAnimation animationComponent = new SpriteAnimation(idle);
-    result.addComponent(animationComponent);
+    result.add(animationComponent);
 
     Sprite sprite = new Sprite(idle.getKeyFrame(0), 32f, 32f);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
-    result.addComponent(new SpriteComponent(sprite, SpriteLayer.FOREGROUND));
+    result.add(new SpriteComponent(sprite, SpriteLayer.FOREGROUND));
 
-    result.addComponent(new BattleUnit(combatant, anims));
+    result.add(new BattleUnit(combatant, anims));
 
     return result;
   }
 
   public Entity createMapAttackOverlay(Set<GridPoint2> locations) {
-    Entity movementOverlay = world.createEntity();
+    Entity movementOverlay = new Entity();
 
     MapSquareOverlay movementOverlayComponent = new MapSquareOverlay(locations, new Color(1, 0, 0, 0.5f));
-    movementOverlay.addComponent(movementOverlayComponent);
+    movementOverlay.add(movementOverlayComponent);
 
     return movementOverlay;
   }
@@ -116,7 +114,7 @@ public class EntityFactory {
   /**
    * Create entities for the arrow that shows the player the path their unit will take when they confirm the move.
    * @param path The {@link com.ziodyne.sometrpg.logic.navigation.Path} to render
-   * @return A {@link java.util.Set} of {@link com.artemis.Entity} representing each tile in the path.
+   * @return A {@link java.util.Set} of {@link Entity} representing each tile in the path.
    */
   public Set<Entity> createPathGuides(Path<GridPoint2> path) {
 
@@ -127,7 +125,7 @@ public class EntityFactory {
     return IntStream.range(0, segments.size()) // For each segment, but we also need the index.
       .mapToObj((idx) -> {
         PathSegment seg = segments.get(idx);
-        Entity ent = world.createEntity();
+        Entity ent = new Entity();
 
         // If we're approaching the end of the segments, draw an arrow head instead of a line to indicate the destination
         TextureRegion region;
@@ -138,10 +136,10 @@ public class EntityFactory {
         }
 
         Sprite sprite = new Sprite(region, region.getRegionWidth(), region.getRegionHeight());
-        ent.addComponent(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
+        ent.add(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
 
         GridPoint2 point = seg.getPoint();
-        ent.addComponent(new Position(point.x * 32f, point.y * 32f));
+        ent.add(new Position(point.x * 32f, point.y * 32f));
 
         return ent;
       })
@@ -149,51 +147,50 @@ public class EntityFactory {
   }
 
   public Entity createMapMovementOverlay(Set<GridPoint2> locations) {
-    Entity movementOverlay = world.createEntity();
+    Entity movementOverlay = new Entity();
 
     MapSquareOverlay movementOverlayComponent = new MapSquareOverlay(locations);
-    movementOverlay.addComponent(movementOverlayComponent);
+    movementOverlay.add(movementOverlayComponent);
 
     return movementOverlay;
   }
 
   public Entity createMapSelector() {
-    Entity mapSelectorEntity = world.createEntity();
+    Entity mapSelectorEntity = new Entity();
 
     Texture texture = repository.get("grid_overlay.png");
     Sprite sprite = new Sprite(texture, 32f, 32f);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
-    mapSelectorEntity.addComponent(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
-    mapSelectorEntity.addComponent(new Position());
+    mapSelectorEntity.add(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
+    mapSelectorEntity.add(new Position());
 
     return mapSelectorEntity;
   }
 
   public Entity createUnitSelector(GridPoint2 point) {
-    Entity mapSelectorEntity = world.createEntity();
+    Entity mapSelectorEntity = new Entity();
 
     Texture texture = repository.get("grid_overlay.png");
     Sprite sprite = new Sprite(texture, 32f, 32f);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
 
-    mapSelectorEntity.addComponent(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
-    mapSelectorEntity.addComponent(new Position(point.x, point.y));
-    mapSelectorEntity.addComponent(new UnitSelector());
+    mapSelectorEntity.add(new SpriteComponent(sprite, SpriteLayer.BACKGROUND));
+    mapSelectorEntity.add(new Position(point.x, point.y));
 
     return mapSelectorEntity;
   }
 
   public Entity createMapGridOverlay(int rows, int columns, float size, GridPoint2 pos) {
-    Entity overlayEntity = world.createEntity();
+    Entity overlayEntity = new Entity();
 
     MapGridOverlay gridOverlayComponent = new MapGridOverlay(rows, columns, size, 0.3f);
-    overlayEntity.addComponent(gridOverlayComponent);
+    overlayEntity.add(gridOverlayComponent);
 
     Position positionComponent = new Position(pos.x, pos.y);
-    overlayEntity.addComponent(positionComponent);
+    overlayEntity.add(positionComponent);
 
     return overlayEntity;
   }
@@ -212,17 +209,17 @@ public class EntityFactory {
   }
 
   private Entity createEntity(Component... components) {
-    Entity result = world.createEntity();
+    Entity result = new Entity();
 
     for (Component comp : components) {
-      result.addComponent(comp);
+      result.add(comp);
     }
 
     return result;
   }
 
   public Entity createMapObject(RectangleMapObject object, TextureRegion region, int zIndex) {
-    Entity mapObj = world.createEntity();
+    Entity mapObj = new Entity();
 
     Rectangle rect = object.getRectangle();
     Position pos = new Position(rect.x, rect.y);
@@ -233,8 +230,8 @@ public class EntityFactory {
     Sprite sprite = new Sprite(region, width, height);
     SpriteComponent spriteComponent = new SpriteComponent(sprite, zIndex);
 
-    mapObj.addComponent(pos);
-    mapObj.addComponent(spriteComponent);
+    mapObj.add(pos);
+    mapObj.add(spriteComponent);
 
     return mapObj;
   }
@@ -257,19 +254,19 @@ public class EntityFactory {
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch) {
-    Entity mapEntity = world.createEntity();
+    Entity mapEntity = new Entity();
 
     TiledMapComponent tiledMapComponent = new TiledMapComponent(map, batch);
-    mapEntity.addComponent(tiledMapComponent);
+    mapEntity.add(tiledMapComponent);
 
     return mapEntity;
   }
 
   public Entity createStage(Stage gdxStage) {
-    Entity entity = world.createEntity();
+    Entity entity = new Entity();
 
     com.ziodyne.sometrpg.view.components.Stage stageComponent = new com.ziodyne.sometrpg.view.components.Stage(gdxStage);
-    entity.addComponent(stageComponent);
+    entity.add(stageComponent);
 
     return entity;
   }

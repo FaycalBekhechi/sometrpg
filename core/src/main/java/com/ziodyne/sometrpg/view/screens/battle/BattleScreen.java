@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.view.screens.battle;
 
-import com.artemis.Entity;
-import com.artemis.World;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
@@ -39,10 +39,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class BattleScreen extends ScreenAdapter {
-  protected final World world = new World();
+  protected final Engine engine = new Engine();
   protected final SpriteBatch spriteBatch = new SpriteBatch();
   protected final AssetManager assetManager = new AssetManager();
-  protected final EntityFactory entityFactory = new EntityFactory(world, new AssetManagerRepository(assetManager));
+  protected final EntityFactory entityFactory = new EntityFactory(engine, new AssetManagerRepository(assetManager));
   protected final OrthographicCamera camera;
   protected final Director director;
   protected final Viewport viewport;
@@ -67,7 +67,6 @@ public abstract class BattleScreen extends ScreenAdapter {
     this.eventBus = eventBus;
     this.viewport = new FitViewport(1600, 900, camera);
 
-    world.initialize();
     camera.translate(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2);
 
     this.menuStage = new Stage(viewport, spriteBatch);
@@ -93,32 +92,32 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   private void setAttackOverlay(Entity overlay) {
     if (currentAttackOverlay != null) {
-      currentAttackOverlay.deleteFromWorld();
+      engine.removeEntity(currentAttackOverlay);
     }
 
-    world.addEntity(overlay);
+    engine.addEntity(overlay);
     currentAttackOverlay = overlay;
   }
 
   public void hideAttackRange() {
     if (currentAttackOverlay != null) {
-      currentAttackOverlay.deleteFromWorld();
+      engine.removeEntity(currentAttackOverlay);
       currentAttackOverlay = null;
     }
   }
 
   private void setMovementOverlay(Entity overlay) {
     if (currentMovementOverlay != null) {
-      currentMovementOverlay.deleteFromWorld();
+      engine.removeEntity(currentMovementOverlay);
     }
 
-    world.addEntity(overlay);
+    engine.addEntity(overlay);
     currentMovementOverlay = overlay;
   }
 
   public void hideMoveRange() {
     if (currentMovementOverlay != null) {
-      currentMovementOverlay.deleteFromWorld();
+      engine.removeEntity(currentMovementOverlay);
       currentMovementOverlay = null;
     }
   }
@@ -158,12 +157,12 @@ public abstract class BattleScreen extends ScreenAdapter {
   public void showPathGuide(Path<GridPoint2> path) {
     hidePathGuide();
     currentPathGuides = entityFactory.createPathGuides(path);
-    currentPathGuides.stream().forEach(world::addEntity);
+    currentPathGuides.stream().forEach(engine::addEntity);
   }
 
   public void hidePathGuide() {
     if (currentPathGuides != null) {
-      currentPathGuides.forEach(Entity::deleteFromWorld);
+      currentPathGuides.forEach(engine::removeEntity);
       currentPathGuides = null;
     }
   }
@@ -175,13 +174,13 @@ public abstract class BattleScreen extends ScreenAdapter {
   public void setSelectedSquare(GridPoint2 selectedSquare) {
     if (selectedSquare == null) {
       if (unitSelector != null) {
-        world.deleteEntity(unitSelector);
+        engine.removeEntity(unitSelector);
         unitSelector = null;
       }
       selectedTile = null;
     } else if (battle.tileExists(selectedSquare)) {
       unitSelector = entityFactory.createUnitSelector(selectedSquare);
-      world.addEntity(unitSelector);
+      engine.addEntity(unitSelector);
       selectedTile = selectedSquare;
     }
   }
@@ -221,7 +220,7 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   protected void registerUnitEntity(Character character, Entity entity) {
     entityIndex.put(character, entity);
-    world.addEntity(entity);
+    engine.addEntity(entity);
   }
 
   @Override
@@ -234,8 +233,7 @@ public abstract class BattleScreen extends ScreenAdapter {
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     assetManager.update();
-    world.setDelta(delta);
-    world.process();
+    engine.update(delta);
 
     // Anchor the unit selection menu to the selected tile.
     if (selectedTile != null) {

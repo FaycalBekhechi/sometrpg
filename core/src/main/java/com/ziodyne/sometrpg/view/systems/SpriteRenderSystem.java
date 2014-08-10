@@ -1,53 +1,33 @@
 package com.ziodyne.sometrpg.view.systems;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.EntitySystem;
-import com.artemis.World;
-import com.artemis.annotations.Mapper;
-import com.artemis.utils.ImmutableBag;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableIntMap;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Lists;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
-import com.ziodyne.sometrpg.util.CollectionUtils;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
-import com.ziodyne.sometrpg.view.components.VoidSprite;
-import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
 import com.ziodyne.sometrpg.view.rendering.SpriteBatchRenderer;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static com.ziodyne.sometrpg.util.CollectionUtils.groupBy;
-
-public class SpriteRenderSystem extends EntitySystem {
+public class SpriteRenderSystem extends IteratingSystem {
   private static final Logger LOG = new GdxLogger(SpriteRenderSystem.class);
 
-  @Mapper
-  private ComponentMapper<Position> positionMapper;
-
-  @Mapper
-  private ComponentMapper<SpriteComponent> spriteMapper;
-
-  @Mapper
-  private ComponentMapper<Shader> shaderMapper;
-
   private final SpriteBatchRenderer spriteBatchRenderer;
+  private List<Entity> zSortedEntities;
 
   public interface Factory {
     public SpriteRenderSystem create(OrthographicCamera camera);
@@ -56,61 +36,57 @@ public class SpriteRenderSystem extends EntitySystem {
   @AssistedInject
   @SuppressWarnings("unchecked")
   SpriteRenderSystem(@Assisted OrthographicCamera camera, SpriteBatch spriteBatch) {
-    super(Aspect.getAspectForAll(Position.class, SpriteComponent.class));
+
+    super(Family.getFamilyFor(Position.class, SpriteComponent.class));
     spriteBatchRenderer = new SpriteBatchRenderer(camera, spriteBatch);
   }
 
   @Override
-  protected void initialize() {
-  }
+  public void update(float deltaTime) {
 
-  @Override
-  protected void begin() {
     spriteBatchRenderer.begin();
-  }
-
-  @Override
-  protected void end() {
+    zSortedEntities.stream()
+      .forEach(e -> this.processEntity(e, deltaTime));
     spriteBatchRenderer.end();
   }
 
   @Override
-  protected void processEntities(ImmutableBag<Entity> entites) {
-    // why oh why doesn't this implement Collection? fuck.
-    List<Entity> entityList = new ArrayList<>(entites.size());
-    for (int i = 0; i < entites.size(); i++) {
-      Entity entity = entites.get(i);
-      entityList.add(entity);
-    }
+  public void addedToEngine(Engine engine) {
 
-    // Render each entity sorted by zIndex
-    entityList.stream()
-      .sorted(byZIndex(spriteMapper))
-      .forEach(this::render);
+    super.addedToEngine(engine);
+
+    ImmutableIntMap<Entity> familyEntities = engine.getEntitiesFor(
+      Family.getFamilyFor(Position.class, SpriteComponent.class));
+    zSortedEntities = Lists.newArrayList(familyEntities).stream()
+      .map(entry -> entry.value)
+      .sorted(byZIndex())
+      .collect(Collectors.toList());
+
   }
 
-  private static Comparator<Entity> byZIndex(ComponentMapper<SpriteComponent> spriteMapper) {
-    return (o1, o2) -> spriteMapper.get(o1).getzIndex() - spriteMapper.get(o2).getzIndex();
-  }
+  @Override
+  public void processEntity(Entity entity, float deltaTime) {
 
-  private void render(Entity entity) {
-    Position pos = positionMapper.get(entity);
+    Position pos = entity.getComponent(Position.class);
     Vector2 position = new Vector2(pos.getX(), pos.getY());
 
-    SpriteComponent spriteComponent = spriteMapper.get(entity);
+    SpriteComponent spriteComponent = entity.getComponent(SpriteComponent.class);
     Sprite sprite = spriteComponent.getSprite();
 
-    Shader shaderComponent = shaderMapper.getSafe(entity);
-    if (shaderComponent != null) {
-      shaderComponent.update(world.getDelta());
+    if (entity.hasComponent(Shader.class)) {
+      Shader shaderComponent = entity.getComponent(Shader.class);
+      shaderComponent.update(deltaTime);
       spriteBatchRenderer.render(sprite, position, shaderComponent.getShader());
     } else {
       spriteBatchRenderer.render(sprite, position);
     }
   }
 
-  @Override
-  protected boolean checkProcessing() {
-    return true;
+  private static Comparator<Entity> byZIndex() {
+
+    return (o1, o2) -> o1.getComponent(SpriteComponent.class).getzIndex() - o2.getComponent(
+      SpriteComponent.class).getzIndex();
   }
+
 }
+

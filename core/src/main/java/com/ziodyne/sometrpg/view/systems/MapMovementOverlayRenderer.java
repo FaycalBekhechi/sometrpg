@@ -1,10 +1,8 @@
 package com.ziodyne.sometrpg.view.systems;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.annotations.Mapper;
-import com.artemis.systems.EntityProcessingSystem;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,23 +15,22 @@ import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
 /**
  * Renders {@link com.ziodyne.sometrpg.view.components.MapSquareOverlay} entities as highlighted tiles.
  */
-public class MapMovementOverlayRenderer extends EntityProcessingSystem {
+public class MapMovementOverlayRenderer extends IteratingSystem {
   private static final Logger logger = new GdxLogger(MapMovementOverlayRenderer.class);
   private final ShapeRenderer shapeRenderer = new ShapeRenderer();
   private final OrthographicCamera camera;
   private final float gridSize;
-  @Mapper
-  private ComponentMapper<MapSquareOverlay> mapOverlayMapper;
 
   public MapMovementOverlayRenderer(OrthographicCamera camera, float gridSize) {
-    super(Aspect.getAspectForAll(MapSquareOverlay.class));
+    super(Family.getFamilyFor(MapSquareOverlay.class));
     this.camera = camera;
     this.gridSize = gridSize;
   }
 
   @Override
-  protected void process(Entity e) {
-    MapSquareOverlay movementOverlay = mapOverlayMapper.get(e);
+  public void processEntity(Entity entity, float deltaTime) {
+
+    MapSquareOverlay movementOverlay = entity.getComponent(MapSquareOverlay.class);
 
     Gdx.gl.glEnable(GL20.GL_BLEND);
     shapeRenderer.setProjectionMatrix(camera.projection);

@@ -260,7 +260,9 @@ public class EntityFactory {
   public Entity createRadialMenuWedge(Vector2 position) {
 
     TextureAtlas wedgeAtlas = repository.get("data/menu_wedges.atlas");
-    Sprite sprite = new Sprite(wedgeAtlas.findRegion("half_wedge"), 200, 200);
+    Sprite sprite = new Sprite(wedgeAtlas.findRegion("half_wedge"), 300, 200);
+    sprite.setOffsetX(-150);
+    sprite.setOffsetY(-100);
     SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.MENU);
 
     Position pos = new Position(position.x, position.y);

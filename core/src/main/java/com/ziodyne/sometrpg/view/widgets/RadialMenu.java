@@ -18,9 +18,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeMap;
 import com.google.common.collect.TreeRangeMap;
+import com.ziodyne.sometrpg.logging.GdxLogger;
+import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 public class RadialMenu extends InputAdapter implements Disposable, Renderable{
+  private final static Logger LOG = new GdxLogger(RadialMenu.class);
 
   private static final int MAX_ITEMS = 3;
 
@@ -79,6 +82,8 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
       Range<Float> degrees = Range.closedOpen(i*degreesPerWedge, (i*degreesPerWedge) + degreesPerWedge);
       radiusRangeToItemName.put(degrees, this.items.get(i).name);
     }
+
+    LOG.log("Radial Menu: " + radiusRangeToItemName);
   }
 
   public void setClickHandler(Consumer<String> clickHandler) {
@@ -105,12 +110,21 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
 
     Vector3 clickCoords = new Vector3(screenX, screenY, 0);
     orthographicCamera.unproject(clickCoords);
-
     Vector2 clickCoords2 = new Vector2(clickCoords.x, clickCoords.y);
-    Vector2 up = new Vector2(0, 1);
 
-    float angleBetween = clickCoords2.angle(up);
+    Vector2 posToClick = clickCoords2.cpy().sub(position.cpy());
+    Vector2 posUp = new Vector2(position.x, position.y+1).sub(position);
+
+    float angleBetween = posToClick.angle(posUp);
+    if (angleBetween < 0) {
+      angleBetween += 360f;
+    }
+    LOG.log("Detected click at angle: " + angleBetween);
     String clickedItemName = radiusRangeToItemName.get(angleBetween);
+
+    if (clickedItemName == null) {
+      return false;
+    }
 
     clickHandler.accept(clickedItemName);
 

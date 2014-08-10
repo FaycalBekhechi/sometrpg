@@ -28,33 +28,25 @@ public class SpriteRenderSystem extends IteratingSystem {
   private static final Logger LOG = new GdxLogger(SpriteRenderSystem.class);
 
   private final SpriteBatchRenderer spriteBatchRenderer;
-  private List<Entity> zSortedEntities;
+  private final Engine engine;
 
   public interface Factory {
-    public SpriteRenderSystem create(OrthographicCamera camera);
+    public SpriteRenderSystem create(OrthographicCamera camera, Engine engine);
   }
 
   @AssistedInject
   @SuppressWarnings("unchecked")
-  SpriteRenderSystem(@Assisted OrthographicCamera camera, SpriteBatch spriteBatch) {
+  SpriteRenderSystem(@Assisted OrthographicCamera camera, @Assisted Engine engine, SpriteBatch spriteBatch) {
 
     super(Family.getFamilyFor(Position.class, SpriteComponent.class));
     spriteBatchRenderer = new SpriteBatchRenderer(camera, spriteBatch);
+    this.engine = engine;
   }
 
   @Override
   public void update(float deltaTime) {
 
     spriteBatchRenderer.begin();
-    zSortedEntities.stream()
-      .forEach(e -> this.processEntity(e, deltaTime));
-    spriteBatchRenderer.end();
-  }
-
-  @Override
-  public void addedToEngine(Engine engine) {
-
-    super.addedToEngine(engine);
 
     ImmutableIntMap<Entity> familyEntities = engine.getEntitiesFor(Family.getFamilyFor(Position.class,
       SpriteComponent.class));
@@ -63,10 +55,11 @@ public class SpriteRenderSystem extends IteratingSystem {
       famEntitiesList.add(entity);
     }
 
-    zSortedEntities = famEntitiesList.stream()
+    famEntitiesList.stream()
       .sorted(byZIndex())
-      .collect(Collectors.toList());
+      .forEach(e -> this.processEntity(e, deltaTime));
 
+    spriteBatchRenderer.end();
   }
 
   @Override

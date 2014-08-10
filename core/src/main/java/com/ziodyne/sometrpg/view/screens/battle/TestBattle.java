@@ -172,7 +172,7 @@ public class TestBattle extends BattleScreen {
     TiledMapTileLayer tileLayer = (TiledMapTileLayer)tiledMap.getLayers().get(0);
     mapBoundingRect = new Rectangle(0, 0, (tileLayer.getWidth()-1) * gridSquareSize, (tileLayer.getHeight()-1) * gridSquareSize);
 
-    SpriteRenderSystem spriteRenderSystem = spriteRendererFactory.create(camera);
+    SpriteRenderSystem spriteRenderSystem = spriteRendererFactory.create(camera, engine);
 
     mapRenderSystem = new TiledMapRenderSystem(camera);
     mapSelectorUpdateSystem = new MapHoverSelectorUpdateSystem(viewport, mapBoundingRect, 32);

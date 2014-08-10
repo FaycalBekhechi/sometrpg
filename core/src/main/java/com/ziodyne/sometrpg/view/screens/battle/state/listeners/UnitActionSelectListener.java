@@ -1,38 +1,42 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import com.badlogic.gdx.Gdx;
+import java.util.Set;
+import javax.annotation.Nullable;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.util.Logged;
+import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.InputStealingFlowListener;
 import com.ziodyne.sometrpg.view.widgets.ActionMenu;
 
-import javax.annotation.Nullable;
-import java.util.Set;
-
 /**
  * Logic for entering and exiting the state where the player is selecting an action for a unit.
  */
-public class UnitActionSelectListener extends InputStealingFlowListener<BattleContext> {
+public class UnitActionSelectListener extends InputStealingFlowListener<BattleContext> implements Logged {
   private Skin skin;
   private Stage stage;
   private Viewport viewport;
   private float gridSize;
+  private Engine engine;
+  private EntityFactory entityFactory;
 
   @Nullable
   private ActionMenu actionMenu;
 
-  public UnitActionSelectListener(Skin skin, Viewport viewport, Stage stage, float gridSize) {
+  public UnitActionSelectListener(Engine engine, EntityFactory entityFactory, float gridSize) {
     super(BattleState.SELECTING_UNIT_ACTION);
 
-    this.skin = skin;
-    this.viewport = viewport;
-    this.stage = stage;
+    this.engine = engine;
+    this.entityFactory = entityFactory;
     this.gridSize = gridSize;
   }
 
@@ -41,7 +45,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
     super.onLeave(context);
 
     if (actionMenu != null) {
-      actionMenu.clear();
+      actionMenu.dispose();
     }
 
     context.mapController.enable();
@@ -58,10 +62,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
       context.safeTrigger(BattleEvent.ACTIONS_EXHAUSTED);
     } else {
 
-      actionMenu = new ActionMenu(allowedActions, skin);
-      actionMenu.setX(context.selectedSquare.x * gridSize);
-      actionMenu.setY(context.selectedSquare.y * gridSize);
-
+      actionMenu = new ActionMenu(allowedActions, new Vector2(context.selectedSquare.x * gridSize, context.selectedSquare.y * gridSize), engine, entityFactory);
       actionMenu.addSelectedListener(selectedAction -> {
         switch (selectedAction) {
           case ATTACK:
@@ -78,8 +79,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
         }
       });
 
-      stage.addActor(actionMenu);
-      Gdx.input.setInputProcessor(stage);
+      //Gdx.input.setInputProcessor(stage);
       context.mapController.disable();
     }
   }

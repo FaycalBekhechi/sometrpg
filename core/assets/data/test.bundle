@@ -9,6 +9,10 @@
   },
   {
     "type": "atlas",
+    "path": "data/menu_wedges.atlas"
+  },
+  {
+    "type": "atlas",
     "path": "data/movement_guide.atlas"
   },
   {

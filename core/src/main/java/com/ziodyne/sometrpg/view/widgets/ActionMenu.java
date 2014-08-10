@@ -1,31 +1,34 @@
 package com.ziodyne.sometrpg.view.widgets;
 
+import java.util.Set;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Disposable;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
-import com.ziodyne.sometrpg.logic.util.MathUtils;
 import com.ziodyne.sometrpg.util.Logged;
+import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
-import java.util.List;
-import java.util.Set;
 
 /**
  * A widget that renders the action menu as a LibGDX {@link Actor}
  */
-public class ActionMenu extends Group implements Logged {
+public class ActionMenu implements Disposable, Logged {
   private static final int RADIUS = 100;
 
   private ActionSelectedHandler selectedHandler;
   private final Set<CombatantAction> availableActions;
-  private final Skin skin;
+  private final Vector2 position;
+  private final Entity menuWedge;
+  private final Engine engine;
 
-  public ActionMenu(Set<CombatantAction> availableActions, Skin skin) {
+  public ActionMenu(Set<CombatantAction> availableActions, Vector2 position, Engine engine, EntityFactory entityFactory) {
     this.availableActions = availableActions;
-    this.skin = skin;
+    this.position = position;
+    this.menuWedge = entityFactory.createRadialMenuWedge(position);
+    this.engine = engine;
 
     initialize();
   }
@@ -35,36 +38,11 @@ public class ActionMenu extends Group implements Logged {
   }
 
   private void initialize() {
-    List<Vector2> samples = MathUtils.uniformSampleUnitCircle(availableActions.size());
-    int i = 0;
-    for (final CombatantAction action : availableActions) {
-      Actor control = createControlForAction(action);
-
-      Vector2 pos = samples.get(i);
-      pos.scl(RADIUS);
-
-      control.setPosition(pos.x, pos.y);
-
-      control.addListener(new ChangeListener() {
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-          if (selectedHandler != null) {
-            try {
-              selectedHandler.handle(action);
-            } catch (Exception e) {
-              logError("Exception thrown in selection handler.", e);
-            }
-          }
-        }
-      });
-
-      addActor(control);
-      i++;
-    }
+    engine.addEntity(menuWedge);
   }
 
-  private Actor createControlForAction(CombatantAction action) {
-    return new TextButton(action.toString(), skin);
+  @Override
+  public void dispose() {
+    engine.removeEntity(menuWedge);
   }
-
 }

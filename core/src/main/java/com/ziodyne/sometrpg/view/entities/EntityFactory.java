@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -254,6 +255,17 @@ public class EntityFactory {
     Position positionComponent = new Position(position.x, position.y);
 
     return createEntity(spriteComponent, positionComponent);
+  }
+
+  public Entity createRadialMenuWedge(Vector2 position) {
+
+    TextureAtlas wedgeAtlas = repository.get("data/menu_wedges.atlas");
+    Sprite sprite = new Sprite(wedgeAtlas.findRegion("half_wedge"), 200, 200);
+    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.MENU);
+
+    Position pos = new Position(position.x, position.y);
+
+    return createEntity(spriteComponent, pos);
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch) {

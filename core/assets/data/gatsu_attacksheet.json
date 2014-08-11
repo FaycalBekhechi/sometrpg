@@ -1,0 +1,33 @@
+{
+  "grid_size": 70,
+  "animations": {
+    "gatsu_attack_south": {
+      "start": [0, 0],
+      "end": [0, 13],
+      "frame_length": 100,
+      "mode": "normal"
+    },
+
+    "gatsu_attack_north": {
+      "start": [1, 0],
+      "end": [1, 11],
+      "frame_length": 100,
+      "mode": "normal"
+    },
+
+    "gatsu_attack_west": {
+      "start": [2, 0],
+      "end": [2, 11],
+      "frame_length": 100,
+      "mode": "normal",
+      "flip_y": true
+    },
+
+    "gatsu_attack_east": {
+      "start": [2, 0],
+      "end": [2, 11],
+      "frame_length": 100,
+      "mode": "normal"
+    }
+  }
+}

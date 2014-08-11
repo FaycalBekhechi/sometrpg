@@ -43,6 +43,31 @@
       "idle": {
         "name": "guts_idle",
         "sheet": "enemies_idle.json"
+      },
+
+      "attack": {
+        "name": "gatsu_attack_north",
+        "sheet": "gatsu_attacksheet.json"
+      },
+
+      "run_north": {
+        "name": "gatsu_run_north",
+        "sheet": "gatsu_runsheet.json"
+      },
+
+      "run_south": {
+        "name": "gatsu_run_south",
+        "sheet": "gatsu_runsheet.json"
+      },
+
+      "run_east": {
+        "name": "gatsu_run_east",
+        "sheet": "gatsu_runsheet.json"
+      },
+
+      "run_west": {
+        "name": "gatsu_run_west",
+        "sheet": "gatsu_runsheet.json"
       }
     }
   ]

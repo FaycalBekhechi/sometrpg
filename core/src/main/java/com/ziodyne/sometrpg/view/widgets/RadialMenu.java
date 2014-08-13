@@ -95,12 +95,19 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
   public void render() {
 
     if (items.size() == 3) {
-      Vector2 outerRingPosition = new Vector2(position.x, position.y + 20);
-      for (int i = 0; i < 3; i++) {
-        Entity testWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition.cpy().rotate(i*2f), i*120f);
-        entities.add(testWedge);
-        engine.addEntity(testWedge);
-      }
+      Vector2 outerRingPosition = new Vector2(position.x, position.y);
+      Entity testWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 0f);
+      entities.add(testWedge);
+      engine.addEntity(testWedge);
+
+
+      Entity secondWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 120f);
+      entities.add(secondWedge);
+      engine.addEntity(secondWedge);
+
+      Entity thirdWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 240f);
+      entities.add(thirdWedge);
+      engine.addEntity(thirdWedge);
     }
   }
 

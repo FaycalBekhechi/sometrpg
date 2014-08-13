@@ -16,6 +16,8 @@ public class Sprite {
   private float offsetX = 0f;
   private float offsetY = 0f;
   private float rotation = 0f;
+  private float originX;
+  private float originY;
 
   public Sprite(Texture texture, float width, float height) {
     Validate.notNull(texture);
@@ -23,6 +25,8 @@ public class Sprite {
     this.texture = texture;
     this.width = width;
     this.height = height;
+    this.originX = width / 2;
+    this.originY = height /2;
   }
 
   public Sprite(TextureRegion region, float width, float height) {
@@ -31,6 +35,8 @@ public class Sprite {
     this.width = width;
     this.height = height;
     this.region = region;
+    this.originX = width / 2;
+    this.originY = height /2;
   }
 
   public float getRotation() {
@@ -131,5 +137,25 @@ public class Sprite {
   public float getOffsetY() {
 
     return offsetY;
+  }
+
+  public float getOriginX() {
+
+    return originX;
+  }
+
+  public void setOriginX(float originX) {
+
+    this.originX = originX;
+  }
+
+  public float getOriginY() {
+
+    return originY;
+  }
+
+  public void setOriginY(float originY) {
+
+    this.originY = originY;
   }
 }

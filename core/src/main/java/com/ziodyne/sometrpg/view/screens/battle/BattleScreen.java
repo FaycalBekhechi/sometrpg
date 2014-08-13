@@ -14,6 +14,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -238,5 +239,11 @@ public abstract class BattleScreen extends GameScreen {
       unitActionMenu.setX(menuPos.x);
       unitActionMenu.setY(menuPos.y);
     }
+
+    ShapeRenderer shapeRenderer = new ShapeRenderer();
+    shapeRenderer.setProjectionMatrix(camera.combined);
+    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    shapeRenderer.circle(864, 320, 1);
+    shapeRenderer.end();
   }
 }

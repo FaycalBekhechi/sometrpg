@@ -261,8 +261,11 @@ public class EntityFactory {
 
     TextureAtlas wedgeAtlas = repository.get("data/menu_wedges.atlas");
     Sprite sprite = new Sprite(wedgeAtlas.findRegion("third_wedge"), 300, 200);
-    sprite.setOffsetX(150f);
-    sprite.setOffsetY(100f);
+    sprite.setOffsetX(-134f);
+    sprite.setOffsetY(-16f);
+
+    sprite.setOriginX(148f);
+    sprite.setOriginY(25f);
     sprite.setRotation(rotation);
     SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.MENU);
 

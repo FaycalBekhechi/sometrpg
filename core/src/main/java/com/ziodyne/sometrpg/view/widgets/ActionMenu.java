@@ -33,9 +33,9 @@ public class ActionMenu extends InputAdapter implements Disposable, Logged {
   }
 
   @Override
-  public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+  public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-    return radialMenu.touchDown(screenX, screenY, pointer, button);
+    return radialMenu.touchUp(screenX, screenY, pointer, button);
   }
 
   @Override

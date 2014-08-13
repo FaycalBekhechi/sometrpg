@@ -72,7 +72,7 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
 
     this.engine = engine;
     this.entityFactory = entityFactory;
-    this.position = position;
+    this.position = position.sub(134f, 16f);
     this.orthographicCamera = camera;
     this.items = Lists.newArrayList(items);
 
@@ -118,7 +118,7 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
   }
 
   @Override
-  public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+  public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
     Vector3 clickCoords = new Vector3(screenX, screenY, 0);
     orthographicCamera.unproject(clickCoords);

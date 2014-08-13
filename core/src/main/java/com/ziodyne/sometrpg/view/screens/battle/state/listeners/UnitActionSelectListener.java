@@ -50,6 +50,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
       actionMenu.dispose();
     }
 
+    Gdx.input.setInputProcessor(null);
     context.mapController.enable();
   }
 
@@ -81,8 +82,8 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
         }
       });
 
-      Gdx.input.setInputProcessor(actionMenu);
       context.mapController.disable();
+      Gdx.input.setInputProcessor(actionMenu);
     }
   }
 

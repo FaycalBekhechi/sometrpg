@@ -26,5 +26,9 @@
   {
     "type": "shader",
     "path": "shaders/distance_field.json"
+  },
+  {
+    "type": "bitmap_font",
+    "path": "data/futura-medium.ttf"
   }
 ]

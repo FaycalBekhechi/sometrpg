@@ -21,8 +21,12 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -164,6 +168,8 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(Chapter.class, new ChapterLoader(resolver));
     assetManager.setLoader(Sound.class, new SoundLoader(resolver));
     assetManager.setLoader(ShaderProgram.class, new ShaderProgramLoader(resolver));
+    assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+    assetManager.setLoader(BitmapFont.class, new FreetypeFontLoader(resolver));
 
     try {
       bundleLoader.load();

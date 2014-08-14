@@ -1,5 +1,9 @@
 [
   {
+    "type": "sound",
+     "path": "sounds/hit.mp3"
+  },
+  {
     "type": "chapter",
     "path": "data/chapters/chapter1.json"
   },

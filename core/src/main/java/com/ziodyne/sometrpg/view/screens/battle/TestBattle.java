@@ -16,7 +16,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,6 +33,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import com.ziodyne.sometrpg.events.UnitHit;
 import com.ziodyne.sometrpg.logic.loader.AssetUtils;
 import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
 import com.ziodyne.sometrpg.logic.loader.loaders.ArmiesLoader;
@@ -62,6 +65,8 @@ import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.TextureAtlasLoader;
 import com.ziodyne.sometrpg.view.assets.models.Chapter;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
+import com.ziodyne.sometrpg.view.audio.BattleSoundPlayer;
+import com.ziodyne.sometrpg.view.audio.SoundEffect;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
@@ -113,6 +118,7 @@ public class TestBattle extends BattleScreen {
   private boolean initialized;
   private Pathfinder<GridPoint2> pathfinder;
   private final String chapterPath;
+  private final BattleSoundPlayer battleSoundPlayer;
 
   public interface Factory {
     TestBattle create(String chapterPath);
@@ -138,6 +144,7 @@ public class TestBattle extends BattleScreen {
     this.voidRenderSystemFactory = voidRenderSystemFactory;
 
     AssetManager assetManager = getAssetManager();
+    this.battleSoundPlayer = new BattleSoundPlayer(eventBus, new AssetManagerRepository(assetManager));
     this.bundleLoader = bundleLoaderFactory.create(assetManager, "data/test.bundle");
 
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
@@ -151,6 +158,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(Characters.class, new CharactersLoader(resolver));
     assetManager.setLoader(TextureAtlas.class, new TextureAtlasLoader(resolver));
     assetManager.setLoader(Chapter.class, new ChapterLoader(resolver));
+    assetManager.setLoader(Sound.class, new SoundLoader(resolver));
 
     try {
       bundleLoader.load();

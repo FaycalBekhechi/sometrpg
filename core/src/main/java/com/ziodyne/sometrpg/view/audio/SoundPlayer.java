@@ -1,19 +1,19 @@
 package com.ziodyne.sometrpg.view.audio;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.utils.Array;
+import com.ziodyne.sometrpg.view.assets.AssetRepository;
 
 public class SoundPlayer {
-  private final AssetManager assetManager;
+  private final AssetRepository assetRepository;
 
-  public SoundPlayer(AssetManager assetManager) {
+  public SoundPlayer(AssetRepository assetRepository) {
 
-    this.assetManager = assetManager;
+    this.assetRepository = assetRepository;
   }
 
   public void play(String filename) {
-    Sound sound = assetManager.get(filename, Sound.class);
+
+    Sound sound = assetRepository.get(filename, Sound.class);
     sound.play();
   }
 
@@ -33,9 +33,6 @@ public class SoundPlayer {
 
   private Iterable<Sound> allSounds() {
 
-    Array<Sound> sounds = new Array<>();
-    assetManager.getAll(Sound.class, sounds);
-
-    return sounds;
+    return assetRepository.getAll(Sound.class);
   }
 }

@@ -1,6 +1,7 @@
 package com.ziodyne.sometrpg.view.assets;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * An {@link AssetRepository} that provides read-only access to an {@link AssetManager}.
@@ -23,5 +24,13 @@ public class AssetManagerRepository implements AssetRepository {
   @Override
   public <T> T get(String fileName, Class<T> type) {
     return assetManager.get(fileName, type);
+  }
+
+  @Override
+  public <T> Iterable<T> getAll(Class<T> type) {
+
+    Array<T> allItems = new Array<>();
+    assetManager.getAll(type, allItems);
+    return allItems;
   }
 }

@@ -1,6 +1,6 @@
 package com.ziodyne.sometrpg.view.audio;
 
-public enum SoundEffect {
+enum SoundEffect {
   HIT("sounds/hit.mp3");
 
   private final String path;

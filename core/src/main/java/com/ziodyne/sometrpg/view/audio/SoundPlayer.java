@@ -3,7 +3,7 @@ package com.ziodyne.sometrpg.view.audio;
 import com.badlogic.gdx.audio.Sound;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
 
-public class SoundPlayer {
+class SoundPlayer implements AudioPlayer {
   private final AssetRepository assetRepository;
 
   public SoundPlayer(AssetRepository assetRepository) {

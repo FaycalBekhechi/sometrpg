@@ -33,7 +33,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import com.ziodyne.sometrpg.events.UnitHit;
 import com.ziodyne.sometrpg.logic.loader.AssetUtils;
 import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
 import com.ziodyne.sometrpg.logic.loader.loaders.ArmiesLoader;
@@ -65,8 +64,8 @@ import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.TextureAtlasLoader;
 import com.ziodyne.sometrpg.view.assets.models.Chapter;
 import com.ziodyne.sometrpg.view.assets.models.CharacterSprites;
+import com.ziodyne.sometrpg.view.audio.BattleMusicPlayer;
 import com.ziodyne.sometrpg.view.audio.BattleSoundPlayer;
-import com.ziodyne.sometrpg.view.audio.SoundEffect;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
@@ -119,6 +118,7 @@ public class TestBattle extends BattleScreen {
   private Pathfinder<GridPoint2> pathfinder;
   private final String chapterPath;
   private final BattleSoundPlayer battleSoundPlayer;
+  private final BattleMusicPlayer battleMusicPlayer;
 
   public interface Factory {
     TestBattle create(String chapterPath);
@@ -144,7 +144,9 @@ public class TestBattle extends BattleScreen {
     this.voidRenderSystemFactory = voidRenderSystemFactory;
 
     AssetManager assetManager = getAssetManager();
-    this.battleSoundPlayer = new BattleSoundPlayer(eventBus, new AssetManagerRepository(assetManager));
+    AssetRepository repo = new AssetManagerRepository(assetManager);
+    this.battleSoundPlayer = new BattleSoundPlayer(eventBus, repo);
+    this.battleMusicPlayer = new BattleMusicPlayer(repo);
     this.bundleLoader = bundleLoaderFactory.create(assetManager, "data/test.bundle");
 
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());

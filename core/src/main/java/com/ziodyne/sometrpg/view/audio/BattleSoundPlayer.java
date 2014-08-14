@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.view.audio;
 
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
+import com.ziodyne.sometrpg.events.EventListener;
 import com.ziodyne.sometrpg.events.UnitHit;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
 
@@ -11,14 +11,6 @@ import com.ziodyne.sometrpg.view.assets.AssetRepository;
 public class BattleSoundPlayer {
 
   private final SoundPlayer soundPlayer;
-
-  // Create a new FunctionalInterface just to get Guava / EventBus' @Subscribe interface
-  // on the actual functional method.
-  @FunctionalInterface
-  private static interface EventListener<T> {
-    @Subscribe
-    void accept(T t);
-  }
 
   public BattleSoundPlayer(EventBus eventBus, AssetRepository repo) {
 

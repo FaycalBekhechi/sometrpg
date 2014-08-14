@@ -23,7 +23,8 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
     @Type(value = ArmiesAsset.class, name = "armies"),
     @Type(value = TextureAtlasAsset.class, name = "atlas"),
     @Type(value = ChapterAsset.class, name = "chapter"),
-    @Type(value = SoundAsset.class, name = "sound")
+    @Type(value = SoundAsset.class, name = "sound"),
+    @Type(value = MusicAsset.class, name = "music")
 })
 public abstract class Asset<T> {
   private String type;

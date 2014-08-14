@@ -183,7 +183,7 @@ public class TestBattle extends BattleScreen {
     List<Roster> rosters = gameSpec.getRosters();
 
     long start = System.currentTimeMillis();
-    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, rosters)).build(eventBus);
+    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, rosters)).build();
     long end = System.currentTimeMillis();
 
     logDebug("Map init took: " + (end - start) + "ms");

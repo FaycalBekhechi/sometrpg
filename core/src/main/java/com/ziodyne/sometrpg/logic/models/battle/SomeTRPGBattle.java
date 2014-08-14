@@ -36,7 +36,6 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private final BattleMap map;
   private final ImmutableList<Army> armies;
   private final WinCondition condition;
-  private final EventBus eventBus;
   private final Pathfinder<GridPoint2> pathfinder;
 
   private MapCombatResolver combatResolver;
@@ -46,11 +45,10 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
   private int turnNumber;
 
-  public SomeTRPGBattle(BattleMap map, List<Army> armies, WinCondition condition, EventBus eventBus) {
+  public SomeTRPGBattle(BattleMap map, List<Army> armies, WinCondition condition) {
     this.map = map;
     this.armies = ImmutableList.copyOf(armies);
     this.condition = condition;
-    this.eventBus = eventBus;
     this.combatResolver = new MapCombatResolver(map);
     this.pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(map));
 

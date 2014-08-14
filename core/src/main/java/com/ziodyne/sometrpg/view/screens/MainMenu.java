@@ -114,12 +114,9 @@ public class MainMenu extends ScreenAdapter {
           .push(Tween.to(startGameButton, ActorAccessor.OPACITY, 0.3f).target(1.0f))
           .push(Tween.to(quitButton, ActorAccessor.OPACITY, 0.3f).target(1.0f))
         .end()
-        .setCallback(new TweenCallback() {
-          @Override
-          public void onEvent(int type, BaseTween<?> source) {
-            if (type == COMPLETE) {
-              menuInitialized = true;
-            }
+        .setCallback((type, source) -> {
+          if (type == TweenCallback.COMPLETE) {
+            menuInitialized = true;
           }
         })
         .start(tweenManager);

@@ -90,7 +90,7 @@ public class TiledBattleBuilder implements Logged {
 
   }
 
-  public SomeTRPGBattle build(EventBus todoFixThis) {
+  public SomeTRPGBattle build() {
 
     WinCondition winCondition = buildWinCondition();
 
@@ -114,7 +114,7 @@ public class TiledBattleBuilder implements Logged {
       }
     }
 
-    return new SomeTRPGBattle(battleMap, Lists.newArrayList(charactersByArmy.keySet()), winCondition, todoFixThis);
+    return new SomeTRPGBattle(battleMap, Lists.newArrayList(charactersByArmy.keySet()), winCondition);
   }
 
   private Map<Army, Set<PositionedCharacter>> buildCombatants() {

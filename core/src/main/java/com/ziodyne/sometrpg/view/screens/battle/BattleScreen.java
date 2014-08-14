@@ -1,5 +1,11 @@
 package com.ziodyne.sometrpg.view.screens.battle;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
@@ -16,11 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
-import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.models.Character;
-import com.ziodyne.sometrpg.logic.models.battle.Army;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -31,18 +34,12 @@ import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
+import com.ziodyne.sometrpg.view.screens.GameScreen;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-public abstract class BattleScreen extends ScreenAdapter {
+public abstract class BattleScreen extends GameScreen {
   protected final Engine engine = new Engine();
   protected final SpriteBatch spriteBatch = new SpriteBatch();
-  protected final AssetManager assetManager = new AssetManager();
-  protected final EntityFactory entityFactory = new EntityFactory(engine, new AssetManagerRepository(assetManager));
+  protected final EntityFactory entityFactory = new EntityFactory(engine, new AssetManagerRepository(getAssetManager()));
   protected final OrthographicCamera camera;
   protected final Director director;
   protected final Viewport viewport;
@@ -230,9 +227,7 @@ public abstract class BattleScreen extends ScreenAdapter {
 
   @Override
   public void render(float delta) {
-    Gdx.gl.glClearColor(0, 0, 0, 1);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-    assetManager.update();
+    super.render(delta);
     engine.update(delta);
 
     // Anchor the unit selection menu to the selected tile.
@@ -243,10 +238,5 @@ public abstract class BattleScreen extends ScreenAdapter {
       unitActionMenu.setX(menuPos.x);
       unitActionMenu.setY(menuPos.y);
     }
-
-    update(delta);
-
   }
-
-  protected abstract void update(float delta);
 }

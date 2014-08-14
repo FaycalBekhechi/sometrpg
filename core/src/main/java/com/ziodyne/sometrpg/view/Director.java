@@ -19,7 +19,8 @@ public class Director {
 
   public void replaceScreen(Screen screen) {
     if (!screens.isEmpty()) {
-      screens.pop();
+      Screen prev = screens.pop();
+      prev.dispose();
     }
     screens.push(screen);
     game.setScreen(screen);

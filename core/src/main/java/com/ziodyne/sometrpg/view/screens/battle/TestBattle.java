@@ -14,6 +14,7 @@ import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
@@ -105,7 +106,6 @@ public class TestBattle extends BattleScreen {
   private TiledMapRenderSystem mapRenderSystem;
   private MapHoverSelectorUpdateSystem mapSelectorUpdateSystem;
   private Rectangle mapBoundingRect;
-  private BattleMap map;
   private TweenAccessor<Position> positionTweenAccessor;
   private TweenAccessor<SpriteComponent> spriteTweenAccessor;
   private TweenAccessor<Camera> cameraTweenAccessor;
@@ -139,6 +139,8 @@ public class TestBattle extends BattleScreen {
     this.spriteTweenAccessor = spriteTweenAccessor;
     this.mapControllerFactory = mapControllerFactory;
     this.voidRenderSystemFactory = voidRenderSystemFactory;
+
+    AssetManager assetManager = getAssetManager();
     this.bundleLoader = bundleLoaderFactory.create(assetManager, "data/test.bundle");
 
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
@@ -166,6 +168,8 @@ public class TestBattle extends BattleScreen {
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
     Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
     Tween.registerAccessor(Position.class, positionTweenAccessor);
+
+    AssetManager assetManager = getAssetManager();
 
     Chapter chapter = assetManager.get(chapterPath, Chapter.class);
     TiledMap tiledMap = chapter.getMap();
@@ -308,8 +312,11 @@ public class TestBattle extends BattleScreen {
     }
   }
 
+  @Override
+  public void render(float delta) {
 
-  protected void update(float delta) {
+    super.render(delta);
+
     if (initialized) {
       tweenManager.update(delta);
     } else {

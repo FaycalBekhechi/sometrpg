@@ -1,12 +1,11 @@
 package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.google.common.collect.Maps;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.exceptions.GameLogicException;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
+import com.ziodyne.sometrpg.util.Logged;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -14,8 +13,7 @@ import java.util.Map;
 import java.util.OptionalInt;
 import java.util.Set;
 
-public class BattleMap {
-  private static final Logger logger = new GdxLogger(BattleMap.class);
+public class BattleMap implements Logged {
 
   private final int width;
 
@@ -53,7 +51,7 @@ public class BattleMap {
     populateGraph(tiles);
     long end = System.currentTimeMillis();
 
-    logger.debug("Graph population took " + (end - start) + "ms.");
+    logDebug("Graph population took " + (end - start) + "ms.");
   }
 
   private void populateGraph(Collection<Tile> tiles) {

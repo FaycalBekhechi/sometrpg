@@ -8,13 +8,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.GridPoint2;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.components.MapGridOverlay;
 import com.ziodyne.sometrpg.view.components.Position;
 
 public class MapOverlayRenderSystem extends IteratingSystem {
-  private final Logger logger = new GdxLogger(MapOverlayRenderSystem.class);
 
   private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 

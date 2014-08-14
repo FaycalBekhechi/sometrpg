@@ -4,17 +4,15 @@ import au.com.ds.ef.EasyFlow;
 import au.com.ds.ef.StateEnum;
 import au.com.ds.ef.StatefulContext;
 import au.com.ds.ef.call.ContextHandler;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.util.Logged;
 
 /**
  * An abstract class to ease the sharing of state between onEnter/onLeave event handlers.
  * @param <T>
  */
-public abstract class FlowListener<T extends StatefulContext> {
+public abstract class FlowListener<T extends StatefulContext> implements Logged {
   public static boolean DEBUG = true;
   private final StateEnum state;
-  private final Logger LOG = new GdxLogger(this.getClass());
 
   protected FlowListener(StateEnum state) {
     this.state = state;
@@ -28,7 +26,7 @@ public abstract class FlowListener<T extends StatefulContext> {
       @Override
       public void call(T context) throws Exception {
         if (DEBUG) {
-          LOG.debug("Entering state: " + state);
+          logDebug("Entering state: " + state);
         }
         onEnter(context);
       }
@@ -38,7 +36,7 @@ public abstract class FlowListener<T extends StatefulContext> {
       @Override
       public void call(T context) throws Exception {
         if (DEBUG) {
-          LOG.debug("Leaving state: " + state);
+          logDebug("Leaving state: " + state);
         }
         onLeave(context);
       }

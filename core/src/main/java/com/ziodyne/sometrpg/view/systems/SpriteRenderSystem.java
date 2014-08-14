@@ -3,7 +3,6 @@ package com.ziodyne.sometrpg.view.systems;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -13,11 +12,8 @@ import com.badlogic.ashley.utils.ImmutableIntMap;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.google.common.collect.Lists;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
@@ -25,7 +21,6 @@ import com.ziodyne.sometrpg.view.rendering.Sprite;
 import com.ziodyne.sometrpg.view.rendering.SpriteBatchRenderer;
 
 public class SpriteRenderSystem extends IteratingSystem {
-  private static final Logger LOG = new GdxLogger(SpriteRenderSystem.class);
 
   private final SpriteBatchRenderer spriteBatchRenderer;
   private final Engine engine;

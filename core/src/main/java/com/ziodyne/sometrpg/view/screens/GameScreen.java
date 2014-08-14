@@ -5,11 +5,12 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Disposable;
+import com.ziodyne.sometrpg.util.Logged;
 
 /**
  * Base class for all screens. Provides a single point of asset management and ensures assets are disposed.
  */
-public abstract class GameScreen extends ScreenAdapter implements Disposable {
+public abstract class GameScreen extends ScreenAdapter implements Disposable, Logged {
   private final AssetManager assetManager = new AssetManager();
 
   @Override

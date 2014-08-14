@@ -1,8 +1,6 @@
 package com.ziodyne.sometrpg.view.tween;
 
 import aurelienribon.tweenengine.TweenAccessor;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.components.Position;
 
 public class PositionComponentAccessor implements TweenAccessor<Position> {

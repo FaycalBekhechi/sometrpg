@@ -31,8 +31,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.loader.AssetUtils;
 import com.ziodyne.sometrpg.logic.loader.TiledBattleBuilder;
 import com.ziodyne.sometrpg.logic.loader.loaders.ArmiesLoader;
@@ -101,7 +99,6 @@ import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
 import static com.google.common.collect.Lists.newArrayList;
 
 public class TestBattle extends BattleScreen {
-  private final Logger logger = new GdxLogger(TestBattle.class);
   private TweenManager tweenManager;
   private TiledMapRenderSystem mapRenderSystem;
   private MapHoverSelectorUpdateSystem mapSelectorUpdateSystem;
@@ -158,12 +155,12 @@ public class TestBattle extends BattleScreen {
     try {
       bundleLoader.load();
     } catch (IOException e) {
-      logger.error("Failed to load bundle file.", e);
+      logError("Failed to load bundle file.", e);
     }
   }
 
   private void initalizeBattle() {
-    logger.log("Initializing battle.");
+    logDebug("Initializing battle.");
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
     Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
@@ -189,7 +186,7 @@ public class TestBattle extends BattleScreen {
     battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, rosters)).build(eventBus);
     long end = System.currentTimeMillis();
 
-    logger.debug("Map init took: " + (end - start) + "ms");
+    logDebug("Map init took: " + (end - start) + "ms");
 
     populateWorld(entityFactory, battle.getMap(), new AssetManagerRepository(assetManager));
 
@@ -264,7 +261,7 @@ public class TestBattle extends BattleScreen {
       listener.bind(flow);
     }
 
-    flow.whenError((error, context) -> logger.error(error.getMessage(), error.getCause()));
+    flow.whenError((error, context) -> logError(error.getMessage(), error.getCause()));
 
     flow.start(new BattleContext(battle));
 

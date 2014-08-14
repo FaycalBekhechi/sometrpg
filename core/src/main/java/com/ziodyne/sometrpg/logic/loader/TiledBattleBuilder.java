@@ -24,8 +24,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.CharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.Army;
@@ -41,13 +39,13 @@ import com.ziodyne.sometrpg.logic.models.battle.conditions.Sieze;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.Survive;
 import com.ziodyne.sometrpg.logic.models.battle.conditions.WinCondition;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import com.ziodyne.sometrpg.util.Logged;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Creates battle models from Tiled maps.
  */
-public class TiledBattleBuilder {
-  private final Logger logger = new GdxLogger(TiledBattleBuilder.class);
+public class TiledBattleBuilder implements Logged {
 
   private static final String BASE_LAYER_NAME = "Ground";
   private static final String BLOCKING_LAYER_NAME = "Blocking";
@@ -99,7 +97,7 @@ public class TiledBattleBuilder {
     long start = System.currentTimeMillis();
     BattleMap battleMap = new BattleMap(buildTiles());
     long end = System.currentTimeMillis();
-    logger.debug("BattleMap initialization took " + (end - start) + "ms.");
+    logDebug("BattleMap initialization took " + (end - start) + "ms.");
 
     // Add all characters to the map
     Map<Army, Set<PositionedCharacter>> charactersByArmy = buildCombatants();

@@ -7,8 +7,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.util.Logged;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,13 +20,11 @@ import java.util.Set;
 /**
  * A loader for asset .bundle files. All loading of individual assets is handled by your provided asset manager.
  */
-public class AssetBundleLoader {
+public class AssetBundleLoader implements Logged {
 
   public interface Factory {
     public AssetBundleLoader create(AssetManager assetManager, String bundlePath);
   }
-
-  private final Logger logger = new GdxLogger(AssetBundleLoader.class);
 
   private final AssetManager assetManager;
 
@@ -66,7 +63,7 @@ public class AssetBundleLoader {
 
     Set<Asset<?>> assets = objectMapper.readValue(fileStream, new TypeReference<Set<Asset<?>>>() { });
     totalNumAssets = assets.size();
-    logger.log("Loading asset bundle with " + totalNumAssets + " assets.");
+    logDebug("Loading asset bundle with " + totalNumAssets + " assets.");
     startTime = new Date();
 
     for (Asset<?> asset : assets) {
@@ -88,7 +85,7 @@ public class AssetBundleLoader {
 
     if (doneLoading) {
       Date endTime = new Date();
-      logger.debug("Bundle loaded in " + (endTime.getTime() - startTime.getTime()) + "ms.");
+      logDebug("Bundle loaded in " + (endTime.getTime() - startTime.getTime()) + "ms.");
     }
 
     return doneLoading;

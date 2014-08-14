@@ -7,8 +7,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.view.components.DeathFade;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.tween.SpriteComponentAccessor;
@@ -17,7 +15,6 @@ import com.ziodyne.sometrpg.view.tween.SpriteComponentAccessor;
  * Fades {@link com.ziodyne.sometrpg.view.components.SpriteComponent} entities with the {@link DeathFade} component to invisible then removes them from the world.
  */
 public class DeathFadeSystem extends IteratingSystem {
-  private static final Logger LOG = new GdxLogger(DeathFadeSystem.class);
 
   private final TweenManager tweenManager;
   private final Engine engine;

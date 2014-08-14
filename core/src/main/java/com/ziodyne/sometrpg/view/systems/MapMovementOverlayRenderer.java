@@ -7,8 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
 
@@ -16,7 +14,6 @@ import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
  * Renders {@link com.ziodyne.sometrpg.view.components.MapSquareOverlay} entities as highlighted tiles.
  */
 public class MapMovementOverlayRenderer extends IteratingSystem {
-  private static final Logger logger = new GdxLogger(MapMovementOverlayRenderer.class);
   private final ShapeRenderer shapeRenderer = new ShapeRenderer();
   private final OrthographicCamera camera;
   private final float gridSize;

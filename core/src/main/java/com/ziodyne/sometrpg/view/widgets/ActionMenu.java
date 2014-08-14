@@ -6,10 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.util.MathUtils;
+import com.ziodyne.sometrpg.util.Logged;
 
 import java.util.List;
 import java.util.Set;
@@ -17,8 +16,7 @@ import java.util.Set;
 /**
  * A widget that renders the action menu as a LibGDX {@link Actor}
  */
-public class ActionMenu extends Group {
-  private static final Logger LOG = new GdxLogger(ActionMenu.class);
+public class ActionMenu extends Group implements Logged {
   private static final int RADIUS = 100;
 
   private ActionSelectedHandler selectedHandler;
@@ -54,7 +52,7 @@ public class ActionMenu extends Group {
             try {
               selectedHandler.handle(action);
             } catch (Exception e) {
-              LOG.error("Exception thrown in selection handler.", e);
+              logError("Exception thrown in selection handler.", e);
             }
           }
         }

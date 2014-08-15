@@ -12,6 +12,7 @@ public class DesktopLauncher {
    cfg.width = 1600;
    cfg.height = 900;
    cfg.samples = 8;
+   cfg.stencil = 8;
 
    new LwjglApplication(new SomeTRPG(), cfg);
  }

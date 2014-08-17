@@ -98,46 +98,52 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
   @Override
   public void render() {
 
+    ShapeComponent shapeComponent = new ShapeComponent((shapeRenderer) -> {
+      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+      Gdx.gl.glEnable(GL20.GL_BLEND);
+
+      float x = position.x;
+      float y = position.y;
+
+      Gdx.gl.glEnable(GL20.GL_STENCIL_TEST);
+      Gdx.gl.glClearStencil(0);
+      Gdx.gl.glClear(GL20.GL_STENCIL_BUFFER_BIT);
+      Gdx.gl.glColorMask(false, false, false, false);
+      Gdx.gl.glDepthMask(false);
+      Gdx.gl.glStencilFunc(GL20.GL_NOTEQUAL, 1, 1);
+      Gdx.gl.glStencilOp(GL20.GL_REPLACE, GL20.GL_REPLACE, GL20.GL_REPLACE);
+
+      shapeRenderer.setColor(1, 1, 1, 1f);
+      shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+      shapeRenderer.circle(x, y, 40);
+      shapeRenderer.end();
+
+      Gdx.gl.glColorMask(true, true, true, true);
+      Gdx.gl.glDepthMask(true);
+      Gdx.gl.glStencilFunc(GL20.GL_STENCIL_FUNC, 1, 1);
+      Gdx.gl.glStencilOp(GL20.GL_KEEP, GL20.GL_KEEP, GL20.GL_KEEP);
+
+      shapeRenderer.setColor(0, 0, 0, 0.5f);
+      shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+      float deg = 95f;
+      float step = (360f / (float)items.size()) - 10f;
+      for (int i = 0; i < items.size(); i++) {
+        deg += (360f / (float)items.size());
+        shapeRenderer.arc(x, y, 100, deg, step, 100);
+      }
+      shapeRenderer.end();
+
+
+      Gdx.gl.glDisable(GL20.GL_STENCIL_TEST);
+    });
+
+    Entity entity = new Entity();
+    entity.add(shapeComponent);
+    engine.addEntity(entity);
+    entities.add(entity);
+
     if (items.size() == 3) {
-      ShapeComponent shapeComponent = new ShapeComponent((shapeRenderer) -> {
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-
-        float x = position.x;
-        float y = position.y;
-
-        Gdx.gl.glEnable(GL20.GL_STENCIL_TEST);
-        Gdx.gl.glClearStencil(0);
-        Gdx.gl.glClear(GL20.GL_STENCIL_BUFFER_BIT);
-        Gdx.gl.glColorMask(false, false, false, false);
-        Gdx.gl.glDepthMask(false);
-        Gdx.gl.glStencilFunc(GL20.GL_NOTEQUAL, 1, 1);
-        Gdx.gl.glStencilOp(GL20.GL_REPLACE, GL20.GL_REPLACE, GL20.GL_REPLACE);
-
-        shapeRenderer.setColor(1, 1, 1, 1f);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.circle(x, y, 40);
-        shapeRenderer.end();
-
-        Gdx.gl.glColorMask(true, true, true, true);
-        Gdx.gl.glDepthMask(true);
-        Gdx.gl.glStencilFunc(GL20.GL_STENCIL_FUNC, 1, 1);
-        Gdx.gl.glStencilOp(GL20.GL_KEEP, GL20.GL_KEEP, GL20.GL_KEEP);
-
-        shapeRenderer.setColor(0, 0, 0, 0.5f);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.arc(x, y, 100, 95, 110, 100);
-        shapeRenderer.arc(x, y, 100, 215, 110, 100);
-        shapeRenderer.arc(x, y, 100, 335, 110, 100);
-        shapeRenderer.end();
-
-
-        Gdx.gl.glDisable(GL20.GL_STENCIL_TEST);
-      });
-      Entity entity = new Entity();
-      entity.add(shapeComponent);
-      engine.addEntity(entity);
-      entities.add(entity);
 
       Vector2 centerOffset = position.cpy().add(40, 40);
       Entity labelEntity = entityFactory.createText(items.get(0).label, centerOffset);
@@ -153,21 +159,6 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
       Entity labelEntity3 = entityFactory.createText(items.get(2).label, leftOffset);
       engine.addEntity(labelEntity3);
       entities.add(labelEntity3);
-      /*
-      Vector2 outerRingPosition = new Vector2(position.x, position.y);
-      Entity testWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 0f);
-      entities.add(testWedge);
-      engine.addEntity(testWedge);
-
-
-      Entity secondWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 120f);
-      entities.add(secondWedge);
-      engine.addEntity(secondWedge);
-
-      Entity thirdWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 240f);
-      entities.add(thirdWedge);
-      engine.addEntity(thirdWedge);
-      */
     }
   }
 

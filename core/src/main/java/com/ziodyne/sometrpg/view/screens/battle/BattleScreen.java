@@ -253,9 +253,10 @@ public abstract class BattleScreen extends GameScreen {
     Gdx.gl.glStencilFunc(GL20.GL_NOTEQUAL, 1, 1);
     Gdx.gl.glStencilOp(GL20.GL_REPLACE, GL20.GL_REPLACE, GL20.GL_REPLACE);
 
+    shapeRenderer.setProjectionMatrix(camera.combined);
     shapeRenderer.setColor(1, 1, 1, 1f);
     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-    shapeRenderer.circle(864, 320, 100);
+    shapeRenderer.circle(864, 320, 40 );
     shapeRenderer.end();
 
     Gdx.gl.glColorMask(true, true, true, true);
@@ -266,7 +267,9 @@ public abstract class BattleScreen extends GameScreen {
     shapeRenderer.setProjectionMatrix(camera.combined);
     shapeRenderer.setColor(0, 0, 0, 0.5f);
     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-    shapeRenderer.arc(864, 320, 100, 0, 120, 100);
+    shapeRenderer.arc(864, 320, 100, 90, 110, 100);
+    shapeRenderer.arc(864, 320, 100, 210, 110, 100);
+    shapeRenderer.arc(864, 320, 100, 330, 110, 100);
     shapeRenderer.end();
 
 

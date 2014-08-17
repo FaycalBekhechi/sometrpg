@@ -1,10 +1,8 @@
 package com.ziodyne.sometrpg.view.widgets;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Engine;
@@ -30,10 +28,9 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable, 
   private static final int MAX_ITEMS = 3;
 
   private final List<Item> items;
-  private final Set<Entity> entities = new HashSet<>();
-  private final Engine engine;
   private final EntityFactory entityFactory;
   private final Vector2 position;
+  private final EntityRegistrar registrar;
   private Consumer<String> clickHandler = (s) -> {};
   private final RangeMap<Float, String> radiusRangeToItemName = TreeRangeMap.create();
   private final OrthographicCamera orthographicCamera;
@@ -72,7 +69,7 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable, 
       throw new IllegalArgumentException("Cannot have more than " + MAX_ITEMS + " items in a radial menu right now.");
     }
 
-    this.engine = engine;
+    this.registrar = new EntityRegistrar(engine);
     this.entityFactory = entityFactory;
     this.position = position;
     this.orthographicCamera = camera;
@@ -138,32 +135,27 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable, 
 
     Entity entity = new Entity();
     entity.add(shapeComponent);
-    engine.addEntity(entity);
-    entities.add(entity);
+    registrar.addEntity(entity);
 
     if (items.size() == 3) {
 
       Vector2 centerOffset = position.cpy().add(40, 40);
       Entity labelEntity = entityFactory.createText(items.get(0).label, centerOffset);
-      engine.addEntity(labelEntity);
-      entities.add(labelEntity);
+      registrar.addEntity(labelEntity);
 
       Vector2 rightOffset = position.cpy().add(0, -80);
       Entity labelEntity2 = entityFactory.createText(items.get(1).label, rightOffset);
-      engine.addEntity(labelEntity2);
-      entities.add(labelEntity2);
+      registrar.addEntity(labelEntity2);
 
       Vector2 leftOffset = position.cpy().add(-80, 40);
       Entity labelEntity3 = entityFactory.createText(items.get(2).label, leftOffset);
-      engine.addEntity(labelEntity3);
-      entities.add(labelEntity3);
+      registrar.addEntity(labelEntity3);
     }
   }
 
   @Override
   public void dispose() {
-    entities.stream()
-      .forEach(engine::removeEntity);
+    registrar.dispose();
   }
 
   @Override

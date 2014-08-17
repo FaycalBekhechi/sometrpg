@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.ziodyne.sometrpg.view.components.ShapeComponent;
 
+/**
+ * A system to render {@link ShapeComponent} instances in world space.
+ */
 public class ShapeRenderSystem extends IteratingSystem {
 
   private final OrthographicCamera camera;

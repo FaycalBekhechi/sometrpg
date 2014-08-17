@@ -21,13 +21,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeMap;
 import com.google.common.collect.TreeRangeMap;
-import com.ziodyne.sometrpg.logging.GdxLogger;
-import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.components.ShapeComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
-public class RadialMenu extends InputAdapter implements Disposable, Renderable{
-  private final static Logger LOG = new GdxLogger(RadialMenu.class);
+public class RadialMenu extends InputAdapter implements Disposable, Renderable, Logged {
 
   private static final int MAX_ITEMS = 3;
 
@@ -87,7 +85,7 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
       radiusRangeToItemName.put(degrees, this.items.get(i).name);
     }
 
-    LOG.log("Radial Menu: " + radiusRangeToItemName);
+    logDebug("Radial Menu: " + radiusRangeToItemName);
   }
 
   public void setClickHandler(Consumer<String> clickHandler) {
@@ -183,7 +181,7 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
       angleBetween += 360f;
     }
 
-    LOG.log("Detected click at angle: " + angleBetween);
+    logDebug("Detected click at angle: " + angleBetween);
     String clickedItemName = radiusRangeToItemName.get(angleBetween);
 
     if (clickedItemName == null) {

@@ -239,42 +239,5 @@ public abstract class BattleScreen extends GameScreen {
       unitActionMenu.setX(menuPos.x);
       unitActionMenu.setY(menuPos.y);
     }
-
-    ShapeRenderer shapeRenderer = new ShapeRenderer();
-    Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    Gdx.gl.glEnable(GL20.GL_BLEND);
-
-
-    Gdx.gl.glEnable(GL20.GL_STENCIL_TEST);
-    Gdx.gl.glClearStencil(0);
-    Gdx.gl.glClear(GL20.GL_STENCIL_BUFFER_BIT);
-    Gdx.gl.glColorMask(false, false, false, false);
-    Gdx.gl.glDepthMask(false);
-    Gdx.gl.glStencilFunc(GL20.GL_NOTEQUAL, 1, 1);
-    Gdx.gl.glStencilOp(GL20.GL_REPLACE, GL20.GL_REPLACE, GL20.GL_REPLACE);
-
-    shapeRenderer.setProjectionMatrix(camera.combined);
-    shapeRenderer.setColor(1, 1, 1, 1f);
-    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-    shapeRenderer.circle(864, 320, 40 );
-    shapeRenderer.end();
-
-    Gdx.gl.glColorMask(true, true, true, true);
-    Gdx.gl.glDepthMask(true);
-    Gdx.gl.glStencilFunc(GL20.GL_STENCIL_FUNC, 1, 1);
-    Gdx.gl.glStencilOp(GL20.GL_KEEP, GL20.GL_KEEP, GL20.GL_KEEP);
-
-    shapeRenderer.setProjectionMatrix(camera.combined);
-    shapeRenderer.setColor(0, 0, 0, 0.5f);
-    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-    shapeRenderer.arc(864, 320, 100, 90, 110, 100);
-    shapeRenderer.arc(864, 320, 100, 210, 110, 100);
-    shapeRenderer.arc(864, 320, 100, 330, 110, 100);
-    shapeRenderer.end();
-
-
-    Gdx.gl.glDisable(GL20.GL_STENCIL_TEST);
-
-
   }
 }

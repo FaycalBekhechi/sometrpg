@@ -18,7 +18,6 @@ import com.ziodyne.sometrpg.view.components.Text;
 import com.ziodyne.sometrpg.view.components.ViewportPosition;
 
 public class ViewportSpaceTextRenderSystem extends IteratingSystem {
-  private final Viewport viewport;
   private final OrthographicCamera camera;
   private final SpriteBatch batch;
 
@@ -31,7 +30,6 @@ public class ViewportSpaceTextRenderSystem extends IteratingSystem {
 
     super(Family.getFamilyFor(Text.class, ViewportPosition.class));
     this.batch = batch;
-    this.viewport = viewport;
     this.camera = new OrthographicCamera();
     this.camera.setToOrtho(false, viewport.getViewportWidth(), viewport.getViewportHeight());
   }

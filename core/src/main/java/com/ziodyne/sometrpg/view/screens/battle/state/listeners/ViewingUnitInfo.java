@@ -10,17 +10,20 @@ import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
+import com.ziodyne.sometrpg.view.widgets.UnitInfoMenu;
 
 public class ViewingUnitInfo extends FlowListener<BattleContext> {
   private final Engine engine;
   private final EntityFactory entityFactory;
   private final Set<Entity> ownedEntities = Sets.newHashSet();
+  private UnitInfoMenu infoMenu;
 
   public ViewingUnitInfo(Engine engine, EntityFactory entityFactory) {
 
     super(BattleState.SHOWING_UNIT_DETAILS);
     this.engine = engine;
     this.entityFactory = entityFactory;
+    this.infoMenu = new UnitInfoMenu(engine, entityFactory);
   }
 
   @Override
@@ -28,22 +31,12 @@ public class ViewingUnitInfo extends FlowListener<BattleContext> {
     for (Entity entity : ownedEntities) {
       engine.removeEntity(entity);
     }
+
+    infoMenu.dispose();
   }
 
   @Override
   public void onEnter(BattleContext context) {
-    float outerGutter = 40;
-    float innerGutter = 25;
-
-    float leftWidth = 446.5f;
-
-    Entity smallLeft = entityFactory.createMenuBg(new Vector2(outerGutter, outerGutter), leftWidth, 630);
-    Entity largeRight = entityFactory.createMenuBg(new Vector2(outerGutter + leftWidth + innerGutter, outerGutter), 1046.5f, 630);
-
-    engine.addEntity(smallLeft);
-    engine.addEntity(largeRight);
-
-    ownedEntities.add(smallLeft);
-    ownedEntities.add(largeRight);
+    infoMenu.render();
   }
 }

@@ -18,5 +18,9 @@
   {
     "type": "gameSpec",
     "path": "data/game.json"
+  },
+  {
+    "type": "shader",
+    "path": "shaders/distance_field.json"
   }
 ]

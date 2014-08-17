@@ -1,0 +1,4 @@
+{
+  "vert": "distance_field.vert",
+  "frag": "distance_field.frag"
+}

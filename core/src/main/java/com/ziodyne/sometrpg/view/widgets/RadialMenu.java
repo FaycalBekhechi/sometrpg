@@ -138,6 +138,21 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
       entity.add(shapeComponent);
       engine.addEntity(entity);
       entities.add(entity);
+
+      Vector2 centerOffset = position.cpy().add(40, 40);
+      Entity labelEntity = entityFactory.createText(items.get(0).label, centerOffset);
+      engine.addEntity(labelEntity);
+      entities.add(labelEntity);
+
+      Vector2 rightOffset = position.cpy().add(0, -80);
+      Entity labelEntity2 = entityFactory.createText(items.get(1).label, rightOffset);
+      engine.addEntity(labelEntity2);
+      entities.add(labelEntity2);
+
+      Vector2 leftOffset = position.cpy().add(-80, 40);
+      Entity labelEntity3 = entityFactory.createText(items.get(2).label, leftOffset);
+      engine.addEntity(labelEntity3);
+      entities.add(labelEntity3);
       /*
       Vector2 outerRingPosition = new Vector2(position.x, position.y);
       Entity testWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 0f);

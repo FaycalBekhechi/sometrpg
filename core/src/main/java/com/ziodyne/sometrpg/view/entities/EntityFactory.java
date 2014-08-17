@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -32,6 +33,7 @@ import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
+import com.ziodyne.sometrpg.view.components.Text;
 import com.ziodyne.sometrpg.view.components.TileCursor;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
 import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
@@ -68,6 +70,15 @@ public class EntityFactory {
   public EntityFactory(Engine engine, AssetRepository repository) {
     this.engine = engine;
     this.repository = repository;
+  }
+
+  public Entity createText(String text, Vector2 position) {
+
+    BitmapFont font = repository.get("data/futura-medium.ttf", BitmapFont.class);
+    Position posComponent = new Position(position.x, position.y);
+    Text textComponent = new Text(font, text);
+
+    return createEntity(posComponent, textComponent);
   }
 
   public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Set<UnitEntityAnimation> animations) {

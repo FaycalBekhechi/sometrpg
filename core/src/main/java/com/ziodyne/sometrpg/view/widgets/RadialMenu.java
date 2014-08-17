@@ -8,29 +8,25 @@ import java.util.function.Consumer;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Disposable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeMap;
 import com.google.common.collect.TreeRangeMap;
-import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.components.ShapeComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
-public class RadialMenu extends InputAdapter implements Disposable, Renderable, Logged {
+public class RadialMenu extends Widget {
 
   private static final int MAX_ITEMS = 3;
 
   private final List<Item> items;
   private final EntityFactory entityFactory;
   private final Vector2 position;
-  private final EntityRegistrar registrar;
   private Consumer<String> clickHandler = (s) -> {};
   private final RangeMap<Float, String> radiusRangeToItemName = TreeRangeMap.create();
   private final OrthographicCamera orthographicCamera;
@@ -65,11 +61,11 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable, 
 
   public RadialMenu(Engine engine, EntityFactory entityFactory, Vector2 position, OrthographicCamera camera, Collection<Item> items) {
 
+    super(engine);
     if (items.size() > MAX_ITEMS) {
       throw new IllegalArgumentException("Cannot have more than " + MAX_ITEMS + " items in a radial menu right now.");
     }
 
-    this.registrar = new EntityRegistrar(engine);
     this.entityFactory = entityFactory;
     this.position = position;
     this.orthographicCamera = camera;
@@ -135,27 +131,22 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable, 
 
     Entity entity = new Entity();
     entity.add(shapeComponent);
-    registrar.addEntity(entity);
+    newEntity(entity);
 
     if (items.size() == 3) {
 
       Vector2 centerOffset = position.cpy().add(40, 40);
       Entity labelEntity = entityFactory.createText(items.get(0).label, centerOffset);
-      registrar.addEntity(labelEntity);
+      newEntity(labelEntity);
 
       Vector2 rightOffset = position.cpy().add(0, -80);
       Entity labelEntity2 = entityFactory.createText(items.get(1).label, rightOffset);
-      registrar.addEntity(labelEntity2);
+      newEntity(labelEntity2);
 
       Vector2 leftOffset = position.cpy().add(-80, 40);
       Entity labelEntity3 = entityFactory.createText(items.get(2).label, leftOffset);
-      registrar.addEntity(labelEntity3);
+      newEntity(labelEntity3);
     }
-  }
-
-  @Override
-  public void dispose() {
-    registrar.dispose();
   }
 
   @Override

@@ -77,7 +77,7 @@ public class EntityFactory {
 
   public Entity createViewportText(String text, Vector2 position) {
 
-    BitmapFont font = repository.get("fonts/baked/futura-16.fnt", BitmapFont.class);
+    BitmapFont font = repository.get("fonts/baked/futura-64.fnt", BitmapFont.class);
     ViewportPosition posComponent = new ViewportPosition(position);
     Text textComponent = new Text(font, text);
 

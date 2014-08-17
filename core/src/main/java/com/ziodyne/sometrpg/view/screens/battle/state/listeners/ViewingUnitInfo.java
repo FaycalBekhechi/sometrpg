@@ -23,7 +23,6 @@ public class ViewingUnitInfo extends FlowListener<BattleContext> {
     super(BattleState.SHOWING_UNIT_DETAILS);
     this.engine = engine;
     this.entityFactory = entityFactory;
-    this.infoMenu = new UnitInfoMenu(engine, entityFactory);
   }
 
   @Override
@@ -32,11 +31,14 @@ public class ViewingUnitInfo extends FlowListener<BattleContext> {
       engine.removeEntity(entity);
     }
 
-    infoMenu.dispose();
+    if (infoMenu != null) {
+      infoMenu.dispose();
+    }
   }
 
   @Override
   public void onEnter(BattleContext context) {
+    infoMenu = new UnitInfoMenu(engine, entityFactory, context.selectedCombatant);
     infoMenu.render();
   }
 }

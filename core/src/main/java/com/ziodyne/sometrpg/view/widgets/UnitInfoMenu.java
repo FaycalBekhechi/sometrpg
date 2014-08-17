@@ -3,15 +3,19 @@ package com.ziodyne.sometrpg.view.widgets;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
+import org.apache.commons.lang3.StringUtils;
 
 public class UnitInfoMenu extends Widget {
   private EntityFactory entityFactory;
+  private Combatant combatant;
 
-  public UnitInfoMenu(Engine engine, EntityFactory entityFactory) {
+  public UnitInfoMenu(Engine engine, EntityFactory entityFactory, Combatant combatant) {
 
     super(engine);
     this.entityFactory = entityFactory;
+    this.combatant = combatant;
   }
 
   @Override
@@ -26,7 +30,10 @@ public class UnitInfoMenu extends Widget {
     newEntity(smallLeft);
     newEntity(largeRight);
 
-    Entity label = entityFactory.createViewportText("TESTING", new Vector2(outerGutter, outerGutter+630));
+    String characterName = combatant.getCharacter().getName();
+    characterName = StringUtils.upperCase(characterName);
+
+    Entity label = entityFactory.createViewportText(characterName, new Vector2(outerGutter + 20, outerGutter+610));
     newEntity(label);
   }
 }

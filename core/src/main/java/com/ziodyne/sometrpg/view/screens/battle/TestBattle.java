@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -60,6 +61,7 @@ import com.ziodyne.sometrpg.view.assets.AssetRepository;
 import com.ziodyne.sometrpg.view.assets.loaders.ChapterLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.CharacterSpritesLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.MapLoader;
+import com.ziodyne.sometrpg.view.assets.loaders.ShaderProgramLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.SpriteSheetAssetLoader;
 import com.ziodyne.sometrpg.view.assets.loaders.TextureAtlasLoader;
 import com.ziodyne.sometrpg.view.assets.models.Chapter;
@@ -161,6 +163,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(TextureAtlas.class, new TextureAtlasLoader(resolver));
     assetManager.setLoader(Chapter.class, new ChapterLoader(resolver));
     assetManager.setLoader(Sound.class, new SoundLoader(resolver));
+    assetManager.setLoader(ShaderProgram.class, new ShaderProgramLoader(resolver));
 
     try {
       bundleLoader.load();

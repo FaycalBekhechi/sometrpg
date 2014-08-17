@@ -46,6 +46,7 @@ import com.ziodyne.sometrpg.view.components.StaticShader;
 import com.ziodyne.sometrpg.view.components.Text;
 import com.ziodyne.sometrpg.view.components.TileCursor;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
+import com.ziodyne.sometrpg.view.components.ViewportPosition;
 import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
 import com.ziodyne.sometrpg.view.components.VoidSprite;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
@@ -72,6 +73,18 @@ public class EntityFactory {
   public EntityFactory(Engine engine, AssetRepository repository) {
     this.engine = engine;
     this.repository = repository;
+  }
+
+  public Entity createViewportText(String text, Vector2 position) {
+
+    BitmapFont font = repository.get("fonts/baked/futura-16.fnt", BitmapFont.class);
+    ViewportPosition posComponent = new ViewportPosition(position);
+    Text textComponent = new Text(font, text);
+
+    ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json");
+    Shader shaderComponent = new StaticShader(distanceFieldShader);
+
+    return createEntity(posComponent, textComponent, shaderComponent);
   }
 
   public Entity createText(String text, Vector2 position) {

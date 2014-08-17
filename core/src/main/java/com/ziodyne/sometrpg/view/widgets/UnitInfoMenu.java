@@ -23,8 +23,10 @@ public class UnitInfoMenu extends Widget {
     float leftWidth = 446.5f;
     Entity smallLeft = entityFactory.createMenuBg(new Vector2(outerGutter, outerGutter), leftWidth, 630);
     Entity largeRight = entityFactory.createMenuBg(new Vector2(outerGutter + leftWidth + innerGutter, outerGutter), 1046.5f, 630);
-
     newEntity(smallLeft);
     newEntity(largeRight);
+
+    Entity label = entityFactory.createViewportText("TESTING", new Vector2(outerGutter, outerGutter+630));
+    newEntity(label);
   }
 }

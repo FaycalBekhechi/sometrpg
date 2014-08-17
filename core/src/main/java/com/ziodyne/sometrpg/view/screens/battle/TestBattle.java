@@ -108,6 +108,7 @@ import com.ziodyne.sometrpg.view.systems.TextRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
 import com.ziodyne.sometrpg.view.systems.ViewportSpaceSpriteRenderSystem;
+import com.ziodyne.sometrpg.view.systems.ViewportSpaceTextRenderSystem;
 import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -122,6 +123,7 @@ public class TestBattle extends BattleScreen {
   private TweenAccessor<Camera> cameraTweenAccessor;
   private SpriteRenderSystem.Factory spriteRendererFactory;
   private BattleMapController.Factory mapControllerFactory;
+  private ViewportSpaceTextRenderSystem.Factory textRenderSystemFactory;
   private VoidSpriteRenderSystem.Factory voidRenderSystemFactory;
   private AssetBundleLoader bundleLoader;
   private TextRenderSystem textRenderSystem;
@@ -140,12 +142,14 @@ public class TestBattle extends BattleScreen {
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<SpriteComponent> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
              TweenAccessor<Position> positionTweenAccessor, VoidSpriteRenderSystem.Factory voidRenderSystemFactory,
-             EventBus eventBus, TextRenderSystem textRenderSystem, @Assisted String chapterPath) {
+             EventBus eventBus, TextRenderSystem textRenderSystem, ViewportSpaceTextRenderSystem.Factory textRenderSystemFactory,
+             @Assisted String chapterPath) {
     super(director, new OrthographicCamera(), 32f, eventBus);
 
     camera.zoom = 0.5f;
     this.chapterPath = chapterPath;
     this.tweenManager = tweenManager;
+    this.textRenderSystemFactory = textRenderSystemFactory;
     this.mapControllerFactory = mapControllerFactory;
     this.cameraTweenAccessor = cameraTweenAccessor;
     this.positionTweenAccessor = positionTweenAccessor;
@@ -241,8 +245,9 @@ public class TestBattle extends BattleScreen {
     engine.addSystem(spriteRenderSystem);
     engine.addSystem(new StageRenderSystem());
     engine.addSystem(new ShapeRenderSystem(camera));
-    engine.addSystem(new ViewportSpaceSpriteRenderSystem(viewport));
     engine.addSystem(textRenderSystem);
+    engine.addSystem(new ViewportSpaceSpriteRenderSystem(viewport));
+    engine.addSystem(textRenderSystemFactory.create(viewport));
 
 
     Entity tileSelectorOverlay = entityFactory.createMapSelector();

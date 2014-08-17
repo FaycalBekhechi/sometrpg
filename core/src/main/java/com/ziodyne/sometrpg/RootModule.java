@@ -17,6 +17,7 @@ import com.ziodyne.sometrpg.view.screens.battle.TestBattle;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.ViewportSpaceSpriteRenderSystem;
+import com.ziodyne.sometrpg.view.systems.ViewportSpaceTextRenderSystem;
 import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
 import com.ziodyne.sometrpg.view.tween.TweenAccessorModule;
 
@@ -50,6 +51,9 @@ public class RootModule extends AbstractModule {
 
     install(new FactoryModuleBuilder()
             .build(AssetBundleLoader.Factory.class));
+
+    install(new FactoryModuleBuilder()
+            .build(ViewportSpaceTextRenderSystem.Factory.class));
   }
 
   @Provides

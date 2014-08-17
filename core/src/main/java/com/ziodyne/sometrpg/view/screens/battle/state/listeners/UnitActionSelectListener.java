@@ -66,8 +66,10 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
       logDebug("Unit actions exhausted.");
       context.safeTrigger(BattleEvent.ACTIONS_EXHAUSTED);
     } else {
-
-      actionMenu = new ActionMenu(allowedActions, new Vector2(context.selectedSquare.x * gridSize, context.selectedSquare.y * gridSize), camera, engine, entityFactory);
+      // Center the radial menu on the center of the selected unit's square.
+      float x = context.selectedSquare.x * gridSize + (gridSize / 2);
+      float y = context.selectedSquare.y * gridSize + (gridSize / 2);
+      actionMenu = new ActionMenu(allowedActions, new Vector2(x, y), camera, engine, entityFactory);
       actionMenu.addSelectedListener(selectedAction -> {
         switch (selectedAction) {
           case ATTACK:

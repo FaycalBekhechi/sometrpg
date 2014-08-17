@@ -98,6 +98,7 @@ import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.MapMovementOverlayRenderer;
 import com.ziodyne.sometrpg.view.systems.MapOverlayRenderSystem;
+import com.ziodyne.sometrpg.view.systems.ShapeRenderSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageUpdateSystem;
@@ -235,6 +236,7 @@ public class TestBattle extends BattleScreen {
     engine.addSystem(new MapOverlayRenderSystem(camera));
     engine.addSystem(spriteRenderSystem);
     engine.addSystem(new StageRenderSystem());
+    engine.addSystem(new ShapeRenderSystem(camera));
     engine.addSystem(new ViewportSpaceSpriteRenderSystem(viewport));
 
 

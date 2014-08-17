@@ -9,8 +9,11 @@ import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
@@ -20,6 +23,7 @@ import com.google.common.collect.RangeMap;
 import com.google.common.collect.TreeRangeMap;
 import com.ziodyne.sometrpg.logging.GdxLogger;
 import com.ziodyne.sometrpg.logging.Logger;
+import com.ziodyne.sometrpg.view.components.ShapeComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 public class RadialMenu extends InputAdapter implements Disposable, Renderable{
@@ -72,7 +76,7 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
 
     this.engine = engine;
     this.entityFactory = entityFactory;
-    this.position = position.sub(134f, 16f);
+    this.position = position;
     this.orthographicCamera = camera;
     this.items = Lists.newArrayList(items);
 
@@ -95,6 +99,46 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
   public void render() {
 
     if (items.size() == 3) {
+      ShapeComponent shapeComponent = new ShapeComponent((shapeRenderer) -> {
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+
+        float x = position.x;
+        float y = position.y;
+
+        Gdx.gl.glEnable(GL20.GL_STENCIL_TEST);
+        Gdx.gl.glClearStencil(0);
+        Gdx.gl.glClear(GL20.GL_STENCIL_BUFFER_BIT);
+        Gdx.gl.glColorMask(false, false, false, false);
+        Gdx.gl.glDepthMask(false);
+        Gdx.gl.glStencilFunc(GL20.GL_NOTEQUAL, 1, 1);
+        Gdx.gl.glStencilOp(GL20.GL_REPLACE, GL20.GL_REPLACE, GL20.GL_REPLACE);
+
+        shapeRenderer.setColor(1, 1, 1, 1f);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.circle(x, y, 40);
+        shapeRenderer.end();
+
+        Gdx.gl.glColorMask(true, true, true, true);
+        Gdx.gl.glDepthMask(true);
+        Gdx.gl.glStencilFunc(GL20.GL_STENCIL_FUNC, 1, 1);
+        Gdx.gl.glStencilOp(GL20.GL_KEEP, GL20.GL_KEEP, GL20.GL_KEEP);
+
+        shapeRenderer.setColor(0, 0, 0, 0.5f);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.arc(x, y, 100, 95, 110, 100);
+        shapeRenderer.arc(x, y, 100, 215, 110, 100);
+        shapeRenderer.arc(x, y, 100, 335, 110, 100);
+        shapeRenderer.end();
+
+
+        Gdx.gl.glDisable(GL20.GL_STENCIL_TEST);
+      });
+      Entity entity = new Entity();
+      entity.add(shapeComponent);
+      engine.addEntity(entity);
+      entities.add(entity);
+      /*
       Vector2 outerRingPosition = new Vector2(position.x, position.y);
       Entity testWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 0f);
       entities.add(testWedge);
@@ -108,6 +152,7 @@ public class RadialMenu extends InputAdapter implements Disposable, Renderable{
       Entity thirdWedge = entityFactory.createRadialMenuThirdWedge(outerRingPosition, 240f);
       entities.add(thirdWedge);
       engine.addEntity(thirdWedge);
+      */
     }
   }
 

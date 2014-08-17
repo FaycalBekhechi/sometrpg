@@ -29,6 +29,6 @@
   },
   {
     "type": "bitmap_font",
-    "path": "data/futura.fnt"
+    "path": "fonts/baked/futura-16.fnt"
   }
 ]

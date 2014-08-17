@@ -76,7 +76,7 @@ public class EntityFactory {
 
   public Entity createText(String text, Vector2 position) {
 
-    BitmapFont font = repository.get("data/futura.fnt", BitmapFont.class);
+    BitmapFont font = repository.get("fonts/baked/futura-16.fnt", BitmapFont.class);
     Position posComponent = new Position(position.x, position.y);
     Text textComponent = new Text(font, text);
 

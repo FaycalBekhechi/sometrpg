@@ -15,6 +15,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
@@ -173,8 +174,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(Chapter.class, new ChapterLoader(resolver));
     assetManager.setLoader(Sound.class, new SoundLoader(resolver));
     assetManager.setLoader(ShaderProgram.class, new ShaderProgramLoader(resolver));
-    assetManager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
-    assetManager.setLoader(BitmapFont.class, new FreetypeFontLoader(resolver));
+    assetManager.setLoader(BitmapFont.class, new BitmapFontLoader(resolver));
 
     try {
       bundleLoader.load();

@@ -29,6 +29,6 @@
   },
   {
     "type": "bitmap_font",
-    "path": "data/futura-medium.ttf"
+    "path": "data/futura.fnt"
   }
 ]

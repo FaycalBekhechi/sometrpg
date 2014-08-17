@@ -61,14 +61,14 @@ public class AssetBundleLoader implements Logged {
     FileHandle bundleFile = Gdx.files.internal(bundlePath);
     InputStream fileStream = bundleFile.read();
 
-    Set<Asset<?>> assets = objectMapper.readValue(fileStream, new TypeReference<Set<Asset<?>>>() { });
+    Set<Asset> assets = objectMapper.readValue(fileStream, new TypeReference<Set<Asset>>() { });
     totalNumAssets = assets.size();
     logDebug("Loading asset bundle with " + totalNumAssets + " assets.");
     startTime = new Date();
 
-    for (Asset<?> asset : assets) {
+    for (Asset asset : assets) {
       remainingAssets.add(asset);
-      assetManager.load(asset.getPath(), asset.getClazz());
+      assetManager.load(asset.getPath(), asset.getClazz(), asset.getParams());
     }
   }
 

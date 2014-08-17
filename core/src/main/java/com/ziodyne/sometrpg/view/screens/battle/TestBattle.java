@@ -15,14 +15,19 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -70,6 +75,7 @@ import com.ziodyne.sometrpg.view.audio.BattleMusicPlayer;
 import com.ziodyne.sometrpg.view.audio.BattleSoundPlayer;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
+import com.ziodyne.sometrpg.view.components.Text;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
@@ -94,9 +100,11 @@ import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.MapMovementOverlayRenderer;
 import com.ziodyne.sometrpg.view.systems.MapOverlayRenderSystem;
+import com.ziodyne.sometrpg.view.systems.ShapeRenderSystem;
 import com.ziodyne.sometrpg.view.systems.SpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageRenderSystem;
 import com.ziodyne.sometrpg.view.systems.StageUpdateSystem;
+import com.ziodyne.sometrpg.view.systems.TextRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TiledMapRenderSystem;
 import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
 import com.ziodyne.sometrpg.view.systems.ViewportSpaceSpriteRenderSystem;
@@ -116,6 +124,7 @@ public class TestBattle extends BattleScreen {
   private BattleMapController.Factory mapControllerFactory;
   private VoidSpriteRenderSystem.Factory voidRenderSystemFactory;
   private AssetBundleLoader bundleLoader;
+  private TextRenderSystem textRenderSystem;
   private boolean initialized;
   private Pathfinder<GridPoint2> pathfinder;
   private final String chapterPath;
@@ -131,7 +140,7 @@ public class TestBattle extends BattleScreen {
              SpriteRenderSystem.Factory spriteRendererFactory, BattleMapController.Factory mapControllerFactory,
              TweenAccessor<SpriteComponent> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
              TweenAccessor<Position> positionTweenAccessor, VoidSpriteRenderSystem.Factory voidRenderSystemFactory,
-             EventBus eventBus, @Assisted String chapterPath) {
+             EventBus eventBus, TextRenderSystem textRenderSystem, @Assisted String chapterPath) {
     super(director, new OrthographicCamera(), 32f, eventBus);
 
     camera.zoom = 0.5f;
@@ -150,6 +159,7 @@ public class TestBattle extends BattleScreen {
     this.battleSoundPlayer = new BattleSoundPlayer(eventBus, repo);
     this.battleMusicPlayer = new BattleMusicPlayer(repo);
     this.bundleLoader = bundleLoaderFactory.create(assetManager, "data/test.bundle");
+    this.textRenderSystem = textRenderSystem;
 
     assetManager.setLoader(TiledMap.class, new TmxMapLoader());
 
@@ -164,6 +174,7 @@ public class TestBattle extends BattleScreen {
     assetManager.setLoader(Chapter.class, new ChapterLoader(resolver));
     assetManager.setLoader(Sound.class, new SoundLoader(resolver));
     assetManager.setLoader(ShaderProgram.class, new ShaderProgramLoader(resolver));
+    assetManager.setLoader(BitmapFont.class, new BitmapFontLoader(resolver));
 
     try {
       bundleLoader.load();
@@ -229,7 +240,9 @@ public class TestBattle extends BattleScreen {
     engine.addSystem(new MapOverlayRenderSystem(camera));
     engine.addSystem(spriteRenderSystem);
     engine.addSystem(new StageRenderSystem());
+    engine.addSystem(new ShapeRenderSystem(camera));
     engine.addSystem(new ViewportSpaceSpriteRenderSystem(viewport));
+    engine.addSystem(textRenderSystem);
 
 
     Entity tileSelectorOverlay = entityFactory.createMapSelector();
@@ -251,6 +264,7 @@ public class TestBattle extends BattleScreen {
     multiplexer.addProcessor(menuStage);
 
 
+
     Gdx.input.setInputProcessor(multiplexer);
 
     initialized = true;
@@ -260,7 +274,7 @@ public class TestBattle extends BattleScreen {
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory),
-      new UnitActionSelectListener(skin, viewport, menuStage, gridSquareSize),
+      new UnitActionSelectListener(engine, entityFactory, camera, gridSquareSize),
       new ViewingUnitInfo(engine, entityFactory),
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),

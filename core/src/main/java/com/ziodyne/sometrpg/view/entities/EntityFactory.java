@@ -1,5 +1,12 @@
 package com.ziodyne.sometrpg.view.entities;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -7,9 +14,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -30,8 +39,11 @@ import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.MapGridOverlay;
 import com.ziodyne.sometrpg.view.components.MapSquareOverlay;
 import com.ziodyne.sometrpg.view.components.Position;
-import com.ziodyne.sometrpg.view.components.SpriteComponent;
+import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
+import com.ziodyne.sometrpg.view.components.SpriteComponent;
+import com.ziodyne.sometrpg.view.components.StaticShader;
+import com.ziodyne.sometrpg.view.components.Text;
 import com.ziodyne.sometrpg.view.components.TileCursor;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
 import com.ziodyne.sometrpg.view.components.ViewportSpaceSprite;
@@ -40,13 +52,6 @@ import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.navigation.PathSegment;
 import com.ziodyne.sometrpg.view.navigation.PathUtils;
 import com.ziodyne.sometrpg.view.rendering.Sprite;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class EntityFactory {
   private final Engine engine;
@@ -67,6 +72,18 @@ public class EntityFactory {
   public EntityFactory(Engine engine, AssetRepository repository) {
     this.engine = engine;
     this.repository = repository;
+  }
+
+  public Entity createText(String text, Vector2 position) {
+
+    BitmapFont font = repository.get("data/futura.fnt", BitmapFont.class);
+    Position posComponent = new Position(position.x, position.y);
+    Text textComponent = new Text(font, text);
+
+    ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json");
+    Shader shaderComponent = new StaticShader(distanceFieldShader);
+
+    return createEntity(posComponent, textComponent, shaderComponent);
   }
 
   public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Set<UnitEntityAnimation> animations) {
@@ -254,6 +271,21 @@ public class EntityFactory {
     Position positionComponent = new Position(position.x, position.y);
 
     return createEntity(spriteComponent, positionComponent);
+  }
+
+  public Entity createRadialMenuThirdWedge(Vector2 position, float rotation) {
+
+    TextureAtlas wedgeAtlas = repository.get("data/menu_wedges.atlas");
+    Sprite sprite = new Sprite(wedgeAtlas.findRegion("third_wedge"), 300, 200);
+
+    sprite.setOriginX(148f);
+    sprite.setOriginY(25f);
+    sprite.setRotation(rotation);
+    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.MENU);
+
+    Position pos = new Position(position.x, position.y);
+
+    return createEntity(spriteComponent, pos);
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch) {

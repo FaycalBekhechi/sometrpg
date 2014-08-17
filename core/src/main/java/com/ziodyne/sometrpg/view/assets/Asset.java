@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.assets;
 
+import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -23,16 +24,23 @@ import static com.fasterxml.jackson.annotation.JsonSubTypes.Type;
     @Type(value = ChapterAsset.class, name = "chapter"),
     @Type(value = SoundAsset.class, name = "sound"),
     @Type(value = MusicAsset.class, name = "music"),
-    @Type(value = ShaderAsset.class, name = "shader")
+    @Type(value = ShaderAsset.class, name = "shader"),
+    @Type(value = BitmapFontAsset.class, name = "bitmap_font")
 })
 public abstract class Asset<T> {
   private String type;
   private String path;
   private Class<T> clazz;
+  private AssetLoaderParameters<T> params;
 
   protected Asset(String type, Class<T> clazz) {
     this.type = type;
     this.clazz = clazz;
+  }
+
+  public AssetLoaderParameters<T> getParams() {
+
+    return params;
   }
 
   public Class<T> getClazz() {

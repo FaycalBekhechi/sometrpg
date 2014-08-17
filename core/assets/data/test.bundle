@@ -9,6 +9,10 @@
   },
   {
     "type": "atlas",
+    "path": "data/menu_wedges.atlas"
+  },
+  {
+    "type": "atlas",
     "path": "data/movement_guide.atlas"
   },
   {
@@ -22,5 +26,9 @@
   {
     "type": "shader",
     "path": "shaders/distance_field.json"
+  },
+  {
+    "type": "bitmap_font",
+    "path": "data/futura.fnt"
   }
 ]

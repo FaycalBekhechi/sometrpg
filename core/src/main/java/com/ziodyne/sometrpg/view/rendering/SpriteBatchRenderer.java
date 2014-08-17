@@ -34,7 +34,9 @@ public class SpriteBatchRenderer {
 
     if (texture == null) {
       TextureRegion region = sprite.getRegion();
-      spriteBatch.draw(region, x + sprite.getOffsetX(), y + sprite.getOffsetY(), region.getRegionWidth(), region.getRegionHeight());
+      spriteBatch.draw(region, x + sprite.getOffsetX(), y + sprite.getOffsetY(), sprite.getOriginX(), sprite.getOriginY(),
+        region.getRegionWidth(), region.getRegionHeight(),
+        sprite.getScale(), sprite.getScale(), sprite.getRotation());
     } else {
       float scale = sprite.getScale();
       float width = sprite.getWidth() * scale;

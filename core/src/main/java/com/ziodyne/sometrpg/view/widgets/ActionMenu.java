@@ -1,70 +1,45 @@
 package com.ziodyne.sometrpg.view.widgets;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
-import com.ziodyne.sometrpg.logic.util.MathUtils;
-import com.ziodyne.sometrpg.util.Logged;
-
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * A widget that renders the action menu as a LibGDX {@link Actor}
- */
-public class ActionMenu extends Group implements Logged {
-  private static final int RADIUS = 100;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
+import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.util.Logged;
+import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
-  private ActionSelectedHandler selectedHandler;
-  private final Set<CombatantAction> availableActions;
-  private final Skin skin;
+public class ActionMenu extends InputAdapter implements Disposable, Logged {
+  private final RadialMenu radialMenu;
 
-  public ActionMenu(Set<CombatantAction> availableActions, Skin skin) {
-    this.availableActions = availableActions;
-    this.skin = skin;
+  public ActionMenu(Set<CombatantAction> availableActions, Vector2 position, OrthographicCamera camera, Engine engine, EntityFactory entityFactory) {
+    radialMenu = new RadialMenu(engine, entityFactory, position, camera, availableActions.stream().map(this::toMenuItem).collect(
+      Collectors.toSet()));
+    radialMenu.render();
+  }
 
-    initialize();
+  private RadialMenu.Item toMenuItem(CombatantAction action) {
+    return new RadialMenu.Item(action.name(), action.name());
   }
 
   public void addSelectedListener(ActionSelectedHandler handler) {
-    selectedHandler = handler;
+    radialMenu.setClickHandler((name) -> {
+
+      handler.handle(CombatantAction.valueOf(name));
+    });
   }
 
-  private void initialize() {
-    List<Vector2> samples = MathUtils.uniformSampleUnitCircle(availableActions.size());
-    int i = 0;
-    for (final CombatantAction action : availableActions) {
-      Actor control = createControlForAction(action);
+  @Override
+  public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-      Vector2 pos = samples.get(i);
-      pos.scl(RADIUS);
-
-      control.setPosition(pos.x, pos.y);
-
-      control.addListener(new ChangeListener() {
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-          if (selectedHandler != null) {
-            try {
-              selectedHandler.handle(action);
-            } catch (Exception e) {
-              logError("Exception thrown in selection handler.", e);
-            }
-          }
-        }
-      });
-
-      addActor(control);
-      i++;
-    }
+    return radialMenu.touchUp(screenX, screenY, pointer, button);
   }
 
-  private Actor createControlForAction(CombatantAction action) {
-    return new TextButton(action.toString(), skin);
+  @Override
+  public void dispose() {
+    radialMenu.dispose();
   }
-
 }

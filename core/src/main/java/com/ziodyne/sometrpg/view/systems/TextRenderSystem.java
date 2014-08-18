@@ -34,6 +34,9 @@ public class TextRenderSystem extends IteratingSystem {
   @Override
   public void processEntity(Entity entity, float deltaTime) {
 
+    if (entity == null) {
+      return;
+    }
     Position pos = entity.getComponent(Position.class);
     Text text = entity.getComponent(Text.class);
     BitmapFont font = text.getFont();

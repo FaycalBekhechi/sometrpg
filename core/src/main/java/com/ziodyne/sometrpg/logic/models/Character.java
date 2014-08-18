@@ -74,6 +74,10 @@ public class Character {
     return statSheet;
   }
 
+  public int getStat(Stat stat) {
+    return statSheet.get(stat);
+  }
+
   public void setStatSheet(Map<Stat, Integer> statSheet) {
 
     this.statSheet = statSheet;

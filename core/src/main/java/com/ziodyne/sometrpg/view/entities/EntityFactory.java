@@ -278,27 +278,12 @@ public class EntityFactory {
    */
   public Entity createMenuBg(Vector2 position, float width, float height) {
     Sprite sprite = new Sprite(BLACK_BOX, width, height);
-    sprite.setAlpha(0.5f);
+    sprite.setAlpha(0.7f);
 
     ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
     Position positionComponent = new Position(position.x, position.y);
 
     return createEntity(spriteComponent, positionComponent);
-  }
-
-  public Entity createRadialMenuThirdWedge(Vector2 position, float rotation) {
-
-    TextureAtlas wedgeAtlas = repository.get("data/menu_wedges.atlas");
-    Sprite sprite = new Sprite(wedgeAtlas.findRegion("third_wedge"), 300, 200);
-
-    sprite.setOriginX(148f);
-    sprite.setOriginY(25f);
-    sprite.setRotation(rotation);
-    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.MENU);
-
-    Position pos = new Position(position.x, position.y);
-
-    return createEntity(spriteComponent, pos);
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch) {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.collect.Sets;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
@@ -19,15 +20,17 @@ import com.ziodyne.sometrpg.view.widgets.UnitInfoMenu;
 
 public class ViewingUnitInfo extends InputStealingFlowListener<BattleContext> implements InputProcessor {
   private final Engine engine;
+  private final Viewport viewport;
   private final EntityFactory entityFactory;
   private final Set<Entity> ownedEntities = Sets.newHashSet();
   private UnitInfoMenu infoMenu;
   private BattleContext context;
 
-  public ViewingUnitInfo(Engine engine, EntityFactory entityFactory) {
+  public ViewingUnitInfo(Engine engine, EntityFactory entityFactory, Viewport viewport) {
 
     super(BattleState.SHOWING_UNIT_DETAILS);
     this.engine = engine;
+    this.viewport = viewport;
     this.entityFactory = entityFactory;
   }
 
@@ -52,7 +55,7 @@ public class ViewingUnitInfo extends InputStealingFlowListener<BattleContext> im
     this.context = context;
     Gdx.input.setInputProcessor(this);
 
-    infoMenu = new UnitInfoMenu(engine, entityFactory, context.selectedCombatant);
+    infoMenu = new UnitInfoMenu(engine, entityFactory, viewport, context.selectedCombatant);
     infoMenu.render();
   }
 

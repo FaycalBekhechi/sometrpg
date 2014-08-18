@@ -280,7 +280,7 @@ public class TestBattle extends BattleScreen {
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory),
       new UnitActionSelectListener(engine, entityFactory, camera, gridSquareSize),
-      new ViewingUnitInfo(engine, entityFactory),
+      new ViewingUnitInfo(engine, entityFactory, viewport),
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
       new AttackTargetSelectionListener(this, gridSquareSize),

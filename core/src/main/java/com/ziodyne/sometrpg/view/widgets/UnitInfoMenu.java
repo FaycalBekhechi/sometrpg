@@ -3,37 +3,53 @@ package com.ziodyne.sometrpg.view.widgets;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * This widget renders the menu for a unit's stats and in-combat information.
+ */
 public class UnitInfoMenu extends Widget {
-  private EntityFactory entityFactory;
-  private Combatant combatant;
+  private static final float INNER_GUTTER_PX = 25;
+  private static final float OUTER_GUTTER_PX = 40;
 
-  public UnitInfoMenu(Engine engine, EntityFactory entityFactory, Combatant combatant) {
+  private final EntityFactory entityFactory;
+  private final Combatant combatant;
+  private final Viewport viewport;
+
+  public UnitInfoMenu(Engine engine, EntityFactory entityFactory, Viewport viewport, Combatant combatant) {
 
     super(engine);
     this.entityFactory = entityFactory;
     this.combatant = combatant;
+    this.viewport = viewport;
   }
 
   @Override
   public void render() {
 
-    float outerGutter = 40;
-    float innerGutter = 25;
+    float height = viewport.getViewportHeight() * .75f;
 
-    float leftWidth = 446.5f;
-    Entity smallLeft = entityFactory.createMenuBg(new Vector2(outerGutter, outerGutter), leftWidth, 630);
-    Entity largeRight = entityFactory.createMenuBg(new Vector2(outerGutter + leftWidth + innerGutter, outerGutter), 1046.5f, 630);
-    newEntity(smallLeft);
-    newEntity(largeRight);
+    float rightWidth = viewport.getViewportWidth() * .8f;
+    float leftWidth = viewport.getViewportWidth() * .2f;
 
-    String characterName = combatant.getCharacter().getName();
-    characterName = StringUtils.upperCase(characterName);
+    Vector2 leftPanePos = new Vector2(OUTER_GUTTER_PX, OUTER_GUTTER_PX);
+    renderPane(leftPanePos, leftWidth, height);
 
-    Entity label = entityFactory.createViewportText(characterName, new Vector2(outerGutter + 20, outerGutter+610));
+    Vector2 rightPanePos = new Vector2(OUTER_GUTTER_PX + leftWidth + INNER_GUTTER_PX, OUTER_GUTTER_PX);
+    renderPane(rightPanePos, rightWidth, height);
+
+    String characterName = StringUtils.upperCase(combatant.getCharacter().getName());
+    Vector2 charNamePos = new Vector2(OUTER_GUTTER_PX + INNER_GUTTER_PX, OUTER_GUTTER_PX + height);
+
+    Entity label = entityFactory.createViewportText(characterName, charNamePos);
     newEntity(label);
+  }
+
+  private void renderPane(Vector2 position, float width, float height) {
+    Entity pane = entityFactory.createMenuBg(position, width, height);
+    newEntity(pane);
   }
 }

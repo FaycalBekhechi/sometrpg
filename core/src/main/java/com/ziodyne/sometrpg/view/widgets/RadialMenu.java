@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.google.common.collect.Lists;
@@ -86,6 +87,20 @@ public class RadialMenu extends Widget {
     this.clickHandler = clickHandler;
   }
 
+  private Vector2 getRotatedOuterRimPoint(float degrees) {
+
+    float rotRadians = MathUtils.degreesToRadians * degrees;
+
+    float outerRimY = position.y + 100;
+    float outerX = (float)(Math.cos(rotRadians) - Math.sin(rotRadians) *
+      (outerRimY-position.y) + position.x);
+
+    float outerY = (float)(Math.sin(rotRadians) + Math.cos(rotRadians) *
+      (outerRimY-position.y) + position.y);
+
+    return new Vector2(outerX, outerY);
+  }
+
   @Override
   public void render() {
 
@@ -107,6 +122,12 @@ public class RadialMenu extends Widget {
       shapeRenderer.setColor(1, 1, 1, 1f);
       shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
       shapeRenderer.circle(x, y, 40);
+
+      float step = (360f / (float)items.size());
+      for (int i = 0; i < items.size(); i++) {
+        Vector2 outerRimPoint = getRotatedOuterRimPoint(step*i);
+        shapeRenderer.rectLine(x, y, outerRimPoint.x, outerRimPoint.y, 7);
+      }
       shapeRenderer.end();
 
       Gdx.gl.glColorMask(true, true, true, true);
@@ -117,12 +138,15 @@ public class RadialMenu extends Widget {
       shapeRenderer.setColor(0, 0, 0, 0.5f);
       shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
+      /*
       float deg = 95f;
       float step = (360f / (float)items.size()) - 10f;
       for (int i = 0; i < items.size(); i++) {
         deg += (360f / (float)items.size());
         shapeRenderer.arc(x, y, 100, deg, step, 100);
       }
+      */
+      shapeRenderer.circle(x, y, 100, 100);
       shapeRenderer.end();
 
 

@@ -4,6 +4,7 @@ import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.Stat;
 
 public class WeaponAttack implements Attack {
+  private static final int BASE_HIT_RATE = 70;
   @Override
   public int getRange() {
     return 1;
@@ -14,7 +15,7 @@ public class WeaponAttack implements Attack {
     Character attackingCharacter = attacker.getCharacter();
     Character defendingCharacter = defender.getCharacter();
 
-    return attackingCharacter.getStat(Stat.SKILL)*3 - defendingCharacter.getStat(Stat.SPEED);
+    return (BASE_HIT_RATE + attackingCharacter.getStat(Stat.SKILL)) - defendingCharacter.getStat(Stat.SPEED);
   }
 
   @Override

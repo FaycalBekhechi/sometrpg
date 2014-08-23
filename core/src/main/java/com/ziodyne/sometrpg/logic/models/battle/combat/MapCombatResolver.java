@@ -62,13 +62,13 @@ public class MapCombatResolver implements CombatResolver {
   static boolean doesAttackHit(Attack attack, Combatant attacker, Combatant defender) {
 
     int hitChance = attack.computeHitChance(attacker, defender);
-    return Math.random() <= (hitChance/100);
+    return Math.random() <= (hitChance/100f);
   }
 
   static int computeDamageSubtotal(Attack attack, Combatant attacker, Combatant defender) {
     int damage = attack.computeDamage(attacker, defender);
     int critChance = attack.computeCritChance(attacker, defender);
-    if (Math.random() <= (critChance/100)) {
+    if (Math.random() <= (critChance/100f)) {
       damage *= 2;
     }
 

@@ -87,18 +87,26 @@ public class RadialMenu extends Widget {
     this.clickHandler = clickHandler;
   }
 
-  private Vector2 getRotatedOuterRimPoint(float degrees) {
+  private Vector2 getRotatedOuterRimPoint(float degrees, float radius) {
 
     float rotRadians = MathUtils.degreesToRadians * degrees;
+    float xOrigin = position.x;
+    float x = position.x;
 
-    float outerRimY = position.y + 100;
-    float outerX = (float)(Math.cos(rotRadians) - Math.sin(rotRadians) *
-      (outerRimY-position.y) + position.x);
+    float y = position.y + radius;
+    float yOrigin = position.y;
 
-    float outerY = (float)(Math.sin(rotRadians) + Math.cos(rotRadians) *
-      (outerRimY-position.y) + position.y);
+    float resultX = ((x - xOrigin) * (float)Math.cos(rotRadians)) -
+                    ((yOrigin - y) * (float)Math.sin(rotRadians)) + xOrigin;
 
-    return new Vector2(outerX, outerY);
+    float resultY = (-(yOrigin - y) * (float)Math.cos(rotRadians)) -
+                    ((x - xOrigin) * (float)Math.sin(rotRadians)) + yOrigin;
+
+    return new Vector2(resultX, resultY);
+  }
+
+  private Vector2 getRotatedOuterRimPoint(float degrees) {
+    return getRotatedOuterRimPoint(degrees, RADIUS);
   }
 
   @Override
@@ -158,19 +166,12 @@ public class RadialMenu extends Widget {
     entity.add(shapeComponent);
     newEntity(entity);
 
-    if (items.size() == 3) {
-
-      Vector2 centerOffset = position.cpy().add(40, 40);
-      Entity labelEntity = entityFactory.createText(items.get(0).label, centerOffset);
+    for (int i = 0; i < items.size(); i++) {
+      Item item = items.get(i);
+      float deg = (i * item.sizeInDegrees) + (item.sizeInDegrees/2);
+      Vector2 textOffset = getRotatedOuterRimPoint(deg, RADIUS * 0.75f);
+      Entity labelEntity = entityFactory.createText(item.label, textOffset, new Vector2());
       newEntity(labelEntity);
-
-      Vector2 rightOffset = position.cpy().add(0, -80);
-      Entity labelEntity2 = entityFactory.createText(items.get(1).label, rightOffset);
-      newEntity(labelEntity2);
-
-      Vector2 leftOffset = position.cpy().add(-80, 40);
-      Entity labelEntity3 = entityFactory.createText(items.get(2).label, leftOffset);
-      newEntity(labelEntity3);
     }
   }
 

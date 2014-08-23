@@ -87,10 +87,19 @@ public class EntityFactory {
     return createEntity(posComponent, textComponent, shaderComponent);
   }
 
-  public Entity createText(String text, Vector2 position) {
+  public Entity createCenteredText(String text, Vector2 position) {
 
     BitmapFont font = repository.get("fonts/baked/futura-16.fnt", BitmapFont.class);
-    Position posComponent = new Position(position.x, position.y);
+    BitmapFont.TextBounds bounds = font.getBounds(text);
+    Vector2 center = new Vector2(bounds.width / 2, 0);
+
+    return createText(text, position, center);
+  }
+
+  public Entity createText(String text, Vector2 position, Vector2 offset) {
+
+    BitmapFont font = repository.get("fonts/baked/futura-16.fnt", BitmapFont.class);
+    Position posComponent = new Position(position.x + offset.x, position.y + offset.y);
     Text textComponent = new Text(font, text);
 
     ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json");

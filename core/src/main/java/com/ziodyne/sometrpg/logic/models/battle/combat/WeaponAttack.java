@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.logic.models.battle.combat;
 
-import com.ziodyne.sometrpg.logic.models.*;
 import com.ziodyne.sometrpg.logic.models.Character;
+import com.ziodyne.sometrpg.logic.models.Stat;
 
 public class WeaponAttack implements Attack {
   @Override

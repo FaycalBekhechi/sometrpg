@@ -151,7 +151,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
       throw new GameLogicException("Cannot get attack range for combatant that is not on the map.");
     }
 
-    Set<GridPoint2> attackablePoints = attackRangeFinder.computeRange(map, position, attack.getRange()+1);
+    Set<GridPoint2> attackablePoints = attackRangeFinder.computeRange(map, position, attack.getRange());
 
     Set<Tile> attackableTiles = Sets.newHashSet();
     for (GridPoint2 point : attackablePoints) {

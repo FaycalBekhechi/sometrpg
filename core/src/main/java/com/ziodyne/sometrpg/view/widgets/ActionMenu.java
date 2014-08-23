@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.widgets;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,13 +17,17 @@ public class ActionMenu extends InputAdapter implements Disposable, Logged {
   private final RadialMenu radialMenu;
 
   public ActionMenu(Set<CombatantAction> availableActions, Vector2 position, OrthographicCamera camera, Engine engine, EntityFactory entityFactory) {
-    radialMenu = new RadialMenu(engine, entityFactory, position, camera, availableActions.stream().map(this::toMenuItem).collect(
-      Collectors.toSet()));
+
+    List<RadialMenu.Item> actionItems = availableActions.stream()
+      .map((action) -> toMenuItem(action, 360f / availableActions.size()))
+      .collect(Collectors.toList());
+
+    radialMenu = new RadialMenu(engine, entityFactory, position, camera, actionItems);
     radialMenu.render();
   }
 
-  private RadialMenu.Item toMenuItem(CombatantAction action) {
-    return new RadialMenu.Item(action.name(), action.name());
+  private RadialMenu.Item toMenuItem(CombatantAction action, float size) {
+    return new RadialMenu.Item(action.name(), action.name(), size);
   }
 
   public void addSelectedListener(ActionSelectedHandler handler) {

@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.widgets;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -22,8 +23,8 @@ import com.ziodyne.sometrpg.view.components.ShapeComponent;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 public class RadialMenu extends Widget {
-
-  private static final int MAX_ITEMS = 3;
+  private static final float PADDING = 5f;
+  private static final float RADIUS = 100f;
 
   private final List<Item> items;
   private final EntityFactory entityFactory;
@@ -35,11 +36,13 @@ public class RadialMenu extends Widget {
   public static class Item {
     private final String label;
     private final String name;
+    private final float sizeInDegrees;
 
-    public Item(String label, String name) {
+    public Item(String label, String name, float sizeInDegrees) {
 
       this.label = label;
       this.name = name;
+      this.sizeInDegrees = sizeInDegrees;
     }
 
     public int hashCode() {
@@ -63,20 +66,17 @@ public class RadialMenu extends Widget {
   public RadialMenu(Engine engine, EntityFactory entityFactory, Vector2 position, OrthographicCamera camera, Collection<Item> items) {
 
     super(engine);
-    if (items.size() > MAX_ITEMS) {
-      throw new IllegalArgumentException("Cannot have more than " + MAX_ITEMS + " items in a radial menu right now.");
-    }
 
     this.entityFactory = entityFactory;
     this.position = position;
     this.orthographicCamera = camera;
     this.items = Lists.newArrayList(items);
 
-    int numItems = this.items.size();
-    float degreesPerWedge = 360f / numItems;
-    for (int i = 0; i < numItems; i++) {
-      Range<Float> degrees = Range.closedOpen(i*degreesPerWedge, (i*degreesPerWedge) + degreesPerWedge);
-      radiusRangeToItemName.put(degrees, this.items.get(i).name);
+    float deg = 0f;
+    for (Item item : items) {
+      Range<Float> degrees = Range.closedOpen(deg, deg+item.sizeInDegrees);
+      radiusRangeToItemName.put(degrees, item.name);
+      deg += item.sizeInDegrees;
     }
 
     logDebug("Radial Menu: " + radiusRangeToItemName);
@@ -123,13 +123,15 @@ public class RadialMenu extends Widget {
       shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
       shapeRenderer.circle(x, y, 40);
 
-      float step = (360f / (float)items.size());
-      for (int i = 0; i < items.size(); i++) {
-        Vector2 outerRimPoint = getRotatedOuterRimPoint(step*i);
 
-        float lineMaskSize = (MathUtils.degreesToRadians * 5f) * 100f;
+      float deg = 0f;
+      for (Item item : items) {
+        deg += item.sizeInDegrees;
+        Vector2 outerRimPoint = getRotatedOuterRimPoint(deg);
+        float lineMaskSize = (MathUtils.degreesToRadians * PADDING) * RADIUS;
         shapeRenderer.rectLine(x, y, outerRimPoint.x, outerRimPoint.y, lineMaskSize);
       }
+
       shapeRenderer.end();
 
       Gdx.gl.glColorMask(true, true, true, true);
@@ -140,12 +142,12 @@ public class RadialMenu extends Widget {
       shapeRenderer.setColor(0, 0, 0, 0.5f);
       shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-      float deg = 95f;
-      float wedgeStep = (360f / (float)items.size()) - 4f;
-      for (int i = 0; i < items.size(); i++) {
-        deg += (360f / (float)items.size());
-        shapeRenderer.arc(x, y, 100, deg, wedgeStep, 100);
+      deg = 90f;
+      for (Item item : items) {
+        shapeRenderer.arc(x, y, RADIUS, deg, item.sizeInDegrees, 50);
+        deg += item.sizeInDegrees;
       }
+
       shapeRenderer.end();
 
 

@@ -47,7 +47,7 @@ public abstract class BattleScreen extends GameScreen {
   protected final EventBus eventBus;
   protected TiledMap map;
   protected SomeTRPGBattle battle;
-  protected Map<Character, Entity> entityIndex = new HashMap<>();
+  protected Map<Long, Entity> entityIndex = new HashMap<>();
   protected Entity unitSelector;
   protected Stage menuStage;
   protected Group unitActionMenu = new Group();
@@ -84,8 +84,8 @@ public abstract class BattleScreen extends GameScreen {
     return map;
   }
 
-  public Entity getUnitEntity(Character character) {
-    return entityIndex.get(character);
+  public Entity getUnitEntity(Combatant combatant) {
+    return entityIndex.get(combatant.getId());
   }
 
   private void setAttackOverlay(Entity overlay) {
@@ -216,8 +216,8 @@ public abstract class BattleScreen extends GameScreen {
     return Optional.ofNullable(tile.getCombatant());
   }
 
-  protected void registerUnitEntity(Character character, Entity entity) {
-    entityIndex.put(character, entity);
+  protected void registerUnitEntity(Combatant combatant, Entity entity) {
+    entityIndex.put(combatant.getId(), entity);
     engine.addEntity(entity);
   }
 

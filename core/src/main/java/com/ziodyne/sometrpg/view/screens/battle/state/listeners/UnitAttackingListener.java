@@ -60,6 +60,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
         AnimationType dodgeType = getDodgeAnimation(attacker, defender);
         defendingBattleUnit.setAnimType(dodgeType);
       } else {
+        logDebug("HIT");
         defendingBattleUnit.setAnimType(AnimationType.BE_HIT);
       }
 
@@ -70,7 +71,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       };
 
       Entity process = new Entity();
-      process.add(new TimedProcess(resetAnimations, 1300));
+      process.add(new TimedProcess(resetAnimations, 1200));
 
       engine.addEntity(process);
     }
@@ -118,7 +119,6 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
   }
 
   private Entity getEntityForCombatant(Combatant combatant) {
-    com.ziodyne.sometrpg.logic.models.Character character = combatant.getCharacter();
-    return screen.getUnitEntity(character);
+    return screen.getUnitEntity(combatant);
   }
 }

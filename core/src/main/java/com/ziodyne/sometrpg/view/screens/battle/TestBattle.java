@@ -335,7 +335,7 @@ public class TestBattle extends BattleScreen {
           Set<UnitEntityAnimation> animations = sprites.getAnimations(character.getId());
           Entity entity = entityFactory.createAnimatedUnit(battleMap, combatant, animations);
 
-          registerUnitEntity(character, entity);
+          registerUnitEntity(combatant, entity);
         }
       }
     }

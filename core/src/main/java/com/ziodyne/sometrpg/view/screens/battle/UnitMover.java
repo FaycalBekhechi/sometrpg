@@ -40,9 +40,7 @@ public class UnitMover {
 
   public void moveCombatant(Combatant combatant, Path<GridPoint2> path, final MovedCallback callback) {
 
-    Character character = combatant.getCharacter();
-
-    Entity entity = battleScreen.getUnitEntity(character);
+    Entity entity = battleScreen.getUnitEntity(combatant);
 
     List<PathSegment> segmentedPath = PathUtils.segmentPath(path);
     Position position = entity.getComponent(Position.class);

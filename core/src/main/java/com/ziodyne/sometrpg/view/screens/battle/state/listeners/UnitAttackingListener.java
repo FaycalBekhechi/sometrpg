@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.TimedProcess;
@@ -50,7 +51,8 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
       Entity defendingEntity = getEntityForCombatant(defender);
 
       final BattleUnit attackingBattleUnit = attackingEntity.getComponent(BattleUnit.class);
-      attackingBattleUnit.setAnimType(AnimationType.ATTACK);
+      AnimationType attackAnimType = getAttackAnimation(attacker, defender);
+      attackingBattleUnit.setAnimType(attackAnimType);
 
       final BattleUnit defendingBattleUnit = defendingEntity.getComponent(BattleUnit.class);
       if (result.wasEvaded()) {
@@ -70,6 +72,31 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
 
       engine.addEntity(process);
     }
+  }
+
+  private AnimationType getAttackAnimation(Combatant attacker, Combatant defender) {
+
+    GridPoint2 attackerPos = screen.getCombatantPosition(attacker);
+    GridPoint2 defenderPos = screen.getCombatantPosition(defender);
+
+    if (attackerPos.x > defenderPos.x) {
+      return AnimationType.ATTACK_WEST;
+    }
+
+    if (attackerPos.y > defenderPos.y) {
+      return AnimationType.ATTACK_SOUTH;
+    }
+
+    if (attackerPos.x < defenderPos.x) {
+      return AnimationType.ATTACK_EAST;
+    }
+
+    if (attackerPos.y < defenderPos.y) {
+      return AnimationType.ATTACK_NORTH;
+    }
+
+    throw new IllegalArgumentException("Cannot resolve attack animation direction between " +
+      attackerPos + " and " + defenderPos);
   }
 
   private Entity getEntityForCombatant(Combatant combatant) {

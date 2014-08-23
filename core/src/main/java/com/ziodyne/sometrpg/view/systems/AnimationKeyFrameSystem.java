@@ -28,14 +28,6 @@ public class AnimationKeyFrameSystem extends IteratingSystem {
     Sprite sprite = spriteComponent.getSprite();
     TextureRegion lastRegion = sprite.getRegion();
 
-    if (lastRegion.getRegionWidth() != region.getRegionWidth()) {
-      float xOffset = (region.getRegionWidth() - 32f) / 64f;
-      sprite.setOffsetX(-xOffset);
-    } else if (lastRegion.getRegionHeight() != region.getRegionHeight()) {
-      float yOffset = (region.getRegionHeight() - 32f) / 64f;
-      sprite.setOffsetY(-yOffset);
-    }
-
     sprite.setRegion(region);
     animation.tick();
   }

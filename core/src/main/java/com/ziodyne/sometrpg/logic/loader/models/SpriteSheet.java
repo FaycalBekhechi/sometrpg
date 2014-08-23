@@ -11,6 +11,14 @@ public class SpriteSheet {
   @JsonProperty("animations")
   private Map<String, AnimationSpec> animationSpecs;
 
+  @JsonProperty("sheet_path")
+  private String fileName;
+
+  public String getFileName() {
+
+    return fileName;
+  }
+
   public int getGridSize() {
 
     return gridSize;

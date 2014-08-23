@@ -2,7 +2,10 @@ package com.ziodyne.sometrpg.view;
 
 public enum AnimationType {
   IDLE("idle"),
-  ATTACK("attack"),
+  ATTACK_NORTH("attack_north"),
+  ATTACK_SOUTH("attack_south"),
+  ATTACK_EAST("attack_east"),
+  ATTACK_WEST("attack_west"),
   DODGE("dodge"),
   BE_HIT("be_hit"),
   RUN_NORTH("run_north"),

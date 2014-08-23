@@ -119,11 +119,16 @@ public class EntityFactory {
     Position position = new Position(pos.x*32f, pos.y*32f);
     result.add(position);
 
+    Map<AnimationType, Vector2> offsets = new HashMap<>();
     Map<AnimationType, Animation> anims = new HashMap<>();
     for (UnitEntityAnimation entityAnimation : animations) {
       AnimationType type = entityAnimation.getType();
       AnimationSpec spec = entityAnimation.getSpec();
       Texture tex = entityAnimation.getTexture();
+      int[] offset = spec.getOffset();
+      if (offset.length > 0) {
+        offsets.put(type, new Vector2(offset[0], offset[1]));
+      }
 
       anims.put(type, AnimationUtils.createFromSpec(tex, spec, entityAnimation.getGridSize()));
     }
@@ -137,7 +142,7 @@ public class EntityFactory {
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     result.add(new SpriteComponent(sprite, SpriteLayer.FOREGROUND));
 
-    result.add(new BattleUnit(combatant, anims));
+    result.add(new BattleUnit(combatant, anims, offsets));
 
     return result;
   }

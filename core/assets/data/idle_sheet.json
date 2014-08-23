@@ -2,6 +2,7 @@
   "grid_size": 40,
   "animations": {
     "mc_idle": {
+      "offset": [-4, 0],
       "start": [0, 0],
       "end": [0, 2],
       "frame_length": 300,

@@ -10,6 +10,9 @@ import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Range;
 
 public class AnimationSpec {
+  @JsonProperty("offset")
+  private int[] offset = new int[]{};
+
   @JsonProperty("start")
   private int[] startCoords;
 
@@ -24,6 +27,11 @@ public class AnimationSpec {
 
   @JsonProperty("flip_y")
   private boolean flipY = false;
+
+  public int[] getOffset() {
+
+    return offset;
+  }
 
   public boolean isYFlipped() {
 

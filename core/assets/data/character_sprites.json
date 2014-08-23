@@ -22,9 +22,21 @@
         "name": "run_west",
         "sheet": "mc_run.json"
       },
-      "attack": {
-        "name": "mc_attack",
-        "sheet": "mc_attackback.json"
+      "attack_north": {
+        "name": "mc_attack_north",
+        "sheet": "mc_attack_north.json"
+      },
+      "attack_south": {
+        "name": "mc_attack_south",
+        "sheet": "mc_attack_south.json"
+      },
+      "attack_east": {
+        "name": "mc_attack_east",
+        "sheet": "mc_attack_east.json"
+      },
+      "attack_west": {
+        "name": "mc_attack_west",
+        "sheet": "mc_attack_west.json"
       },
       "dodge": {
         "name": "mc_dodge",
@@ -45,7 +57,7 @@
         "sheet": "enemies_idle.json"
       },
 
-      "attack": {
+      "attack_north": {
         "name": "gatsu_attack_north",
         "sheet": "gatsu_attacksheet.json"
       },

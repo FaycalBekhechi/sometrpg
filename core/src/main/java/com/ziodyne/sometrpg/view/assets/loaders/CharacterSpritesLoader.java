@@ -51,7 +51,16 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
     Map<String, Texture> texturesByPath = uniquePaths.stream()
       .collect(Collectors.toMap(
         Function.identity(),
-        path -> assetManager.get(path.replace(".json", ".png"), Texture.class)
+        (path) -> {
+          SpriteSheet sheet = assetManager.get(path, SpriteSheet.class);
+          String sheetFilePath = sheet.getFileName();
+
+          if (sheetFilePath != null) {
+            return assetManager.get(sheetFilePath, Texture.class);
+          } else {
+            return assetManager.get(path.replace(".json", ".png"), Texture.class);
+          }
+        }
       ));
 
     // Pull all necessary sprite sheets and index them by their path

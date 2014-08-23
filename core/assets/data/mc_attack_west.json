@@ -1,0 +1,13 @@
+{
+  "grid_size": 60,
+  "animations": {
+    "mc_attack_west": {
+      "offset": [0, -10],
+      "start": [0, 0],
+      "end": [0, 10],
+      "frame_length": 80,
+      "mode": "normal"
+    }
+  },
+  "sheet_path": "data/mc_attack_side.png"
+}

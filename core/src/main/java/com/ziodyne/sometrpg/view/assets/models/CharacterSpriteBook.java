@@ -21,7 +21,17 @@ public class CharacterSpriteBook {
   @JsonProperty("run_west")
   private SpriteReference runWest;
 
-  private SpriteReference attack;
+  @JsonProperty("attack_east")
+  private SpriteReference attackEast;
+
+  @JsonProperty("attack_west")
+  private SpriteReference attackWest;
+
+  @JsonProperty("attack_south")
+  private SpriteReference attackSouth;
+
+  @JsonProperty("attack_north")
+  private SpriteReference attackNorth;
 
   private SpriteReference dodge;
 
@@ -55,9 +65,24 @@ public class CharacterSpriteBook {
     return runWest;
   }
 
-  public SpriteReference getAttack() {
+  public SpriteReference getAttackEast() {
 
-    return attack;
+    return attackEast;
+  }
+
+  public SpriteReference getAttackWest() {
+
+    return attackWest;
+  }
+
+  public SpriteReference getAttackSouth() {
+
+    return attackSouth;
+  }
+
+  public SpriteReference getAttackNorth() {
+
+    return attackNorth;
   }
 
   public SpriteReference getDodge() {

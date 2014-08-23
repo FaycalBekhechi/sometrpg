@@ -69,6 +69,13 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
     float y = context.selectedSquare.y * gridSize + (gridSize / 2);
 
     forecast = new CombatForecast(engine, entityFactory, new Vector2(x, y), camera, summary);
+    forecast.addSelectedHandler((result) -> {
+      if (result == CombatForecast.Action.CONFIRM) {
+        context.safeTrigger(BattleEvent.ATTACK_CONFIRMED);
+      } else {
+        context.safeTrigger(BattleEvent.ATTACK_CANCEL);
+      }
+    });
     forecast.render();
 
     context.mapController.disable();

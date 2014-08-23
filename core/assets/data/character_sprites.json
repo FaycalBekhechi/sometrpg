@@ -80,6 +80,26 @@
       "run_west": {
         "name": "gatsu_run_west",
         "sheet": "gatsu_runsheet.json"
+      },
+
+      "dodge_east": {
+        "name": "gatsu_dodge_east",
+        "sheet": "gatsu_dodge_east.json"
+      },
+
+      "dodge_west": {
+        "name": "gatsu_dodge_west",
+        "sheet": "gatsu_dodge_west.json"
+      },
+
+      "dodge_north": {
+        "name": "gatsu_dodge_north",
+        "sheet": "gatsu_dodge_north.json"
+      },
+
+      "dodge_south": {
+        "name": "gatsu_dodge_south",
+        "sheet": "gatsu_dodge_south.json"
       }
     }
   ]

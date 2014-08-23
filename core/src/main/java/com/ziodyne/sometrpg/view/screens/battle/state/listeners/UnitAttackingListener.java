@@ -8,6 +8,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
+import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.TimedProcess;
@@ -20,7 +21,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 /**
  * A handle for the state where an attack is being executed.
  */
-public class UnitAttackingListener extends FlowListener<BattleContext> {
+public class UnitAttackingListener extends FlowListener<BattleContext> implements Logged {
   private final BattleScreen screen;
   private final Engine engine;
 
@@ -56,7 +57,8 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
 
       final BattleUnit defendingBattleUnit = defendingEntity.getComponent(BattleUnit.class);
       if (result.wasEvaded()) {
-        defendingBattleUnit.setAnimType(AnimationType.DODGE);
+        AnimationType dodgeType = getDodgeAnimation(attacker, defender);
+        defendingBattleUnit.setAnimType(dodgeType);
       } else {
         defendingBattleUnit.setAnimType(AnimationType.BE_HIT);
       }
@@ -72,6 +74,22 @@ public class UnitAttackingListener extends FlowListener<BattleContext> {
 
       engine.addEntity(process);
     }
+  }
+
+  private AnimationType getDodgeAnimation(Combatant attacker, Combatant defender) {
+    switch (getAttackAnimation(attacker, defender)) {
+      case ATTACK_WEST:
+        return AnimationType.DODGE_EAST;
+      case ATTACK_EAST:
+        return AnimationType.DODGE_WEST;
+      case ATTACK_SOUTH:
+        return AnimationType.DODGE_NORTH;
+      case ATTACK_NORTH:
+        return AnimationType.DODGE_SOUTH;
+    }
+
+    throw new IllegalArgumentException("Cannoy resolve dodge animation direction between " +
+      screen.getCombatantPosition(attacker) + " and " + screen.getCombatantPosition(defender));
   }
 
   private AnimationType getAttackAnimation(Combatant attacker, Combatant defender) {

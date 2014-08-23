@@ -1,0 +1,12 @@
+{
+  "grid_size": 50,
+  "animations": {
+    "gatsu_dodge_south": {
+      "start": [0, 0],
+      "end": [0, 7],
+      "frame_length": 80,
+      "mode": "normal"
+    }
+  },
+  "sheet_path": "data/gatsu_dodge.png"
+}

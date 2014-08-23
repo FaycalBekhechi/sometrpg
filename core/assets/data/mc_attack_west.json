@@ -2,7 +2,7 @@
   "grid_size": 60,
   "animations": {
     "mc_attack_west": {
-      "offset": [0, -10],
+      "offset": [-20, -10],
       "start": [0, 0],
       "end": [0, 10],
       "frame_length": 80,

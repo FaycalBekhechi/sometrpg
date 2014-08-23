@@ -8,6 +8,7 @@
       "mode": "ping_pong"
     },
     "guts_idle": {
+      "offset": [-10, -1],
       "start": [1, 0],
       "end": [1, 2],
       "frame_length": 300,

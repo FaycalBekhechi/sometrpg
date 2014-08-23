@@ -126,7 +126,9 @@ public class RadialMenu extends Widget {
       float step = (360f / (float)items.size());
       for (int i = 0; i < items.size(); i++) {
         Vector2 outerRimPoint = getRotatedOuterRimPoint(step*i);
-        shapeRenderer.rectLine(x, y, outerRimPoint.x, outerRimPoint.y, 7);
+
+        float lineMaskSize = (MathUtils.degreesToRadians * 5f) * 100f;
+        shapeRenderer.rectLine(x, y, outerRimPoint.x, outerRimPoint.y, lineMaskSize);
       }
       shapeRenderer.end();
 
@@ -138,15 +140,12 @@ public class RadialMenu extends Widget {
       shapeRenderer.setColor(0, 0, 0, 0.5f);
       shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-      /*
       float deg = 95f;
-      float step = (360f / (float)items.size()) - 10f;
+      float wedgeStep = (360f / (float)items.size()) - 4f;
       for (int i = 0; i < items.size(); i++) {
         deg += (360f / (float)items.size());
-        shapeRenderer.arc(x, y, 100, deg, step, 100);
+        shapeRenderer.arc(x, y, 100, deg, wedgeStep, 100);
       }
-      */
-      shapeRenderer.circle(x, y, 100, 100);
       shapeRenderer.end();
 
 

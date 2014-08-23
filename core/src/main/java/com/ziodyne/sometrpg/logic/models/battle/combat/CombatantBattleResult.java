@@ -1,6 +1,6 @@
 package com.ziodyne.sometrpg.logic.models.battle.combat;
 
-class CombatantBattleResult {
+public class CombatantBattleResult {
   private final Combatant combatant;
   private final int damage;
   private final int hitChancePct;

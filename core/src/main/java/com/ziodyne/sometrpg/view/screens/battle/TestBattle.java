@@ -284,7 +284,7 @@ public class TestBattle extends BattleScreen {
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
       new AttackTargetSelectionListener(this, gridSquareSize),
-      new AttackConfirmationListener(skin, menuStage, camera, gridSquareSize),
+      new AttackConfirmationListener(engine, entityFactory, camera, gridSquareSize),
       new UnitAttackingListener(this, engine),
       new EnemyTurnListener(battle)
     );

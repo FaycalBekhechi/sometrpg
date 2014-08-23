@@ -1,6 +1,5 @@
 package com.ziodyne.sometrpg.view.widgets;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -37,6 +36,10 @@ public class RadialMenu extends Widget {
     private final String label;
     private final String name;
     private final float sizeInDegrees;
+
+    public Item(String name, float size) {
+      this(null, name, size);
+    }
 
     public Item(String label, String name, float sizeInDegrees) {
 
@@ -168,10 +171,12 @@ public class RadialMenu extends Widget {
 
     for (int i = 0; i < items.size(); i++) {
       Item item = items.get(i);
-      float deg = (i * item.sizeInDegrees) + (item.sizeInDegrees/2);
-      Vector2 textOffset = getRotatedOuterRimPoint(deg, RADIUS * 0.75f);
-      Entity labelEntity = entityFactory.createText(item.label, textOffset, new Vector2());
-      newEntity(labelEntity);
+      if (item.label != null) {
+        float deg = (i * item.sizeInDegrees) + (item.sizeInDegrees / 2);
+        Vector2 textOffset = getRotatedOuterRimPoint(deg, RADIUS * 0.75f);
+        Entity labelEntity = entityFactory.createText(item.label, textOffset, new Vector2());
+        newEntity(labelEntity);
+      }
     }
   }
 

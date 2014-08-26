@@ -52,7 +52,6 @@ public abstract class BattleScreen extends GameScreen {
   protected Stage menuStage;
   protected Group unitActionMenu = new Group();
   protected GridPoint2 selectedTile;
-  protected Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
   protected float gridSquareSize = 32;
   private Entity currentMovementOverlay;
   private Entity currentAttackOverlay;

@@ -9,6 +9,16 @@ import java.util.List;
 
 public class PathUtilsTest {
   @Test
+  public void testSingleMove() {
+    Path<GridPoint2> path = new Path.Builder<>(new GridPoint2(1, 0))
+            .addPoint(new GridPoint2(1, 1))
+            .build();
+
+    List<PathSegment> segs = PathUtils.segmentPath(path);
+    Assert.assertEquals("There should only be one path segment", 1, segs.size());
+  }
+
+  @Test
   public void testSegmentPath() throws Exception {
     Path<GridPoint2> path = new Path.Builder<GridPoint2>(new GridPoint2(1, 0))
             .addPoint(new GridPoint2(0,0))

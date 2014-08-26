@@ -47,11 +47,11 @@ public class UnitMover {
     final BattleUnit battleUnit = entity.getComponent(BattleUnit.class);
 
     // Set the initial running animation
-    PathSegment firstSeg = segmentedPath.get(1);
+    PathSegment firstSeg = segmentedPath.get(0);
     battleUnit.setAnimType(getAnimationTypeForSegmentType(firstSeg.getType()));
 
     Timeline movement = Timeline.createSequence();
-    for (int i = 1; i < segmentedPath.size(); i++) {
+    for (int i = 0; i < segmentedPath.size(); i++) {
       PathSegment segment = segmentedPath.get(i);
 
       GridPoint2 point = segment.getPoint();

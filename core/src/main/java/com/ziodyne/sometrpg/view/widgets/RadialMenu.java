@@ -23,8 +23,8 @@ import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 public class RadialMenu extends Widget {
   private static final float PADDING = 5f;
-  public static final float RADIUS = 100f;
 
+  private final float radius;
   private final List<Item> items;
   private final EntityFactory entityFactory;
   private final Vector2 position;
@@ -66,7 +66,7 @@ public class RadialMenu extends Widget {
     }
   }
 
-  public RadialMenu(Engine engine, EntityFactory entityFactory, Vector2 position, OrthographicCamera camera, Collection<Item> items) {
+  public RadialMenu(Engine engine, EntityFactory entityFactory, Vector2 position, OrthographicCamera camera, Collection<Item> items, float radius) {
 
     super(engine);
 
@@ -74,6 +74,7 @@ public class RadialMenu extends Widget {
     this.position = position;
     this.orthographicCamera = camera;
     this.items = Lists.newArrayList(items);
+    this.radius = radius;
 
     float deg = 0f;
     for (Item item : items) {
@@ -96,7 +97,7 @@ public class RadialMenu extends Widget {
   }
 
   private Vector2 getRotatedOuterRimPoint(float degrees) {
-    return getRotatedOuterRimPoint(degrees, RADIUS);
+    return getRotatedOuterRimPoint(degrees, radius);
   }
 
   @Override
@@ -126,7 +127,7 @@ public class RadialMenu extends Widget {
       for (Item item : items) {
         deg += item.sizeInDegrees;
         Vector2 outerRimPoint = getRotatedOuterRimPoint(deg);
-        float lineMaskSize = (MathUtils.degreesToRadians * PADDING) * RADIUS;
+        float lineMaskSize = (MathUtils.degreesToRadians * PADDING) * radius;
         shapeRenderer.rectLine(x, y, outerRimPoint.x, outerRimPoint.y, lineMaskSize);
       }
 
@@ -142,7 +143,7 @@ public class RadialMenu extends Widget {
 
       deg = 90f;
       for (Item item : items) {
-        shapeRenderer.arc(x, y, RADIUS, deg, item.sizeInDegrees, 50);
+        shapeRenderer.arc(x, y, radius, deg, item.sizeInDegrees, 50);
         deg += item.sizeInDegrees;
       }
 
@@ -160,7 +161,7 @@ public class RadialMenu extends Widget {
       Item item = items.get(i);
       if (item.label != null) {
         float deg = (i * item.sizeInDegrees) + (item.sizeInDegrees / 2);
-        Vector2 textOffset = getRotatedOuterRimPoint(deg, RADIUS * 0.75f);
+        Vector2 textOffset = getRotatedOuterRimPoint(deg, radius * 0.75f);
         Entity labelEntity = entityFactory.createText(item.label, textOffset, new Vector2());
         newEntity(labelEntity);
       }
@@ -192,5 +193,9 @@ public class RadialMenu extends Widget {
     clickHandler.accept(clickedItemName);
 
     return true;
+  }
+
+  public float getRadius() {
+    return radius;
   }
 }

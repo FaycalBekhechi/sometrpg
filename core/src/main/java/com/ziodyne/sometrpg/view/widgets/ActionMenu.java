@@ -22,7 +22,7 @@ public class ActionMenu extends InputAdapter implements Disposable, Logged {
       .map((action) -> toMenuItem(action, 360f / availableActions.size()))
       .collect(Collectors.toList());
 
-    radialMenu = new RadialMenu(engine, entityFactory, position, camera, actionItems);
+    radialMenu = new RadialMenu(engine, entityFactory, position, camera, actionItems, 100f);
     radialMenu.render();
   }
 

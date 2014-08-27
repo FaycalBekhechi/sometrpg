@@ -46,7 +46,7 @@ public class CombatForecast extends Widget {
     items.add(new RadialMenu.Item(CANCEL_MENU_ID, 35));
     items.add(new RadialMenu.Item("defender", 145));
 
-    menu = new RadialMenu(engine, entityFactory, position, camera, items);
+    menu = new RadialMenu(engine, entityFactory, position, camera, items, 100f);
   }
 
   public void addSelectedHandler(Consumer<Action> handler) {
@@ -121,7 +121,7 @@ public class CombatForecast extends Widget {
    * @param degrees degrees from up, rotated clockwise
    */
   private Vector2 getOuterRimPosition(float degrees) {
-    Vector2 above = new Vector2(position.x, position.y + RadialMenu.RADIUS);
+    Vector2 above = new Vector2(position.x, position.y + menu.getRadius());
     return MathUtils.rotateAroundPoint(position, above, degrees);
   }
 

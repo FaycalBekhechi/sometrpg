@@ -80,7 +80,6 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
             context.safeTrigger(BattleEvent.INFO_ACTION_SELECTED);
             break;
           case WAIT:
-            context.battle.wait(selectedCombatant);
             context.safeTrigger(BattleEvent.WAIT_ACTION_SELECTED);
             break;
           default:

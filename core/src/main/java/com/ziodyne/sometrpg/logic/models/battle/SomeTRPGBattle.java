@@ -263,12 +263,6 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     actedThisTurn.add(combatant);
   }
 
-  @Override
-  public void wait(Combatant combatant) {
-    recordMovement(combatant, Integer.MAX_VALUE);
-    recordAction(combatant);
-  }
-
   private void recordMovement(Combatant combatant, int numSquares) {
     Integer remainingSquares = Math.max(0, movementSquaresRemaining.get(combatant) - numSquares);
     movementSquaresRemaining.put(combatant, remainingSquares);

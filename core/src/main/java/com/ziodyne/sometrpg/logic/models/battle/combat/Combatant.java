@@ -68,6 +68,7 @@ public class Combatant {
 
     return new EqualsBuilder()
             .append(character, ((Combatant) obj).getCharacter())
+            .append(id, ((Combatant) obj).getId())
             .build();
   }
 
@@ -75,6 +76,7 @@ public class Combatant {
   public int hashCode() {
     return new HashCodeBuilder(17, 37)
             .append(character)
+            .append(id)
             .build();
   }
 }

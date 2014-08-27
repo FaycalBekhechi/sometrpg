@@ -231,7 +231,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
   @Override
   public Set<CombatantAction> getAvailableActions(Combatant combatant) {
-    Set<CombatantAction> actions = EnumSet.of(CombatantAction.INFO);
+    Set<CombatantAction> actions = EnumSet.of(CombatantAction.INFO, CombatantAction.WAIT);
 
     // If the combatant hasn't performed an attack action this turn,
     // allow them to attack.
@@ -261,11 +261,17 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     actedThisTurn.add(combatant);
   }
 
+  @Override
+  public void wait(Combatant combatant) {
+    recordMovement(combatant, Integer.MAX_VALUE);
+    recordAction(combatant);
+  }
+
   private void recordMovement(Combatant combatant, int numSquares) {
-    Integer remainingSquares = movementSquaresRemaining.get(combatant) - numSquares;
+    Integer remainingSquares = Math.max(0, movementSquaresRemaining.get(combatant) - numSquares);
     movementSquaresRemaining.put(combatant, remainingSquares);
 
-    // Only record their actual movement as completed when they use all their squars.
+    // Only record their actual movement as completed when they use all their squares.
     if (remainingSquares <= 0) {
       movedThisTurn.add(combatant);
     }

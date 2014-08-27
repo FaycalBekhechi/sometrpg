@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.util.Logged;
@@ -24,9 +25,6 @@ import com.ziodyne.sometrpg.view.widgets.ActionMenu;
  * Logic for entering and exiting the state where the player is selecting an action for a unit.
  */
 public class UnitActionSelectListener extends InputStealingFlowListener<BattleContext> implements Logged {
-  private Skin skin;
-  private Stage stage;
-  private Viewport viewport;
   private float gridSize;
   private Engine engine;
   private EntityFactory entityFactory;
@@ -80,6 +78,10 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
             break;
           case INFO:
             context.safeTrigger(BattleEvent.INFO_ACTION_SELECTED);
+            break;
+          case WAIT:
+            context.battle.wait(selectedCombatant);
+            context.safeTrigger(BattleEvent.WAIT_ACTION_SELECTED);
             break;
           default:
             throw new IllegalArgumentException("Combatant action " + selectedAction + " not mapped to event.");

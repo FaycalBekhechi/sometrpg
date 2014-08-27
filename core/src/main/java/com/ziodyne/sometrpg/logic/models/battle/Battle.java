@@ -56,6 +56,12 @@ public interface Battle {
   public void moveCombatant(Combatant combatant, Tile destination, Path<GridPoint2> path);
 
   /**
+   * Forefits a combatant's turn.
+   * @param combatant the combatant
+   */
+  public void wait(Combatant combatant);
+
+  /**
    * Have one {@link Combatant} attack another.
    *  @param attacker The Combatant attacking
    * @param attack The {@link com.ziodyne.sometrpg.logic.models.battle.combat.Attack} to perform

@@ -104,6 +104,7 @@ import com.ziodyne.sometrpg.view.systems.TimedProcessRunnerSystem;
 import com.ziodyne.sometrpg.view.systems.ViewportSpaceSpriteRenderSystem;
 import com.ziodyne.sometrpg.view.systems.ViewportSpaceTextRenderSystem;
 import com.ziodyne.sometrpg.view.systems.VoidSpriteRenderSystem;
+import com.ziodyne.sometrpg.view.widgets.PortraitTray;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -292,6 +293,9 @@ public class TestBattle extends BattleScreen {
     flow.whenError((error, context) -> logError(error.getMessage(), error.getCause()));
 
     flow.start(new BattleContext(battle));
+
+    PortraitTray portraitTray = new PortraitTray(engine, entityFactory, battle, viewport, eventBus);
+    portraitTray.render();
 
     eventBus.register(new UnitMoveHandler(unitMover));
   }

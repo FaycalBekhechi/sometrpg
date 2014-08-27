@@ -303,8 +303,8 @@ public class EntityFactory {
   }
 
   public Entity createPortraitAttackIcon(Vector2 screenSpacePosition) {
-    Texture tex = repository.get("data/portraits/attack.png");
-    Sprite sprite = new Sprite(tex, 200, 200);
+    Texture tex = repository.get("data/portraits/icons/attack.png");
+    Sprite sprite = new Sprite(tex, 50, 50);
     ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
 
     Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y);
@@ -313,8 +313,8 @@ public class EntityFactory {
   }
 
   public Entity createPortraitMoveIcon(Vector2 screenSpacePosition) {
-    Texture tex = repository.get("data/portraits/move.png");
-    Sprite sprite = new Sprite(tex, 200, 200);
+    Texture tex = repository.get("data/portraits/icons/move.png");
+    Sprite sprite = new Sprite(tex, 50, 50);
     ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
 
     Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y);

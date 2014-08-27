@@ -15,7 +15,7 @@ public class CombatUtils {
       attack.computeHitChance(attacker, defender),
       attack.computeCritChance(attacker, defender)
     );
-    
+
     CombatantBattleResult defenderResult = new CombatantBattleResult(
       defender,
       attack.computeDamage(defender, attacker),

@@ -5,7 +5,7 @@
       "name": "Liat",
       "maxStats": {
         "hp": 10,
-        "str": 10,
+        "str": 99,
         "def": 10,
         "skl": 10,
         "spd": 10,
@@ -14,7 +14,7 @@
       },
       "stats": {
         "hp": 10,
-        "str": 10,
+        "str": 99,
         "def": 10,
         "skl": 10,
         "spd": 10,

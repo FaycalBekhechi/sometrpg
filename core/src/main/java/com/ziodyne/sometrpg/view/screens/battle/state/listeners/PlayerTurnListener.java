@@ -53,8 +53,10 @@ public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListen
     // If not, trigger friendly_actions_exhausted
 
     if (battle.isWon()) {
+      context.won = true;
       context.safeTrigger(BattleEvent.BATTLE_WON);
     } else if (battle.isLost()) {
+      context.won = false;
       context.safeTrigger(BattleEvent.BATTLE_LOST);
     } else if (battle.isTurnComplete()) {
       battle.endTurn();

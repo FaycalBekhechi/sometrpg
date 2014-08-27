@@ -85,15 +85,7 @@ import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleFlow;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackConfirmationListener;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.AttackTargetSelectionListener;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.EnemyTurnListener;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.PlayerTurnListener;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.SelectingMoveLocation;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitActionSelectListener;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitAttackingListener;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.UnitMoving;
-import com.ziodyne.sometrpg.view.screens.battle.state.listeners.ViewingUnitInfo;
+import com.ziodyne.sometrpg.view.screens.battle.state.listeners.*;
 import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
 import com.ziodyne.sometrpg.view.systems.BattleAnimationSwitchSystem;
 import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
@@ -287,7 +279,8 @@ public class TestBattle extends BattleScreen {
       new AttackTargetSelectionListener(this, gridSquareSize),
       new AttackConfirmationListener(engine, entityFactory, camera, new MapCombatResolver(map), gridSquareSize),
       new UnitAttackingListener(this, engine),
-      new EnemyTurnListener(battle)
+      new EnemyTurnListener(battle),
+      new EndScreenListener()
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

@@ -18,6 +18,7 @@ public class BattleContext extends StatefulContext {
     this.battle = battle;
   }
 
+  public Boolean won;
   public Combatant selectedCombatant;
   public Combatant defendingCombatant;
   public Attack attackToExecute;

@@ -8,10 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
-import com.ziodyne.sometrpg.logic.models.battle.combat.CombatSummary;
-import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
-import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantBattleResult;
+import com.ziodyne.sometrpg.logic.models.battle.combat.*;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -28,13 +25,15 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
   private final EntityFactory entityFactory;
   private final OrthographicCamera camera;
   private final float gridSize;
+  private final CombatResolver resolver;
   private CombatForecast forecast;
 
-  public AttackConfirmationListener(Engine engine, EntityFactory entityFactory, OrthographicCamera camera, float gridSize) {
+  public AttackConfirmationListener(Engine engine, EntityFactory entityFactory, OrthographicCamera camera, CombatResolver combatResolver, float gridSize) {
     super(BattleState.AWAITING_ATTACK_CONFIRMATION);
     this.engine = engine;
     this.entityFactory = entityFactory;
     this.camera = camera;
+    this.resolver = combatResolver;
     this.gridSize = gridSize;
   }
 
@@ -55,14 +54,7 @@ public class AttackConfirmationListener extends InputStealingFlowListener<Battle
     Optional<BattleAction> action = context.getAction();
     Preconditions.checkState(action.isPresent(), "Attack confirmation requested with no attack to perform.");
 
-    Combatant attacker = context.selectedCombatant;
-    Combatant defender = context.defendingCombatant;
-
-
-    CombatSummary summary = new CombatSummary(
-      new CombatantBattleResult(attacker, 35, 50, 20),
-      new CombatantBattleResult(defender, 28, 70, 48)
-    );
+    CombatSummary summary = resolver.preview(action.get());
 
     // Center the radial menu on the center of the selected unit's square.
     float x = context.selectedSquare.x * gridSize + (gridSize / 2);

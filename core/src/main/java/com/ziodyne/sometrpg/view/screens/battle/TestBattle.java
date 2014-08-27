@@ -54,6 +54,7 @@ import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
+import com.ziodyne.sometrpg.logic.models.battle.combat.MapCombatResolver;
 import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
@@ -284,7 +285,7 @@ public class TestBattle extends BattleScreen {
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
       new AttackTargetSelectionListener(this, gridSquareSize),
-      new AttackConfirmationListener(engine, entityFactory, camera, gridSquareSize),
+      new AttackConfirmationListener(engine, entityFactory, camera, new MapCombatResolver(map), gridSquareSize),
       new UnitAttackingListener(this, engine),
       new EnemyTurnListener(battle)
     );

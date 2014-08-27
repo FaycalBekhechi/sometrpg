@@ -140,7 +140,7 @@ public class EntityFactory {
     Sprite sprite = new Sprite(idle.getKeyFrame(0), 32f, 32f);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
-    result.add(new SpriteComponent(sprite, SpriteLayer.FOREGROUND));
+    result.add(new SpriteComponent(sprite, SpriteLayer.FOREGROUND.getZIndex() + 100));
 
     result.add(new BattleUnit(combatant, anims, offsets));
 

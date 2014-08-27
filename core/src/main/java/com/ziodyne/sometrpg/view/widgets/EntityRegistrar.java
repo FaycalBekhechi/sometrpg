@@ -19,6 +19,11 @@ class EntityRegistrar implements Disposable {
     this.engine = engine;
   }
 
+  public void removeEntity(Entity ent) {
+    entities.remove(ent);
+    engine.removeEntity(ent);
+  }
+
   public void addEntity(Entity ent) {
 
     engine.addEntity(ent);

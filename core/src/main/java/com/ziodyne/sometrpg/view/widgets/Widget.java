@@ -14,8 +14,13 @@ public abstract class Widget extends InputAdapter implements Disposable, Logged,
     registrar = new EntityRegistrar(engine);
   }
 
-  protected void newEntity(Entity entity) {
+  protected void removeEntity(Entity entity) {
+    registrar.removeEntity(entity);
+  }
+
+  protected Entity newEntity(Entity entity) {
     registrar.addEntity(entity);
+    return entity;
   }
 
   @Override

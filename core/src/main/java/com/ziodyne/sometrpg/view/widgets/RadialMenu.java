@@ -91,21 +91,8 @@ public class RadialMenu extends Widget {
   }
 
   private Vector2 getRotatedOuterRimPoint(float degrees, float radius) {
-
-    float rotRadians = MathUtils.degreesToRadians * degrees;
-    float xOrigin = position.x;
-    float x = position.x;
-
-    float y = position.y + radius;
-    float yOrigin = position.y;
-
-    float resultX = ((x - xOrigin) * (float)Math.cos(rotRadians)) -
-                    ((yOrigin - y) * (float)Math.sin(rotRadians)) + xOrigin;
-
-    float resultY = (-(yOrigin - y) * (float)Math.cos(rotRadians)) -
-                    ((x - xOrigin) * (float)Math.sin(rotRadians)) + yOrigin;
-
-    return new Vector2(resultX, resultY);
+    Vector2 pointAbove = new Vector2(position.x, position.y + radius);
+    return com.ziodyne.sometrpg.logic.util.MathUtils.rotateAroundPoint(position, pointAbove, degrees);
   }
 
   private Vector2 getRotatedOuterRimPoint(float degrees) {

@@ -13,6 +13,23 @@ public class MathUtils {
 
   private MathUtils() { }
 
+  public static Vector2 rotateAroundPoint(Vector2 center, Vector2 point, float degrees) {
+
+    float rotRadians = com.badlogic.gdx.math.MathUtils.degreesToRadians * degrees;
+    float xOrigin = center.x;
+    float yOrigin = center.y;
+    float x = point.x;
+    float y = point.y;
+
+    float resultX = ((x - xOrigin) * (float)Math.cos(rotRadians)) -
+            ((yOrigin - y) * (float)Math.sin(rotRadians)) + xOrigin;
+
+    float resultY = (-(yOrigin - y) * (float)Math.cos(rotRadians)) -
+            ((x - xOrigin) * (float)Math.sin(rotRadians)) + yOrigin;
+
+    return new Vector2(resultX, resultY);
+  }
+
   /**
    * Generate a uniform sampling of vectors corresponding to points on the unit circle.
    *

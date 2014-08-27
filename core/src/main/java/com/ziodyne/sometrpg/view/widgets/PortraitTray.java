@@ -76,6 +76,8 @@ public class PortraitTray extends Widget implements Logged {
     Position pos = entities.portrait.getComponent(Position.class);
 
     Set<CombatantAction> actions = battle.getAvailableActions(combatant);
+
+    // TODO: Refactor this janky diff update
     if (!actions.contains(CombatantAction.MOVE)) {
       removeEntity(entities.move);
       entities.move = null;

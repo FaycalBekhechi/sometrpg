@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.eventbus.EventBus;
+import com.ziodyne.sometrpg.events.CombatantActed;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
@@ -37,6 +38,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private final BattleMap map;
   private final ImmutableList<Army> armies;
   private final WinCondition condition;
+  private final EventBus eventBus;
 
   private MapCombatResolver combatResolver;
   private Set<Combatant> actedThisTurn = Sets.newHashSet();
@@ -45,11 +47,12 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
   private int turnNumber;
 
-  public SomeTRPGBattle(BattleMap map, List<Army> armies, WinCondition condition) {
+  public SomeTRPGBattle(BattleMap map, List<Army> armies, WinCondition condition, EventBus eventBus) {
     this.map = map;
     this.armies = ImmutableList.copyOf(armies);
     this.condition = condition;
     this.combatResolver = new MapCombatResolver(map);
+    this.eventBus = eventBus;
 
     Army firstArmy = armies.get(0);
     firstArmy.getLivingCombatants().stream()
@@ -261,6 +264,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
   private void recordAction(Combatant combatant) {
     actedThisTurn.add(combatant);
+    eventBus.post(new CombatantActed(combatant));
   }
 
   private void recordMovement(Combatant combatant, int numSquares) {
@@ -270,6 +274,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     // Only record their actual movement as completed when they use all their squares.
     if (remainingSquares <= 0) {
       movedThisTurn.add(combatant);
+      eventBus.post(new CombatantActed(combatant));
     }
   }
 

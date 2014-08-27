@@ -10,12 +10,13 @@ import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 import java.util.Collection;
 import java.util.Set;
 
-public class PortraitTray extends Widget {
+public class PortraitTray extends Widget implements Logged {
   private final Collection<Combatant> combatants;
   private final EntityFactory entityFactory;
   private final Viewport viewport;
@@ -52,6 +53,6 @@ public class PortraitTray extends Widget {
   }
 
   private void updateIcons() {
-
+    logDebug("Got event");
   }
 }

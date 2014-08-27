@@ -63,8 +63,9 @@ public class TiledBattleBuilder implements Logged {
   private final float tileSize;
   private final TiledMap map;
   private final CharacterDatabase characterDB;
+  private final EventBus eventBus;
 
-  public TiledBattleBuilder(TiledMap map, CharacterDatabase characterDB) {
+  public TiledBattleBuilder(TiledMap map, CharacterDatabase characterDB, EventBus eventBus) {
 
     this.map = map;
     this.characterDB = characterDB;
@@ -78,6 +79,7 @@ public class TiledBattleBuilder implements Logged {
     }
 
     this.tileSize = tileWidth;
+    this.eventBus = eventBus;
   }
 
   private Map<Army, Set<PositionedCharacter>> buildArmyIndex(Collection<PositionedCharacter> allCharacters) {
@@ -114,7 +116,7 @@ public class TiledBattleBuilder implements Logged {
       }
     }
 
-    return new SomeTRPGBattle(battleMap, Lists.newArrayList(charactersByArmy.keySet()), winCondition);
+    return new SomeTRPGBattle(battleMap, Lists.newArrayList(charactersByArmy.keySet()), winCondition, eventBus);
   }
 
   private Map<Army, Set<PositionedCharacter>> buildCombatants() {

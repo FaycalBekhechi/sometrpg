@@ -107,6 +107,7 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
     }
 
     String basePath = FilenameUtils.getFullPath(s);
+    Set<String> staticTexturePaths = new HashSet<>();
 
     // For each sprite...
     List<JsonNode> sprite = Lists.newArrayList(json.get("sprites"));
@@ -120,22 +121,27 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
         .filter(field -> !field.equals("character_id"))
         .forEach((animFieldName) -> {
           JsonNode anim = node.get(animFieldName);
-          String animName = anim.get("name").asText();
-          String sheetPath = basePath + anim.get("sheet").asText();
+          if (anim.has("texture")) {
+            String texPath = basePath + anim.get("texture").asText();
+            staticTexturePaths.add(texPath);
+          } else {
+            String animName = anim.get("name").asText();
+            String sheetPath = basePath + anim.get("sheet").asText();
 
-          // Infer the animation type from the name
-          typesByAnimName.put(
-            animName,
-            AnimationType.fromString(animFieldName)
-          );
+            // Infer the animation type from the name
+            typesByAnimName.put(
+                    animName,
+                    AnimationType.fromString(animFieldName)
+            );
 
-          // Keep the path to the sprite sheet and texture indexed by the animation name
-          pathsByAnimationName.put(
-            animName,
-            sheetPath
-          );
+            // Keep the path to the sprite sheet and texture indexed by the animation name
+            pathsByAnimationName.put(
+                    animName,
+                    sheetPath
+            );
 
-          animNames.add(animName);
+            animNames.add(animName);
+          }
         });
 
       // Collect all the animation names for a single character
@@ -155,6 +161,7 @@ public class CharacterSpritesLoader extends SynchronousAssetLoader<CharacterSpri
     Array<AssetDescriptor> result = new Array<>();
 
     uniquePaths.forEach(path -> result.add(new AssetDescriptor<>(path, SpriteSheet.class)));
+    staticTexturePaths.forEach(path -> result.add(new AssetDescriptor<>(path, Texture.class)));
 
     return result;
   }

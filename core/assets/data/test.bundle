@@ -1,7 +1,11 @@
 [
   {
     "type": "texture",
-    "path": "data/portraits/liat.png"
+    "path": "data/portraits/icons/move.png"
+  },
+  {
+    "type": "texture",
+    "path": "data/portraits/icons/attack.png"
   },
   {
     "type": "music",

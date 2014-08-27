@@ -2,6 +2,9 @@
   "sprites": [
     {
       "character_id": "liat",
+      "portrait": {
+        "texture": "portraits/liat.png"
+      },
       "idle": {
         "name": "mc_idle",
         "sheet": "idle_sheet.json"

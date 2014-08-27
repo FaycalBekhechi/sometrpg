@@ -84,6 +84,7 @@ import com.ziodyne.sometrpg.view.input.BattleMapController;
 import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleFlow;
+import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.*;
 import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
@@ -273,7 +274,8 @@ public class TestBattle extends BattleScreen {
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory),
       new UnitActionSelectListener(engine, entityFactory, camera, gridSquareSize),
-      new ViewingUnitInfo(engine, entityFactory, viewport),
+      new ViewingUnitInfo(BattleState.SHOWING_ENEMY_DETAILS, engine, entityFactory, viewport),
+      new ViewingUnitInfo(BattleState.SHOWING_FRIENDLY_DETAILS, engine, entityFactory, viewport),
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
       new AttackTargetSelectionListener(this, gridSquareSize),

@@ -26,9 +26,9 @@ public class ViewingUnitInfo extends InputStealingFlowListener<BattleContext> im
   private UnitInfoMenu infoMenu;
   private BattleContext context;
 
-  public ViewingUnitInfo(Engine engine, EntityFactory entityFactory, Viewport viewport) {
+  public ViewingUnitInfo(BattleState state, Engine engine, EntityFactory entityFactory, Viewport viewport) {
 
-    super(BattleState.SHOWING_UNIT_DETAILS);
+    super(state);
     this.engine = engine;
     this.viewport = viewport;
     this.entityFactory = entityFactory;

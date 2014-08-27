@@ -6,6 +6,7 @@ import au.com.ds.ef.EventEnum;
  * These are events that can occur during a battle.
  */
 public enum BattleEvent implements EventEnum {
+  QUICK_MOVE,
   FRIENDLY_UNIT_SELECTED,
   FRIENDLY_UNIT_SELECTION_CANCEL,
   ENEMY_UNIT_SELECTED,

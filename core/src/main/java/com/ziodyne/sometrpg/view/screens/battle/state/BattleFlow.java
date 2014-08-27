@@ -14,6 +14,7 @@ public class BattleFlow {
    */
   public static final EasyFlow<BattleContext> FLOW =
     from(PLAYER_TURN).transit(
+      on(QUICK_MOVE).to(SELECTING_MOVE_LOCATION),
       on(FRIENDLY_UNIT_SELECTED).to(SELECTING_UNIT_ACTION).transit(
         on(ACTIONS_EXHAUSTED).to(PLAYER_TURN),
         on(FRIENDLY_UNIT_SELECTION_CANCEL).to(PLAYER_TURN),

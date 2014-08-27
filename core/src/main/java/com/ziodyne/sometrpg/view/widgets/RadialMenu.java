@@ -23,7 +23,7 @@ import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 public class RadialMenu extends Widget {
   private static final float PADDING = 5f;
-  private static final float RADIUS = 100f;
+  public static final float RADIUS = 100f;
 
   private final List<Item> items;
   private final EntityFactory entityFactory;

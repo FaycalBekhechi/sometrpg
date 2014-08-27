@@ -5,24 +5,41 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatSummary;
+import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantBattleResult;
+import com.ziodyne.sometrpg.logic.util.MathUtils;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 public class CombatForecast extends Widget {
   private static final String CANCEL_MENU_ID = "cancel";
   private static final String SELECT_MENU_ID = "select";
+
+  private final Vector2 position;
+  private final EntityFactory entityFactory;
   private final RadialMenu menu;
+  private final CombatSummary summary;
 
   public static enum Action {
     CONFIRM,
     REJECT
   }
 
+  private static enum ResultSide {
+    LEFT,
+    RIGHT
+  }
+
   public CombatForecast(Engine engine, EntityFactory entityFactory, Vector2 position, OrthographicCamera camera,
                         CombatSummary summary) {
     super(engine);
+
+    this.position = position;
+    this.entityFactory = entityFactory;
+    this.summary = summary;
+
     List<RadialMenu.Item> items = new ArrayList<>();
     items.add(new RadialMenu.Item("attacker", 145));
     items.add(new RadialMenu.Item(SELECT_MENU_ID, 35));
@@ -54,10 +71,63 @@ public class CombatForecast extends Widget {
   @Override
   public void render() {
     menu.render();
+
+    renderResult(summary.getDefenderResult(), ResultSide.LEFT);
+    renderResult(summary.getAttackerResult(), ResultSide.RIGHT);
+    renderText("NO", getOuterRimPosition(190));
+    renderText("YES", getOuterRimPosition(170));
   }
 
   @Override
   public void dispose() {
+    super.dispose();
     menu.dispose();
+  }
+
+  /**
+   * Render a combatant result
+   * @param result the {@link CombatantBattleResult} battle result
+   * @param side which side to render it on
+   */
+  private void renderResult(CombatantBattleResult result, ResultSide side) {
+    int degreesMultiplier = side == ResultSide.LEFT ? -1 : 1;
+    int hp = result.getCombatant().getHealth();
+    renderStat(hp, "health", getOuterRimPosition(degreesMultiplier * 30));
+
+    int damage = result.getDamage();
+    renderStat(damage, "damage", getOuterRimPosition(degreesMultiplier * 50));
+
+    int hitChance = result.getHitChancePct();
+    renderStat(hitChance, "hit%", getOuterRimPosition(degreesMultiplier * 65));
+
+    int critChance = result.getCritChancePct();
+    renderStat(critChance, "crit%", getOuterRimPosition(degreesMultiplier * 80));
+  }
+
+  /**
+   * Render a single stat.
+   * @param value the number value of the stat
+   * @param label the name of the stat
+   * @param position its position
+   */
+  private void renderStat(int value, String label, Vector2 position) {
+    renderText(String.valueOf(value), position);
+    renderText(label, position.cpy().sub(0, 10));
+  }
+
+  /**
+   * Get a position along the outer ring where the text is aligned
+   *
+   * @param degrees degrees from up, rotated clockwise
+   */
+  private Vector2 getOuterRimPosition(float degrees) {
+    Vector2 above = new Vector2(position.x, position.y + RadialMenu.RADIUS);
+    return MathUtils.rotateAroundPoint(position, above, degrees);
+  }
+
+  // Render text at a given position
+  private void renderText(String text, Vector2 position) {
+    Entity textEntity = entityFactory.createText(text, position, Vector2.Zero);
+    newEntity(textEntity);
   }
 }

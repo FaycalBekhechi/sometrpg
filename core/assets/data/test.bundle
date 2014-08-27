@@ -1,15 +1,15 @@
 [
   {
+    "type": "texture",
+    "path": "data/portraits/liat.png"
+  },
+  {
     "type": "music",
-     "path": "sounds/hit.mp3"
+    "path": "sounds/hit.mp3"
   },
   {
     "type": "chapter",
     "path": "data/chapters/chapter1.json"
-  },
-  {
-    "type": "atlas",
-    "path": "data/menu_wedges.atlas"
   },
   {
     "type": "atlas",

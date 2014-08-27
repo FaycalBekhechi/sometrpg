@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private final RangeFinder attackRangeFinder = new AttackRangeFinder();
@@ -36,7 +37,6 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private final BattleMap map;
   private final ImmutableList<Army> armies;
   private final WinCondition condition;
-  private final Pathfinder<GridPoint2> pathfinder;
 
   private MapCombatResolver combatResolver;
   private Set<Combatant> actedThisTurn = Sets.newHashSet();
@@ -50,7 +50,6 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     this.armies = ImmutableList.copyOf(armies);
     this.condition = condition;
     this.combatResolver = new MapCombatResolver(map);
-    this.pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(map));
 
     Army firstArmy = armies.get(0);
     firstArmy.getLivingCombatants().stream()
@@ -124,8 +123,11 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     }
   }
 
-  private static boolean isPathValid(Path<GridPoint2> path) {
-    return true;
+  private boolean isPathValid(Path<GridPoint2> path) {
+    List<GridPoint2> points = path.getPoints();
+    Predicate<GridPoint2> existsAndPassable = (point) -> tileExists(point) && getTile(point).isPassable();
+
+    return points.stream().allMatch(existsAndPassable);
   }
 
   @Override

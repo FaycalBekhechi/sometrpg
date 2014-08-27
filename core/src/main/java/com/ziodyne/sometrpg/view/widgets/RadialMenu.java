@@ -173,9 +173,13 @@ public class RadialMenu extends Widget {
 
     Vector3 clickCoords = new Vector3(screenX, screenY, 0);
     orthographicCamera.unproject(clickCoords);
-    Vector2 clickCoords2 = new Vector2(clickCoords.x, clickCoords.y);
+    Vector2 worldSpaceCoords = new Vector2(clickCoords.x, clickCoords.y);
+    if (worldSpaceCoords.dst(position) > radius) {
+      logDebug("Detected click outside the circle. Ignoring.");
+      return false;
+    }
 
-    Vector2 posToClick = clickCoords2.cpy().sub(position.cpy());
+    Vector2 posToClick = worldSpaceCoords.cpy().sub(position.cpy());
     Vector2 posUp = new Vector2(position.x, position.y+1).sub(position);
 
     float angleBetween = posToClick.angle(posUp);

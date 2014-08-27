@@ -108,6 +108,7 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
     if (combatantOptional.isPresent()) {
       Combatant combatant = combatantOptional.get();
       context.selectedCombatant = combatantOptional.get();
+      context.selectedSquare = selectedPoint;
 
       BattleEvent event;
       if (battleScreen.isUnitTurn(combatant)) {

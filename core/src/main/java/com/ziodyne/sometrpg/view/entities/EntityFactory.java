@@ -27,6 +27,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
+import com.ziodyne.sometrpg.logic.models.*;
+import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.navigation.Path;
@@ -298,6 +300,41 @@ public class EntityFactory {
     Position positionComponent = new Position(position.x, position.y);
 
     return createEntity(spriteComponent, positionComponent);
+  }
+
+  public Entity createPortraitAttackIcon(Vector2 screenSpacePosition) {
+    Texture tex = repository.get("data/portraits/attack.png");
+    Sprite sprite = new Sprite(tex, 200, 200);
+    ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
+
+    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y);
+
+    return createEntity(spriteComponent, posComponent);
+  }
+
+  public Entity createPortraitMoveIcon(Vector2 screenSpacePosition) {
+    Texture tex = repository.get("data/portraits/move.png");
+    Sprite sprite = new Sprite(tex, 200, 200);
+    ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
+
+    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y);
+
+    return createEntity(spriteComponent, posComponent);
+  }
+
+  public Entity createDockPortrait(Character character, Vector2 screenSpacePosition) {
+
+    Texture tex = repository.get("data/portraits/" + character.getId() + ".png", Texture.class);
+    if (tex == null) {
+      throw new IllegalArgumentException("No portrait texture found for character: " + character.getId());
+    }
+
+    Sprite sprite = new Sprite(tex, 200, 200);
+    ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
+
+    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y);
+
+    return createEntity(spriteComponent, posComponent);
   }
 
   public Entity createTiledMap(TiledMap map, SpriteBatch batch) {

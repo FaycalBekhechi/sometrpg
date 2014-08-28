@@ -2,8 +2,10 @@ package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.events.TurnStarted;
 import com.ziodyne.sometrpg.logic.models.battle.Army;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.TurnBased;
@@ -34,9 +36,11 @@ public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListen
 
   private BattleMapController controller;
 
+  private final EventBus eventBus;
+
   @AssistedInject
   public PlayerTurnListener(OrthographicCamera camera, BattleScreen screen, T battle, Pathfinder<GridPoint2> pathfinder,
-                              float gridSize, BattleMapController.Factory controllerFactory) {
+                              float gridSize, BattleMapController.Factory controllerFactory, EventBus eventBus) {
 
     super(BattleState.PLAYER_TURN);
     this.camera = camera;
@@ -45,12 +49,15 @@ public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListen
     this.pathfinder = pathfinder;
     this.gridSize = gridSize;
     this.battle = battle;
+    this.eventBus = eventBus;
   }
 
   @Override
   public void onEnter(BattleContext context) {
     // Check if it still should be the player's turn.
     // If not, trigger friendly_actions_exhausted
+
+    eventBus.post(new TurnStarted());
 
     if (battle.isWon()) {
       context.won = true;

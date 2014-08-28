@@ -7,10 +7,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.util.Logged;
@@ -79,8 +75,9 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
           case INFO:
             context.safeTrigger(BattleEvent.INFO_ACTION_SELECTED);
             break;
-          case WAIT:
-            context.safeTrigger(BattleEvent.WAIT_ACTION_SELECTED);
+          case END_TURN:
+            context.battle.endTurn();
+            context.safeTrigger(BattleEvent.END_TURN);
             break;
           default:
             throw new IllegalArgumentException("Combatant action " + selectedAction + " not mapped to event.");

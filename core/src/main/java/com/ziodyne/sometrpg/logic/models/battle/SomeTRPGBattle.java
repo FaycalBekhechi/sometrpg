@@ -236,7 +236,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
 
   @Override
   public Set<CombatantAction> getAvailableActions(Combatant combatant) {
-    Set<CombatantAction> actions = EnumSet.of(CombatantAction.INFO, CombatantAction.WAIT);
+    Set<CombatantAction> actions = EnumSet.of(CombatantAction.INFO, CombatantAction.END_TURN);
 
     // If the combatant hasn't performed an attack action this turn,
     // allow them to attack.

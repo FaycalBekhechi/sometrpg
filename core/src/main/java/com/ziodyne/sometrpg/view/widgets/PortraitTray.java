@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.eventbus.EventBus;
 import com.ziodyne.sometrpg.events.CombatantActed;
 import com.ziodyne.sometrpg.events.EventListener;
+import com.ziodyne.sometrpg.events.TurnStarted;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -36,6 +37,7 @@ public class PortraitTray extends Widget implements Logged {
   public PortraitTray(Engine engine, EntityFactory entityFactory, Battle battle, Viewport viewport, EventBus eventBus) {
     super(engine);
     eventBus.register((EventListener<CombatantActed>) this::updateIcons);
+    eventBus.register((EventListener<TurnStarted>) this::updateAllIcons);
 
     this.combatants = battle.getPlayerUnits();
     this.entityFactory = entityFactory;
@@ -72,6 +74,17 @@ public class PortraitTray extends Widget implements Logged {
 
   private void updateIcons(CombatantActed actedEvent) {
     Combatant combatant = actedEvent.getCombatant();
+    diffItems(combatant);
+  }
+
+  private void updateAllIcons(TurnStarted turnStarted) {
+    for (Combatant combatant : combatants) {
+      diffItems(combatant);
+    }
+  }
+
+  private void diffItems(Combatant combatant) {
+
     IconEntities entities = icons.get(combatant);
     Position pos = entities.portrait.getComponent(Position.class);
 

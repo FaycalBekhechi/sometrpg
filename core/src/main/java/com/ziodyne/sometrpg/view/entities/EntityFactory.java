@@ -77,6 +77,18 @@ public class EntityFactory {
     this.repository = repository;
   }
 
+  public Entity createViewportText(String text, Vector2 position, int size) {
+
+    BitmapFont font = repository.get("fonts/baked/futura-" + size + ".fnt", BitmapFont.class);
+    ViewportPosition posComponent = new ViewportPosition(position);
+    Text textComponent = new Text(font, text);
+
+    ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json");
+    Shader shaderComponent = new StaticShader(distanceFieldShader);
+
+    return createEntity(posComponent, textComponent, shaderComponent);
+  }
+
   public Entity createViewportText(String text, Vector2 position) {
 
     BitmapFont font = repository.get("fonts/baked/futura-64.fnt", BitmapFont.class);
@@ -108,6 +120,18 @@ public class EntityFactory {
     Shader shaderComponent = new StaticShader(distanceFieldShader);
 
     return createEntity(posComponent, textComponent, shaderComponent);
+  }
+
+  public Entity createText(String text, Vector2 position, int size) {
+
+    BitmapFont font = repository.get("fonts/baked/futura-" + size + ".fnt", BitmapFont.class);
+    ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json", ShaderProgram.class);
+
+    return createEntity(
+      new Position(position.x, position.y),
+      new Text(font, text),
+      new StaticShader(distanceFieldShader)
+    );
   }
 
   public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Set<UnitEntityAnimation> animations) {

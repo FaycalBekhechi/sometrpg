@@ -81,6 +81,7 @@ import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
+import com.ziodyne.sometrpg.view.rendering.TextRenderer;
 import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleFlow;
@@ -282,7 +283,7 @@ public class TestBattle extends BattleScreen {
       new AttackTargetSelectionListener(this, gridSquareSize),
       new AttackConfirmationListener(engine, entityFactory, camera, new MapCombatResolver(map), gridSquareSize),
       new UnitAttackingListener(this, engine),
-      new EnemyTurnListener(battle),
+      new EnemyTurnListener(battle, engine, new TextRenderer(entityFactory, engine)),
       new EndScreenListener()
     );
 

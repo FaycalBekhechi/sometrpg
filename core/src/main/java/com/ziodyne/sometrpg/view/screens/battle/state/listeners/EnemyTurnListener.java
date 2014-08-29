@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ziodyne.sometrpg.logic.models.battle.TurnBased;
 import com.ziodyne.sometrpg.view.components.TimedProcess;
-import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.rendering.LiveEntity;
 import com.ziodyne.sometrpg.view.rendering.TextRenderer;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;

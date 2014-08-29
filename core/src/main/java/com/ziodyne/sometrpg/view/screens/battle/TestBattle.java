@@ -245,7 +245,6 @@ public class TestBattle extends BattleScreen {
     engine.addSystem(new ViewportSpaceSpriteRenderSystem(viewport));
     engine.addSystem(textRenderSystemFactory.create(viewport));
 
-
     Entity tileSelectorOverlay = entityFactory.createMapSelector();
     engine.addEntity(tileSelectorOverlay);
 
@@ -264,12 +263,9 @@ public class TestBattle extends BattleScreen {
     final InputMultiplexer multiplexer = new InputMultiplexer();
     multiplexer.addProcessor(menuStage);
 
-
-
     Gdx.input.setInputProcessor(multiplexer);
 
     initialized = true;
-
     UnitMover unitMover = new UnitMover(this, tweenManager, gridSquareSize);
 
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;

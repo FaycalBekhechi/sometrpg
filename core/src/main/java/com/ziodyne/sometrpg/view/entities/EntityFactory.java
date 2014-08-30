@@ -134,7 +134,7 @@ public class EntityFactory {
     );
   }
 
-  public Entity createAnimatedUnit(BattleMap map, Combatant combatant, Set<UnitEntityAnimation> animations) {
+  public RenderedCombatant createAnimatedUnit(BattleMap map, Combatant combatant, Set<UnitEntityAnimation> animations) {
     Entity result = new Entity();
 
     GridPoint2 pos = map.getCombatantPosition(combatant);
@@ -168,9 +168,11 @@ public class EntityFactory {
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     result.add(new SpriteComponent(sprite, SpriteLayer.FOREGROUND.getZIndex() + 100));
 
-    result.add(new BattleUnit(combatant, anims, offsets));
+    BattleUnit battleUnit = new BattleUnit(combatant, anims, offsets);
+    result.add(battleUnit);
+    engine.addEntity(result);
 
-    return result;
+    return new RenderedCombatant(combatant, position, battleUnit);
   }
 
   public Entity createMapAttackOverlay(Set<GridPoint2> locations) {

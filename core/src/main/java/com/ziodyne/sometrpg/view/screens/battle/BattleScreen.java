@@ -8,23 +8,16 @@ import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
-import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -35,6 +28,7 @@ import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
+import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.screens.GameScreen;
 
 public abstract class BattleScreen extends GameScreen {
@@ -47,7 +41,7 @@ public abstract class BattleScreen extends GameScreen {
   protected final EventBus eventBus;
   protected TiledMap map;
   protected SomeTRPGBattle battle;
-  protected Map<Long, Entity> entityIndex = new HashMap<>();
+  protected Map<Long, RenderedCombatant> renderedCombatantIndex = new HashMap<>();
   protected Entity unitSelector;
   protected Stage menuStage;
   protected Group unitActionMenu = new Group();
@@ -83,8 +77,8 @@ public abstract class BattleScreen extends GameScreen {
     return map;
   }
 
-  public Entity getUnitEntity(Combatant combatant) {
-    return entityIndex.get(combatant.getId());
+  public RenderedCombatant getRenderedCombatant(Combatant combatant) {
+    return renderedCombatantIndex.get(combatant.getId());
   }
 
   private void setAttackOverlay(Entity overlay) {
@@ -215,9 +209,9 @@ public abstract class BattleScreen extends GameScreen {
     return Optional.ofNullable(tile.getCombatant());
   }
 
-  protected void registerUnitEntity(Combatant combatant, Entity entity) {
-    entityIndex.put(combatant.getId(), entity);
-    engine.addEntity(entity);
+  protected void registerUnitEntity(RenderedCombatant renderedCombatant) {
+    Combatant combatant = renderedCombatant.getCombatant();
+    renderedCombatantIndex.put(combatant.getId(), renderedCombatant);
   }
 
   @Override

@@ -7,13 +7,14 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.ashley.core.Entity;
-import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.Position;
+import com.ziodyne.sometrpg.view.entities.Positioned;
+import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.navigation.PathSegment;
 import com.ziodyne.sometrpg.view.navigation.PathUtils;
 
@@ -40,15 +41,13 @@ public class UnitMover {
 
   public void moveCombatant(Combatant combatant, Path<GridPoint2> path, final MovedCallback callback) {
 
-    Entity entity = battleScreen.getUnitEntity(combatant);
+    RenderedCombatant renderedCombatant = battleScreen.getRenderedCombatant(combatant);
 
     List<PathSegment> segmentedPath = PathUtils.segmentPath(path);
-    Position position = entity.getComponent(Position.class);
-    final BattleUnit battleUnit = entity.getComponent(BattleUnit.class);
 
     // Set the initial running animation
     PathSegment firstSeg = segmentedPath.get(0);
-    battleUnit.setAnimType(getAnimationTypeForSegmentType(firstSeg.getType()));
+    renderedCombatant.setAnimationType(getAnimationTypeForSegmentType(firstSeg.getType()));
 
     Timeline movement = Timeline.createSequence();
     for (int i = 0; i < segmentedPath.size(); i++) {
@@ -56,7 +55,7 @@ public class UnitMover {
 
       GridPoint2 point = segment.getPoint();
       Tween segTween = Tween
-        .to(position, 1, 0.3f)
+        .to(renderedCombatant, 0, 0.3f)
         .ease(TweenEquations.easeNone)
         .target(point.x * gridSize, point.y * gridSize);
 
@@ -68,7 +67,7 @@ public class UnitMover {
 
         segTween.setCallback((i1, baseTween) -> {
 
-          battleUnit.setAnimType(runningAnim);
+          renderedCombatant.setAnimationType(runningAnim);
         });
       }
 
@@ -77,7 +76,7 @@ public class UnitMover {
 
     movement.setCallback((i, baseTween) -> {
 
-      battleUnit.setAnimType(AnimationType.IDLE);
+      renderedCombatant.setAnimationType(AnimationType.IDLE);
       if (callback != null) {
         callback.call();
       }

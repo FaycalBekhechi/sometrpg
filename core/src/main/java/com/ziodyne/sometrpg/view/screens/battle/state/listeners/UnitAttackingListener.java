@@ -12,6 +12,7 @@ import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.TimedProcess;
+import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -48,25 +49,22 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       Combatant defender = context.defendingCombatant;
       CombatResult result = context.battle.executeAttack(attacker, context.attackToExecute, defender);
 
-      Entity attackingEntity = getEntityForCombatant(attacker);
-      Entity defendingEntity = getEntityForCombatant(defender);
+      RenderedCombatant attackingEntity = getEntityForCombatant(attacker);
+      RenderedCombatant defendingEntity = getEntityForCombatant(defender);
 
-      final BattleUnit attackingBattleUnit = attackingEntity.getComponent(BattleUnit.class);
       AnimationType attackAnimType = getAttackAnimation(attacker, defender);
-      attackingBattleUnit.setAnimType(attackAnimType);
+      attackingEntity.setAnimationType(attackAnimType);
 
-      final BattleUnit defendingBattleUnit = defendingEntity.getComponent(BattleUnit.class);
       if (result.wasEvaded()) {
         AnimationType dodgeType = getDodgeAnimation(attacker, defender);
-        defendingBattleUnit.setAnimType(dodgeType);
+        defendingEntity.setAnimationType(dodgeType);
       } else {
-        logDebug("HIT");
-        defendingBattleUnit.setAnimType(AnimationType.BE_HIT);
+        defendingEntity.setAnimationType(AnimationType.BE_HIT);
       }
 
       Runnable resetAnimations = () -> {
-        attackingBattleUnit.setAnimType(AnimationType.IDLE);
-        defendingBattleUnit.setAnimType(AnimationType.IDLE);
+        attackingEntity.setAnimationType(AnimationType.IDLE);
+        defendingEntity.setAnimationType(AnimationType.IDLE);
         context.safeTrigger(BattleEvent.UNIT_ATTACKED);
       };
 
@@ -118,7 +116,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       attackerPos + " and " + defenderPos);
   }
 
-  private Entity getEntityForCombatant(Combatant combatant) {
-    return screen.getUnitEntity(combatant);
+  private RenderedCombatant getEntityForCombatant(Combatant combatant) {
+    return screen.getRenderedCombatant(combatant);
   }
 }

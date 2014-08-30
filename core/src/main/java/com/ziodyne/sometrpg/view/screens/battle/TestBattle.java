@@ -25,9 +25,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -76,8 +73,9 @@ import com.ziodyne.sometrpg.view.audio.BattleMusicPlayer;
 import com.ziodyne.sometrpg.view.audio.BattleSoundPlayer;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
-import com.ziodyne.sometrpg.view.components.Text;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
+import com.ziodyne.sometrpg.view.entities.Positioned;
+import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
@@ -117,6 +115,7 @@ public class TestBattle extends BattleScreen {
   private TweenAccessor<Position> positionTweenAccessor;
   private TweenAccessor<SpriteComponent> spriteTweenAccessor;
   private TweenAccessor<Camera> cameraTweenAccessor;
+  private TweenAccessor<RenderedCombatant> renderedCombatantTweenAccessor;
   private SpriteRenderSystem.Factory spriteRendererFactory;
   private BattleMapController.Factory mapControllerFactory;
   private ViewportSpaceTextRenderSystem.Factory textRenderSystemFactory;
@@ -139,11 +138,12 @@ public class TestBattle extends BattleScreen {
              TweenAccessor<SpriteComponent> spriteTweenAccessor, AssetBundleLoader.Factory bundleLoaderFactory,
              TweenAccessor<Position> positionTweenAccessor, VoidSpriteRenderSystem.Factory voidRenderSystemFactory,
              EventBus eventBus, TextRenderSystem textRenderSystem, ViewportSpaceTextRenderSystem.Factory textRenderSystemFactory,
-             @Assisted String chapterPath) {
+             TweenAccessor<RenderedCombatant> renderedCombatantTweenAccessor, @Assisted String chapterPath) {
     super(director, new OrthographicCamera(), 32f, eventBus);
 
     camera.zoom = 0.5f;
     this.chapterPath = chapterPath;
+    this.renderedCombatantTweenAccessor = renderedCombatantTweenAccessor;
     this.tweenManager = tweenManager;
     this.textRenderSystemFactory = textRenderSystemFactory;
     this.mapControllerFactory = mapControllerFactory;
@@ -188,7 +188,7 @@ public class TestBattle extends BattleScreen {
 
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
     Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
-    Tween.registerAccessor(Position.class, positionTweenAccessor);
+    Tween.registerAccessor(RenderedCombatant.class, renderedCombatantTweenAccessor);
 
     AssetManager assetManager = getAssetManager();
 
@@ -330,9 +330,9 @@ public class TestBattle extends BattleScreen {
 
           Character character = combatant.getCharacter();
           Set<UnitEntityAnimation> animations = sprites.getAnimations(character.getId());
-          Entity entity = entityFactory.createAnimatedUnit(battleMap, combatant, animations);
+          RenderedCombatant renderedCombatant = entityFactory.createAnimatedUnit(battleMap, combatant, animations);
 
-          registerUnitEntity(combatant, entity);
+          registerUnitEntity(renderedCombatant);
         }
       }
     }

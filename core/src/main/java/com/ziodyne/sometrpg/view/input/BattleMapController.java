@@ -8,9 +8,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
@@ -23,7 +26,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class BattleMapController extends InputAdapter implements Toggleable, Logged {
-  private static final int DRAG_TOLERANCE = 4;
+  private static final int DRAG_TOLERANCE = 0;
 
   private final OrthographicCamera camera;
   private final TweenManager tweenManager;
@@ -171,7 +174,17 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
       return false;
     }
 
-    camera.translate(new Vector3(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0));
+    Vector3 newPosition = camera.position.cpy().add(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0);
+    float trueViewWidth = camera.viewportWidth*camera.zoom;
+    float trueViewHeight = camera.viewportHeight*camera.zoom;
+    Rectangle newViewBounds = new Rectangle(newPosition.x - (trueViewWidth)/2, newPosition.y - (trueViewHeight)/2, trueViewWidth, trueViewHeight);
+    BattleMap map = battleScreen.getBattle().getMap();
+
+    // Do not allow the camera to pan outside the map area.
+    Rectangle mapViewspaceBounds = new Rectangle(0, 0, map.getWidth()*gridSize, map.getHeight()*gridSize);
+    if (mapViewspaceBounds.contains(newViewBounds)) {
+      camera.translate(new Vector3(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0));
+    }
     ignoreNextTouchUp = true;
 
     return true;

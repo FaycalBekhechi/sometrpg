@@ -57,10 +57,8 @@ public abstract class BattleScreen extends GameScreen {
     this.camera = camera;
     this.eventBus = eventBus;
     this.viewport = new FitViewport(1600, 900, camera);
-
-    camera.translate(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2);
-
     this.menuStage = new Stage(viewport, spriteBatch);
+    camera.position.set(viewport.getViewportWidth()/4, viewport.getViewportHeight()/4, 0);
 
     menuStage.addActor(unitActionMenu);
   }
@@ -223,6 +221,7 @@ public abstract class BattleScreen extends GameScreen {
   public void render(float delta) {
     super.render(delta);
     engine.update(delta);
+
 
     // Anchor the unit selection menu to the selected tile.
     if (selectedTile != null) {

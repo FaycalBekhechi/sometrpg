@@ -27,6 +27,7 @@ import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class BattleMapController extends InputAdapter implements Toggleable, Logged {
   private static final int DRAG_TOLERANCE = 0;
+  private static final float[] ZOOM_LEVELS = {0.5f , 0.7f};
 
   private final OrthographicCamera camera;
   private final TweenManager tweenManager;
@@ -36,6 +37,7 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
   private final float gridSize;
   private boolean ignoreNextTouchUp = false;
   private boolean enabled = true;
+  private int currentZoomLevel = 0;
 
   public interface Factory {
     public BattleMapController create(OrthographicCamera camera, BattleScreen battleScreen, BattleContext context,
@@ -67,6 +69,25 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
   @Override
   public boolean isEnabled() {
     return enabled;
+  }
+
+  @Override
+  public boolean keyUp(int keycode) {
+    if (keycode == Input.Keys.UP || keycode == Input.Keys.DOWN) {
+      // Choose the new zoom level, up key increases the zoom, down key decreases
+      if (keycode == Input.Keys.UP) {
+        currentZoomLevel = Math.max(currentZoomLevel - 1, 0);
+        camera.zoom = ZOOM_LEVELS[currentZoomLevel];
+      } else {
+        currentZoomLevel = Math.min(currentZoomLevel + 1, ZOOM_LEVELS.length - 1);
+        camera.zoom = ZOOM_LEVELS[currentZoomLevel];
+      }
+      // Re-center the position on the camera
+      camera.position.set(camera.viewportWidth*camera.zoom/2, camera.viewportHeight*camera.zoom/2, 0);
+
+      return true;
+    }
+    return false;
   }
 
   @Override

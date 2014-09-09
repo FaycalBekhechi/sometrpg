@@ -1,12 +1,18 @@
 package com.ziodyne.sometrpg.view.widgets;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
+import com.ziodyne.sometrpg.events.CloseTray;
 import com.ziodyne.sometrpg.events.CombatantActed;
 import com.ziodyne.sometrpg.events.EventListener;
+import com.ziodyne.sometrpg.events.OpenTray;
 import com.ziodyne.sometrpg.events.TurnStarted;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
@@ -18,15 +24,19 @@ import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class PortraitTray extends Widget implements Logged {
   private final Collection<Combatant> combatants;
   private final EntityFactory entityFactory;
   private final Viewport viewport;
   private final Battle battle;
+  private final TweenManager tweenManager;
   private final Map<Combatant, IconEntities> icons = new HashMap<>();
+  private boolean open = false;
 
   private static class IconEntities {
     public Entity attack;
@@ -34,8 +44,10 @@ public class PortraitTray extends Widget implements Logged {
     public Entity portrait;
   }
 
-  public PortraitTray(Engine engine, EntityFactory entityFactory, Battle battle, Viewport viewport, EventBus eventBus) {
+  public PortraitTray(Engine engine, EntityFactory entityFactory, Battle battle, Viewport viewport, EventBus eventBus, TweenManager tweenManager) {
     super(engine);
+    eventBus.register((EventListener<OpenTray>) (e) -> this.show());
+    eventBus.register((EventListener<CloseTray>) (e) -> this.hide());
     eventBus.register((EventListener<CombatantActed>) this::updateIcons);
     eventBus.register((EventListener<TurnStarted>) this::updateAllIcons);
 
@@ -43,11 +55,12 @@ public class PortraitTray extends Widget implements Logged {
     this.entityFactory = entityFactory;
     this.battle = battle;
     this.viewport = viewport;
+    this.tweenManager = tweenManager;
   }
 
   @Override
   public void render() {
-    Vector2 position = new Vector2(viewport.getViewportWidth() - 200, viewport.getViewportHeight() - 200);
+    Vector2 position= new Vector2(viewport.getViewportWidth(), viewport.getViewportHeight() - 200);
     for (Combatant combatant : combatants) {
       Character character = combatant.getCharacter();
       IconEntities iconEntities = new IconEntities();
@@ -69,6 +82,48 @@ public class PortraitTray extends Widget implements Logged {
       icons.put(combatant, iconEntities);
 
       position = position.sub(0, 100);
+    }
+  }
+
+  private void hide() {
+    if (!open) {
+      return;
+    }
+
+    forAllPositions((pos) -> {
+      Tween.to(pos, 0, 0.3f)
+              .ease(TweenEquations.easeOutCubic)
+              .target(pos.getX() + 200, pos.getY())
+              .start(tweenManager);
+    });
+    open = false;
+  }
+
+  private void show() {
+    if (open) {
+      return;
+    }
+
+    forAllPositions((pos) -> {
+      Tween.to(pos, 0, 0.3f)
+              .ease(TweenEquations.easeOutCubic)
+              .target(pos.getX() - 200, pos.getY())
+              .start(tweenManager);
+    });
+    open = true;
+  }
+
+  private void forAllPositions(Consumer<Position> action) {
+    for (IconEntities entities : icons.values()) {
+      List<Position> positions = Lists.newArrayList(
+              entities.attack.getComponent(Position.class),
+              entities.portrait.getComponent(Position.class),
+              entities.move.getComponent(Position.class)
+      );
+
+      for (Position pos : positions) {
+        action.accept(pos);
+      }
     }
   }
 

@@ -70,7 +70,7 @@ public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListen
       context.safeTrigger(BattleEvent.FRIENDLY_ACTIONS_EXHAUSTED);
     } else {
 
-      context.mapController = controllerFactory.create(camera, screen, context, pathfinder, gridSize);
+      context.mapController = controllerFactory.create(camera, screen, context, pathfinder, eventBus, gridSize);
       Gdx.input.setInputProcessor(context.mapController);
     }
   }

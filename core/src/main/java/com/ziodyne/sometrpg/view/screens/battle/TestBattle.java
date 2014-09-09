@@ -189,6 +189,7 @@ public class TestBattle extends BattleScreen {
     Tween.registerAccessor(Camera.class, cameraTweenAccessor);
     Tween.registerAccessor(SpriteComponent.class, spriteTweenAccessor);
     Tween.registerAccessor(RenderedCombatant.class, renderedCombatantTweenAccessor);
+    Tween.registerAccessor(Position.class, positionTweenAccessor);
 
     AssetManager assetManager = getAssetManager();
 
@@ -291,7 +292,7 @@ public class TestBattle extends BattleScreen {
 
     flow.start(new BattleContext(battle));
 
-    PortraitTray portraitTray = new PortraitTray(engine, entityFactory, battle, viewport, eventBus);
+    PortraitTray portraitTray = new PortraitTray(engine, entityFactory, battle, viewport, eventBus, tweenManager);
     portraitTray.render();
 
     eventBus.register(new UnitMoveHandler(unitMover));

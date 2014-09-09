@@ -11,8 +11,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.ziodyne.sometrpg.events.CloseTray;
+import com.ziodyne.sometrpg.events.OpenTray;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.navigation.Path;
@@ -34,6 +37,7 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
   private final BattleScreen battleScreen;
   private final BattleContext context;
   private final Pathfinder<GridPoint2> pathfinder;
+  private final EventBus eventBus;
   private final float gridSize;
   private boolean ignoreNextTouchUp = false;
   private boolean enabled = true;
@@ -41,19 +45,20 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
 
   public interface Factory {
     public BattleMapController create(OrthographicCamera camera, BattleScreen battleScreen, BattleContext context,
-                                      Pathfinder<GridPoint2> pathfinder, float gridSize);
+                                      Pathfinder<GridPoint2> pathfinder, EventBus eventBus, float gridSize);
   }
 
   @AssistedInject
   BattleMapController(@Assisted OrthographicCamera camera, @Assisted BattleScreen battleScreen,
                       @Assisted BattleContext context, @Assisted Pathfinder<GridPoint2> pathfinder,
-                      @Assisted float gridSize, TweenManager tweenManager) {
+                      @Assisted float gridSize, @Assisted EventBus eventBus, TweenManager tweenManager) {
     this.context = context;
     this.camera = camera;
     this.tweenManager = tweenManager;
     this.battleScreen = battleScreen;
     this.gridSize = gridSize;
     this.pathfinder = pathfinder;
+    this.eventBus = eventBus;
   }
 
   @Override
@@ -207,6 +212,17 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
       camera.translate(new Vector3(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0));
     }
     ignoreNextTouchUp = true;
+
+    return true;
+  }
+
+  @Override
+  public boolean mouseMoved(int screenX, int screenY) {
+    if ((camera.viewportWidth - 200) < screenX) {
+      eventBus.post(new OpenTray());
+    } else {
+      eventBus.post(new CloseTray());
+    }
 
     return true;
   }

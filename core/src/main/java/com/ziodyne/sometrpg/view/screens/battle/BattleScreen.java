@@ -222,7 +222,6 @@ public abstract class BattleScreen extends GameScreen {
     super.render(delta);
     engine.update(delta);
 
-
     // Anchor the unit selection menu to the selected tile.
     if (selectedTile != null) {
       Vector3 menuPos = new Vector3(selectedTile.x, selectedTile.y, 0);

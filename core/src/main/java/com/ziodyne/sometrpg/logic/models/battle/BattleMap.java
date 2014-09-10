@@ -204,6 +204,18 @@ public class BattleMap implements Logged {
 
     Combatant movingUnit = src.getCombatant();
 
+    // Remove all edges into destination
+    GridPoint2 destPos = dest.getPosition();
+    for (GridPoint2 neighbor : MathUtils.getNeighbors(destPos)) {
+      battleGraph.removeUnitEdge(neighbor, destPos);
+    }
+
+    // Add edges from all source neighbors into the source
+    GridPoint2 srcPos = src.getPosition();
+    for (GridPoint2 neighbor : MathUtils.getNeighbors(srcPos)) {
+      battleGraph.addUnitEdge(neighbor, srcPos);
+    }
+
     src.setCombatant(null);
     dest.setCombatant(movingUnit);
 

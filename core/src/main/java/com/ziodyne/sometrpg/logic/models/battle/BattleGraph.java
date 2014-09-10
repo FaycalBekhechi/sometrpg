@@ -70,6 +70,10 @@ public class BattleGraph  {
     blockingGraph.addEdge(source, sink);
   }
 
+  public void addUnitEdge(GridPoint2 source, GridPoint2 sink) {
+    blockingGraph.addEdge(source, sink);
+  }
+
   public void removeUnitEdge(GridPoint2 source, GridPoint2 sink) {
     blockingGraph.removeEdge(source, sink);
   }

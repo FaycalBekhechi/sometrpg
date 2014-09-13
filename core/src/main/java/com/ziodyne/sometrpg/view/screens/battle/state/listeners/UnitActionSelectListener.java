@@ -48,6 +48,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
 
     Gdx.input.setInputProcessor(null);
     context.mapController.enable();
+    context.battleView.enableCameraControl();
   }
 
   @Override
@@ -84,6 +85,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
         }
       });
 
+      context.battleView.disableCameraControl();
       context.mapController.disable();
       Gdx.input.setInputProcessor(actionMenu);
     }

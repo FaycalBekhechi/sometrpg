@@ -49,6 +49,7 @@ import com.ziodyne.sometrpg.logic.loader.models.SpriteSheet;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.SaveGameCharacterDatabase;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
+import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.MapCombatResolver;
@@ -208,7 +209,7 @@ public class TestBattle extends BattleScreen {
     List<Roster> rosters = gameSpec.getRosters();
 
     long start = System.currentTimeMillis();
-    battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, rosters), eventBus).build();
+    SomeTRPGBattle battle = new TiledBattleBuilder(tiledMap, new SaveGameCharacterDatabase(characters, rosters), eventBus).build();
     long end = System.currentTimeMillis();
 
     logDebug("Map init took: " + (end - start) + "ms");
@@ -290,12 +291,13 @@ public class TestBattle extends BattleScreen {
 
     flow.whenError((error, context) -> logError(error.getMessage(), error.getCause()));
 
-    flow.start(new BattleContext(battle));
+    flow.start(new BattleContext(battle, this));
 
     PortraitTray portraitTray = new PortraitTray(engine, entityFactory, battle, viewport, eventBus, tweenManager);
     portraitTray.render();
 
     eventBus.register(new UnitMoveHandler(unitMover));
+    battleInitialized(battle);
   }
 
   private void initializeMapObjects(TiledMap tiledMap) {

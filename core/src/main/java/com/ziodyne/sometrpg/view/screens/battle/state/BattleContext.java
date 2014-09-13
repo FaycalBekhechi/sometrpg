@@ -10,12 +10,15 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.SomeTRPG;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
+import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 
 public class BattleContext extends StatefulContext {
   public final SomeTRPGBattle battle;
+  public final BattleScreen battleView;
 
-  public BattleContext(SomeTRPGBattle battle) {
+  public BattleContext(SomeTRPGBattle battle, BattleScreen battleView) {
     this.battle = battle;
+    this.battleView = battleView;
   }
 
   public Boolean won;

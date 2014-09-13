@@ -29,7 +29,6 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.tween.CameraAccessor;
 
 public class BattleMapController extends InputAdapter implements Toggleable, Logged {
-  private static final int DRAG_TOLERANCE = 0;
   private static final float[] ZOOM_LEVELS = {0.5f , 0.7f};
 
   private final OrthographicCamera camera;
@@ -77,7 +76,7 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
   }
 
   @Override
-  public boolean keyUp(int keycode) {
+  public boolean keyDown(int keycode) {
     if (keycode == Input.Keys.UP || keycode == Input.Keys.DOWN) {
       // Choose the new zoom level, up key increases the zoom, down key decreases
       if (keycode == Input.Keys.UP) {
@@ -127,12 +126,6 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
       return false;
     }
 
-    // Click on an unoccupied square
-    if (!battleScreen.isOccupied(selectedPoint)) {
-      battleScreen.setSelectedSquare(null);
-      return doCameraPan(button);
-    }
-
     Optional<Combatant> combatantOptional = battleScreen.getCombatant(selectedPoint);
     if (combatantOptional.isPresent()) {
       Combatant combatant = combatantOptional.get();
@@ -155,63 +148,6 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
     }
 
     ignoreNextTouchUp = false;
-
-    return true;
-  }
-
-  private boolean doCameraPan(int button) {
-    if (!isEnabled()) {
-      return false;
-    }
-
-    if (button != Input.Buttons.LEFT) {
-      return false;
-    }
-
-    if (ignoreNextTouchUp) {
-      return false;
-    }
-
-    int screenX = Gdx.input.getX();
-    int screenY = Gdx.input.getY();
-
-    // Get the touch position in world space.
-    Vector3 touchCoords3d = new Vector3(screenX, screenY, 0);
-    camera.unproject(touchCoords3d);
-
-    // Slide the camera to the new position.
-    Tween.to(camera, CameraAccessor.POSITION, 0.5f)
-            .target(touchCoords3d.x, touchCoords3d.y, 0)
-            .start(tweenManager);
-
-    return true;
-  }
-
-  @Override
-  public boolean touchDragged(int screenX, int screenY, int pointer) {
-    if (!isEnabled()) {
-      return false;
-    }
-
-    int dx = Gdx.input.getDeltaX();
-    int dy = Gdx.input.getDeltaY();
-
-    if (Math.abs(dx) < DRAG_TOLERANCE && Math.abs(dy) < DRAG_TOLERANCE) {
-      return false;
-    }
-
-    Vector3 newPosition = camera.position.cpy().add(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0);
-    float trueViewWidth = camera.viewportWidth*camera.zoom;
-    float trueViewHeight = camera.viewportHeight*camera.zoom;
-    Rectangle newViewBounds = new Rectangle(newPosition.x - (trueViewWidth)/2, newPosition.y - (trueViewHeight)/2, trueViewWidth, trueViewHeight);
-    BattleMap map = battleScreen.getBattle().getMap();
-
-    // Do not allow the camera to pan outside the map area.
-    Rectangle mapViewspaceBounds = new Rectangle(0, 0, map.getWidth()*gridSize, map.getHeight()*gridSize);
-    if (mapViewspaceBounds.contains(newViewBounds)) {
-      camera.translate(new Vector3(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY(), 0));
-    }
-    ignoreNextTouchUp = true;
 
     return true;
   }

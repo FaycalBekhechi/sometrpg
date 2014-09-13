@@ -11,6 +11,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
+import com.ziodyne.sometrpg.logic.models.battle.Battle;
 import com.ziodyne.sometrpg.logic.models.battle.SomeTRPGBattle;
 import com.ziodyne.sometrpg.logic.models.battle.Tile;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
@@ -30,6 +32,7 @@ import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.screens.GameScreen;
+import com.ziodyne.sometrpg.view.systems.CameraPanSystem;
 
 public abstract class BattleScreen extends GameScreen {
   protected final Engine engine = new Engine();
@@ -50,6 +53,7 @@ public abstract class BattleScreen extends GameScreen {
   private Entity currentMovementOverlay;
   private Entity currentAttackOverlay;
   private Set<Entity> currentPathGuides;
+  private CameraPanSystem cameraPanner;
 
   public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize, EventBus eventBus) {
     this.gridSquareSize = gridSquareSize;
@@ -61,6 +65,34 @@ public abstract class BattleScreen extends GameScreen {
     camera.position.set(viewport.getViewportWidth()/4, viewport.getViewportHeight()/4, 0);
 
     menuStage.addActor(unitActionMenu);
+
+  }
+
+  /**
+   * FIX ME FIX ME FIX ME
+   *
+   * This exists because we want this class to provide some sort of controller interface for the
+   * flow states to use to trigger high-level actions in the view (like disabling panning while a menu is open).
+   *
+   * FIX ME FIX ME FIX ME
+   */
+  protected void battleInitialized(SomeTRPGBattle battle) {
+    this.battle = battle;
+    Rectangle mapViewBounds = new Rectangle(
+            0, 0,
+            battle.getWidth() * gridSquareSize,
+            battle.getHeight() * gridSquareSize
+    );
+    this.cameraPanner = new CameraPanSystem(camera, mapViewBounds);
+    engine.addSystem(cameraPanner);
+  }
+
+  public void enableCameraControl() {
+    cameraPanner.enable();
+  }
+
+  public void disableCameraControl() {
+    cameraPanner.disable();
   }
 
   public SomeTRPGBattle getBattle() {

@@ -12,4 +12,6 @@ public interface TileNavigable {
   public boolean tileExists(GridPoint2 point);
   public Pathfinder<GridPoint2> createPathfinder();
   public Pathfinder<GridPoint2> createCachedPathfinder();
+  public float getWidth();
+  public float getHeight();
 }

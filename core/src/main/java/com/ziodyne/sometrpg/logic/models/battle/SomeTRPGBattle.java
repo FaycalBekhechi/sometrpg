@@ -32,6 +32,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
+/**
+ * The view-agnostic implementation of a Battle / chapter
+ */
 public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   private final RangeFinder attackRangeFinder = new AttackRangeFinder();
   private final RangeFinder movementRangeFinder = new NeighborRangeFinder();
@@ -57,6 +60,16 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     Army firstArmy = armies.get(0);
     firstArmy.getLivingCombatants().stream()
       .forEach((combatant) -> movementSquaresRemaining.put(combatant, combatant.getMovementRange()));
+  }
+
+  @Override
+  public float getWidth() {
+    return map.getWidth();
+  }
+
+  @Override
+  public float getHeight() {
+    return map.getHeight();
   }
 
   @Override

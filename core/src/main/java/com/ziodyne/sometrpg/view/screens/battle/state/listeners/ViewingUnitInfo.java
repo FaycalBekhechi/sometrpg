@@ -1,44 +1,27 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import java.util.Set;
-
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
+import au.com.ds.ef.StateEnum;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.google.common.collect.Sets;
-import com.ziodyne.sometrpg.view.entities.EntityFactory;
+import com.ziodyne.sometrpg.view.controllers.MenuController;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
-import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
-import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.InputStealingFlowListener;
 import com.ziodyne.sometrpg.view.widgets.UnitInfoMenu;
 
 public class ViewingUnitInfo extends InputStealingFlowListener<BattleContext> implements InputProcessor {
-  private final Engine engine;
-  private final Viewport viewport;
-  private final EntityFactory entityFactory;
-  private final Set<Entity> ownedEntities = Sets.newHashSet();
+  private final MenuController menuController;
   private UnitInfoMenu infoMenu;
   private BattleContext context;
 
-  public ViewingUnitInfo(BattleState state, Engine engine, EntityFactory entityFactory, Viewport viewport) {
-
+  public ViewingUnitInfo(StateEnum state, MenuController menuController) {
     super(state);
-    this.engine = engine;
-    this.viewport = viewport;
-    this.entityFactory = entityFactory;
+    this.menuController = menuController;
   }
 
   @Override
   public void onLeave(BattleContext context) {
-    for (Entity entity : ownedEntities) {
-      engine.removeEntity(entity);
-    }
 
     if (infoMenu != null) {
       infoMenu.dispose();
@@ -49,13 +32,14 @@ public class ViewingUnitInfo extends InputStealingFlowListener<BattleContext> im
 
   @Override
   public void onEnter(BattleContext context) {
+
     super.onEnter(context);
 
     // This must happen in order or else the context may not be available when the input starts coming in
     this.context = context;
     Gdx.input.setInputProcessor(this);
 
-    infoMenu = new UnitInfoMenu(engine, entityFactory, viewport, context.selectedCombatant);
+    infoMenu = menuController.showUnitInfo(context.selectedCombatant);
     infoMenu.render();
   }
 

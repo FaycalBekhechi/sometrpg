@@ -8,8 +8,8 @@ import java.util.function.Consumer;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -30,7 +30,7 @@ public class RadialMenu extends Widget {
   private final Vector2 position;
   private Consumer<String> clickHandler = (s) -> {};
   private final RangeMap<Float, String> radiusRangeToItemName = TreeRangeMap.create();
-  private final OrthographicCamera orthographicCamera;
+  private final Camera orthographicCamera;
 
   public static class Item {
     private final String label;
@@ -66,7 +66,7 @@ public class RadialMenu extends Widget {
     }
   }
 
-  public RadialMenu(Engine engine, EntityFactory entityFactory, Vector2 position, OrthographicCamera camera, Collection<Item> items, float radius) {
+  public RadialMenu(Engine engine, EntityFactory entityFactory, Vector2 position, Camera camera, Collection<Item> items, float radius) {
 
     super(engine);
 

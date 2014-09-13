@@ -74,6 +74,7 @@ import com.ziodyne.sometrpg.view.audio.BattleMusicPlayer;
 import com.ziodyne.sometrpg.view.audio.BattleSoundPlayer;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
+import com.ziodyne.sometrpg.view.controllers.BattleMenuController;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
 import com.ziodyne.sometrpg.view.entities.Positioned;
 import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
@@ -270,12 +271,13 @@ public class TestBattle extends BattleScreen {
     initialized = true;
     UnitMover unitMover = new UnitMover(this, tweenManager, gridSquareSize);
 
+    BattleMenuController menuController = new BattleMenuController(entityFactory, engine, viewport);
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory, eventBus),
-      new UnitActionSelectListener(engine, entityFactory, camera, gridSquareSize),
-      new ViewingUnitInfo(BattleState.SHOWING_ENEMY_DETAILS, engine, entityFactory, viewport),
-      new ViewingUnitInfo(BattleState.SHOWING_FRIENDLY_DETAILS, engine, entityFactory, viewport),
+      new UnitActionSelectListener(menuController, gridSquareSize),
+      new ViewingUnitInfo(BattleState.SHOWING_ENEMY_DETAILS, menuController),
+      new ViewingUnitInfo(BattleState.SHOWING_FRIENDLY_DETAILS, menuController),
       new SelectingMoveLocation(this, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
       new AttackTargetSelectionListener(this, gridSquareSize),

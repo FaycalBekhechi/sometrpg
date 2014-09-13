@@ -1,6 +1,10 @@
 [
   {
     "type": "texture",
+    "path": "data/health_bar.png"
+  },
+  {
+    "type": "texture",
     "path": "data/portraits/icons/move.png"
   },
   {

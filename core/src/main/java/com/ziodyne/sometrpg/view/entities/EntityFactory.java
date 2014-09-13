@@ -123,7 +123,6 @@ public class EntityFactory {
   }
 
   public Entity createText(String text, Vector2 position, int size) {
-
     BitmapFont font = repository.get("fonts/baked/futura-" + size + ".fnt", BitmapFont.class);
     ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json", ShaderProgram.class);
 
@@ -132,6 +131,23 @@ public class EntityFactory {
       new Text(font, text),
       new StaticShader(distanceFieldShader)
     );
+  }
+
+  public HealthBar createHealthBar(RenderedCombatant renderedCombatant) {
+
+    Combatant combatant = renderedCombatant.getCombatant();
+    Vector2 pos = renderedCombatant.getPosition();
+
+    float barHeight = 2f;
+    Vector2 healthBarPos = new Vector2(pos.x, (pos.y - barHeight));
+    Texture barTexture = repository.get("data/health_bar.png", Texture.class);
+    Sprite sprite = new Sprite(barTexture, 28f * combatant.getHealthPct(), barHeight);
+    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.FOREGROUND.getZIndex() + 100);
+    Position position = new Position(healthBarPos.x + 2, healthBarPos.y + barHeight);
+
+    Entity entity = createEntity(spriteComponent, position);
+    engine.addEntity(entity);
+    return new HealthBar(engine, entity);
   }
 
   public RenderedCombatant createAnimatedUnit(BattleMap map, Combatant combatant, Set<UnitEntityAnimation> animations) {

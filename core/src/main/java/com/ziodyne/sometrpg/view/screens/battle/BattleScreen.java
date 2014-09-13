@@ -1,6 +1,7 @@
 package com.ziodyne.sometrpg.view.screens.battle;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.base.Preconditions;
@@ -30,6 +32,7 @@ import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.Director;
 import com.ziodyne.sometrpg.view.assets.AssetManagerRepository;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
+import com.ziodyne.sometrpg.view.entities.HealthBar;
 import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.screens.GameScreen;
 import com.ziodyne.sometrpg.view.systems.CameraPanSystem;
@@ -55,6 +58,8 @@ public abstract class BattleScreen extends GameScreen {
   private Set<Entity> currentPathGuides;
   private CameraPanSystem cameraPanner;
 
+  private Optional<Set<HealthBar>> healthBars = Optional.empty();
+
   public BattleScreen(Director director, OrthographicCamera camera, float gridSquareSize, EventBus eventBus) {
     this.gridSquareSize = gridSquareSize;
     this.director = director;
@@ -65,7 +70,29 @@ public abstract class BattleScreen extends GameScreen {
     camera.position.set(viewport.getViewportWidth()/4, viewport.getViewportHeight()/4, 0);
 
     menuStage.addActor(unitActionMenu);
+  }
 
+  public void toggleHealthBars() {
+    if (healthBars.isPresent()) {
+      hideHealthBars();
+    } else {
+      showHealthBars();
+    }
+  }
+
+  public void showHealthBars() {
+    Set<HealthBar> bars = renderedCombatantIndex.values().stream()
+      .map(entityFactory::createHealthBar)
+      .collect(Collectors.toSet());
+
+    healthBars = Optional.of(bars);
+  }
+
+  public void hideHealthBars() {
+    healthBars.get().stream()
+      .forEach(HealthBar::dispose);
+
+    healthBars = Optional.empty();
   }
 
   /**

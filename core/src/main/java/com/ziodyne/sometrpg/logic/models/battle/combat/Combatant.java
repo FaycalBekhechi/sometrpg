@@ -36,6 +36,14 @@ public class Combatant {
     health = Math.max(health - amount, 0);
   }
 
+  /**
+   * Get the percentage of health this combatant has left
+   * @return the percent health remaining on the combatant from 0 to 1.
+   */
+  public float getHealthPct() {
+    return health / (float)UnitUtils.getMaxHealth(character);
+  }
+
   public long getId() {
     return id;
   }

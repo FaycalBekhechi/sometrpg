@@ -1,22 +1,16 @@
 package com.ziodyne.sometrpg.view.input;
 
-import java.util.Optional;
-
-import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.events.CloseTray;
 import com.ziodyne.sometrpg.events.OpenTray;
-import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
@@ -26,7 +20,8 @@ import com.ziodyne.sometrpg.view.navigation.PathUtils;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
-import com.ziodyne.sometrpg.view.tween.CameraAccessor;
+
+import java.util.Optional;
 
 public class BattleMapController extends InputAdapter implements Toggleable, Logged {
   private static final float[] ZOOM_LEVELS = {0.5f , 0.7f};
@@ -91,6 +86,11 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
 
       return true;
     }
+    
+    if (keycode == Input.Keys.H) {
+      battleScreen.toggleHealthBars();
+    }
+
     return false;
   }
 

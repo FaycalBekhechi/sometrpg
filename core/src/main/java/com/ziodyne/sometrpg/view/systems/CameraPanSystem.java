@@ -13,7 +13,7 @@ import com.ziodyne.sometrpg.view.input.Toggleable;
  * This class handles moving the camera based on user input.
  */
 public class CameraPanSystem extends EntitySystem implements Logged, Toggleable {
-  private static final float CAMERA_PAN_SPEED = 2f;
+  private static final float CAMERA_PAN_SPEED = 4f;
   private static final float VIEW_POS_NUDGE = 0.001f;
 
   private final OrthographicCamera camera;

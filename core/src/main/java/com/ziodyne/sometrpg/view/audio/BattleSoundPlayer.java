@@ -1,7 +1,7 @@
 package com.ziodyne.sometrpg.view.audio;
 
 import com.google.common.eventbus.EventBus;
-import com.ziodyne.sometrpg.events.EventListener;
+import com.google.common.eventbus.Subscribe;
 import com.ziodyne.sometrpg.events.UnitHit;
 import com.ziodyne.sometrpg.view.assets.AssetRepository;
 
@@ -25,6 +25,11 @@ public class BattleSoundPlayer {
 
   private void attachListeners(EventBus bus) {
     // Bigole translation table between game events and sounds!
-    bus.register((EventListener<UnitHit>) input -> play(SoundEffect.HIT));
+    bus.register(this);
+  }
+
+  @Subscribe
+  public void playHitSound(UnitHit evt) {
+    play(SoundEffect.HIT);
   }
 }

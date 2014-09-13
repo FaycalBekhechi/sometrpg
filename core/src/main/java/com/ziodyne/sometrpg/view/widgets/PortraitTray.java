@@ -9,9 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.ziodyne.sometrpg.events.CloseTray;
 import com.ziodyne.sometrpg.events.CombatantActed;
-import com.ziodyne.sometrpg.events.EventListener;
 import com.ziodyne.sometrpg.events.OpenTray;
 import com.ziodyne.sometrpg.events.TurnStarted;
 import com.ziodyne.sometrpg.logic.models.Character;
@@ -38,18 +38,9 @@ public class PortraitTray extends Widget implements Logged {
   private final Map<Combatant, IconEntities> icons = new HashMap<>();
   private boolean open = false;
 
-  private static class IconEntities {
-    public Entity attack;
-    public Entity move;
-    public Entity portrait;
-  }
-
   public PortraitTray(Engine engine, EntityFactory entityFactory, Battle battle, Viewport viewport, EventBus eventBus, TweenManager tweenManager) {
     super(engine);
-    eventBus.register((EventListener<OpenTray>) (e) -> this.show());
-    eventBus.register((EventListener<CloseTray>) (e) -> this.hide());
-    eventBus.register((EventListener<CombatantActed>) this::updateIcons);
-    eventBus.register((EventListener<TurnStarted>) this::updateAllIcons);
+    eventBus.register(this);
 
     this.combatants = battle.getPlayerUnits();
     this.entityFactory = entityFactory;
@@ -58,9 +49,19 @@ public class PortraitTray extends Widget implements Logged {
     this.tweenManager = tweenManager;
   }
 
+  @Subscribe
+  public void openTray(OpenTray evt) {
+    show();
+  }
+
+  @Subscribe
+  public void closeTray(CloseTray evt) {
+    hide();
+  }
+
   @Override
   public void render() {
-    Vector2 position= new Vector2(viewport.getViewportWidth(), viewport.getViewportHeight() - 200);
+    Vector2 position = new Vector2(viewport.getViewportWidth(), viewport.getViewportHeight() - 200);
     for (Combatant combatant : combatants) {
       Character character = combatant.getCharacter();
       IconEntities iconEntities = new IconEntities();
@@ -127,12 +128,14 @@ public class PortraitTray extends Widget implements Logged {
     }
   }
 
-  private void updateIcons(CombatantActed actedEvent) {
+  @Subscribe
+  public void updateIcons(CombatantActed actedEvent) {
     Combatant combatant = actedEvent.getCombatant();
     diffItems(combatant);
   }
 
-  private void updateAllIcons(TurnStarted turnStarted) {
+  @Subscribe
+  public void updateAllIcons(TurnStarted turnStarted) {
     for (Combatant combatant : combatants) {
       diffItems(combatant);
     }
@@ -159,9 +162,15 @@ public class PortraitTray extends Widget implements Logged {
       removeEntity(entities.attack);
       entities.attack = null;
     } else {
-      if (entities.attack == null)  {
+      if (entities.attack == null) {
         entities.attack = newEntity(entityFactory.createPortraitAttackIcon(new Vector2(pos.getX(), pos.getY() - 20)));
       }
     }
+  }
+
+  private static class IconEntities {
+    public Entity attack;
+    public Entity move;
+    public Entity portrait;
   }
 }

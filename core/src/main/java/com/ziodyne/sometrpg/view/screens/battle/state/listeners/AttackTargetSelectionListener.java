@@ -6,6 +6,7 @@ import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.WeaponAttack;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.input.GridSelectionController;
+import com.ziodyne.sometrpg.view.input.InputHandlerStack;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -20,12 +21,14 @@ import java.util.Set;
  */
 public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
   private final BattleScreen screen;
+  private final InputHandlerStack handlerStack;
   private final float gridSize;
   private GridSelectionController gridSelectionController;
 
-  public AttackTargetSelectionListener(BattleScreen battleScreen, float gridSize) {
+  public AttackTargetSelectionListener(BattleScreen battleScreen, InputHandlerStack handlerStack, float gridSize) {
     super(BattleState.SELECTING_ATTACK_TARGET);
     this.screen = battleScreen;
+    this.handlerStack = handlerStack;
     this.gridSize = gridSize;
   }
 
@@ -33,7 +36,7 @@ public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
   public void onLeave(BattleContext context) {
     screen.hideAttackRange();
     context.mapController.enable();
-    Gdx.input.setInputProcessor(null);
+    handlerStack.pop();
   }
 
   @Override
@@ -64,6 +67,6 @@ public class AttackTargetSelectionListener extends FlowListener<BattleContext> {
         context.safeTrigger(BattleEvent.ATTACK_CANCEL);
       }
     });
-    Gdx.input.setInputProcessor(gridSelectionController);
+    handlerStack.push(gridSelectionController);
   }
 }

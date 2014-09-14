@@ -1,15 +1,15 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.controllers.MenuController;
+import com.ziodyne.sometrpg.view.input.InputHandlerStack;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
-import com.ziodyne.sometrpg.view.screens.battle.state.InputStealingFlowListener;
+import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.widgets.ActionMenu;
 
 import javax.annotation.Nullable;
@@ -18,36 +18,36 @@ import java.util.Set;
 /**
  * Logic for entering and exiting the state where the player is selecting an action for a unit.
  */
-public class UnitActionSelectListener extends InputStealingFlowListener<BattleContext> implements Logged {
+public class UnitActionSelectListener extends FlowListener<BattleContext> implements Logged {
+  private final InputHandlerStack handlers;
   private final MenuController menuController;
   private final float gridSize;
 
   @Nullable
   private ActionMenu actionMenu;
 
-  public UnitActionSelectListener(MenuController menuController, float gridSize) {
+  public UnitActionSelectListener(MenuController menuController, InputHandlerStack handlers, float gridSize) {
     super(BattleState.SELECTING_UNIT_ACTION);
 
     this.gridSize = gridSize;
+    this.handlers = handlers;
     this.menuController = menuController;
   }
 
   @Override
   public void onLeave(BattleContext context) {
-    super.onLeave(context);
 
     if (actionMenu != null) {
       actionMenu.dispose();
     }
 
-    Gdx.input.setInputProcessor(null);
+    handlers.pop();
     context.mapController.enable();
     context.battleView.enableCameraControl();
   }
 
   @Override
   public void onEnter(final BattleContext context) {
-    super.onEnter(context);
 
     Combatant selectedCombatant = context.selectedCombatant;
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
@@ -81,7 +81,7 @@ public class UnitActionSelectListener extends InputStealingFlowListener<BattleCo
 
       context.battleView.disableCameraControl();
       context.mapController.disable();
-      Gdx.input.setInputProcessor(actionMenu);
+      handlers.push(actionMenu);
     }
   }
 

@@ -1,10 +1,10 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import com.badlogic.gdx.Gdx;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.input.GridSelectionController;
+import com.ziodyne.sometrpg.view.input.InputHandlerStack;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -20,12 +20,14 @@ import java.util.Set;
  */
 public class SelectingMoveLocation extends FlowListener<BattleContext> {
   private final BattleScreen battle;
+  private final InputHandlerStack handlerStack;
   private final float gridSize;
   private GridSelectionController movementController;
 
-  public SelectingMoveLocation(BattleScreen screen, float gridSize) {
+  public SelectingMoveLocation(BattleScreen screen, InputHandlerStack handlers, float gridSize) {
     super(BattleState.SELECTING_MOVE_LOCATION);
     this.battle = screen;
+    this.handlerStack = handlers;
     this.gridSize = gridSize;
   }
 
@@ -34,7 +36,7 @@ public class SelectingMoveLocation extends FlowListener<BattleContext> {
     context.mapController.enable();
     battle.hideMoveRange();
     battle.hidePathGuide();
-    Gdx.input.setInputProcessor(null);
+    handlerStack.pop();
   }
 
   @Override
@@ -65,6 +67,6 @@ public class SelectingMoveLocation extends FlowListener<BattleContext> {
         context.safeTrigger(BattleEvent.MOVE_ACTION_CANCEL);
       }
     });
-    Gdx.input.setInputProcessor(movementController);
+    handlerStack.push(movementController);
   }
 }

@@ -12,6 +12,7 @@ import com.ziodyne.sometrpg.logic.models.battle.TurnBased;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
+import com.ziodyne.sometrpg.view.input.InputHandlerStack;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
@@ -34,13 +35,14 @@ public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListen
 
   private final T battle;
 
-  private BattleMapController controller;
-
   private final EventBus eventBus;
+
+  private final InputHandlerStack handlers;
 
   @AssistedInject
   public PlayerTurnListener(OrthographicCamera camera, BattleScreen screen, T battle, Pathfinder<GridPoint2> pathfinder,
-                              float gridSize, BattleMapController.Factory controllerFactory, EventBus eventBus) {
+                              float gridSize, BattleMapController.Factory controllerFactory, InputHandlerStack handlers,
+                              EventBus eventBus) {
 
     super(BattleState.PLAYER_TURN);
     this.camera = camera;
@@ -49,6 +51,7 @@ public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListen
     this.pathfinder = pathfinder;
     this.gridSize = gridSize;
     this.battle = battle;
+    this.handlers = handlers;
     this.eventBus = eventBus;
   }
 
@@ -71,12 +74,12 @@ public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListen
     } else {
 
       context.mapController = controllerFactory.create(camera, screen, context, pathfinder, eventBus, gridSize);
-      Gdx.input.setInputProcessor(context.mapController);
+      handlers.push(context.mapController);
     }
   }
 
   @Override
   public void onLeave(BattleContext context) {
-    Gdx.input.setInputProcessor(null);
+    handlers.pop();
   }
 }

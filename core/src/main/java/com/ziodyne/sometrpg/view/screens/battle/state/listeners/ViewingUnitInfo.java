@@ -1,23 +1,25 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import au.com.ds.ef.StateEnum;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.ziodyne.sometrpg.view.controllers.MenuController;
+import com.ziodyne.sometrpg.view.input.InputHandlerStack;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
-import com.ziodyne.sometrpg.view.screens.battle.state.InputStealingFlowListener;
+import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.widgets.UnitInfoMenu;
 
-public class ViewingUnitInfo extends InputStealingFlowListener<BattleContext> implements InputProcessor {
+public class ViewingUnitInfo extends FlowListener<BattleContext> implements InputProcessor {
   private final MenuController menuController;
+  private final InputHandlerStack handlerStack;
   private UnitInfoMenu infoMenu;
   private BattleContext context;
 
-  public ViewingUnitInfo(StateEnum state, MenuController menuController) {
+  public ViewingUnitInfo(StateEnum state, MenuController menuController, InputHandlerStack handlers) {
     super(state);
     this.menuController = menuController;
+    this.handlerStack = handlers;
   }
 
   @Override
@@ -26,18 +28,15 @@ public class ViewingUnitInfo extends InputStealingFlowListener<BattleContext> im
     if (infoMenu != null) {
       infoMenu.dispose();
     }
-
-    super.onLeave(context);
+    handlerStack.pop();
   }
 
   @Override
   public void onEnter(BattleContext context) {
 
-    super.onEnter(context);
-
     // This must happen in order or else the context may not be available when the input starts coming in
     this.context = context;
-    Gdx.input.setInputProcessor(this);
+    handlerStack.push(this);
 
     infoMenu = menuController.showUnitInfo(context.selectedCombatant);
     infoMenu.render();

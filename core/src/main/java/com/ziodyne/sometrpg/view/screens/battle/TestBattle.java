@@ -81,6 +81,7 @@ import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
 import com.ziodyne.sometrpg.view.input.BattleMapController;
+import com.ziodyne.sometrpg.view.input.InputHandlerStack;
 import com.ziodyne.sometrpg.view.rendering.TextRenderer;
 import com.ziodyne.sometrpg.view.screens.battle.eventhandlers.UnitMoveHandler;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
@@ -263,25 +264,26 @@ public class TestBattle extends BattleScreen {
 
     engine.addEntity(entityFactory.createVoid(viewport));
 
-    final InputMultiplexer multiplexer = new InputMultiplexer();
-    multiplexer.addProcessor(menuStage);
-
-    Gdx.input.setInputProcessor(multiplexer);
-
     initialized = true;
-    UnitMover unitMover = new UnitMover(this, tweenManager, gridSquareSize);
 
+    UnitMover unitMover = new UnitMover(this, tweenManager, gridSquareSize);
     BattleMenuController menuController = new BattleMenuController(entityFactory, engine, viewport);
+
+    InputHandlerStack handlerStack = new InputHandlerStack();
+    handlerStack.enable();
+
     EasyFlow<BattleContext> flow = BattleFlow.FLOW;
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
-      new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory, eventBus),
-      new UnitActionSelectListener(menuController, gridSquareSize),
-      new ViewingUnitInfo(BattleState.SHOWING_ENEMY_DETAILS, menuController),
-      new ViewingUnitInfo(BattleState.SHOWING_FRIENDLY_DETAILS, menuController),
-      new SelectingMoveLocation(this, gridSquareSize),
+      new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory, handlerStack,
+              eventBus),
+      new UnitActionSelectListener(menuController, handlerStack, gridSquareSize),
+      new ViewingUnitInfo(BattleState.SHOWING_ENEMY_DETAILS, menuController, handlerStack),
+      new ViewingUnitInfo(BattleState.SHOWING_FRIENDLY_DETAILS, menuController, handlerStack),
+      new SelectingMoveLocation(this, handlerStack, gridSquareSize),
       new UnitMoving(this, pathfinder, map, gridSquareSize, tweenManager, unitMover),
-      new AttackTargetSelectionListener(this, gridSquareSize),
-      new AttackConfirmationListener(engine, entityFactory, camera, new MapCombatResolver(map), gridSquareSize),
+      new AttackTargetSelectionListener(this, handlerStack, gridSquareSize),
+      new AttackConfirmationListener(engine, entityFactory, camera, new MapCombatResolver(map), handlerStack,
+              gridSquareSize),
       new UnitAttackingListener(this, engine),
       new EnemyTurnListener(battle, engine, viewport, new TextRenderer(entityFactory, engine)),
       new EndScreenListener()

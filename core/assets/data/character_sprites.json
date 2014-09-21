@@ -5,6 +5,14 @@
       "portrait": {
         "texture": "portraits/liat.png"
       },
+      "dodge_north": {
+        "name": "mc_dodge_back",
+        "sheet": "mc_dodgeback.json"
+      },
+      "dodge_south": {
+        "name": "mc_dodge_front",
+        "sheet": "mc_dodgefront.json"
+      },
       "idle": {
         "name": "mc_idle",
         "sheet": "idle_sheet.json"
@@ -40,10 +48,6 @@
       "attack_west": {
         "name": "mc_attack_west",
         "sheet": "mc_attack_west.json"
-      },
-      "dodge": {
-        "name": "mc_dodge",
-        "sheet": "mc_dodgefront.json"
       }
     },
     {

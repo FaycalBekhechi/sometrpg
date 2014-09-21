@@ -64,7 +64,8 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
         AnimationType dodgeType = getDodgeAnimation(attacker, defender);
         defendingEntity.setAnimationType(dodgeType);
       } else {
-        defendingEntity.setAnimationType(AnimationType.BE_HIT);
+        AnimationType combatIdleType = getCombatIdleAnim(attacker, defender);
+        defendingEntity.setAnimationType(combatIdleType);
       }
 
       Runnable resetAnimations = () -> {
@@ -80,8 +81,10 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
             AnimationType dodgeType = getDodgeAnimation(defender, attacker);
             attackingEntity.setAnimationType(dodgeType);
           } else {
-            attackingEntity.setAnimationType(AnimationType.BE_HIT);
+            AnimationType combatIdleType = getCombatIdleAnim(defender, attacker);
+            attackingEntity.setAnimationType(combatIdleType);
           }
+
           Entity counterAnimReset = new Entity();
           counterAnimReset.add(new TimedProcess(() -> {
             counterEncounter.execute();
@@ -144,6 +147,22 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
 
     throw new IllegalArgumentException("Cannot resolve attack animation direction between " +
       attackerPos + " and " + defenderPos);
+  }
+
+  private AnimationType getCombatIdleAnim(Combatant attacker, Combatant defender) {
+    switch (getAttackAnimation(attacker, defender)) {
+      case ATTACK_WEST:
+        return AnimationType.COMBAT_IDLE_EAST;
+      case ATTACK_EAST:
+        return AnimationType.COMBAT_IDLE_WEST;
+      case ATTACK_SOUTH:
+        return AnimationType.COMBAT_IDLE_NORTH;
+      case ATTACK_NORTH:
+        return AnimationType.COMBAT_IDLE_SOUTH;
+    }
+
+    throw new IllegalArgumentException("Cannoy resolve combat idle direction between " +
+            screen.getCombatantPosition(attacker) + " and " + screen.getCombatantPosition(defender));
   }
 
   private RenderedCombatant getEntityForCombatant(Combatant combatant) {

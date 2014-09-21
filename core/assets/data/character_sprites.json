@@ -60,6 +60,26 @@
         "sheet": "enemies_idle.json"
       },
 
+      "combat_idle_north": {
+        "name": "gatsu_combat_idle_north",
+        "sheet": "gatsu_attacksheet.json"
+      },
+
+      "combat_idle_south": {
+        "name": "gatsu_combat_idle_south",
+        "sheet": "gatsu_attacksheet.json"
+      },
+
+      "combat_idle_east": {
+        "name": "gatsu_combat_idle_east",
+        "sheet": "gatsu_attacksheet.json"
+      },
+
+      "combat_idle_west": {
+        "name": "gatsu_combat_idle_west",
+        "sheet": "gatsu_attacksheet.json"
+      },
+
       "attack_north": {
         "name": "gatsu_attack_north",
         "sheet": "gatsu_attacksheet.json"

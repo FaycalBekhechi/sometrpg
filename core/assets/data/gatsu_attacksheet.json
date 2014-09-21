@@ -1,11 +1,25 @@
 {
   "grid_size": 70,
   "animations": {
+    "gatsu_combat_idle_south": {
+      "start": [0, 0],
+      "end": [0, 0],
+      "frame_length": 100,
+      "mode": "loop"
+    },
+
     "gatsu_attack_south": {
       "start": [0, 0],
       "end": [0, 13],
       "frame_length": 100,
       "mode": "normal"
+    },
+
+    "gatsu_combat_idle_north": {
+      "start": [1, 0],
+      "end": [1, 0],
+      "frame_length": 100,
+      "mode": "loop"
     },
 
     "gatsu_attack_north": {
@@ -15,11 +29,28 @@
       "mode": "normal"
     },
 
+    "gatsu_combat_idle_west": {
+      "start": [2, 0],
+      "end": [2, 0],
+      "offset": [-22, -10],
+      "frame_length": 100,
+      "mode": "loop"
+    },
+
     "gatsu_attack_west": {
       "start": [2, 0],
       "end": [2, 11],
+      "offset": [-22, -10],
       "frame_length": 100,
       "mode": "normal"
+    },
+
+    "gatsu_combat_idle_east": {
+      "start": [2, 0],
+      "end": [2, 0],
+      "frame_length": 100,
+      "mode": "loop",
+      "flip_y": true
     },
 
     "gatsu_attack_east": {

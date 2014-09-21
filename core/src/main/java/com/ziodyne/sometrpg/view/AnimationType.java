@@ -2,6 +2,10 @@ package com.ziodyne.sometrpg.view;
 
 public enum AnimationType {
   IDLE("idle"),
+  COMBAT_IDLE_NORTH("combat_idle_north"),
+  COMBAT_IDLE_SOUTH("combat_idle_south"),
+  COMBAT_IDLE_EAST("combat_idle_east"),
+  COMBAT_IDLE_WEST("combat_idle_west"),
   ATTACK_NORTH("attack_north"),
   ATTACK_SOUTH("attack_south"),
   ATTACK_EAST("attack_east"),

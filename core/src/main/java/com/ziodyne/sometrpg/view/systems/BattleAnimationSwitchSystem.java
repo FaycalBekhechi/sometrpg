@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
@@ -16,7 +17,7 @@ import com.ziodyne.sometrpg.view.rendering.Sprite;
  * This system is responsible for changing the animation on units when
  * their animation state changes.
  */
-public class BattleAnimationSwitchSystem extends IteratingSystem {
+public class BattleAnimationSwitchSystem extends IteratingSystem implements Logged {
 
   public BattleAnimationSwitchSystem() {
 

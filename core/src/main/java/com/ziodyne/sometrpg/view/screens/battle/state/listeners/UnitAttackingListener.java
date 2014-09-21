@@ -1,18 +1,17 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
-import java.util.Optional;
-import java.util.Set;
-
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.logic.models.battle.combat.CounterAttack;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Encounter;
+import com.ziodyne.sometrpg.logic.models.battle.combat.EncounterResult;
 import com.ziodyne.sometrpg.logic.util.GridPoint2;
 import com.ziodyne.sometrpg.util.Logged;
 import com.ziodyne.sometrpg.view.AnimationType;
-import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.TimedProcess;
 import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
@@ -20,6 +19,9 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
+
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * A handle for the state where an attack is being executed.
@@ -49,8 +51,8 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
     } else {
       Combatant attacker = context.selectedCombatant;
       Combatant defender = context.defendingCombatant;
-      BattleResult result = context.battle.executeAttack(attacker, context.attackToExecute, defender);
-      CombatResult initialAttack = result.getInitalAttack();
+
+      Encounter encounter = context.battle.startCombat(attacker, context.attackToExecute, defender);
 
       RenderedCombatant attackingEntity = getEntityForCombatant(attacker);
       RenderedCombatant defendingEntity = getEntityForCombatant(defender);
@@ -58,7 +60,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       AnimationType attackAnimType = getAttackAnimation(attacker, defender);
       attackingEntity.setAnimationType(attackAnimType);
 
-      if (initialAttack.wasEvaded()) {
+      if (encounter.defenderWillDodge()) {
         AnimationType dodgeType = getDodgeAnimation(attacker, defender);
         defendingEntity.setAnimationType(dodgeType);
       } else {
@@ -66,9 +68,31 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       }
 
       Runnable resetAnimations = () -> {
-        attackingEntity.setAnimationType(AnimationType.IDLE);
-        defendingEntity.setAnimationType(AnimationType.IDLE);
-        context.safeTrigger(BattleEvent.UNIT_ATTACKED);
+        EncounterResult encounterResult = encounter.execute();
+
+        Optional<Encounter> counterOptional = encounterResult.getCounter();
+        if (counterOptional.isPresent()) {
+          Encounter counterEncounter = counterOptional.get();
+          if (counterEncounter.defenderWillDodge()) {
+            AnimationType dodgeType = getDodgeAnimation(defender, attacker);
+            attackingEntity.setAnimationType(dodgeType);
+          } else {
+            attackingEntity.setAnimationType(AnimationType.BE_HIT);
+          }
+          Entity counterAnimReset = new Entity();
+          counterAnimReset.add(new TimedProcess(() -> {
+            counterEncounter.execute();
+            attackingEntity.setAnimationType(AnimationType.IDLE);
+            defendingEntity.setAnimationType(AnimationType.IDLE);
+            context.safeTrigger(BattleEvent.UNIT_ATTACKED);
+          }, 1200));
+          engine.addEntity(counterAnimReset);
+
+        } else {
+          attackingEntity.setAnimationType(AnimationType.IDLE);
+          defendingEntity.setAnimationType(AnimationType.IDLE);
+          context.safeTrigger(BattleEvent.UNIT_ATTACKED);
+        }
       };
 
       Entity process = new Entity();

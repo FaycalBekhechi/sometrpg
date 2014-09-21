@@ -35,6 +35,33 @@ public class MapCombatResolver implements CombatResolver {
     return CombatUtils.previewBattle(action);
   }
 
+  public DeferredCombatResult precomputeCombat(BattleAction action) {
+    Attack attack = action.getAttack();
+    Combatant attacker = action.getAttacker();
+    Combatant defender = action.getDefender();
+
+    boolean evaded = !doesAttackHit(attack, attacker, defender);
+
+    return new DeferredCombatResult() {
+
+      @Override
+      public boolean defenderWillDodge() {
+        return evaded;
+      }
+
+      @Override
+      public CombatResult execute() {
+        int damage = 0;
+        if (!evaded) {
+          damage = computeDamageSubtotal(attack, attacker, defender);
+          defender.applyDamage(damage);
+        }
+
+        return new CombatResult(damage, evaded, !defender.isAlive());
+      }
+    };
+  }
+
   @Override
   public CombatResult execute(BattleAction action) throws InvalidBattleActionException {
     validate(action);
@@ -59,13 +86,13 @@ public class MapCombatResolver implements CombatResolver {
     return attacker.getArmy().equals(defender.getArmy());
   }
 
-  static boolean doesAttackHit(Attack attack, Combatant attacker, Combatant defender) {
+  public boolean doesAttackHit(Attack attack, Combatant attacker, Combatant defender) {
 
     int hitChance = attack.computeHitChance(attacker, defender);
     return Math.random() <= (hitChance/100f);
   }
 
-  static int computeDamageSubtotal(Attack attack, Combatant attacker, Combatant defender) {
+  private int computeDamageSubtotal(Attack attack, Combatant attacker, Combatant defender) {
     int damage = attack.computeDamage(attacker, defender);
     int critChance = attack.computeCritChance(attacker, defender);
     if (Math.random() <= (critChance/100f)) {

@@ -8,8 +8,11 @@ import com.ziodyne.sometrpg.events.CombatantActed;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleResult;
+import com.ziodyne.sometrpg.logic.models.battle.combat.DeferredCombatResult;
+import com.ziodyne.sometrpg.logic.models.battle.combat.Encounter;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.logic.models.battle.combat.EncounterResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.WeaponAttack;
 import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.AttackRangeFinder;
@@ -168,6 +171,51 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     } else {
       return new BattleResult(result);
     }
+  }
+
+  @Override
+  public Encounter startCombat(Combatant attacker, Attack attack, Combatant defender) {
+    DeferredCombatResult preparedResult = combatResolver.precomputeCombat(new BattleAction(attacker, defender, attack));
+    return new Encounter() {
+
+      @Override
+      public boolean defenderWillDodge() {
+        return preparedResult.defenderWillDodge();
+      }
+
+      @Override
+      public EncounterResult execute() {
+        if (actedThisTurn.contains(attacker)) {
+          throw new GameLogicException("Cannot perform two actions on the same turn.");
+        }
+
+        if (!defender.isAlive()) {
+          throw new GameLogicException("Cannot attack a dead combatant.");
+        }
+
+        CombatResult result = preparedResult.execute();
+        recordAction(attacker);
+
+        boolean evaded = result.wasEvaded();
+        if (!result.wasTargetKilled()) {
+          DeferredCombatResult counterResult = combatResolver.precomputeCombat(new BattleAction(defender, attacker, new WeaponAttack()));
+          return new EncounterResult(evaded, new Encounter() {
+            @Override
+            public EncounterResult execute() {
+              CombatResult counterFinalResult = counterResult.execute();
+              return new EncounterResult(counterFinalResult.wasEvaded());
+            }
+
+            @Override
+            public boolean defenderWillDodge() {
+              return counterResult.defenderWillDodge();
+            }
+          });
+        } else {
+          return new EncounterResult(evaded);
+        }
+      }
+    };
   }
 
   public Set<Tile> getAttackableTiles(Combatant combatant, Attack attack) {

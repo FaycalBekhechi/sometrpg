@@ -4,7 +4,7 @@
       "id": "liat",
       "name": "Liat",
       "maxStats": {
-        "hp": 10,
+        "hp": 20,
         "str": 99,
         "def": 10,
         "skl": 10,
@@ -13,7 +13,7 @@
         "mov": 40
       },
       "stats": {
-        "hp": 10,
+        "hp": 20,
         "str": 20,
         "def": 10,
         "skl": 10,
@@ -98,7 +98,7 @@
       "name": "Greatswordsman",
       "stats": {
         "hp": 20,
-        "str": 10,
+        "str": 20,
         "def": 10,
         "skl": 10,
         "spd": 10,
@@ -116,7 +116,7 @@
       },
       "maxStats": {
         "hp": 20,
-        "str": 10,
+        "str": 20,
         "def": 10,
         "skl": 10,
         "spd": 10,

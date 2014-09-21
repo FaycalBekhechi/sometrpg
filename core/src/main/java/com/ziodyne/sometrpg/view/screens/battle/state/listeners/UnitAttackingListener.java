@@ -6,6 +6,8 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.google.common.eventbus.EventBus;
+import com.ziodyne.sometrpg.events.UnitHit;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -35,13 +37,15 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
   private final TweenManager tweenManager;
   private final BattleScreen screen;
   private final Engine engine;
+  private final EventBus eventBus;
 
-  public UnitAttackingListener(TweenManager tweenManager, BattleScreen screen, Engine engine) {
+  public UnitAttackingListener(TweenManager tweenManager, BattleScreen screen, Engine engine, EventBus eventBus) {
 
     super(BattleState.UNIT_ATTACKING);
     this.tweenManager = tweenManager;
     this.screen = screen;
     this.engine = engine;
+    this.eventBus = eventBus;
   }
 
   @Override
@@ -73,16 +77,8 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       } else {
         AnimationType combatIdleType = getCombatIdleAnim(attacker, defender);
         defendingEntity.setAnimationType(combatIdleType);
-
-        logDebug("Flashing: " + defendingEntity.getCombatant().getCharacter().getName());
-        Timeline.createSequence()
-                .push(Tween.to(defendingEntity, RenderedCombatantAccessor.DAMAGE_TINT, 0.2f)
-                  .ease(TweenEquations.easeOutCubic)
-                  .target(0.9f))
-                .push(Tween.to(defendingEntity, RenderedCombatantAccessor.DAMAGE_TINT, 0.3f)
-                  .ease(TweenEquations.easeOutCubic)
-                  .target(0f))
-                .start(tweenManager);
+        doHitFlash(defendingEntity);
+        eventBus.post(new UnitHit());
       }
 
       Runnable resetAnimations = () -> {
@@ -100,6 +96,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
           } else {
             AnimationType combatIdleType = getCombatIdleAnim(defender, attacker);
             attackingEntity.setAnimationType(combatIdleType);
+            doHitFlash(attackingEntity);
           }
 
           Entity counterAnimReset = new Entity();
@@ -123,6 +120,17 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
 
       engine.addEntity(process);
     }
+  }
+
+  private void doHitFlash(RenderedCombatant combatant) {
+    Timeline.createSequence()
+            .push(Tween.to(combatant, RenderedCombatantAccessor.DAMAGE_TINT, 0.2f)
+                    .ease(TweenEquations.easeOutCubic)
+                    .target(0.9f))
+            .push(Tween.to(combatant, RenderedCombatantAccessor.DAMAGE_TINT, 0.3f)
+                    .ease(TweenEquations.easeOutCubic)
+                    .target(0f))
+            .start(tweenManager);
   }
 
   private AnimationType getDodgeAnimation(Combatant attacker, Combatant defender) {

@@ -12,7 +12,7 @@
     "path": "data/portraits/icons/attack.png"
   },
   {
-    "type": "music",
+    "type": "sound",
     "path": "sounds/hit.mp3"
   },
   {

@@ -5,11 +5,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
-import com.ziodyne.sometrpg.view.components.StaticShader;
 import com.ziodyne.sometrpg.view.components.Text;
 
 public class TextRenderSystem extends IteratingSystem {
@@ -41,8 +39,8 @@ public class TextRenderSystem extends IteratingSystem {
     Text text = entity.getComponent(Text.class);
     BitmapFont font = text.getFont();
 
-    if (entity.hasComponent(StaticShader.class)) {
-      batch.setShader(entity.getComponent(StaticShader.class).getShader());
+    if (entity.hasComponent(Shader.class)) {
+      batch.setShader(entity.getComponent(Shader.class).getShader());
       font.draw(batch, text.getCharacters(), pos.getX(), pos.getY());
       batch.setShader(null);
     } else {

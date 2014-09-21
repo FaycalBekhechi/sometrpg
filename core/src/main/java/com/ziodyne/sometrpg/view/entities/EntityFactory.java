@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.inject.Inject;
 import com.ziodyne.sometrpg.logic.loader.models.AnimationSpec;
-import com.ziodyne.sometrpg.logic.models.*;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.BattleMap;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
@@ -44,7 +43,6 @@ import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.SpriteAnimation;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
-import com.ziodyne.sometrpg.view.components.StaticShader;
 import com.ziodyne.sometrpg.view.components.Text;
 import com.ziodyne.sometrpg.view.components.TileCursor;
 import com.ziodyne.sometrpg.view.components.TiledMapComponent;
@@ -84,7 +82,7 @@ public class EntityFactory {
     Text textComponent = new Text(font, text);
 
     ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json");
-    Shader shaderComponent = new StaticShader(distanceFieldShader);
+    Shader shaderComponent = new Shader(distanceFieldShader);
 
     return createEntity(posComponent, textComponent, shaderComponent);
   }
@@ -96,7 +94,7 @@ public class EntityFactory {
     Text textComponent = new Text(font, text);
 
     ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json");
-    Shader shaderComponent = new StaticShader(distanceFieldShader);
+    Shader shaderComponent = new Shader(distanceFieldShader);
 
     return createEntity(posComponent, textComponent, shaderComponent);
   }
@@ -117,7 +115,7 @@ public class EntityFactory {
     Text textComponent = new Text(font, text);
 
     ShaderProgram distanceFieldShader = repository.get("shaders/distance_field.json");
-    Shader shaderComponent = new StaticShader(distanceFieldShader);
+    Shader shaderComponent = new Shader(distanceFieldShader);
 
     return createEntity(posComponent, textComponent, shaderComponent);
   }
@@ -129,7 +127,7 @@ public class EntityFactory {
     return createEntity(
       new Position(position.x, position.y),
       new Text(font, text),
-      new StaticShader(distanceFieldShader)
+      new Shader(distanceFieldShader)
     );
   }
 
@@ -183,6 +181,15 @@ public class EntityFactory {
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     result.add(new SpriteComponent(sprite, SpriteLayer.FOREGROUND.getZIndex() + 100));
+
+    /*
+    ShaderProgram program = repository.get("shaders/color_tint.json", ShaderProgram.class);
+    Shader shader = new Shader(program, (shaderProgram, delta) -> {
+      float whiteAmount = 0.6f;
+      shaderProgram.setUniformf("u_tintColor", new Color(whiteAmount, 0, 0, 1f));
+    });
+    result.add(shader);
+    */
 
     BattleUnit battleUnit = new BattleUnit(combatant, anims, offsets);
     result.add(battleUnit);

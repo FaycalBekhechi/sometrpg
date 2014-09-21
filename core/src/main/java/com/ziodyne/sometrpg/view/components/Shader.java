@@ -3,14 +3,25 @@ package com.ziodyne.sometrpg.view.components;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
-public abstract class Shader extends Component {
-  private final ShaderProgram shader;
+import java.util.function.Consumer;
 
-  protected Shader(ShaderProgram shader) {
+public class Shader extends Component {
+  private final ShaderProgram shader;
+  private final ShaderUpdater updater;
+
+  public Shader(ShaderProgram shader, ShaderUpdater updater) {
     this.shader = shader;
+    this.updater = updater;
   }
 
-  public abstract void update(float delta);
+  public Shader(ShaderProgram shader) {
+    this.shader = shader;
+    this.updater = (prog, time) -> {};
+  }
+
+  public void update(float delta) {
+    updater.update(shader, delta);
+  }
 
   public ShaderProgram getShader() {
     return shader;

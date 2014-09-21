@@ -36,6 +36,10 @@
     "path": "shaders/distance_field.json"
   },
   {
+    "type": "shader",
+    "path": "shaders/color_tint.json"
+  },
+  {
     "type": "bitmap_font",
     "path": "fonts/baked/futura-16.fnt"
   },

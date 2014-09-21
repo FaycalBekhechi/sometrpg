@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
-import com.ziodyne.sometrpg.view.components.StaticShader;
+import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.Text;
 import com.ziodyne.sometrpg.view.components.ViewportPosition;
 
@@ -55,8 +55,8 @@ public class ViewportSpaceTextRenderSystem extends IteratingSystem {
     Text text = entity.getComponent(Text.class);
     BitmapFont font = text.getFont();
 
-    if (entity.hasComponent(StaticShader.class)) {
-      batch.setShader(entity.getComponent(StaticShader.class).getShader());
+    if (entity.hasComponent(Shader.class)) {
+      batch.setShader(entity.getComponent(Shader.class).getShader());
       font.draw(batch, text.getCharacters(), pos.x, pos.y);
       batch.setShader(null);
     } else {

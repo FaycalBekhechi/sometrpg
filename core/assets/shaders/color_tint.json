@@ -1,0 +1,4 @@
+{
+  "vert": "color_tint.vert",
+  "frag": "color_tint.frag"
+}

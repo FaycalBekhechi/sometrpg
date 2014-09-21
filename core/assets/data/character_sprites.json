@@ -65,6 +65,21 @@
         "sheet": "gatsu_attacksheet.json"
       },
 
+      "attack_west": {
+        "name": "gatsu_attack_west",
+        "sheet": "gatsu_attacksheet.json"
+      },
+
+      "attack_east": {
+        "name": "gatsu_attack_east",
+        "sheet": "gatsu_attacksheet.json"
+      },
+
+      "attack_south": {
+        "name": "gatsu_attack_south",
+        "sheet": "gatsu_attacksheet.json"
+      },
+
       "run_north": {
         "name": "gatsu_run_north",
         "sheet": "gatsu_runsheet.json"

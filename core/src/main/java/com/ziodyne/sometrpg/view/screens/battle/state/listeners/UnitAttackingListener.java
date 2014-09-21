@@ -73,6 +73,9 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
         Optional<Encounter> counterOptional = encounterResult.getCounter();
         if (counterOptional.isPresent()) {
           Encounter counterEncounter = counterOptional.get();
+          AnimationType counterattackAnimType = getAttackAnimation(defender, attacker);
+          defendingEntity.setAnimationType(counterattackAnimType);
+
           if (counterEncounter.defenderWillDodge()) {
             AnimationType dodgeType = getDodgeAnimation(defender, attacker);
             attackingEntity.setAnimationType(dodgeType);

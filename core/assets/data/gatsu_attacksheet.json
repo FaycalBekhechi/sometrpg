@@ -19,15 +19,15 @@
       "start": [2, 0],
       "end": [2, 11],
       "frame_length": 100,
-      "mode": "normal",
-      "flip_y": true
+      "mode": "normal"
     },
 
     "gatsu_attack_east": {
       "start": [2, 0],
       "end": [2, 11],
       "frame_length": 100,
-      "mode": "normal"
+      "mode": "normal",
+      "flip_y": true
     }
   }
 }

@@ -25,9 +25,6 @@ public class SpriteBatchRenderer {
 
   public void render(Sprite sprite, Vector2 position) {
 
-    Color color = Color.WHITE;
-    spriteBatch.setColor(color.r, color.g, color.b, sprite.getAlpha());
-
     float x = position.x;
     float y = position.y;
     Texture texture = sprite.getTexture();
@@ -63,7 +60,7 @@ public class SpriteBatchRenderer {
 
   public void end() {
     spriteBatch.end();
-    spriteBatch.setShader(defaultShader);
+    spriteBatch.setShader(null);
     spriteBatch.setTransformMatrix(originalTransform);
     spriteBatch.setProjectionMatrix(originalProjection);
   }

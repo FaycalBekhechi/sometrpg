@@ -20,7 +20,9 @@ public class Shader extends Component {
   }
 
   public void update(float delta) {
+    shader.begin();
     updater.update(shader, delta);
+    shader.end();
   }
 
   public ShaderProgram getShader() {

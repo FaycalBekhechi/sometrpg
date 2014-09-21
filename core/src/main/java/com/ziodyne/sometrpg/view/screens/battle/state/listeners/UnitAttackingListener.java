@@ -1,5 +1,9 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
+import aurelienribon.tweenengine.Timeline;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleResult;
@@ -19,6 +23,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
+import com.ziodyne.sometrpg.view.tween.RenderedCombatantAccessor;
 
 import java.util.Optional;
 import java.util.Set;
@@ -27,12 +32,14 @@ import java.util.Set;
  * A handle for the state where an attack is being executed.
  */
 public class UnitAttackingListener extends FlowListener<BattleContext> implements Logged {
+  private final TweenManager tweenManager;
   private final BattleScreen screen;
   private final Engine engine;
 
-  public UnitAttackingListener(BattleScreen screen, Engine engine) {
+  public UnitAttackingListener(TweenManager tweenManager, BattleScreen screen, Engine engine) {
 
     super(BattleState.UNIT_ATTACKING);
+    this.tweenManager = tweenManager;
     this.screen = screen;
     this.engine = engine;
   }
@@ -66,6 +73,16 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       } else {
         AnimationType combatIdleType = getCombatIdleAnim(attacker, defender);
         defendingEntity.setAnimationType(combatIdleType);
+
+        logDebug("Flashing: " + defendingEntity.getCombatant().getCharacter().getName());
+        Timeline.createSequence()
+                .push(Tween.to(defendingEntity, RenderedCombatantAccessor.DAMAGE_TINT, 0.2f)
+                  .ease(TweenEquations.easeOutCubic)
+                  .target(0.9f))
+                .push(Tween.to(defendingEntity, RenderedCombatantAccessor.DAMAGE_TINT, 0.3f)
+                  .ease(TweenEquations.easeOutCubic)
+                  .target(0f))
+                .start(tweenManager);
       }
 
       Runnable resetAnimations = () -> {
@@ -102,7 +119,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       };
 
       Entity process = new Entity();
-      process.add(new TimedProcess(resetAnimations, 1200));
+      process.add(new TimedProcess(resetAnimations, 2400));
 
       engine.addEntity(process);
     }

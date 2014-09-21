@@ -284,7 +284,7 @@ public class TestBattle extends BattleScreen {
       new AttackTargetSelectionListener(this, handlerStack, gridSquareSize),
       new AttackConfirmationListener(engine, entityFactory, camera, new MapCombatResolver(map), handlerStack,
               gridSquareSize),
-      new UnitAttackingListener(this, engine),
+      new UnitAttackingListener(tweenManager, this, engine),
       new EnemyTurnListener(battle, engine, viewport, new TextRenderer(entityFactory, engine)),
       new EndScreenListener()
     );

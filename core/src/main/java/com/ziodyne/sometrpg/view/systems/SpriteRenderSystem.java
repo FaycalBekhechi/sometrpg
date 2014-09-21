@@ -41,7 +41,6 @@ public class SpriteRenderSystem extends IteratingSystem {
   @Override
   public void update(float deltaTime) {
 
-    spriteBatchRenderer.begin();
 
     ImmutableIntMap<Entity> familyEntities = engine.getEntitiesFor(Family.getFamilyFor(Position.class,
       SpriteComponent.class));
@@ -54,12 +53,12 @@ public class SpriteRenderSystem extends IteratingSystem {
       .sorted(byZIndex())
       .forEach(e -> this.processEntity(e, deltaTime));
 
-    spriteBatchRenderer.end();
   }
 
   @Override
   public void processEntity(Entity entity, float deltaTime) {
 
+    spriteBatchRenderer.begin();
     Position pos = entity.getComponent(Position.class);
     Vector2 position = new Vector2(pos.getX(), pos.getY());
 
@@ -73,6 +72,7 @@ public class SpriteRenderSystem extends IteratingSystem {
     } else {
       spriteBatchRenderer.render(sprite, position);
     }
+    spriteBatchRenderer.end();
   }
 
   private static Comparator<Entity> byZIndex() {

@@ -182,20 +182,16 @@ public class EntityFactory {
     sprite.setMinFilter(Texture.TextureFilter.Linear);
     result.add(new SpriteComponent(sprite, SpriteLayer.FOREGROUND.getZIndex() + 100));
 
-    /*
     ShaderProgram program = repository.get("shaders/color_tint.json", ShaderProgram.class);
-    Shader shader = new Shader(program, (shaderProgram, delta) -> {
-      float whiteAmount = 0.6f;
-      shaderProgram.setUniformf("u_tintColor", new Color(whiteAmount, 0, 0, 1f));
-    });
+    DamageTintUpdater tintUpdater = new DamageTintUpdater();
+    Shader shader = new Shader(program, tintUpdater);
     result.add(shader);
-    */
 
     BattleUnit battleUnit = new BattleUnit(combatant, anims, offsets);
     result.add(battleUnit);
     engine.addEntity(result);
 
-    return new RenderedCombatant(combatant, position, battleUnit);
+    return new RenderedCombatant(combatant, position, battleUnit, tintUpdater);
   }
 
   public Entity createMapAttackOverlay(Set<GridPoint2> locations) {

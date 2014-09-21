@@ -17,6 +17,7 @@ import com.ziodyne.sometrpg.view.entities.Positioned;
 import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.navigation.PathSegment;
 import com.ziodyne.sometrpg.view.navigation.PathUtils;
+import com.ziodyne.sometrpg.view.tween.RenderedCombatantAccessor;
 
 public class UnitMover {
 
@@ -55,7 +56,7 @@ public class UnitMover {
 
       GridPoint2 point = segment.getPoint();
       Tween segTween = Tween
-        .to(renderedCombatant, 0, 0.3f)
+        .to(renderedCombatant, RenderedCombatantAccessor.POS, 0.3f)
         .ease(TweenEquations.easeNone)
         .target(point.x * gridSize, point.y * gridSize);
 

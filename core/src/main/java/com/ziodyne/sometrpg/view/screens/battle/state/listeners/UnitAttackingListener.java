@@ -116,7 +116,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       };
 
       Entity process = new Entity();
-      process.add(new TimedProcess(resetAnimations, 2400));
+      process.add(new TimedProcess(resetAnimations, 1200));
 
       engine.addEntity(process);
     }

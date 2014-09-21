@@ -2,6 +2,7 @@ package com.ziodyne.sometrpg.logic.models.battle;
 
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Attack;
+import com.ziodyne.sometrpg.logic.models.battle.combat.BattleResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
@@ -61,7 +62,7 @@ public interface Battle {
    * @param attack The {@link com.ziodyne.sometrpg.logic.models.battle.combat.Attack} to perform
    * @param defender The Combatant receiving the attack
    */
-  public CombatResult executeAttack(Combatant attacker, Attack attack, Combatant defender);
+  public BattleResult executeAttack(Combatant attacker, Attack attack, Combatant defender);
 
   /**
    * Return <tt>true</tt> if the battle is won.

@@ -7,8 +7,10 @@ import com.google.common.eventbus.EventBus;
 import com.ziodyne.sometrpg.events.CombatantActed;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleAction;
+import com.ziodyne.sometrpg.logic.models.battle.combat.BattleResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
+import com.ziodyne.sometrpg.logic.models.battle.combat.WeaponAttack;
 import com.ziodyne.sometrpg.logic.navigation.AStarPathfinder;
 import com.ziodyne.sometrpg.logic.navigation.AttackRangeFinder;
 import com.ziodyne.sometrpg.logic.navigation.BattleMapPathfindingStrategy;
@@ -147,7 +149,7 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
   }
 
   @Override
-  public CombatResult executeAttack(Combatant attacker, Attack attack, Combatant defender) {
+  public BattleResult executeAttack(Combatant attacker, Attack attack, Combatant defender) {
     if (actedThisTurn.contains(attacker)) {
       throw new GameLogicException("Cannot perform two actions on the same turn.");
     }
@@ -157,10 +159,15 @@ public class SomeTRPGBattle implements Battle, TileNavigable, TurnBased {
     }
 
     CombatResult result = combatResolver.execute(new BattleAction(attacker, defender, attack));
-
     recordAction(attacker);
 
-    return result;
+    // If the target is not dead, counterattack.
+    if (!result.wasTargetKilled()) {
+      CombatResult counterResult = combatResolver.execute(new BattleAction(defender, attacker, new WeaponAttack()));
+      return new BattleResult(result, counterResult);
+    } else {
+      return new BattleResult(result);
+    }
   }
 
   public Set<Tile> getAttackableTiles(Combatant combatant, Attack attack) {

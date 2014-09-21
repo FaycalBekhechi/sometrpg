@@ -1,9 +1,11 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
+import java.util.Optional;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.ziodyne.sometrpg.logic.models.battle.combat.BattleResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatResult;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
@@ -47,7 +49,8 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
     } else {
       Combatant attacker = context.selectedCombatant;
       Combatant defender = context.defendingCombatant;
-      CombatResult result = context.battle.executeAttack(attacker, context.attackToExecute, defender);
+      BattleResult result = context.battle.executeAttack(attacker, context.attackToExecute, defender);
+      CombatResult initialAttack = result.getInitalAttack();
 
       RenderedCombatant attackingEntity = getEntityForCombatant(attacker);
       RenderedCombatant defendingEntity = getEntityForCombatant(defender);
@@ -55,7 +58,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       AnimationType attackAnimType = getAttackAnimation(attacker, defender);
       attackingEntity.setAnimationType(attackAnimType);
 
-      if (result.wasEvaded()) {
+      if (initialAttack.wasEvaded()) {
         AnimationType dodgeType = getDodgeAnimation(attacker, defender);
         defendingEntity.setAnimationType(dodgeType);
       } else {

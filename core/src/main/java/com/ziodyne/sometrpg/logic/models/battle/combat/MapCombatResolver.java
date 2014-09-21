@@ -47,10 +47,10 @@ public class MapCombatResolver implements CombatResolver {
     int damage = 0;
     if (!evaded) {
       damage = computeDamageSubtotal(attack, attacker, defender);
-      action.getDefender().applyDamage(damage);
+      defender.applyDamage(damage);
     }
 
-    return new CombatResult(damage, evaded);
+    return new CombatResult(damage, evaded, !defender.isAlive());
   }
 
   private static boolean isFriendlyFire(BattleAction action) {

@@ -32,75 +32,13 @@
       }
     },
     {
-      "id": "rhodry",
-      "name": "Rhodry",
-      "stats": {
-        "hp": 10,
-        "str": 10,
-        "def": 10,
-        "skl": 10,
-        "spd": 10,
-        "lvl": 1,
-        "mov": 4
-      },
-      "growths": {
-        "hp": 10,
-        "str": 10,
-        "def": 10,
-        "skl": 10,
-        "spd": 10,
-        "lvl": 1,
-        "mov": 4
-      },
-      "maxStats": {
-        "hp": 10,
-        "str": 10,
-        "def": 10,
-        "skl": 10,
-        "spd": 10,
-        "lvl": 1,
-        "mov": 4
-      }
-    },
-    {
-      "id": "crossbow_enemy",
-      "name": "Crossbowman",
-      "stats": {
-        "hp": 10,
-        "str": 10,
-        "def": 10,
-        "skl": 10,
-        "spd": 10,
-        "lvl": 1,
-        "mov": 4
-      },
-      "growths": {
-        "hp": 10,
-        "str": 10,
-        "def": 10,
-        "skl": 10,
-        "spd": 10,
-        "lvl": 1,
-        "mov": 4
-      },
-      "maxStats": {
-        "hp": 10,
-        "str": 10,
-        "def": 10,
-        "skl": 10,
-        "spd": 10,
-        "lvl": 1,
-        "mov": 4
-      }
-    },
-    {
       "id": "gatsu",
       "name": "Greatswordsman",
       "stats": {
         "hp": 20,
-        "str": 20,
+        "str": 40,
         "def": 10,
-        "skl": 10,
+        "skl": 80,
         "spd": 10,
         "lvl": 1,
         "mov": 4
@@ -116,9 +54,9 @@
       },
       "maxStats": {
         "hp": 20,
-        "str": 20,
+        "str": 90,
         "def": 10,
-        "skl": 10,
+        "skl": 80,
         "spd": 10,
         "lvl": 1,
         "mov": 4

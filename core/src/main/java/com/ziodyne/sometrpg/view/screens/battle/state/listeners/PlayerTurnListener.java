@@ -80,6 +80,8 @@ public class PlayerTurnListener<T extends Battle & TurnBased> extends FlowListen
 
   @Override
   public void onLeave(BattleContext context) {
-    handlers.pop();
+    if (!handlers.isEmpty()) {
+      handlers.pop();
+    }
   }
 }

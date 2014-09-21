@@ -23,6 +23,10 @@ public class InputHandlerStack {
     muxer.addProcessor(processor);
   }
 
+  public boolean isEmpty() {
+    return queue.isEmpty();
+  }
+
   public InputProcessor pop() {
     InputProcessor first = queue.removeFirst();
     muxer.removeProcessor(first);

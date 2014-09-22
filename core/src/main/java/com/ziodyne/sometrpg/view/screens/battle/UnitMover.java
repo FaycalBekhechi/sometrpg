@@ -56,7 +56,7 @@ public class UnitMover {
 
       GridPoint2 point = segment.getPoint();
       Tween segTween = Tween
-        .to(renderedCombatant, RenderedCombatantAccessor.POS, 0.3f)
+        .to(renderedCombatant, RenderedCombatantAccessor.POS, 0.2f)
         .ease(TweenEquations.easeNone)
         .target(point.x * gridSize, point.y * gridSize);
 

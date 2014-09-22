@@ -145,7 +145,7 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
         return AnimationType.DODGE_SOUTH;
     }
 
-    throw new IllegalArgumentException("Cannoy resolve dodge animation direction between " +
+    throw new IllegalArgumentException("Cannot resolve dodge animation direction between " +
       screen.getCombatantPosition(attacker) + " and " + screen.getCombatantPosition(defender));
   }
 

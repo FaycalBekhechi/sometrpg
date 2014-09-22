@@ -13,6 +13,14 @@
         "name": "mc_dodge_front",
         "sheet": "mc_dodgefront.json"
       },
+      "dodge_west": {
+        "name": "mc_dodge_west",
+        "sheet": "mc_dodgeside.json"
+      },
+      "dodge_east": {
+        "name": "mc_dodge_east",
+        "sheet": "mc_dodgeside.json"
+      },
       "idle": {
         "name": "mc_idle",
         "sheet": "idle_sheet.json"

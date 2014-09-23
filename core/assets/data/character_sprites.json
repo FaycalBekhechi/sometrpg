@@ -45,17 +45,33 @@
         "name": "mc_attack_north",
         "sheet": "mc_attack_north.json"
       },
+      "attack_north_tween": {
+        "name": "mc_attack_north_tween",
+        "sheet": "mc_attack_north_tween.json"
+      },
       "attack_south": {
         "name": "mc_attack_south",
         "sheet": "mc_attack_south.json"
+      },
+      "attack_south_tween": {
+        "name": "mc_attack_south_tween",
+        "sheet": "mc_attack_south_tween.json"
       },
       "attack_east": {
         "name": "mc_attack_east",
         "sheet": "mc_attack_east.json"
       },
+      "attack_east_tween": {
+        "name": "mc_attack_east_tween",
+        "sheet": "mc_attack_east_tween.json"
+      },
       "attack_west": {
         "name": "mc_attack_west",
         "sheet": "mc_attack_west.json"
+      },
+      "attack_west_tween": {
+        "name": "mc_attack_west_tween",
+        "sheet": "mc_attack_west_tween.json"
       }
     },
     {

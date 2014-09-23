@@ -75,8 +75,17 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
         AnimationType dodgeType = getDodgeAnimation(attacker, defender);
         defendingEntity.setAnimationType(dodgeType);
       } else {
-        AnimationType combatIdleType = getCombatIdleAnim(attacker, defender);
-        defendingEntity.setAnimationType(combatIdleType);
+
+        AnimationType tweenType = getTweenAnimation(attacker, defender);
+        defendingEntity.setAnimationType(tweenType);
+
+        Entity combatIdleTask = new Entity();
+        combatIdleTask.add(new TimedProcess(() -> {
+          AnimationType combatIdleType = getCombatIdleAnim(attacker, defender);
+          defendingEntity.setAnimationType(combatIdleType);
+        }, 100));
+
+        engine.addEntity(combatIdleTask);
         doHitFlash(defendingEntity);
         eventBus.post(new UnitHit());
       }
@@ -131,6 +140,23 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
                     .ease(TweenEquations.easeOutCubic)
                     .target(0f))
             .start(tweenManager);
+  }
+
+  private AnimationType getTweenAnimation(Combatant attacker, Combatant defender) {
+
+    switch (getAttackAnimation(attacker, defender)) {
+      case ATTACK_WEST:
+        return AnimationType.ATTACK_EAST_TWEEN;
+      case ATTACK_EAST:
+        return AnimationType.ATTACK_WEST_TWEEN;
+      case ATTACK_SOUTH:
+        return AnimationType.ATTACK_SOUTH_TWEEN;
+      case ATTACK_NORTH:
+        return AnimationType.ATTACK_NORTH_TWEEN;
+    }
+
+    throw new IllegalArgumentException("Cannot resolve dodge animation direction between " +
+            screen.getCombatantPosition(attacker) + " and " + screen.getCombatantPosition(defender));
   }
 
   private AnimationType getDodgeAnimation(Combatant attacker, Combatant defender) {

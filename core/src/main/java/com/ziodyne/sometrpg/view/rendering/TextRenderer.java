@@ -30,8 +30,22 @@ public class TextRenderer {
     this.engine = engine;
   }
 
+  public LiveEntity renderCenteredViewportText(String text, Vector2 position, Size size) {
+    return renderViewportText(text, position, size, true);
+  }
   public LiveEntity renderViewportText(String text, Vector2 position, Size size) {
-    Entity entity = entityFactory.createViewportText(text, position, size.getValue());
+    return renderViewportText(text, position, size, false);
+  }
+
+  public LiveEntity renderViewportText(String text, Vector2 position, Size size, boolean centered) {
+
+    Entity entity;
+    if (centered) {
+      entity = entityFactory.createCenteredViewportText(text, position);
+    } else {
+      entity = entityFactory.createViewportText(text, position, size.getValue());
+    }
+
     engine.addEntity(entity);
 
     return new LiveEntity(engine, entity);

@@ -279,7 +279,7 @@ public class TestBattle extends BattleScreen {
               gridSquareSize),
       new UnitAttackingListener(tweenManager, this, engine, eventBus),
       new EnemyTurnListener(battle, engine, viewport, new TextRenderer(entityFactory, engine)),
-      new EndScreenListener()
+      new EndScreenListener(engine, viewport, new TextRenderer(entityFactory, engine))
     );
 
     for (FlowListener<BattleContext> listener : listeners) {

@@ -33,7 +33,8 @@ public class RenderedCombatant implements Positioned {
   }
 
   public void fadeToDeath(TweenManager tweenManager, Engine engine) {
-    // Get rid of the tint shader
+    // Get rid of the tint shader, which doesn't really account for alpha. Maybe fix this?
+    
     entity.remove(Shader.class);
     Tween.to(spriteComponent, SpriteComponentAccessor.ALPHA, 0.5f)
             .target(0f)

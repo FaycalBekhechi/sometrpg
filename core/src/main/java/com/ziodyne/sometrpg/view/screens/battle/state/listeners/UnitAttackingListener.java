@@ -76,22 +76,20 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
         defendingEntity.setAnimationType(dodgeType);
       } else {
 
-        AnimationType tweenType = getTweenAnimation(attacker, defender);
-        defendingEntity.setAnimationType(tweenType);
-
-        Entity combatIdleTask = new Entity();
-        combatIdleTask.add(new TimedProcess(() -> {
-          AnimationType combatIdleType = getCombatIdleAnim(attacker, defender);
-          defendingEntity.setAnimationType(combatIdleType);
-        }, 100));
-
-        engine.addEntity(combatIdleTask);
+        //AnimationType tweenType = getTweenAnimation(attacker, defender);
+        //defendingEntity.setAnimationType(tweenType);
+        AnimationType combatIdleType = getCombatIdleAnim(attacker, defender);
+        defendingEntity.setAnimationType(combatIdleType);
         doHitFlash(defendingEntity);
+
         eventBus.post(new UnitHit());
       }
 
       Runnable resetAnimations = () -> {
         EncounterResult encounterResult = encounter.execute();
+        if (!defender.isAlive()) {
+          defendingEntity.fadeToDeath(tweenManager, engine);
+        }
 
         Optional<Encounter> counterOptional = encounterResult.getCounter();
         if (counterOptional.isPresent()) {
@@ -119,7 +117,11 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
 
         } else {
           attackingEntity.setAnimationType(AnimationType.IDLE);
-          defendingEntity.setAnimationType(AnimationType.IDLE);
+
+          if (defender.isAlive()) {
+            defendingEntity.setAnimationType(AnimationType.IDLE);
+          }
+
           context.safeTrigger(BattleEvent.UNIT_ATTACKED);
         }
       };

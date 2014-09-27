@@ -12,8 +12,6 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenAccessor;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
@@ -76,7 +74,6 @@ import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.controllers.BattleMenuController;
 import com.ziodyne.sometrpg.view.entities.EntityFactory;
-import com.ziodyne.sometrpg.view.entities.Positioned;
 import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.entities.UnitEntityAnimation;
 import com.ziodyne.sometrpg.view.graphics.SpriteLayer;
@@ -91,8 +88,6 @@ import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.*;
 import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
 import com.ziodyne.sometrpg.view.systems.BattleAnimationSwitchSystem;
-import com.ziodyne.sometrpg.view.systems.BattleUnitDeathSystem;
-import com.ziodyne.sometrpg.view.systems.DeathFadeSystem;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.MapMovementOverlayRenderer;
 import com.ziodyne.sometrpg.view.systems.MapOverlayRenderSystem;
@@ -220,9 +215,7 @@ public class TestBattle extends BattleScreen {
 
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
 
-    engine.addSystem(new BattleUnitDeathSystem());
     engine.addSystem(new AnimationKeyFrameSystem());
-    engine.addSystem(new DeathFadeSystem(tweenManager, engine));
     engine.addSystem(mapSelectorUpdateSystem);
     engine.addSystem(new StageUpdateSystem());
     engine.addSystem(new BattleAnimationSwitchSystem());

@@ -1,24 +1,47 @@
 package com.ziodyne.sometrpg.view.entities;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
+import com.ziodyne.sometrpg.view.components.SpriteComponent;
+import com.ziodyne.sometrpg.view.tween.SpriteComponentAccessor;
 
 public class RenderedCombatant implements Positioned {
   private final Combatant combatant;
   private final Position positionComponent;
   private final BattleUnit battleUnitComponent;
   private final DamageTintUpdater tintUpdater;
+  private final SpriteComponent spriteComponent;
+  private final Entity entity;
 
-  public RenderedCombatant(Combatant combatant, Position positionComponent, BattleUnit battleUnitComponent,
-                           DamageTintUpdater tintUpdater) {
+  public RenderedCombatant(Entity entity, Combatant combatant, Position positionComponent, BattleUnit battleUnitComponent,
+                           SpriteComponent spriteComponent, DamageTintUpdater tintUpdater) {
+    this.entity = entity;
     this.combatant = combatant;
+    this.spriteComponent = spriteComponent;
     this.positionComponent = positionComponent;
     this.battleUnitComponent = battleUnitComponent;
     this.tintUpdater = tintUpdater;
+  }
+
+  public void fadeToDeath(TweenManager tweenManager, Engine engine) {
+    // Get rid of the tint shader
+    entity.remove(Shader.class);
+    Tween.to(spriteComponent, SpriteComponentAccessor.ALPHA, 0.5f)
+            .target(0f)
+            .ease(TweenEquations.easeOutCubic)
+            .setCallback((type, source) -> {
+              engine.removeEntity(entity);
+            })
+            .start(tweenManager);
   }
 
   public void setTintAmount(float amount) {

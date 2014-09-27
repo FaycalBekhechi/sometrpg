@@ -29,6 +29,10 @@ public class SpriteBatchRenderer {
     float y = position.y;
     Texture texture = sprite.getTexture();
 
+    if (sprite.getAlpha() < 1) {
+      spriteBatch.setColor(1.0f, 1.0f, 1.0f, sprite.getAlpha());
+    }
+
     if (texture == null) {
       TextureRegion region = sprite.getRegion();
       spriteBatch.draw(region, x + sprite.getOffsetX(), y + sprite.getOffsetY(), sprite.getOriginX(), sprite.getOriginY(),
@@ -41,6 +45,8 @@ public class SpriteBatchRenderer {
 
       spriteBatch.draw(texture, x, y, width, height);
     }
+
+    spriteBatch.setColor(Color.WHITE);
   }
 
   public void render(Sprite sprite, Vector2 position, ShaderProgram shader) {

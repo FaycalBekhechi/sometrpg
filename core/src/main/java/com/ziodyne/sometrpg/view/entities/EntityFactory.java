@@ -180,7 +180,8 @@ public class EntityFactory {
     Sprite sprite = new Sprite(idle.getKeyFrame(0), 32f, 32f);
     sprite.setMagFiler(Texture.TextureFilter.Linear);
     sprite.setMinFilter(Texture.TextureFilter.Linear);
-    result.add(new SpriteComponent(sprite, SpriteLayer.FOREGROUND.getZIndex() + 100));
+    SpriteComponent spriteComponent = new SpriteComponent(sprite, SpriteLayer.FOREGROUND.getZIndex() + 100);
+    result.add(spriteComponent);
 
     ShaderProgram program = repository.get("shaders/color_tint.json", ShaderProgram.class);
     DamageTintUpdater tintUpdater = new DamageTintUpdater();
@@ -191,7 +192,7 @@ public class EntityFactory {
     result.add(battleUnit);
     engine.addEntity(result);
 
-    return new RenderedCombatant(combatant, position, battleUnit, tintUpdater);
+    return new RenderedCombatant(result, combatant, position, battleUnit, spriteComponent, tintUpdater);
   }
 
   public Entity createMapAttackOverlay(Set<GridPoint2> locations) {

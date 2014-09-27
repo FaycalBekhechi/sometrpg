@@ -4,6 +4,7 @@
     "gatsu_combat_idle_south": {
       "start": [0, 0],
       "end": [0, 0],
+      "offset": [-20, -11],
       "frame_length": 100,
       "mode": "loop"
     },
@@ -18,6 +19,7 @@
     "gatsu_combat_idle_north": {
       "start": [1, 0],
       "end": [1, 0],
+      "offset": [-22, -6],
       "frame_length": 100,
       "mode": "loop"
     },

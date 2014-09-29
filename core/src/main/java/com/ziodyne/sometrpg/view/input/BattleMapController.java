@@ -11,6 +11,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import com.ziodyne.sometrpg.events.CloseTray;
 import com.ziodyne.sometrpg.events.OpenTray;
+import com.ziodyne.sometrpg.events.ToggleTray;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.navigation.Path;
 import com.ziodyne.sometrpg.logic.navigation.Pathfinder;
@@ -85,8 +86,10 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
       camera.position.set(camera.viewportWidth*camera.zoom/2, camera.viewportHeight*camera.zoom/2, 0);
 
       return true;
+    } else if (keycode == Input.Keys.NUM_1) {
+      eventBus.post(new ToggleTray());
     }
-    
+
     if (keycode == Input.Keys.H) {
       battleScreen.toggleHealthBars();
     }
@@ -148,17 +151,6 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
     }
 
     ignoreNextTouchUp = false;
-
-    return true;
-  }
-
-  @Override
-  public boolean mouseMoved(int screenX, int screenY) {
-    if ((camera.viewportWidth - 200) < screenX) {
-      eventBus.post(new OpenTray());
-    } else {
-      eventBus.post(new CloseTray());
-    }
 
     return true;
   }

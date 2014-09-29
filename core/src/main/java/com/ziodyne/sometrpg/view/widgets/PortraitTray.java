@@ -13,6 +13,7 @@ import com.google.common.eventbus.Subscribe;
 import com.ziodyne.sometrpg.events.CloseTray;
 import com.ziodyne.sometrpg.events.CombatantActed;
 import com.ziodyne.sometrpg.events.OpenTray;
+import com.ziodyne.sometrpg.events.ToggleTray;
 import com.ziodyne.sometrpg.events.TurnStarted;
 import com.ziodyne.sometrpg.logic.models.Character;
 import com.ziodyne.sometrpg.logic.models.battle.Battle;
@@ -57,6 +58,15 @@ public class PortraitTray extends Widget implements Logged {
   @Subscribe
   public void closeTray(CloseTray evt) {
     hide();
+  }
+
+  @Subscribe
+  public void toggleTray(ToggleTray evt) {
+    if (open) {
+      hide();
+    } else {
+      show();
+    }
   }
 
   @Override

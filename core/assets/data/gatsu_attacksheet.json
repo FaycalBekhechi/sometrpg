@@ -12,6 +12,7 @@
     "gatsu_attack_south": {
       "start": [0, 0],
       "end": [0, 13],
+      "offset": [-20, -11],
       "frame_length": 100,
       "mode": "normal"
     },

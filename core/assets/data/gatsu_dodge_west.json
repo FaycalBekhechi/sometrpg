@@ -4,6 +4,7 @@
     "gatsu_dodge_west": {
       "start": [1, 0],
       "end": [1, 9],
+      "offset": [-5, 0],
       "frame_length": 80,
       "mode": "normal"
     }

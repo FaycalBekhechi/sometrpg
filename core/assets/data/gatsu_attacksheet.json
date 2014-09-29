@@ -19,7 +19,7 @@
     "gatsu_combat_idle_north": {
       "start": [1, 0],
       "end": [1, 0],
-      "offset": [-22, -6],
+      "offset": [-17, -5],
       "frame_length": 100,
       "mode": "loop"
     },
@@ -27,6 +27,7 @@
     "gatsu_attack_north": {
       "start": [1, 0],
       "end": [1, 11],
+      "offset": [-17, -5],
       "frame_length": 100,
       "mode": "normal"
     },

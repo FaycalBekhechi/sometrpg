@@ -44,14 +44,8 @@ public class BattleAnimationSwitchSystem extends IteratingSystem implements Logg
     SpriteComponent spriteCmp = entity.getComponent(SpriteComponent.class);
     Sprite sprite = spriteCmp.getSprite();
 
-    Optional<Vector2> offset = unit.getCurrentOffset();
-    if (offset.isPresent()) {
-      Vector2 vec = offset.get();
-      sprite.setOffsetX(vec.x);
-      sprite.setOffsetY(vec.y);
-    } else {
-      sprite.setOffsetY(0);
-      sprite.setOffsetX(0);
-    }
+    Vector2 offset = unit.getCurrentOffset().orElse(Vector2.Zero);
+    sprite.setOffsetX(offset.x);
+    sprite.setOffsetY(offset.y);
   }
 }

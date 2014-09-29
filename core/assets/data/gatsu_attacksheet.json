@@ -59,6 +59,7 @@
     "gatsu_attack_east": {
       "start": [2, 0],
       "end": [2, 11],
+      "offset": [-12, -10],
       "frame_length": 100,
       "mode": "normal",
       "flip_y": true

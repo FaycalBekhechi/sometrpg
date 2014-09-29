@@ -1,5 +1,6 @@
 package com.ziodyne.sometrpg.view.widgets;
 
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
@@ -7,7 +8,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.ziodyne.sometrpg.events.CloseTray;
@@ -25,10 +25,9 @@ import com.ziodyne.sometrpg.view.entities.EntityFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class PortraitTray extends Widget implements Logged {
   private final Collection<Combatant> combatants;
@@ -37,6 +36,10 @@ public class PortraitTray extends Widget implements Logged {
   private final Battle battle;
   private final TweenManager tweenManager;
   private final Map<Combatant, IconEntities> icons = new HashMap<>();
+  private final Position rootPosition;
+  private final Vector2 openPosition;
+  private final Vector2 closedPosition;
+
   private boolean open = false;
 
   public PortraitTray(Engine engine, EntityFactory entityFactory, Battle battle, Viewport viewport, EventBus eventBus, TweenManager tweenManager) {
@@ -48,6 +51,9 @@ public class PortraitTray extends Widget implements Logged {
     this.battle = battle;
     this.viewport = viewport;
     this.tweenManager = tweenManager;
+    this.rootPosition = new Position(viewport.getViewportWidth(), viewport.getViewportHeight() - 200);
+    this.openPosition = new Vector2(rootPosition.getX() - 200, rootPosition.getY());
+    this.closedPosition = new Vector2(rootPosition.getX(), rootPosition.getY());
   }
 
   @Subscribe
@@ -71,28 +77,30 @@ public class PortraitTray extends Widget implements Logged {
 
   @Override
   public void render() {
-    Vector2 position = new Vector2(viewport.getViewportWidth(), viewport.getViewportHeight() - 200);
+
+    // For each portrait, draw them stacked, from top to bottom.
+    float topOffset = 0;
     for (Combatant combatant : combatants) {
       Character character = combatant.getCharacter();
       IconEntities iconEntities = new IconEntities();
-      Entity portrait = newEntity(entityFactory.createDockPortrait(character, position));
+      Entity portrait = newEntity(entityFactory.createDockPortrait(character, rootPosition, new Vector2(0, -topOffset)));
       iconEntities.portrait = portrait;
       Set<CombatantAction> actions = battle.getAvailableActions(combatant);
 
 
       if (actions.contains(CombatantAction.MOVE)) {
-        Entity moveIcon = newEntity(entityFactory.createPortraitMoveIcon(position.cpy().sub(-20, 20)));
+        Entity moveIcon = newEntity(entityFactory.createPortraitMoveIcon(rootPosition, new Vector2(20, 20 - topOffset)));
         iconEntities.move = moveIcon;
       }
 
       if (actions.contains(CombatantAction.ATTACK)) {
-        Entity attack = newEntity(entityFactory.createPortraitAttackIcon(position.cpy().sub(0, 20)));
+        Entity attack = newEntity(entityFactory.createPortraitAttackIcon(rootPosition, new Vector2(0, 20 - topOffset)));
         iconEntities.attack = attack;
       }
 
       icons.put(combatant, iconEntities);
 
-      position = position.sub(0, 100);
+      topOffset += 100;
     }
   }
 
@@ -101,13 +109,13 @@ public class PortraitTray extends Widget implements Logged {
       return;
     }
 
-    forAllPositions((pos) -> {
-      Tween.to(pos, 0, 0.3f)
-              .ease(TweenEquations.easeOutCubic)
-              .target(pos.getX() + 200, pos.getY())
-              .start(tweenManager);
-    });
-    open = false;
+    Tween.to(rootPosition, 0, 0.2f)
+          .ease(TweenEquations.easeOutCubic)
+          .target(closedPosition.x, closedPosition.y)
+          .setCallback((type, source) -> {
+            open = false;
+          })
+          .start(tweenManager);
   }
 
   private void show() {
@@ -115,27 +123,13 @@ public class PortraitTray extends Widget implements Logged {
       return;
     }
 
-    forAllPositions((pos) -> {
-      Tween.to(pos, 0, 0.3f)
-              .ease(TweenEquations.easeOutCubic)
-              .target(pos.getX() - 200, pos.getY())
-              .start(tweenManager);
-    });
-    open = true;
-  }
-
-  private void forAllPositions(Consumer<Position> action) {
-    for (IconEntities entities : icons.values()) {
-      List<Position> positions = Lists.newArrayList(
-              entities.attack.getComponent(Position.class),
-              entities.portrait.getComponent(Position.class),
-              entities.move.getComponent(Position.class)
-      );
-
-      for (Position pos : positions) {
-        action.accept(pos);
-      }
-    }
+    Tween.to(rootPosition, 0, 0.2f)
+          .ease(TweenEquations.easeOutCubic)
+          .target(openPosition.x, openPosition.y)
+          .setCallback((type, source) -> {
+            open = true;
+          })
+          .start(tweenManager);
   }
 
   @Subscribe
@@ -164,7 +158,7 @@ public class PortraitTray extends Widget implements Logged {
       entities.move = null;
     } else {
       if (entities.move == null) {
-        entities.move = newEntity(entityFactory.createPortraitMoveIcon(new Vector2(pos.getX(), pos.getY() - 20)));
+        entities.move = newEntity(entityFactory.createPortraitMoveIcon(rootPosition, new Vector2(pos.getX(), pos.getY() - 20)));
       }
     }
 
@@ -173,7 +167,7 @@ public class PortraitTray extends Widget implements Logged {
       entities.attack = null;
     } else {
       if (entities.attack == null) {
-        entities.attack = newEntity(entityFactory.createPortraitAttackIcon(new Vector2(pos.getX(), pos.getY() - 20)));
+        entities.attack = newEntity(entityFactory.createPortraitAttackIcon(rootPosition, new Vector2(pos.getX(), pos.getY() - 20)));
       }
     }
   }

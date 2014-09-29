@@ -363,27 +363,27 @@ public class EntityFactory {
     return createEntity(spriteComponent, positionComponent);
   }
 
-  public Entity createPortraitAttackIcon(Vector2 screenSpacePosition) {
+  public Entity createPortraitAttackIcon(Position root, Vector2 screenSpacePosition) {
     Texture tex = repository.get("data/portraits/icons/attack.png");
     Sprite sprite = new Sprite(tex, 50, 50);
     ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
 
-    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y);
+    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y, root);
 
     return createEntity(spriteComponent, posComponent);
   }
 
-  public Entity createPortraitMoveIcon(Vector2 screenSpacePosition) {
+  public Entity createPortraitMoveIcon(Position root, Vector2 screenSpacePosition) {
     Texture tex = repository.get("data/portraits/icons/move.png");
     Sprite sprite = new Sprite(tex, 50, 50);
     ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
 
-    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y);
+    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y, root);
 
     return createEntity(spriteComponent, posComponent);
   }
 
-  public Entity createDockPortrait(Character character, Vector2 screenSpacePosition) {
+  public Entity createDockPortrait(Character character, Position root, Vector2 screenSpacePosition) {
 
     Texture tex = repository.get("data/portraits/" + character.getId() + ".png", Texture.class);
     if (tex == null) {
@@ -393,7 +393,7 @@ public class EntityFactory {
     Sprite sprite = new Sprite(tex, 200, 200);
     ViewportSpaceSprite spriteComponent = new ViewportSpaceSprite(sprite);
 
-    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y);
+    Position posComponent = new Position(screenSpacePosition.x, screenSpacePosition.y, root);
 
     return createEntity(spriteComponent, posComponent);
   }

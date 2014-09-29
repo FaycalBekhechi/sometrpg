@@ -103,7 +103,6 @@ public class BattleMapController extends InputAdapter implements Toggleable, Log
       return false;
     }
 
-
     Vector3 clickCoordinates = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     camera.unproject(clickCoordinates);
     int x = (int)Math.floor(clickCoordinates.x/gridSize);

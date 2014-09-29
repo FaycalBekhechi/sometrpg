@@ -4,6 +4,7 @@
     "gatsu_dodge_north": {
       "start": [2, 0],
       "end": [2, 8],
+      "offset": [-10, -4],
       "frame_length": 80,
       "mode": "normal"
     }

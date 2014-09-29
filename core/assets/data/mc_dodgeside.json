@@ -3,6 +3,7 @@
   "animations": {
     "mc_dodge_east": {
       "start": [0, 0],
+      "offset": [0, -4],
       "end": [0, 8],
       "frame_length": 100,
       "mode": "normal",
@@ -11,6 +12,7 @@
 
     "mc_dodge_west": {
       "start": [0, 0],
+      "offset": [0, -4],
       "end": [0, 8],
       "frame_length": 100,
       "mode": "normal"

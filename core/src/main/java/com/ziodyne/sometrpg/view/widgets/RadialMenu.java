@@ -161,8 +161,8 @@ public class RadialMenu extends Widget {
       Item item = items.get(i);
       if (item.label != null) {
         float deg = (i * item.sizeInDegrees) + (item.sizeInDegrees / 2);
-        Vector2 textOffset = getRotatedOuterRimPoint(deg, radius * 0.75f);
-        Entity labelEntity = entityFactory.createText(item.label, textOffset, new Vector2());
+        final Vector2 textOffset = getRotatedOuterRimPoint(-deg, radius * 0.75f).cpy();
+        Entity labelEntity = entityFactory.createCenteredText(item.label, textOffset);
         newEntity(labelEntity);
       }
     }

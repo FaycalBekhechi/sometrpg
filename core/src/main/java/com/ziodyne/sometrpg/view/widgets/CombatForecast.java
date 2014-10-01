@@ -74,8 +74,8 @@ public class CombatForecast extends Widget {
 
     renderResult(summary.getDefenderResult(), ResultSide.LEFT);
     renderResult(summary.getAttackerResult(), ResultSide.RIGHT);
-    renderText("NO", getOuterRimPosition(190));
-    renderText("YES", getOuterRimPosition(170));
+    renderText("NO", getOuterRimPosition(190).add(0, 40), true);
+    renderText("YES", getOuterRimPosition(170).add(0, 40), true);
   }
 
   @Override
@@ -90,18 +90,18 @@ public class CombatForecast extends Widget {
    * @param side which side to render it on
    */
   private void renderResult(CombatantBattleResult result, ResultSide side) {
-    int degreesMultiplier = side == ResultSide.LEFT ? -1 : 1;
+    int degreesMultiplier = side == ResultSide.LEFT ? 1 : -1;
     int hp = result.getCombatant().getHealth();
-    renderStat(hp, "health", getOuterRimPosition(degreesMultiplier * 30));
+    renderStat(hp, "health", getOuterRimPosition(degreesMultiplier * 30), side);
 
     int damage = result.getDamage();
-    renderStat(damage, "damage", getOuterRimPosition(degreesMultiplier * 50));
+    renderStat(damage, "damage", getOuterRimPosition(degreesMultiplier * 50), side);
 
     int hitChance = result.getHitChancePct();
-    renderStat(hitChance, "hit%", getOuterRimPosition(degreesMultiplier * 65));
+    renderStat(hitChance, "hit%", getOuterRimPosition(degreesMultiplier * 65), side);
 
     int critChance = result.getCritChancePct();
-    renderStat(critChance, "crit%", getOuterRimPosition(degreesMultiplier * 80));
+    renderStat(critChance, "crit%", getOuterRimPosition(degreesMultiplier * 80), side);
   }
 
   /**
@@ -110,9 +110,17 @@ public class CombatForecast extends Widget {
    * @param label the name of the stat
    * @param position its position
    */
-  private void renderStat(int value, String label, Vector2 position) {
-    renderText(String.valueOf(value), position);
-    renderText(label, position.cpy().sub(0, 10));
+  private void renderStat(int value, String label, Vector2 position, ResultSide side) {
+    if (side == ResultSide.RIGHT) {
+      Entity statNumber = entityFactory.createRightAlignedText(String.valueOf(value), position);
+      newEntity(statNumber);
+
+      Entity statLabel = entityFactory.createRightAlignedText(label, position.cpy().sub(0, 10));
+      newEntity(statLabel);
+    } else {
+      renderText(String.valueOf(value), position, false);
+      renderText(label, position.cpy().sub(0, 10), false);
+    }
   }
 
   /**
@@ -126,8 +134,14 @@ public class CombatForecast extends Widget {
   }
 
   // Render text at a given position
-  private void renderText(String text, Vector2 position) {
-    Entity textEntity = entityFactory.createText(text, position, Vector2.Zero);
-    newEntity(textEntity);
+  private void renderText(String text, Vector2 position, boolean centered) {
+    if (centered) {
+      Entity textEntity = entityFactory.createCenteredText(text, position);
+      newEntity(textEntity);
+    } else {
+      Entity textEntity = entityFactory.createText(text, position, Vector2.Zero);
+      newEntity(textEntity);
+
+    }
   }
 }

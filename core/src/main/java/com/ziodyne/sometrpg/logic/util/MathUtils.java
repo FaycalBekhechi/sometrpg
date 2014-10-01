@@ -21,13 +21,18 @@ public class MathUtils {
     float x = point.x;
     float y = point.y;
 
+    /*
     float resultX = ((x - xOrigin) * (float)Math.cos(rotRadians)) -
             ((yOrigin - y) * (float)Math.sin(rotRadians)) + xOrigin;
 
-    float resultY = (-(yOrigin - y) * (float)Math.cos(rotRadians)) -
-            ((x - xOrigin) * (float)Math.sin(rotRadians)) + yOrigin;
+    float resultY = ((y - yOrigin) * (float)Math.cos(rotRadians)) -
+            ((xOrigin - x) * (float)Math.sin(rotRadians)) + yOrigin;
+    */
 
-    return new Vector2(resultX, resultY);
+    double resultX = xOrigin + (x-xOrigin)*Math.cos(rotRadians) - (y-yOrigin)*Math.sin(rotRadians);
+    double resultY = yOrigin + (x-xOrigin)*Math.sin(rotRadians) + (y-yOrigin)*Math.cos(rotRadians);
+
+    return new Vector2((float)resultX, (float)resultY);
   }
 
   /**

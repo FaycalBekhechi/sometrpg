@@ -114,13 +114,23 @@ public class EntityFactory {
     return createEntity(posComponent, textComponent, shaderComponent);
   }
 
+
   public Entity createCenteredText(String text, Vector2 position) {
 
     BitmapFont font = repository.get("fonts/baked/futura-16.fnt", BitmapFont.class);
     BitmapFont.TextBounds bounds = font.getBounds(text);
-    Vector2 center = new Vector2(bounds.width / 2f, 0);
+    Vector2 center = new Vector2(-(bounds.width / 2f), (bounds.height / 2f));
 
     return createText(text, position, center);
+  }
+
+  public Entity createRightAlignedText(String text, Vector2 position) {
+
+    BitmapFont font = repository.get("fonts/baked/futura-16.fnt", BitmapFont.class);
+    BitmapFont.TextBounds bounds = font.getBounds(text);
+    Vector2 rightOffset = new Vector2(-bounds.width, 0);
+
+    return createText(text, position, rightOffset);
   }
 
   public Entity createText(String text, Vector2 position, Vector2 offset) {

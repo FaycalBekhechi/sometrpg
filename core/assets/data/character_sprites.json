@@ -76,6 +76,10 @@
       "combat_idle_east": {
         "name": "mc_combat_idle_east",
         "sheet": "mc_attack_east.json"
+      },
+      "combat_idle_west": {
+        "name": "mc_combat_idle_west",
+        "sheet": "mc_attack_west.json"
       }
     },
     {

@@ -7,6 +7,13 @@
       "end": [0, 10],
       "frame_length": 80,
       "mode": "normal"
+    },
+    "mc_combat_idle_west": {
+      "offset": [-35, -10],
+      "start": [0, 0],
+      "end": [0, 0],
+      "frame_length": 80,
+      "mode": "normal"
     }
   },
   "sheet_path": "data/mc_attack_side.png"

@@ -58,11 +58,6 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> implem
   public void onEnter(final BattleContext context) {
 
     Combatant selectedCombatant = context.selectedCombatant;
-    RenderedCombatant renderedCombatant = battleScreen.getRenderedCombatant(selectedCombatant);
-    //renderedCombatant.setAnimation(AnimationType.COMBAT_IDLE_EAST);
-    //renderedCombatant.setAnimation(AnimationType.ATTACK_EAST_TWEEN);
-    renderedCombatant.setAnimationSequence(Lists.newArrayList(AnimationType.ATTACK_EAST_TWEEN, AnimationType.COMBAT_IDLE_EAST, AnimationType.ATTACK_EAST, AnimationType.COMBAT_IDLE_EAST, AnimationType.IDLE));
-
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
     if (allowedActions.size() == 1 && allowedActions.contains(CombatantAction.INFO)) {
       logDebug("Unit actions exhausted.");

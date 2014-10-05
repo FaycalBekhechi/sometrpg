@@ -6,6 +6,7 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.EventBus;
 import com.ziodyne.sometrpg.events.UnitHit;
 import com.ziodyne.sometrpg.logic.models.battle.combat.BattleResult;
@@ -68,18 +69,17 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       RenderedCombatant attackingEntity = getEntityForCombatant(attacker);
       RenderedCombatant defendingEntity = getEntityForCombatant(defender);
 
-      AnimationType attackAnimType = getAttackAnimation(attacker, defender);
-      attackingEntity.setAnimationType(attackAnimType);
+      attackingEntity.setAnimationSequence(Lists.newArrayList(
+              getTweenAnimation(attacker, defender),
+              getCombatIdleAnim(attacker, defender),
+              getAttackAnimation(attacker, defender)));
 
       if (encounter.defenderWillDodge()) {
         AnimationType dodgeType = getDodgeAnimation(attacker, defender);
         defendingEntity.setAnimationType(dodgeType);
       } else {
 
-        //AnimationType tweenType = getTweenAnimation(attacker, defender);
-        //defendingEntity.setAnimationType(tweenType);
-        AnimationType combatIdleType = getCombatIdleAnim(attacker, defender);
-        defendingEntity.setAnimationType(combatIdleType);
+        defendingEntity.setAnimationSequence(Lists.newArrayList(getTweenAnimation(defender, attacker), getCombatIdleAnim(attacker, defender)));
         doHitFlash(defendingEntity);
 
         eventBus.post(new UnitHit());
@@ -148,9 +148,9 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
 
     switch (getAttackAnimation(attacker, defender)) {
       case ATTACK_WEST:
-        return AnimationType.ATTACK_EAST_TWEEN;
-      case ATTACK_EAST:
         return AnimationType.ATTACK_WEST_TWEEN;
+      case ATTACK_EAST:
+        return AnimationType.ATTACK_EAST_TWEEN;
       case ATTACK_SOUTH:
         return AnimationType.ATTACK_SOUTH_TWEEN;
       case ATTACK_NORTH:
@@ -205,13 +205,13 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
   private AnimationType getCombatIdleAnim(Combatant attacker, Combatant defender) {
     switch (getAttackAnimation(attacker, defender)) {
       case ATTACK_WEST:
-        return AnimationType.COMBAT_IDLE_EAST;
-      case ATTACK_EAST:
         return AnimationType.COMBAT_IDLE_WEST;
+      case ATTACK_EAST:
+        return AnimationType.COMBAT_IDLE_EAST;
       case ATTACK_SOUTH:
-        return AnimationType.COMBAT_IDLE_NORTH;
-      case ATTACK_NORTH:
         return AnimationType.COMBAT_IDLE_SOUTH;
+      case ATTACK_NORTH:
+        return AnimationType.COMBAT_IDLE_NORTH;
     }
 
     throw new IllegalArgumentException("Cannoy resolve combat idle direction between " +

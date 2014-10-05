@@ -216,11 +216,11 @@ public class TestBattle extends BattleScreen {
 
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
 
+    engine.addSystem(new BattleAnimationSwitchSystem());
     engine.addSystem(new AnimationKeyFrameSystem());
     engine.addSystem(new AnimationSequenceSystem());
     engine.addSystem(mapSelectorUpdateSystem);
     engine.addSystem(new StageUpdateSystem());
-    engine.addSystem(new BattleAnimationSwitchSystem());
     engine.addSystem(new TimedProcessRunnerSystem(engine));
 
     /**

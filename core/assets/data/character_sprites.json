@@ -72,6 +72,10 @@
       "attack_west_tween": {
         "name": "mc_attack_west_tween",
         "sheet": "mc_attack_west_tween.json"
+      },
+      "combat_idle_east": {
+        "name": "mc_combat_idle_east",
+        "sheet": "mc_attack_east.json"
       }
     },
     {

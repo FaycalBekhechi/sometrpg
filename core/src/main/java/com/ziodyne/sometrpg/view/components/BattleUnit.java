@@ -24,12 +24,16 @@ public class BattleUnit extends Component {
     this.offsets = offsets;
   }
 
+  public Animation getAnimation(AnimationType type) {
+    return anims.get(type);
+  }
+
   public Optional<Vector2> getCurrentOffset() {
     return Optional.ofNullable(offsets.get(animType));
   }
 
   public Animation getCurrentAnimation() {
-    return anims.get(animType);
+    return getAnimation(animType);
   }
 
   public void setAnimType(AnimationType animType) {

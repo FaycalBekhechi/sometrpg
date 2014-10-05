@@ -87,6 +87,7 @@ import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
 import com.ziodyne.sometrpg.view.screens.battle.state.FlowListener;
 import com.ziodyne.sometrpg.view.screens.battle.state.listeners.*;
 import com.ziodyne.sometrpg.view.systems.AnimationKeyFrameSystem;
+import com.ziodyne.sometrpg.view.systems.AnimationSequenceSystem;
 import com.ziodyne.sometrpg.view.systems.BattleAnimationSwitchSystem;
 import com.ziodyne.sometrpg.view.systems.MapHoverSelectorUpdateSystem;
 import com.ziodyne.sometrpg.view.systems.MapMovementOverlayRenderer;
@@ -216,6 +217,7 @@ public class TestBattle extends BattleScreen {
     pathfinder = new AStarPathfinder<>(new BattleMapPathfindingStrategy(battle.getMap()));
 
     engine.addSystem(new AnimationKeyFrameSystem());
+    engine.addSystem(new AnimationSequenceSystem());
     engine.addSystem(mapSelectorUpdateSystem);
     engine.addSystem(new StageUpdateSystem());
     engine.addSystem(new BattleAnimationSwitchSystem());
@@ -269,7 +271,7 @@ public class TestBattle extends BattleScreen {
     List<? extends FlowListener<BattleContext>> listeners = Arrays.asList(
       new PlayerTurnListener<>(camera, this, battle, pathfinder, gridSquareSize, mapControllerFactory, handlerStack,
               eventBus),
-      new UnitActionSelectListener(menuController, handlerStack, gridSquareSize),
+      new UnitActionSelectListener(menuController, handlerStack, this, gridSquareSize),
       new ViewingUnitInfo(BattleState.SHOWING_ENEMY_DETAILS, menuController, handlerStack),
       new ViewingUnitInfo(BattleState.SHOWING_FRIENDLY_DETAILS, menuController, handlerStack),
       new SelectingMoveLocation(this, handlerStack, gridSquareSize),

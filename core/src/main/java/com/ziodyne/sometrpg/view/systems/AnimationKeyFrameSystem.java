@@ -26,7 +26,6 @@ public class AnimationKeyFrameSystem extends IteratingSystem {
     TextureRegion region = animation.getCurrentFrame();
 
     Sprite sprite = spriteComponent.getSprite();
-    TextureRegion lastRegion = sprite.getRegion();
 
     sprite.setRegion(region);
     animation.tick();

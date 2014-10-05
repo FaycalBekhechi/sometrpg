@@ -25,9 +25,18 @@ public class SpriteAnimation extends Component {
     return animation;
   }
 
+  public boolean isLoop() {
+    Animation.PlayMode mode = animation.getPlayMode();
+    return mode != Animation.PlayMode.NORMAL && mode != Animation.PlayMode.REVERSED;
+  }
+
   public void setAnimation(Animation anim) {
     this.animation = anim;
     this.currentTime = 0L;
+  }
+
+  public boolean isFinished() {
+    return animation.isAnimationFinished(currentTime);
   }
 
   public TextureRegion getKeyFrame(float time) {

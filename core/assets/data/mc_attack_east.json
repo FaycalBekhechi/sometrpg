@@ -8,6 +8,15 @@
       "frame_length": 80,
       "mode": "normal",
       "flip_y": true
+    },
+
+    "mc_combat_idle_east": {
+      "offset": [0, -10],
+      "start": [0, 0],
+      "end": [0, 0],
+      "frame_length": 80,
+      "mode": "normal",
+      "flip_y": true
     }
   },
   "sheet_path": "data/mc_attack_side.png"

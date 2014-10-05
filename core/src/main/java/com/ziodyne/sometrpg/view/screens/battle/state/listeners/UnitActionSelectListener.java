@@ -1,11 +1,16 @@
 package com.ziodyne.sometrpg.view.screens.battle.state.listeners;
 
 import com.badlogic.gdx.math.Vector2;
+import com.google.common.collect.Lists;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.logic.models.battle.combat.CombatantAction;
 import com.ziodyne.sometrpg.util.Logged;
+import com.ziodyne.sometrpg.view.AnimationType;
+import com.ziodyne.sometrpg.view.components.BattleUnit;
 import com.ziodyne.sometrpg.view.controllers.MenuController;
+import com.ziodyne.sometrpg.view.entities.RenderedCombatant;
 import com.ziodyne.sometrpg.view.input.InputHandlerStack;
+import com.ziodyne.sometrpg.view.screens.battle.BattleScreen;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleContext;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleEvent;
 import com.ziodyne.sometrpg.view.screens.battle.state.BattleState;
@@ -21,14 +26,17 @@ import java.util.Set;
 public class UnitActionSelectListener extends FlowListener<BattleContext> implements Logged {
   private final InputHandlerStack handlers;
   private final MenuController menuController;
+  private final BattleScreen battleScreen;
   private final float gridSize;
 
   @Nullable
   private ActionMenu actionMenu;
 
-  public UnitActionSelectListener(MenuController menuController, InputHandlerStack handlers, float gridSize) {
+  public UnitActionSelectListener(MenuController menuController, InputHandlerStack handlers, BattleScreen battleScreen,
+                                  float gridSize) {
     super(BattleState.SELECTING_UNIT_ACTION);
 
+    this.battleScreen = battleScreen;
     this.gridSize = gridSize;
     this.handlers = handlers;
     this.menuController = menuController;
@@ -50,6 +58,11 @@ public class UnitActionSelectListener extends FlowListener<BattleContext> implem
   public void onEnter(final BattleContext context) {
 
     Combatant selectedCombatant = context.selectedCombatant;
+    RenderedCombatant renderedCombatant = battleScreen.getRenderedCombatant(selectedCombatant);
+    //renderedCombatant.setAnimation(AnimationType.COMBAT_IDLE_EAST);
+    //renderedCombatant.setAnimation(AnimationType.ATTACK_EAST_TWEEN);
+    renderedCombatant.setAnimationSequence(Lists.newArrayList(AnimationType.ATTACK_EAST_TWEEN, AnimationType.COMBAT_IDLE_EAST, AnimationType.ATTACK_EAST, AnimationType.COMBAT_IDLE_EAST, AnimationType.IDLE));
+
     Set<CombatantAction> allowedActions = context.battle.getAvailableActions(selectedCombatant);
     if (allowedActions.size() == 1 && allowedActions.contains(CombatantAction.INFO)) {
       logDebug("Unit actions exhausted.");

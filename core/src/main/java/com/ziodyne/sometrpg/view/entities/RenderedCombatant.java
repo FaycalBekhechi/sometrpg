@@ -5,14 +5,18 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.ziodyne.sometrpg.logic.models.battle.combat.Combatant;
 import com.ziodyne.sometrpg.view.AnimationType;
 import com.ziodyne.sometrpg.view.components.BattleUnit;
+import com.ziodyne.sometrpg.view.components.CombatantAnimationSequence;
 import com.ziodyne.sometrpg.view.components.Position;
 import com.ziodyne.sometrpg.view.components.Shader;
 import com.ziodyne.sometrpg.view.components.SpriteComponent;
 import com.ziodyne.sometrpg.view.tween.SpriteComponentAccessor;
+
+import java.util.List;
 
 public class RenderedCombatant implements Positioned {
   private final Combatant combatant;
@@ -43,6 +47,19 @@ public class RenderedCombatant implements Positioned {
               engine.removeEntity(entity);
             })
             .start(tweenManager);
+  }
+
+  public void setAnimationSequence(List<AnimationType> types) {
+
+    entity.add(new CombatantAnimationSequence(battleUnitComponent, types));
+  }
+
+  public void setAnimation(AnimationType type) {
+    battleUnitComponent.setAnimType(type);
+  }
+
+  public Animation getAnimation(AnimationType type) {
+    return battleUnitComponent.getAnimation(type);
   }
 
   public void setTintAmount(float amount) {

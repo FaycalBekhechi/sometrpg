@@ -12,8 +12,11 @@ public class CombatantAnimationSequence extends Component {
   private int currentAnimationIndex = -1;
 
   public CombatantAnimationSequence(BattleUnit unit, List<AnimationType> animations) {
-    for (AnimationType animation : animations.subList(0, animations.size() -1)) {
-      Animation anim = unit.getAnimation(animation);
+    for (AnimationType type : animations.subList(0, animations.size() -1)) {
+      Animation anim = unit.getAnimation(type);
+      if (anim == null) {
+        throw new IllegalArgumentException("Cannot find animation for type " + type);
+      }
       Animation.PlayMode mode  = anim.getPlayMode();
       if (mode != Animation.PlayMode.NORMAL && mode != Animation.PlayMode.REVERSED) {
         throw new IllegalArgumentException("Cannot use looped animation in a sequence.");

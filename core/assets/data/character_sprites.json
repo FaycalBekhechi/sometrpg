@@ -80,6 +80,14 @@
       "combat_idle_west": {
         "name": "mc_combat_idle_west",
         "sheet": "mc_attack_west.json"
+      },
+      "combat_idle_south": {
+        "name": "mc_combat_idle_south",
+        "sheet": "mc_attack_south.json"
+      },
+      "combat_idle_north": {
+        "name": "mc_combat_idle_north",
+        "sheet": "mc_attack_north.json"
       }
     },
     {

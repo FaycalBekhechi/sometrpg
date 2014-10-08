@@ -4,7 +4,7 @@
         "mc_attack_east_tween": {
             "start": [0, 0],
             "end": [0, 0],
-            "frame_length": 100,
+            "frame_length": 50,
             "offset": [-10, 0],
             "mode": "normal"
         }

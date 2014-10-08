@@ -7,6 +7,13 @@
       "offset": [-14, 0],
       "frame_length": 100,
       "mode": "normal"
+    },
+    "mc_combat_idle_north": {
+      "start": [0, 0],
+      "end": [0, 0],
+      "offset": [-14, 0],
+      "frame_length": 100,
+      "mode": "normal"
     }
   }
 }

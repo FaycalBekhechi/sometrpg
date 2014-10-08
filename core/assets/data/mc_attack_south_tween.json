@@ -4,7 +4,8 @@
         "mc_attack_south_tween": {
             "start": [0, 0],
             "end": [0, 0],
-            "frame_length": 100,
+            "frame_length": 50,
+            "offset": [-5, -10],
             "mode": "normal"
         }
     }

@@ -69,6 +69,9 @@ public class UnitAttackingListener extends FlowListener<BattleContext> implement
       RenderedCombatant attackingEntity = getEntityForCombatant(attacker);
       RenderedCombatant defendingEntity = getEntityForCombatant(defender);
 
+//      attackingEntity.setAnimationSequence(Lists.newArrayList(
+//              getTweenAnimation(attacker, defender)));
+
       attackingEntity.setAnimationSequence(Lists.newArrayList(
               getTweenAnimation(attacker, defender),
               getCombatIdleAnim(attacker, defender),
